@@ -11,36 +11,36 @@ This repository contains internal sales and operations tools for Little 6 Indust
 
 | File | Description |
 |------|-------------|
-| `L6I_Quote_Tool_v2.html` | Internal sales quote calculator — all pricing, print-ready quotes, email integration |
-| `L6I_Pricing_Master.xlsx` | Master pricing spreadsheet — source of truth for all product pricing |
+| `L6I_Quote_Tool_v3.html` | Internal sales estimate tool — all pricing, print-ready estimates, email integration |
+| `L6I_Pricing_Master_v2.xlsx` | Master pricing spreadsheet — source of truth for all product pricing |
 | `README.md` | This file |
 
 ---
 
-## 🧾 Quote Tool (`L6I_Quote_Tool_v2.html`)
+## 🧾 Quote Tool (`L6I_Quote_Tool_v3.html`)
 
 A single-file HTML sales tool. No installation, no server, no internet required after download. Open in any browser.
 
 ### Features
-- **Product calculators** — 4mm Corrugated Signs, 10mm Corrugated Signs, Aluminum Signs, Vinyl Decals, T-Shirts + DTF, Cornhole Trophies
+- **Product calculators** — 4mm Corrugated Signs, 10mm Corrugated Signs, Aluminum Signs, Vinyl Decals, Banners, T-Shirts + DTF, Cornhole Trophies, Stickers, Embroidery
 - **Automatic quantity break pricing** — correct tier applied automatically based on qty entered
-- **Quote sheet** — add multiple line items, enter customer info, track running total
-- **Print quote** — opens a clean branded print sheet with L6I logo and "America's SWAG" tagline
-- **Email quote** — opens default email client pre-filled with full quote as plain text
-- **Copy quote** — copies plain text to clipboard for pasting into any system
+- **Estimate sheet** — add multiple line items, enter customer info, track running total
+- **Print estimate** — opens a clean branded print sheet with L6I logo and "America's SWAG" tagline — includes ESTIMATE ONLY watermark
+- **Email estimate** — opens default email client pre-filled with full estimate as plain text
+- **Copy estimate** — copies plain text to clipboard for pasting into any system
 - **Mobile-friendly** — horizontal nav on phones, slide-up quote drawer, works as home screen app
 - **Live pricing from Google Sheet** — fetches updated pricing on load if connected (see below)
 - **Desktop layout** — three-column view on screens 900px+ (sidebar / calculator / quote sheet)
 
 ### How to Use
-1. Download `L6I_Quote_Tool_v2.html`
+1. Download `L6I_Quote_Tool_v3.html`
 2. Open in Chrome, Edge, or Safari
 3. Select a product category from the sidebar or top nav
 4. Enter job details and click **Calculate**
-5. Click **+ Add to Quote** to add the line item
+5. Click **+ Add to Estimate** to add the line item
 6. Repeat for additional products
 7. Enter customer info in the Quote Sheet
-8. Click **Print**, **Copy**, or **Email Quote**
+8. Click **Print**, **Copy**, or **Email Estimate**
 
 ### Mobile / Field Use
 In Chrome on iPhone or Android:
@@ -52,18 +52,24 @@ In Chrome on iPhone or Android:
 The tool can pull live pricing from a published Google Sheet. When connected, pricing updates automatically whenever Lindsay changes a number in the sheet — no code edits needed.
 
 **To connect:**
-1. Open `L6I_Pricing_Master.xlsx`, upload to Google Drive (it becomes a Google Sheet automatically)
+1. Open `L6I_Pricing_Master_v2.xlsx`, upload to Google Drive (it becomes a Google Sheet automatically)
 2. In Google Sheets: **File → Share → Publish to Web → CSV → Publish**
 3. Copy the published CSV URL
 4. The tool already has the current sheet URL hardcoded — to update it, change the `SHEET_URL` constant at the top of the `<script>` section
 
 **Current sheet URL is configured in the file.** The tool will show `"Pricing loaded from Google Sheet"` in green under the 4mm panel title when the connection is live.
 
+**Live Google Sheet (internal access):**
+[L6I Pricing Master — Google Sheets](https://docs.google.com/spreadsheets/d/1OaC1CLGwIHe8Lc8ep2kf6Mr0FzFMHW8k/edit?gid=1048448350#gid=1048448350)
+
+**Published CSV URL (used by the Quote Tool):**
+`https://docs.google.com/spreadsheets/d/e/2PACX-1vR6BMt8raR1OUAspd8mJzJsj2Zj4N_hGQZV6oJo3XSqZI6oHGHBDO8Wf68FDTHR2A/pub?output=csv`
+
 ---
 
-## 💰 Pricing Master (`L6I_Pricing_Master.xlsx`)
+## 💰 Pricing Master (`L6I_Pricing_Master_v2.xlsx`)
 
-Eight-tab Excel workbook. Upload to Google Drive to use as a live Google Sheet.
+Eleven-tab Excel workbook. Upload to Google Drive to use as a live Google Sheet.
 
 | Tab | Contents |
 |-----|----------|
@@ -74,6 +80,9 @@ Eight-tab Excel workbook. Upload to Google Drive to use as a live Google Sheet.
 | 🎨 Vinyl Decals | Per-square-foot rate + application fee |
 | 👕 Shirts + DTF | All shirt styles (MSRP/sale/cost), DTF transfer costs, press fees, live formula |
 | 🏆 Cornhole Trophies | Tiered pricing 1–100+ pieces, design fee |
+| 🚩 Banners | Hanging banner pricing — 9 sizes |
+| 🏷 Stickers | Vinyl die-cut sticker pricing — 8 sizes, MOQ formula |
+| 🧵 Embroidery | Full stitch count × quantity pricing matrix, setup fee, stitch count reference guide |
 | 🔗 Quote Tool Export | Machine-readable tab — **this is the one published as CSV** |
 
 **Color coding:**
@@ -86,7 +95,7 @@ Eight-tab Excel workbook. Upload to Google Drive to use as a live Google Sheet.
 ## 🔧 Making Changes
 
 ### Pricing updates (no code needed)
-1. Open the Google Sheet version of `L6I_Pricing_Master.xlsx`
+1. Open the Google Sheet version of `L6I_Pricing_Master_v2.xlsx`
 2. Find the yellow cell for the price you want to change
 3. Update the number
 4. Save — the Quote Tool pulls the new price on next load
@@ -95,7 +104,7 @@ Eight-tab Excel workbook. Upload to Google Drive to use as a live Google Sheet.
 Requires a code edit to the HTML file. Contact Matt or open an issue in this repo.
 
 ### Updating the tool itself
-1. Open `L6I_Quote_Tool_v2.html` in a text editor (VS Code recommended)
+1. Open `L6I_Quote_Tool_v3.html` in a text editor (VS Code recommended)
 2. Make changes
 3. Test in browser
 4. Commit and push to this repo
@@ -137,4 +146,4 @@ This is an internal tool. If you find a bug or want a feature added:
 
 ---
 
-*Last updated: March 2026*
+*Last updated: March 2026 — v3*
