@@ -144,6 +144,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="mobile-nav-btn" onclick="showPanel('cornhole',this)">🏆 Cornhole</button>
   <button class="mobile-nav-btn" onclick="showPanel('ref',this)">📋 All Prices</button>
   <button class="mobile-nav-btn" onclick="showPanel('banners',this)">🚩 Banners</button>
+  <button class="mobile-nav-btn" onclick="showPanel('magnets',this)">🧲 Magnets</button>
   <button class="mobile-nav-btn" onclick="showPanel('stickers',this)">🏷 Stickers</button>
   <button class="mobile-nav-btn" onclick="showPanel('embroidery',this)">🧵 Embroidery</button>
   <button class="mobile-nav-btn" onclick="showPanel('resources',this)">🔗 Resources</button>
@@ -164,6 +165,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="cat-btn" onclick="showPanel('cornhole',this)"><span>🏆</span> Cornhole Trophies</button>
   <div class="sidebar-section">More Products</div>
   <button class="cat-btn" onclick="showPanel('banners',this)"><span>🚩</span> Banners</button>
+  <button class="cat-btn" onclick="showPanel('magnets',this)"><span>🧲</span> Vehicle Magnets</button>
   <button class="cat-btn" onclick="showPanel('stickers',this)"><span>🏷</span> Stickers</button>
   <button class="cat-btn" onclick="showPanel('embroidery',this)"><span>🧵</span> Embroidery</button>
   <div class="sidebar-section">Reference</div>
@@ -376,7 +378,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     </tbody></table>
 
     <div class="section-divider"></div>
-    <table class="price-table"><thead><tr><th colspan="2">Banners</th></tr></thead><tbody>
+    <table class="price-table"><thead><tr><th colspan="2">Hanging Banners</th></tr></thead><tbody>
       <tr><td>2×1 ft</td><td>$15.00</td></tr>
       <tr><td>3×2 ft</td><td>$23.00</td></tr>
       <tr><td>4×3 ft</td><td>$45.00</td></tr>
@@ -387,7 +389,20 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <tr><td>10×4 ft</td><td>$150.00</td></tr>
       <tr><td>12×4 ft</td><td>$180.00</td></tr>
     </tbody></table>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Retractable Banner Stand (FireSprint)</th><th>1–9</th><th>10+</th></tr></thead><tbody>
+      <tr><td>36×72"</td><td>$497.50</td><td>$472.50</td></tr>
+      <tr><td>36×84"</td><td>$497.50</td><td>$472.50</td></tr>
+      <tr><td>36×92"</td><td>$497.50</td><td>$472.50</td></tr>
+    </tbody></table>
 
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th colspan="2">Vehicle Magnets (FireSprint · min 2)</th></tr></thead><tbody>
+      <tr><td>18×10"</td><td>$30.00 ea</td></tr>
+      <tr><td>18×12"</td><td>$30.00 ea</td></tr>
+      <tr><td>24×12"</td><td>$30.00 ea</td></tr>
+      <tr><td>24×18"</td><td>$45.00 ea</td></tr>
+    </tbody></table>
     <div class="section-divider"></div>
     <table class="price-table"><thead><tr><th colspan="2">Stickers — Vinyl Die-Cut (min 15)</th></tr></thead><tbody>
       <tr><td>1 inch</td><td>$0.19 ea</td></tr>
@@ -444,6 +459,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="form-row">
       <div class="field"><label>Size</label>
         <select id="bn-size">
+          <optgroup label="Hanging Banners">
           <option value="2x1|15.00">2×1 ft — $15.00</option>
           <option value="3x2|23.00">3×2 ft — $23.00</option>
           <option value="4x3|45.00" selected>4×3 ft — $45.00</option>
@@ -453,6 +469,12 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="10x2|69.00">10×2 ft — $69.00</option>
           <option value="10x4|150.00">10×4 ft — $150.00</option>
           <option value="12x4|180.00">12×4 ft — $180.00</option>
+          </optgroup>
+          <optgroup label="Lifetime Retractable Banner Stand (FireSprint)">
+          <option value="retract_36x72|497.50">36×72" Retractable Stand — $497.50</option>
+          <option value="retract_36x84|497.50">36×84" Retractable Stand — $497.50</option>
+          <option value="retract_36x92|497.50">36×92" Retractable Stand — $497.50</option>
+          </optgroup>
         </select></div>
       <div class="field"><label>Quantity</label><input type="number" id="bn-qty" value="1" min="1"></div>
     </div>
@@ -461,7 +483,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <button class="add-to-quote-btn" id="bn-add" style="display:none" onclick="addToQuote('bn')">+ ADD TO ESTIMATE</button>
     <div class="note-box">Custom sizes available — call for quote. Prices subject to change — Lindsay updates via Google Sheet.</div>
     <div class="section-divider"></div>
-    <table class="price-table"><thead><tr><th>Size</th><th>Retail Price</th></tr></thead><tbody>
+    <table class="price-table"><thead><tr><th colspan="2">Hanging Banners</th></tr></thead><tbody>
       <tr><td>2×1 ft</td><td>$15.00</td></tr>
       <tr><td>3×2 ft</td><td>$23.00</td></tr>
       <tr><td>4×3 ft</td><td>$45.00</td></tr>
@@ -471,6 +493,41 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <tr><td>10×2 ft</td><td>$69.00</td></tr>
       <tr><td>10×4 ft</td><td>$150.00</td></tr>
       <tr><td>12×4 ft</td><td>$180.00</td></tr>
+    </tbody></table>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Lifetime Retractable Stand (FireSprint)</th><th>1–9</th><th>10+</th></tr></thead><tbody>
+      <tr><td>36×72"</td><td>$497.50</td><td>$472.50</td></tr>
+      <tr><td>36×84"</td><td>$497.50</td><td>$472.50</td></tr>
+      <tr><td>36×92"</td><td>$497.50</td><td>$472.50</td></tr>
+    </tbody></table>
+    <div class="note-box">Retractable stands via FireSprint — firesprint.com/36-silverstep-retractable-banner-stand/</div>
+  </div>
+
+
+  <!-- VEHICLE MAGNETS -->
+  <div class="panel" id="panel-magnets">
+    <div class="panel-title">Vehicle Magnets</div>
+    <div class="panel-desc">FireSprint · firesprint.com/vehicle-magnets/ · Min qty 2</div>
+    <div class="form-row">
+      <div class="field"><label>Size</label>
+        <select id="mg-size">
+          <option value="18x10|30.00" selected>18×10" — $30.00 ea</option>
+          <option value="18x12|30.00">18×12" — $30.00 ea</option>
+          <option value="24x12|30.00">24×12" — $30.00 ea</option>
+          <option value="24x18|45.00">24×18" — $45.00 ea</option>
+        </select></div>
+      <div class="field"><label>Quantity (min 2)</label><input type="number" id="mg-qty" value="2" min="2"></div>
+    </div>
+    <button class="calc-btn" onclick="calcMagnets()">CALCULATE</button>
+    <div class="result-card" id="mg-result"></div>
+    <button class="add-to-quote-btn" id="mg-add" style="display:none" onclick="addToQuote('mg')">+ ADD TO ESTIMATE</button>
+    <div class="note-box">Flat pricing — no qty break discount. Minimum order: 2 per size. Via FireSprint.</div>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Size</th><th>Price Each</th><th>Min Order</th></tr></thead><tbody>
+      <tr><td>18×10"</td><td>$30.00</td><td>2</td></tr>
+      <tr><td>18×12"</td><td>$30.00</td><td>2</td></tr>
+      <tr><td>24×12"</td><td>$30.00</td><td>2</td></tr>
+      <tr><td>24×18"</td><td>$45.00</td><td>2</td></tr>
     </tbody></table>
   </div>
 
@@ -609,7 +666,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="quote-actions">
       <button class="qa-btn primary" onclick="printQuote()">🖨 Print Estimate</button>
       <button class="qa-btn secondary" onclick="copyQuote()">📋 Copy</button>
-      <button class="qa-btn email-btn" onclick="showEmailModal()">✉ Email Estimate</button>
+      <button class="qa-btn email-btn" onclick="showEmailModal()">✉ Email / Save PDF</button>
       <button class="qa-btn danger" onclick="clearQuote()">Clear Estimate</button>
     </div>
   </div>
@@ -626,12 +683,12 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 <div class="modal-overlay" id="email-modal">
   <div class="modal">
     <div class="modal-header">
-      <span class="modal-title">✉ Email Estimate</span>
+      <span class="modal-title">✉ Email / Save PDF</span>
       <button class="modal-close-btn" onclick="closeEmailModal()">✕</button>
     </div>
     <div class="modal-body">
       <div class="modal-note">
-        This sends the customer a price estimate for approval. Once they reply to confirm, send a formal invoice. Prices are subject to change based on final artwork and specifications.
+        This opens your email client with the estimate in the message body. To attach a PDF: click <strong>Save as PDF</strong> below first, then attach it to your email manually.
       </div>
       <div class="modal-field">
         <label>Send To</label>
@@ -652,6 +709,9 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <div class="modal-actions">
         <button class="modal-btn send" onclick="sendEmail()">📧 Open in Email</button>
         <button class="modal-btn cancel" onclick="closeEmailModal()">Cancel</button>
+      </div>
+      <div style="margin-top:10px">
+        <button class="modal-btn" style="width:100%;background:var(--navy);color:var(--gold)" onclick="closeEmailModal();printQuote()">🖨 Save as PDF First</button>
       </div>
     </div>
   </div>
@@ -947,6 +1007,21 @@ function printQuote(){
 
 
 
+
+function calcMagnets(){
+  var sv=document.getElementById('mg-size').value.split('|');
+  var size=sv[0];
+  var rate=parseFloat(sv[1]);
+  var qty=parseInt(document.getElementById('mg-qty').value)||2;
+  if(qty<2){qty=2;document.getElementById('mg-qty').value=2;}
+  var total=rate*qty;
+  var desc=qty+'x Vehicle Magnet '+size+'"';
+  var lines=[['Size',size+'"'],['Rate Each','$'+rate.toFixed(2)],['Qty',qty]];
+  showResult('mg-result',lines,total,qty,desc);
+  lastCalc.mg={desc:desc,total:total,qty:qty};
+  showAddBtn('mg-add');
+}
+
 // Banner pricing
 var BN_PRICES = {
   '2x1':15.00,'3x2':23.00,'4x3':45.00,'4x4':60.00,
@@ -956,11 +1031,19 @@ var BN_PRICES = {
 function calcBanners(){
   var sv=document.getElementById('bn-size').value.split('|');
   var size=sv[0];
-  var rate=parseFloat(sv[1]);
+  var baseRate=parseFloat(sv[1]);
   var qty=parseInt(document.getElementById('bn-qty').value)||1;
+  var isRetract=size.indexOf('retract_')===0;
+  var displaySize=isRetract?size.replace('retract_',''):size;
+  var rate=baseRate;
+  if(isRetract&&qty>=10){rate=472.50;}
   var total=rate*qty;
-  var desc=qty+'x Hanging Banner '+size+' ft';
-  var lines=[['Size',size+' ft'],['Rate Each','$'+rate.toFixed(2)],['Qty',qty]];
+  var type=isRetract?'Retractable Banner Stand':'Hanging Banner';
+  var desc=qty+'x '+type+' '+displaySize+(isRetract?'"':'ft');
+  var lines=[['Type',type],['Size',displaySize+(isRetract?'"':' ft')]];
+  if(isRetract&&qty>=10)lines.push(['Qty 10+ discount','$472.50 ea']);
+  lines.push(['Rate Each','$'+rate.toFixed(2)]);
+  lines.push(['Qty',qty]);
   showResult('bn-result',lines,total,qty,desc);
   lastCalc.bn={desc:desc,total:total,qty:qty};
   showAddBtn('bn-add');
