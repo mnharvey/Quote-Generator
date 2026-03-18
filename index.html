@@ -822,6 +822,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 </div>
 
 <script>
+const SERVER_URL='http://54.146.242.63:3001';
 const SHEET_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vR6BMt8raR1OUAspd8mJzJsj2Zj4N_hGQZV6oJo3XSqZI6oHGHBDO8Wf68FDTHR2A/pub?output=csv';
 
 const C4={
@@ -1083,15 +1084,49 @@ function closeEmailModal(){
 }
 
 function sendEmail(){
-  var to=document.getElementById('m-to').value||'sales@little6llc.com';
-  var cc=document.getElementById('m-cc').value;
-  var subject=encodeURIComponent(document.getElementById('m-subject').value);
-  var notes=document.getElementById('m-notes').value;
-  var body=buildQuoteText();
-  if(notes)body+='\n\nNotes:\n'+notes;
-  var ccParam=cc?'&cc='+encodeURIComponent(cc):'';
-  window.location.href='mailto:'+to+ccParam+'?subject='+subject+'&body='+encodeURIComponent(body);
-  closeEmailModal();
+  var customerEmail=document.getElementById('m-to').value||'';
+  if(!customerEmail){alert('Please enter a customer email address.');return;}
+  if(quoteItems.length===0){alert('No items in estimate.');return;}
+  var customerName=document.getElementById('q-name').value||'Customer';
+  var company=document.getElementById('q-company').value||'';
+  var notes=document.getElementById('m-notes').value||'';
+  var date=new Date().toLocaleDateString();
+  var overallDiscVal=parseFloat(document.getElementById('overall-disc').value)||0;
+  var payload={
+    customerName:customerName,
+    company:company,
+    customerEmail:customerEmail,
+    date:date,
+    items:quoteItems,
+    overallDiscount:overallDiscVal,
+    overallDiscountType:'pct',
+    notes:notes
+  };
+  var sendBtn=document.querySelector('.modal-btn.send');
+  var origText=sendBtn.textContent;
+  sendBtn.textContent='Sending...';
+  sendBtn.disabled=true;
+  fetch(SERVER_URL+'/send-estimate',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(data.success){
+      closeEmailModal();
+      alert('Estimate sent to '+customerEmail+'. A copy was sent to sales@little6llc.com.');
+    } else {
+      alert('Error: '+(data.error||'Unknown error'));
+      sendBtn.textContent=origText;
+      sendBtn.disabled=false;
+    }
+  })
+  .catch(function(){
+    alert('Could not reach the server. Check your connection and try again.');
+    sendBtn.textContent=origText;
+    sendBtn.disabled=false;
+  });
 }
 
 function printQuote(){
