@@ -1061,10 +1061,8 @@ function copyQuote(){
 }
 
 function showEmailModal(){
-  var name=document.getElementById('q-name').value||'Customer';
-  var co=document.getElementById('q-company').value;
-  document.getElementById('m-subject').value='Price Estimate for '+(co||name)+' -- Little 6 Industries';
-  document.getElementById('m-cc').value=document.getElementById('q-email').value||'';
+  var emailField=document.getElementById('m-to');
+  if(emailField) emailField.value=document.getElementById('q-email').value||'';
   document.getElementById('email-modal').classList.add('show');
 }
 
