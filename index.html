@@ -770,7 +770,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="quote-actions">
       <button class="qa-btn primary" onclick="printQuote()">🖨 Print Estimate</button>
       <button class="qa-btn secondary" onclick="copyQuote()">📋 Copy</button>
-      <button class="qa-btn email-btn" onclick="showEmailModal()">✉ Email / Save PDF</button>
+      <button class="qa-btn email-btn" onclick="showEmailModal()">✉ Email Estimate</button>
       <button class="qa-btn danger" onclick="clearQuote()">Clear Estimate</button>
     </div>
   </div>
@@ -787,7 +787,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 <div class="modal-overlay" id="email-modal">
   <div class="modal">
     <div class="modal-header">
-      <span class="modal-title">✉ Email / Save PDF</span>
+      <span class="modal-title">✉ Send Estimate</span>
       <button class="modal-close-btn" onclick="closeEmailModal()">✕</button>
     </div>
     <div class="modal-body">
@@ -803,7 +803,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <textarea id="m-notes" placeholder="Any special instructions, turnaround notes, etc."></textarea>
       </div>
       <div class="modal-actions">
-        <button class="modal-btn send" onclick="sendEmail()">📧 Send Estimate + PDF</button>
+        <button class="modal-btn send" type="button" onclick="sendEmail()">📧 Send Estimate + PDF</button>
         <button class="modal-btn cancel" onclick="closeEmailModal()">Cancel</button>
       </div>
     </div>
