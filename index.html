@@ -792,30 +792,19 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     </div>
     <div class="modal-body">
       <div class="modal-note">
-        This opens your email client with the estimate in the message body. To attach a PDF: click <strong>Save as PDF</strong> below first, then attach it to your email manually.
+        The server will generate a branded PDF and email it directly to the customer. A copy goes to sales@little6llc.com automatically.
       </div>
       <div class="modal-field">
-        <label>Send To</label>
-        <input type="email" id="m-to" value="sales@little6llc.com" placeholder="sales@little6llc.com">
+        <label>Customer Email</label>
+        <input type="email" id="m-to" placeholder="customer@email.com">
       </div>
       <div class="modal-field">
-        <label>CC Customer Email (optional)</label>
-        <input type="email" id="m-cc" placeholder="customer@email.com">
-      </div>
-      <div class="modal-field">
-        <label>Subject</label>
-        <input type="text" id="m-subject" placeholder="Estimate for Customer Name">
-      </div>
-      <div class="modal-field">
-        <label>Additional Notes</label>
+        <label>Additional Notes (optional)</label>
         <textarea id="m-notes" placeholder="Any special instructions, turnaround notes, etc."></textarea>
       </div>
       <div class="modal-actions">
-        <button class="modal-btn send" onclick="sendEmail()">📧 Open in Email</button>
+        <button class="modal-btn send" onclick="sendEmail()">📧 Send Estimate + PDF</button>
         <button class="modal-btn cancel" onclick="closeEmailModal()">Cancel</button>
-      </div>
-      <div style="margin-top:10px">
-        <button class="modal-btn" style="width:100%;background:var(--navy);color:var(--gold)" onclick="closeEmailModal();printQuote()">🖨 Save as PDF First</button>
       </div>
     </div>
   </div>
