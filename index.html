@@ -121,6 +121,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   .quote-drawer{position:static;height:auto;min-height:calc(100vh - 56px);transform:none!important;box-shadow:none;border-left:1px solid var(--mid-gray);}
   .quote-close-btn{display:none!important;}
 }
+
 </style>
 </head>
 <body>
@@ -192,6 +193,17 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <select id="c4-sides"><option value="single">Single Sided</option><option value="double">Double Sided</option></select></div>
       <div class="field"><label>Quantity</label><input type="number" id="c4-qty" value="10" min="1"></div>
     </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="c4-disc">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
+        </select></div>
+    </div>
     <button class="calc-btn" onclick="calcCorr4()">CALCULATE</button>
     <div class="result-card" id="c4-result"></div>
     <button class="add-to-quote-btn" id="c4-add" style="display:none" onclick="addToQuote('c4')">+ ADD TO ESTIMATE</button>
@@ -229,6 +241,17 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <div class="field"><label>Sides</label>
         <select id="c10-sides"><option value="single">Single</option><option value="double">Double</option></select></div>
       <div class="field"><label>Quantity</label><input type="number" id="c10-qty" value="5" min="1"></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="c10-disc">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
+        </select></div>
     </div>
     <button class="calc-btn" onclick="calcCorr10()">CALCULATE</button>
     <div class="result-card" id="c10-result"></div>
@@ -273,6 +296,17 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <div class="field"><label>Application Fee</label>
         <select id="al-app"><option value="0">No application</option><option value="35">Window vinyl application (+$35)</option></select></div>
     </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="al-disc">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
+        </select></div>
+    </div>
     <button class="calc-btn" onclick="calcAluminum()">CALCULATE</button>
     <div class="result-card" id="al-result"></div>
     <button class="add-to-quote-btn" id="al-add" style="display:none" onclick="addToQuote('al')">+ ADD TO ESTIMATE</button>
@@ -290,6 +324,17 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="form-row single">
       <div class="field"><label>Application</label>
         <select id="vn-app"><option value="0">Customer installs</option><option value="35">Window application (+$35)</option></select></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="vn-disc">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
+        </select></div>
     </div>
     <button class="calc-btn" onclick="calcVinyl()">CALCULATE</button>
     <div class="result-card" id="vn-result"></div>
@@ -317,14 +362,18 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="4.25|5.00">Pocket + Back — DTF $4.25 + Press $5</option>
         </select></div>
     </div>
-    <div class="form-row">
+    <div class="form-row single">
       <div class="field"><label>Quantity</label><input type="number" id="sh-qty" value="24" min="1"></div>
-      <div class="field"><label>Bulk Discount</label>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
         <select id="sh-disc">
           <option value="0">No discount</option>
-          <option value="5">5% discount</option>
-          <option value="10">10% — 100+ pcs</option>
-          <option value="15">15% — 200+ pcs</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
         </select></div>
     </div>
     <button class="calc-btn" onclick="calcShirts()">CALCULATE</button>
@@ -349,6 +398,17 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <div class="field"><label>Quantity</label><input type="number" id="ch-qty" value="5" min="1"></div>
       <div class="field"><label>Design</label>
         <select id="ch-design"><option value="0">Customer provides art</option><option value="25">We design (+$25)</option></select></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="ch-disc">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
+        </select></div>
     </div>
     <button class="calc-btn" onclick="calcCornhole()">CALCULATE</button>
     <div class="result-card" id="ch-result"></div>
@@ -478,6 +538,17 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         </select></div>
       <div class="field"><label>Quantity</label><input type="number" id="bn-qty" value="1" min="1"></div>
     </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="bn-disc">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
+        </select></div>
+    </div>
     <button class="calc-btn" onclick="calcBanners()">CALCULATE</button>
     <div class="result-card" id="bn-result"></div>
     <button class="add-to-quote-btn" id="bn-add" style="display:none" onclick="addToQuote('bn')">+ ADD TO ESTIMATE</button>
@@ -518,6 +589,17 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         </select></div>
       <div class="field"><label>Quantity (min 2)</label><input type="number" id="mg-qty" value="2" min="2"></div>
     </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="mg-disc">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
+        </select></div>
+    </div>
     <button class="calc-btn" onclick="calcMagnets()">CALCULATE</button>
     <div class="result-card" id="mg-result"></div>
     <button class="add-to-quote-btn" id="mg-add" style="display:none" onclick="addToQuote('mg')">+ ADD TO ESTIMATE</button>
@@ -548,6 +630,17 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="8|6.59">8 inch — $6.59 each</option>
         </select></div>
       <div class="field"><label>Quantity</label><input type="number" id="st-qty" value="15" min="15"></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="st-disc">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
+        </select></div>
     </div>
     <button class="calc-btn" onclick="calcStickers()">CALCULATE</button>
     <div class="result-card" id="st-result"></div>
@@ -589,6 +682,17 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <select id="em-setup">
           <option value="35">New design — $35 setup fee</option>
           <option value="0">Existing digitized design — no setup fee</option>
+        </select></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="em-disc">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
         </select></div>
     </div>
     <button class="calc-btn" onclick="calcEmbroidery()">CALCULATE</button>
@@ -747,6 +851,7 @@ let lastCalc={};
 let quoteItems=[];
 let itemCounter=0;
 
+
 function getRate(prices,breaks,qty){
   var r=prices[0];
   for(var i=0;i<breaks.length;i++){if(qty>=breaks[i])r=prices[i];}
@@ -754,11 +859,24 @@ function getRate(prices,breaks,qty){
 }
 
 function showResult(id,lines,total,qty,desc){
+  var pid=id.replace('-result','');
+  var discSel=document.getElementById(pid+'-disc');
+  var discPct=discSel?parseFloat(discSel.value)||0:0;
+  var discAmt=total*(discPct/100);
+  var finalTotal=total-discAmt;
+  if(discPct>0){lines=lines.concat([['Discount','-'+discPct+'% (-$'+discAmt.toFixed(2)+')']]);}
   var el=document.getElementById(id);
   el.className='result-card show';
-  var lHTML=lines.map(function(pair){return '<div class="result-line"><span class="r-key">'+pair[0]+'</span><span class="r-val">'+pair[1]+'</span></div>';}).join('');
-  var eachHTML=qty>1?'<div class="result-each">$'+(total/qty).toFixed(2)+' each</div>':'';
-  el.innerHTML='<div class="result-label">Quote Result</div>'+lHTML+'<div class="result-total"><span class="r-key">Total</span><div><div class="r-val">$'+total.toFixed(2)+'</div>'+eachHTML+'</div></div>';
+  var lHTML=lines.map(function(pair){
+    var isDisc=pair[0]==='Discount';
+    return '<div class="result-line"><span class="r-key">'+pair[0]+'</span><span class="r-val">'+(isDisc?'<span style="color:var(--green)">'+pair[1]+'</span>':pair[1])+'</span></div>';
+  }).join('');
+  var eachHTML=qty>1?'<div class="result-each">$'+(finalTotal/qty).toFixed(2)+' each</div>':'';
+  el.innerHTML='<div class="result-label">Estimate Result</div>'+lHTML+'<div class="result-total"><span class="r-key">Total</span><div><div class="r-val">$'+finalTotal.toFixed(2)+'</div>'+eachHTML+'</div></div>';
+  if(window.lastCalc&&window.lastCalc[pid]){
+    window.lastCalc[pid].total=finalTotal;
+    if(discPct>0){window.lastCalc[pid].desc=desc+' ('+discPct+'% off)';}
+  }
 }
 
 function calcCorr4(){
@@ -827,21 +945,14 @@ function calcShirts(){
   var dtf=parseFloat(pv[0]);
   var press=parseFloat(pv[1]);
   var qty=parseInt(document.getElementById('sh-qty').value)||1;
-  var disc=parseFloat(document.getElementById('sh-disc').value)||0;
   var sEl=document.getElementById('sh-shirt');
   var pEl=document.getElementById('sh-print');
   var sName=sEl.options[sEl.selectedIndex].text.split('--')[0].trim();
   var pName=pEl.options[pEl.selectedIndex].text.split('--')[0].trim();
   var unit=msrp+dtf+press;
-  var dAmt=unit*(disc/100);
-  var dUnit=unit-dAmt;
-  var total=dUnit*qty;
-  var discStr=disc>0?' ('+disc+'% disc)':'';
-  var desc=qty+'x '+sName+' / '+pName+discStr;
-  var lines=[['Shirt (MSRP)','$'+msrp.toFixed(2)],['DTF','$'+dtf.toFixed(2)],['Press','$'+press.toFixed(2)],['Unit','$'+unit.toFixed(2)]];
-  if(disc>0)lines.push(['Discount','-'+disc+'% (-$'+dAmt.toFixed(2)+')']);
-  lines.push(['Final Each','$'+dUnit.toFixed(2)]);
-  lines.push(['Qty',qty]);
+  var total=unit*qty;
+  var desc=qty+'x '+sName+' / '+pName;
+  var lines=[['Shirt (MSRP)','$'+msrp.toFixed(2)],['DTF','$'+dtf.toFixed(2)],['Press','$'+press.toFixed(2)],['Unit Each','$'+unit.toFixed(2)],['Qty',qty]];
   showResult('sh-result',lines,total,qty,desc);
   lastCalc.sh={desc:desc,total:total,qty:qty};
   showAddBtn('sh-add');
@@ -992,14 +1103,14 @@ function printQuote(){
   var logoSrc=document.getElementById('hidden-logo').src;
   var rows=quoteItems.map(function(i){return '<tr><td>'+i.desc+'</td><td style="text-align:right;font-family:monospace">$'+i.total.toFixed(2)+'</td></tr>';}).join('');
   var win=window.open('','_blank');
-  win.document.write('<!DOCTYPE html><html><head><title>L6I Price Estimate</title><style>body{font-family:Arial,sans-serif;max-width:680px;margin:40px auto;color:#222}.logo{height:60px}.tagline{font-size:11px;color:#888;letter-spacing:2px;text-transform:uppercase;margin-top:4px}hr{border:none;border-top:2px solid #B03028;margin:16px 0}.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;margin-bottom:20px}.ml{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px}table{width:100%;border-collapse:collapse;font-size:13px}th{background:#1A1A2E;color:#C8A84B;padding:10px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px}td{padding:10px 12px;border-bottom:1px solid #eee}tr:nth-child(even) td{background:#fafafa}.total-row td{font-weight:700;font-size:15px;background:#f5f4f1;color:#B03028}.footer{margin-top:24px;font-size:11px;color:#888;text-align:center;line-height:1.8}@media print{body{margin:20px}}</style></head><body>');
+  win.document.write('<!DOCTYPE html><html><head><title>L6I Price Estimate</title><style>body{font-family:Arial,sans-serif;max-width:680px;margin:40px auto;color:#222}.logo{height:60px}.tagline{font-size:11px;color:#888;letter-spacing:2px;text-transform:uppercase;margin-top:4px}hr{border:none;border-top:2px solid #B03028;margin:16px 0}.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;margin-bottom:20px}.ml{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px}table{width:100%;border-collapse:collapse;font-size:13px}th{background:#1A1A2E;color:#C8A84B;padding:10px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px}td{padding:10px 12px;border-bottom:1px solid #eee}tr:nth-child(even) td{background:#fafafa}.total-row td{font-weight:700;font-size:15px;background:#f5f4f1;color:#B03028}.footer{margin-top:24px;font-size:11px;color:#888;text-align:center;line-height:1.8}@media print{body{margin:20px}} </style></head><body>');
   win.document.write('<img class="logo" src="'+logoSrc+'" alt="Little 6 Industries">');
-  win.document.write('<div style="background:#B03028;color:white;padding:4px 12px;font-family:Arial;font-size:11px;font-weight:bold;letter-spacing:1px;display:inline-block;margin-bottom:4px">PRICE ESTIMATE — PENDING APPROVAL</div>');
+  win.document.write('<div style="background:#B03028;color:white;padding:4px 12px;font-family:Arial;font-size:11px;font-weight:bold;letter-spacing:1px;display:inline-block;margin-bottom:4px">PRICE ESTIMATE -- PENDING APPROVAL</div>');
   win.document.write('<div class="tagline">Americas SWAG -- The Brand Behind the Brand -- Veteran Owned -- Maricopa, AZ</div>');
   win.document.write('<hr>');
   win.document.write('<div class="meta"><div><div class="ml">Customer</div><div>'+name+'</div></div><div><div class="ml">Company</div><div>'+(co||'--')+'</div></div><div><div class="ml">Email</div><div>'+(email||'--')+'</div></div><div><div class="ml">Date</div><div>'+date+'</div></div></div>');
-  win.document.write('<table><thead><tr><th>Description</th><th style="text-align:right">Total</th></tr></thead><tbody>'+rows+'<tr class="total-row"><td>QUOTE TOTAL</td><td style="text-align:right;font-family:monospace">$'+total.toFixed(2)+'</td></tr></tbody></table>');
-  win.document.write('<div class="footer">Little 6 Industries LLC | SDVOSB Certified | 520-705-4026 | sales@little6llc.com | little6llc.com<br><strong>ESTIMATE ONLY — Not a final invoice.</strong> Prices subject to change based on final artwork and specs. Reply to approve and receive a formal invoice. Valid 30 days.</div>');
+  win.document.write('<table><thead><tr><th>Description</th><th style="text-align:right">Total</th></tr></thead><tbody>'+rows+'<tr class="total-row"><td>ESTIMATE TOTAL</td><td style="text-align:right;font-family:monospace">$'+total.toFixed(2)+'</td></tr></tbody></table>');
+  win.document.write('<div class="footer">Little 6 Industries LLC | SDVOSB Certified | 520-705-4026 | sales@little6llc.com | little6llc.com<br><strong>ESTIMATE ONLY -- Not a final invoice.</strong> Prices subject to change based on final artwork and specs. Reply to approve and receive a formal invoice. Valid 30 days.</div>');
   win.document.write('</body></html>');
   win.document.close();
   win.print();
@@ -1078,7 +1189,7 @@ function calcEmbroidery(){
   var subtotal=rate*qty;
   var total=subtotal+setup;
   var sEl=document.getElementById('em-stitches');
-  var sName=sEl.options[sEl.selectedIndex].text.split('—')[0].trim();
+  var sName=sEl.options[sEl.selectedIndex].text.split('--')[0].trim();
   var desc=qty+'x Embroidery '+sName+(setup>0?' + setup':'');
   var lines=[['Stitch Count',sName],['Qty',qty],['Rate Each','$'+rate.toFixed(2)],['Subtotal','$'+subtotal.toFixed(2)]];
   if(setup>0)lines.push(['Setup Fee','$'+setup.toFixed(2)]);
