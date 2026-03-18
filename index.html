@@ -1078,7 +1078,7 @@ function sendEmail(){
   var company=document.getElementById('q-company').value||'';
   var notes=document.getElementById('m-notes').value||'';
   var date=new Date().toLocaleDateString();
-  var overallDiscVal=parseFloat(document.getElementById('overall-disc').value)||0;
+  var overallDiscEl=document.getElementById('overall-disc'); var overallDiscVal=overallDiscEl?parseFloat(overallDiscEl.value)||0:0;
   var payload={
     customerName:customerName,
     company:company,
