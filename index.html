@@ -464,15 +464,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <tr><td>24×18"</td><td>$45.00 ea</td></tr>
     </tbody></table>
     <div class="section-divider"></div>
-    <table class="price-table"><thead><tr><th colspan="2">Stickers — Vinyl Die-Cut (min 15)</th></tr></thead><tbody>
-      <tr><td>1 inch</td><td>$0.19 ea</td></tr>
-      <tr><td>2 inch</td><td>$0.42 ea</td></tr>
-      <tr><td>3 inch</td><td>$0.92 ea</td></tr>
-      <tr><td>4 inch</td><td>$1.65 ea</td></tr>
-      <tr><td>5 inch</td><td>$2.57 ea</td></tr>
-      <tr><td>6 inch</td><td>$3.70 ea</td></tr>
-      <tr><td>7 inch</td><td>$5.00 ea</td></tr>
-      <tr><td>8 inch</td><td>$6.59 ea</td></tr>
+    <table class="price-table"><thead><tr><th colspan="2">Stickers — Premium UV Outdoor (min 50)</th></tr></thead><tbody>
+      <tr><td>2" · 50/100/250/500</td><td>$18 / $29 / $62.50 / $105</td></tr>
+      <tr><td>3" · 50/100/250/500</td><td>$39 / $64 / $137.50 / $230</td></tr>
+      <tr><td>4" · 50/100/250/500</td><td>$70 / $116 / $247.50 / $415</td></tr>
+    </tbody></table>
+    <table class="price-table" style="margin-top:8px"><thead><tr><th colspan="2">Stickers — Economy Waterproof (min 50)</th></tr></thead><tbody>
+      <tr><td>2" · 50/100/250/500</td><td>$9 / $15 / $32.50 / $55</td></tr>
+      <tr><td>3" · 50/100/250/500</td><td>$18 / $29 / $62.50 / $105</td></tr>
+      <tr><td>4" · 50/100/250/500</td><td>$35.50 / $58 / $125 / $210</td></tr>
+      <tr><td>5" · 50/100/250/500</td><td>$55 / $90 / $192.50 / $325</td></tr>
     </tbody></table>
 
     <div class="section-divider"></div>
@@ -618,20 +619,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="panel-title">Custom Vinyl Die-Cut Stickers</div>
     <div class="panel-desc">White gloss or matte weatherproof vinyl · Min 15 per size</div>
     <div class="form-row">
-      <div class="field"><label>Size</label>
-        <select id="st-size">
-          <option value="1|0.19">1 inch — $0.19 each</option>
-          <option value="2|0.42">2 inch — $0.42 each</option>
-          <option value="3|0.92" selected>3 inch — $0.92 each</option>
-          <option value="4|1.65">4 inch — $1.65 each</option>
-          <option value="5|2.57">5 inch — $2.57 each</option>
-          <option value="6|3.70">6 inch — $3.70 each</option>
-          <option value="7|5.00">7 inch — $5.00 each</option>
-          <option value="8|6.59">8 inch — $6.59 each</option>
+      <div class="field"><label>Tier</label>
+        <select id="st-tier" onchange="updateStickerSizes()">
+          <option value="premium">Premium — UV rated, outdoor, waterproof</option>
+          <option value="economy">Economy — Waterproof, laptops, swag, labels</option>
         </select></div>
-      <div class="field"><label>Quantity</label><input type="number" id="st-qty" value="15" min="15"></div>
+      <div class="field"><label>Size</label>
+        <select id="st-size"></select></div>
     </div>
-    <div class="form-row single">
+    <div class="form-row">
+      <div class="field"><label>Quantity</label><input type="number" id="st-qty" value="50" min="1"></div>
       <div class="field"><label>Discount</label>
         <select id="st-disc">
           <option value="0">No discount</option>
@@ -645,17 +642,21 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <button class="calc-btn" onclick="calcStickers()">CALCULATE</button>
     <div class="result-card" id="st-result"></div>
     <button class="add-to-quote-btn" id="st-add" style="display:none" onclick="addToQuote('st')">+ ADD TO ESTIMATE</button>
-    <div class="note-box">Minimum order: 15 stickers per size. Design fee $25 if artwork is needed. Transfers42.com sticker builder available for self-service orders.</div>
+    <div class="note-box">Pricing breaks at 50/100/250/500 pieces. Die-cut shape standard. Kiss cut available. Spot gloss available at extra charge. Design fee $25 if artwork needed.</div>
     <div class="section-divider"></div>
-    <table class="price-table"><thead><tr><th>Size</th><th>Each</th><th>MOQ (15)</th></tr></thead><tbody>
-      <tr><td>1 inch</td><td>$0.19</td><td>$2.85</td></tr>
-      <tr><td>2 inch</td><td>$0.42</td><td>$6.30</td></tr>
-      <tr><td>3 inch</td><td>$0.92</td><td>$13.80</td></tr>
-      <tr><td>4 inch</td><td>$1.65</td><td>$24.75</td></tr>
-      <tr><td>5 inch</td><td>$2.57</td><td>$38.55</td></tr>
-      <tr><td>6 inch</td><td>$3.70</td><td>$55.50</td></tr>
-      <tr><td>7 inch</td><td>$5.00</td><td>$75.00</td></tr>
-      <tr><td>8 inch</td><td>$6.59</td><td>$98.85</td></tr>
+    <div style="font-family:Oswald,sans-serif;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Premium — UV Rated Outdoor Vinyl</div>
+    <table class="price-table"><thead><tr><th>Size</th><th>50 pcs</th><th>100 pcs</th><th>250 pcs</th><th>500 pcs</th></tr></thead><tbody>
+      <tr><td>2 inch</td><td>$18.00 ($.36)</td><td>$29.00 ($.29)</td><td>$62.50 ($.25)</td><td>$105.00 ($.21)</td></tr>
+      <tr><td>3 inch</td><td>$39.00 ($.78)</td><td>$64.00 ($.64)</td><td>$137.50 ($.55)</td><td>$230.00 ($.46)</td></tr>
+      <tr><td>4 inch</td><td>$70.00 ($1.40)</td><td>$116.00 ($1.16)</td><td>$247.50 ($.99)</td><td>$415.00 ($.83)</td></tr>
+    </tbody></table>
+    <div class="section-divider"></div>
+    <div style="font-family:Oswald,sans-serif;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Economy — Waterproof Vinyl</div>
+    <table class="price-table"><thead><tr><th>Size</th><th>50 pcs</th><th>100 pcs</th><th>250 pcs</th><th>500 pcs</th></tr></thead><tbody>
+      <tr><td>2 inch</td><td>$9.00 ($.18)</td><td>$15.00 ($.15)</td><td>$32.50 ($.13)</td><td>$55.00 ($.11)</td></tr>
+      <tr><td>3 inch</td><td>$18.00 ($.36)</td><td>$29.00 ($.29)</td><td>$62.50 ($.25)</td><td>$105.00 ($.21)</td></tr>
+      <tr><td>4 inch</td><td>$35.50 ($.71)</td><td>$58.00 ($.58)</td><td>$125.00 ($.50)</td><td>$210.00 ($.42)</td></tr>
+      <tr><td>5 inch</td><td>$55.00 ($1.10)</td><td>$90.00 ($.90)</td><td>$192.50 ($.77)</td><td>$325.00 ($.65)</td></tr>
     </tbody></table>
   </div>
 
@@ -1257,22 +1258,60 @@ function calcEmbroidery(){
   showAddBtn('em-add');
 }
 
-// Sticker pricing
-var ST_PRICES = {'1':0.19,'2':0.42,'3':0.92,'4':1.65,'5':2.57,'6':3.70,'7':5.00,'8':6.59};
+// Sticker pricing — Premium and Economy tiers
+var ST_DATA = {
+  premium: {
+    '2': [18.00, 29.00, 62.50, 105.00],
+    '3': [39.00, 64.00, 137.50, 230.00],
+    '4': [70.00, 116.00, 247.50, 415.00]
+  },
+  economy: {
+    '2': [9.00, 15.00, 32.50, 55.00],
+    '3': [18.00, 29.00, 62.50, 105.00],
+    '4': [35.50, 58.00, 125.00, 210.00],
+    '5': [55.00, 90.00, 192.50, 325.00]
+  }
+};
+var ST_BREAKS = [50, 100, 250, 500];
+
+function updateStickerSizes(){
+  var tier=document.getElementById('st-tier').value;
+  var sizes=Object.keys(ST_DATA[tier]);
+  var sel=document.getElementById('st-size');
+  sel.innerHTML='';
+  sizes.forEach(function(s){
+    var opt=document.createElement('option');
+    opt.value=s;
+    opt.textContent=s+' inch';
+    sel.appendChild(opt);
+  });
+}
+
+function getStickerRate(tier, size, qty){
+  var prices=ST_DATA[tier][size];
+  if(!prices)return 0;
+  var rate=prices[0];
+  for(var i=0;i<ST_BREAKS.length;i++){if(qty>=ST_BREAKS[i])rate=prices[i];}
+  return rate;
+}
 
 function calcStickers(){
-  var sv=document.getElementById('st-size').value.split('|');
-  var size=sv[0];
-  var rate=parseFloat(sv[1]);
-  var qty=parseInt(document.getElementById('st-qty').value)||15;
-  if(qty<15){qty=15;document.getElementById('st-qty').value=15;}
-  var total=rate*qty;
-  var desc=qty+'x '+size+'" Vinyl Die-Cut Stickers';
-  var lines=[['Size',size+'"'],['Rate Each','$'+rate.toFixed(2)],['Qty',qty]];
+  var tier=document.getElementById('st-tier').value;
+  var size=document.getElementById('st-size').value;
+  var qty=parseInt(document.getElementById('st-qty').value)||1;
+  var total=getStickerRate(tier,size,qty);
+  var each=(total/qty);
+  var tierLabel=tier==='premium'?'Premium UV':'Economy';
+  var desc=qty+'x '+size+'" '+tierLabel+' Stickers';
+  var lines=[['Tier',tierLabel],['Size',size+'"'],['Qty',qty],['Each','$'+each.toFixed(2)]];
   showResult('st-result',lines,total,qty,desc);
   lastCalc.st={desc:desc,total:total,qty:qty};
   showAddBtn('st-add');
 }
+
+// Initialize sticker sizes on load
+document.addEventListener('DOMContentLoaded', function(){ updateStickerSizes(); });
+
 
 // Try loading live pricing from Google Sheet
 fetch(SHEET_URL)
