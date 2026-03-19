@@ -1285,4 +1285,18 @@ fetch(SHEET_URL)
       var size=cols[1]?cols[1].trim():'';
       var qty=parseInt(cols[2])||1;
       var price=parseFloat(cols[3]);
-      if(!prod||isNaN(price))r
+      if(!prod||isNaN(price))return;
+      if(prod==='aluminum'&&AL[size]!==undefined){AL[size]=price;}
+    });
+    var el=document.getElementById('sheet-status');
+    if(el){el.textContent='Pricing loaded from Google Sheet';el.style.color='var(--green)';}
+  })
+  .catch(function(){
+    var el=document.getElementById('sheet-status');
+    if(el){el.textContent='Using built-in pricing';}
+  });
+
+document.getElementById('q-date').value=new Date().toLocaleDateString();
+</script>
+</body>
+</html>
