@@ -1277,21 +1277,14 @@ function updateMarginCheck(){
   
   var msg, color, bg;
   if(margin >= 50) {
-    msg = '✅ STRONG MARGIN — $' + dollars.toFixed(2) + ' profit per unit (' + margin.toFixed(0) + '%) at $' + targetVal.toFixed(2) + ' sell price';
+    msg = '✅ Good to go';
     color = '#1A6B3C'; bg = '#f0fff4'; checkDiv.style.borderLeftColor = '#1A6B3C';
   } else if(margin >= 30) {
-    msg = '⚠️ THIN MARGIN — $' + dollars.toFixed(2) + ' profit per unit (' + margin.toFixed(0) + '%) at $' + targetVal.toFixed(2) + ' — consider DTF add-on to improve value';
+    msg = '⚠️ Workable — confirm with customer before quoting';
     color = '#856404'; bg = '#fffbe6'; checkDiv.style.borderLeftColor = '#C8A84B';
   } else {
-    msg = '🚫 MARGIN TOO LOW — $' + dollars.toFixed(2) + ' profit per unit (' + margin.toFixed(0) + '%) at $' + targetVal.toFixed(2) + ' — not recommended';
+    msg = '🚫 Contact Matt or Lindsay before proceeding';
     color = '#B03028'; bg = '#fff3f3'; checkDiv.style.borderLeftColor = '#B03028';
-  }
-  
-  // Also show what price hits 50% margin
-  var price50 = caseVal / 0.50;
-  var price60 = caseVal / 0.40;
-  if(margin < 50) {
-    msg += '<br><small style="font-weight:400;opacity:0.8">To hit 50% margin: $' + price50.toFixed(2) + ' · To hit 60% margin: $' + price60.toFixed(2) + '</small>';
   }
   
   checkDiv.innerHTML = msg;
