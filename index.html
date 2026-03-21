@@ -948,25 +948,6 @@ function calcVinyl(){
   showAddBtn('vn-add');
 }
 
-function calcShirts(){
-  var msrp=parseFloat(document.getElementById('sh-shirt').value);
-  var pv=document.getElementById('sh-print').value.split('|');
-  var dtf=parseFloat(pv[0]);
-  var press=parseFloat(pv[1]);
-  var qty=parseInt(document.getElementById('sh-qty').value)||1;
-  var sEl=document.getElementById('sh-shirt');
-  var pEl=document.getElementById('sh-print');
-  var sName=sEl.options[sEl.selectedIndex].text.split('--')[0].trim();
-  var pName=pEl.options[pEl.selectedIndex].text.split('--')[0].trim();
-  var unit=msrp+dtf+press;
-  var total=unit*qty;
-  var desc=qty+'x '+sName+' / '+pName;
-  var lines=[['Shirt (MSRP)','$'+msrp.toFixed(2)],['DTF','$'+dtf.toFixed(2)],['Press','$'+press.toFixed(2)],['Unit Each','$'+unit.toFixed(2)],['Qty',qty]];
-  showResult('sh-result',lines,total,qty,desc);
-  lastCalc.sh={desc:desc,total:total,qty:qty};
-  showAddBtn('sh-add');
-}
-
 function calcCornhole(){
   var qty=parseInt(document.getElementById('ch-qty').value)||1;
   var df=parseFloat(document.getElementById('ch-design').value)||0;
@@ -990,7 +971,7 @@ function addToQuote(key){
   var item=lastCalc[key];
   if(!item)return;
   itemCounter++;
-  quoteItems.push({desc:item.desc,total:item.total,qty:item.qty,id:itemCounter});
+  quoteItems.push({desc:item.desc,total:item.total,qty:item.qty,details:item.details||[],id:itemCounter});
   renderQuote();
   var btn=document.getElementById(key+'-add');
   if(btn){
@@ -1023,7 +1004,11 @@ function renderQuote(){
     var div=document.createElement('div');
     div.className='quote-item';
     div.setAttribute('data-item-id',item.id);
-    div.innerHTML='<div class="qi-desc">'+item.desc+'</div><div class="qi-price">$'+item.total.toFixed(2)+'</div><button class="qi-remove" onclick="removeItem('+item.id+')">x</button>';
+    var detailHtml='';
+    if(item.details&&item.details.length){
+      detailHtml='<div style="font-size:11px;color:#888;margin-top:2px">'+item.details.map(function(d){return d[0]+': '+d[1];}).join(' · ')+'</div>';
+    }
+    div.innerHTML='<div class="qi-desc">'+item.desc+detailHtml+'</div><div class="qi-price">$'+item.total.toFixed(2)+'</div><button class="qi-remove" onclick="removeItem('+item.id+')">x</button>';
     container.appendChild(div);
   });
   totalEl.textContent='$'+total.toFixed(2);
@@ -1173,7 +1158,13 @@ function printQuote(){
   var date=document.getElementById('q-date').value||new Date().toLocaleDateString();
   var total=quoteItems.reduce(function(s,i){return s+i.total;},0);
   var logoSrc=document.getElementById('hidden-logo').src;
-  var rows=quoteItems.map(function(i){return '<tr><td>'+i.desc+'</td><td style="text-align:right;font-family:monospace">$'+i.total.toFixed(2)+'</td></tr>';}).join('');
+  var rows=quoteItems.map(function(i){
+    var detail='';
+    if(i.details&&i.details.length){
+      detail='<br><span style="font-size:11px;color:#888;font-weight:400">'+i.details.map(function(d){return d[0]+': '+d[1];}).join(' &nbsp;·&nbsp; ')+'</span>';
+    }
+    return '<tr><td>'+i.desc+detail+'</td><td style="text-align:right;font-family:monospace;vertical-align:top">$'+i.total.toFixed(2)+'</td></tr>';
+  }).join('');
   var win=window.open('','_blank');
   win.document.write('<!DOCTYPE html><html><head><title>L6I Price Estimate</title><style>body{font-family:Arial,sans-serif;max-width:680px;margin:40px auto;color:#222}.logo{height:60px}.tagline{font-size:11px;color:#888;letter-spacing:2px;text-transform:uppercase;margin-top:4px}hr{border:none;border-top:2px solid #B03028;margin:16px 0}.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;margin-bottom:20px}.ml{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px}table{width:100%;border-collapse:collapse;font-size:13px}th{background:#1A1A2E;color:#C8A84B;padding:10px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px}td{padding:10px 12px;border-bottom:1px solid #eee}tr:nth-child(even) td{background:#fafafa}.total-row td{font-weight:700;font-size:15px;background:#f5f4f1;color:#B03028}.footer{margin-top:24px;font-size:11px;color:#888;text-align:center;line-height:1.8}@media print{body{margin:20px}} </style></head><body>');
   win.document.write('<img class="logo" src="'+logoSrc+'" alt="Little 6 Industries">');
@@ -1379,9 +1370,14 @@ function calcShirts(){
   lines.push(['Qty', qty]);
   
   showResult('sh-result', lines, subtotal, qty, desc);
-  lastCalc.sh = {desc: desc, total: subtotal - subtotal*(parseFloat(document.getElementById('sh-disc').value)||0)/100, qty: qty};
-  // Fix: recalc with disc applied via showResult
-  lastCalc.sh.total = subtotal * (1 - (parseFloat(document.getElementById('sh-disc').value)||0)/100);
+  var discPct = parseFloat(document.getElementById('sh-disc').value)||0;
+  var finalTotal = subtotal * (1 - discPct/100);
+  var detailLines = [['Style', styleNum], ['Brand', brand], ['Category', category], ['Shirt MSRP', '$'+msrp.toFixed(2)]];
+  if(dtf>0) detailLines.push(['DTF+Press', '$'+(dtf+press).toFixed(2)]);
+  if(bulkPct>0) detailLines.push(['Bulk disc', '-'+bulkPct+'%']);
+  if(discPct>0) detailLines.push(['Discount', '-'+discPct+'%']);
+  detailLines.push(['Qty', qty]);
+  lastCalc.sh = {desc: desc, total: finalTotal, qty: qty, details: detailLines};
   showAddBtn('sh-add');
 }
 
@@ -1546,3 +1542,4 @@ initShirtCatalog();
 </script>
 </body>
 </html>
+  
