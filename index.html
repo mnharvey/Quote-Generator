@@ -377,7 +377,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="form-row">
       <div class="field"><label>Quantity</label><input type="number" id="sh-qty" value="12" min="1" onchange="checkBulkDiscount()"></div>
       <div class="field"><label>Bulk Discount (100+)</label>
-        <select id="sh-bulk">
+        <select id="sh-bulk" onchange="updateDiscountCheck()">
           <option value="0">No bulk discount</option>
           <option value="10">10% off (100+ garments)</option>
           <option value="15">15% off (200+ garments)</option>
@@ -386,7 +386,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     </div>
     <div class="form-row single">
       <div class="field"><label>Additional Discount</label>
-        <select id="sh-disc">
+        <select id="sh-disc" onchange="updateDiscountCheck()">
           <option value="0">No discount</option>
           <option value="5">5% off</option>
           <option value="10">10% off</option>
@@ -395,6 +395,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="25">25% off</option>
         </select></div>
     </div>
+    <div id="sh-discount-check" style="display:none;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #ccc"></div>
     <button class="calc-btn" onclick="calcShirts()">CALCULATE</button>
     <div class="result-card" id="sh-result"></div>
     <button class="add-to-quote-btn" id="sh-add" style="display:none" onclick="addToQuote('sh')">+ ADD TO ESTIMATE</button>
@@ -1261,7 +1262,50 @@ function updateShirtPrice(){
   updateMarginCheck();
 }
 
+function updateDiscountCheck(){
+  var caseVal = parseFloat(document.getElementById('sh-case').value);
+  var msrp = parseFloat(document.getElementById('sh-msrp').value);
+  var bulkVal = document.getElementById('sh-bulk').value;
+  var discVal = parseFloat(document.getElementById('sh-disc').value) || 0;
+  var checkDiv = document.getElementById('sh-discount-check');
+
+  // Need case price and a sell price to evaluate
+  if(!caseVal || !msrp) { checkDiv.style.display='none'; return; }
+
+  // Calculate total discount %
+  var bulkPct = (bulkVal === 'custom' || bulkVal === '0') ? 0 : parseFloat(bulkVal);
+  var totalDisc = 1 - ((1 - bulkPct/100) * (1 - discVal/100));
+  var effectiveSell = msrp * (1 - totalDisc);
+  var margin = ((effectiveSell - caseVal) / effectiveSell) * 100;
+  var breakEvenMargin = ((caseVal / msrp) * 100); // cost as % of MSRP
+
+  checkDiv.style.display = 'block';
+  var msg, color, bg;
+
+  if(bulkVal === 'custom') {
+    msg = '⚠️ Custom rate requested — confirm margin with Lindsay before quoting';
+    color = '#856404'; bg = '#fffbe6'; checkDiv.style.borderLeftColor = '#C8A84B';
+  } else if(margin <= 0) {
+    msg = '🚫 Discounts exceed margin — contact Matt or Lindsay before proceeding';
+    color = '#B03028'; bg = '#fff3f3'; checkDiv.style.borderLeftColor = '#B03028';
+  } else if(margin < 10) {
+    msg = '🚫 Within 10% of break-even — contact Matt or Lindsay before proceeding';
+    color = '#B03028'; bg = '#fff3f3'; checkDiv.style.borderLeftColor = '#B03028';
+  } else if(margin < 25) {
+    msg = '⚠️ Discounts are cutting into margin — confirm with customer before quoting';
+    color = '#856404'; bg = '#fffbe6'; checkDiv.style.borderLeftColor = '#C8A84B';
+  } else {
+    msg = '✅ Good to go';
+    color = '#1A6B3C'; bg = '#f0fff4'; checkDiv.style.borderLeftColor = '#1A6B3C';
+  }
+
+  checkDiv.innerHTML = msg;
+  checkDiv.style.color = color;
+  checkDiv.style.background = bg;
+}
+
 function updateMarginCheck(){
+  updateDiscountCheck();
   var caseVal = parseFloat(document.getElementById('sh-case').value);
   var targetVal = parseFloat(document.getElementById('sh-target').value);
   var checkDiv = document.getElementById('sh-margin-check');
