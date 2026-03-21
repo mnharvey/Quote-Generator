@@ -1161,9 +1161,10 @@ function printQuote(){
   var rows=quoteItems.map(function(i){
     var detail='';
     if(i.details&&i.details.length){
-      detail='<br><span style="font-size:11px;color:#888;font-weight:400">'+i.details.map(function(d){return d[0]+': '+d[1];}).join(' &nbsp;·&nbsp; ')+'</span>';
+      var pairs=i.details.map(function(d){return '<span style="margin-right:12px"><strong>'+d[0]+'</strong> '+d[1]+'</span>';}).join('');
+      detail='<div style="margin-top:5px;font-size:11px;color:#888;font-weight:400;line-height:1.8">'+pairs+'</div>';
     }
-    return '<tr><td>'+i.desc+detail+'</td><td style="text-align:right;font-family:monospace;vertical-align:top">$'+i.total.toFixed(2)+'</td></tr>';
+    return '<tr><td style="padding-bottom:12px"><div style="font-weight:600;font-size:13px">'+i.desc+'</div>'+detail+'</td><td style="text-align:right;font-family:monospace;vertical-align:top;padding-top:10px">$'+i.total.toFixed(2)+'</td></tr>';
   }).join('');
   var win=window.open('','_blank');
   win.document.write('<!DOCTYPE html><html><head><title>L6I Price Estimate</title><style>body{font-family:Arial,sans-serif;max-width:680px;margin:40px auto;color:#222}.logo{height:60px}.tagline{font-size:11px;color:#888;letter-spacing:2px;text-transform:uppercase;margin-top:4px}hr{border:none;border-top:2px solid #B03028;margin:16px 0}.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;margin-bottom:20px}.ml{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px}table{width:100%;border-collapse:collapse;font-size:13px}th{background:#1A1A2E;color:#C8A84B;padding:10px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px}td{padding:10px 12px;border-bottom:1px solid #eee}tr:nth-child(even) td{background:#fafafa}.total-row td{font-weight:700;font-size:15px;background:#f5f4f1;color:#B03028}.footer{margin-top:24px;font-size:11px;color:#888;text-align:center;line-height:1.8}@media print{body{margin:20px}} </style></head><body>');
@@ -1542,4 +1543,3 @@ initShirtCatalog();
 </script>
 </body>
 </html>
-  
