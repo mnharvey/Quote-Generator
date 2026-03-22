@@ -142,6 +142,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="mobile-nav-btn" onclick="showPanel('aluminum',this)">🔩 Aluminum</button>
   <button class="mobile-nav-btn" onclick="showPanel('vinyl',this)">🎨 Vinyl</button>
   <button class="mobile-nav-btn" onclick="showPanel('shirts',this)">👕 Shirts</button>
+  <button class="mobile-nav-btn" onclick="showPanel('dtf',this)">🖨️ DTF Transfers</button>
   <button class="mobile-nav-btn" onclick="showPanel('cornhole',this)">🏆 Cornhole</button>
   <button class="mobile-nav-btn" onclick="showPanel('ref',this)">📋 All Prices</button>
   <button class="mobile-nav-btn" onclick="showPanel('banners',this)">🚩 Banners</button>
@@ -162,6 +163,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="cat-btn" onclick="showPanel('vinyl',this)"><span>🎨</span> Vinyl Decals</button>
   <div class="sidebar-section">Apparel</div>
   <button class="cat-btn" onclick="showPanel('shirts',this)"><span>👕</span> T-Shirts + DTF</button>
+  <button class="cat-btn" onclick="showPanel('dtf',this)"><span>🖨️</span> DTF Transfers</button>
   <div class="sidebar-section">Hard Goods</div>
   <button class="cat-btn" onclick="showPanel('cornhole',this)"><span>🏆</span> Cornhole Trophies</button>
   <div class="sidebar-section">More Products</div>
@@ -400,6 +402,73 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="result-card" id="sh-result"></div>
     <button class="add-to-quote-btn" id="sh-add" style="display:none" onclick="addToQuote('sh')">+ ADD TO ESTIMATE</button>
     <div class="note-box">Pricing = MSRP. 100+ garments qualifies for bulk discount — call Lindsay for large orders. XL+ sizes may incur upcharge. Veterans &amp; nonprofits qualify for bulk discount at lower quantities.</div>
+  </div>
+
+
+  <!-- DTF TRANSFERS -->
+  <div class="panel" id="panel-dtf">
+    <div class="panel-title">DTF Transfers</div>
+    <div class="panel-desc">Gang Sheet pricing · By-the-Foot wholesale · Side-by-side comparison</div>
+
+    <div class="form-row">
+      <div class="field"><label>Print Width (inches)</label>
+        <input type="number" id="dtf-w" value="10" min="0.5" step="0.5" oninput="calcDTF()"></div>
+      <div class="field"><label>Print Height (inches)</label>
+        <input type="number" id="dtf-h" value="12" min="0.5" step="0.5" oninput="calcDTF()"></div>
+    </div>
+
+    <div class="form-row single">
+      <div class="field"><label>Preset Size</label>
+        <select id="dtf-preset" onchange="applyDTFPreset()">
+          <option value="">— Custom size —</option>
+          <option value="3|3">Small / Pocket / Logo (~3×3")</option>
+          <option value="10|12">Medium / Full Front (~10×12")</option>
+          <option value="12|14">Large / Full Back (~12×14")</option>
+          <option value="13|18">Oversized / Jersey (~13×18")</option>
+        </select></div>
+    </div>
+
+    <div class="form-row">
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="dtf-qty" value="24" min="1" oninput="calcDTF()"></div>
+      <div class="field"><label>Discount</label>
+        <select id="dtf-disc" onchange="calcDTF()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off — Veteran / Nonprofit</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
+        </select></div>
+    </div>
+
+    <!-- Comparison cards -->
+    <div id="dtf-comparison" style="display:none;margin:12px 0;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:8px">Side-by-Side Comparison</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div id="dtf-gang-card" style="padding:12px;border:2px solid #ccc;border-radius:0;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:6px">🗂️ Gang Sheet</div>
+          <div id="dtf-gang-details" style="font-size:12px;color:#555;line-height:1.8"></div>
+          <div id="dtf-gang-total" style="font-size:18px;font-weight:700;margin-top:6px;font-family:monospace"></div>
+          <div id="dtf-gang-each" style="font-size:11px;color:#888"></div>
+        </div>
+        <div id="dtf-foot-card" style="padding:12px;border:2px solid #ccc;border-radius:0;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:6px">📏 By the Foot</div>
+          <div id="dtf-foot-details" style="font-size:12px;color:#555;line-height:1.8"></div>
+          <div id="dtf-foot-total" style="font-size:18px;font-weight:700;margin-top:6px;font-family:monospace"></div>
+          <div id="dtf-foot-each" style="font-size:11px;color:#888"></div>
+        </div>
+      </div>
+      <div id="dtf-winner" style="margin-top:10px;padding:10px 14px;font-size:13px;font-weight:600;border-left:4px solid #ccc"></div>
+    </div>
+
+    <!-- Discount traffic light -->
+    <div id="dtf-discount-check" style="display:none;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #ccc"></div>
+
+    <button class="calc-btn" onclick="calcDTF()">CALCULATE</button>
+    <div class="result-card" id="dtf-result"></div>
+    <button class="add-to-quote-btn" id="dtf-add" style="display:none" onclick="addToQuote('dtf')">+ ADD TO ESTIMATE</button>
+    <div class="note-box">Gang Sheet: 22" wide roll, prints packed tightly. By-the-Foot: $8.50/linear ft wholesale rate. Front + back = 2 sides.</div>
   </div>
 
   <!-- CORNHOLE -->
@@ -1380,6 +1449,153 @@ function calcShirts(){
   detailLines.push(['Qty', qty]);
   lastCalc.sh = {desc: desc, total: finalTotal, qty: qty, details: detailLines};
   showAddBtn('sh-add');
+}
+
+
+// DTF pricing data from catalog
+var DTF_GANG = {
+  // gang sheet pricing: based on size tier, per-side retail with qty breaks
+  // Row: [1-24, 25-49, 50-99, 100+] total per side including press
+  pocket:  [4.00, 3.50, 3.00, 2.50],  // ≤4x4 pocket/sleeve
+  standard:[8.00, 7.00, 6.00, 5.00],  // ≤12x12 standard
+  large:   [9.00, 8.00, 7.00, 6.00],  // >12x12 large
+  // Bulk wholesale (Bulk Order Pricing from catalog)
+  pocket_bulk: 1.98,
+  standard_bulk: 5.82,
+  large_bulk: 6.68
+};
+var DTF_FOOT_RATE = 8.50;   // per linear foot wholesale
+var DTF_ROLL_WIDTH = 22;    // roll width in inches
+
+function applyDTFPreset(){
+  var v = document.getElementById('dtf-preset').value;
+  if(!v) return;
+  var parts = v.split('|');
+  document.getElementById('dtf-w').value = parts[0];
+  document.getElementById('dtf-h').value = parts[1];
+  calcDTF();
+}
+
+function getDTFTier(w, h) {
+  if(w <= 4 && h <= 4) return 'pocket';
+  if(w <= 12 && h <= 12) return 'standard';
+  return 'large';
+}
+
+function calcDTF(){
+  var w = parseFloat(document.getElementById('dtf-w').value) || 0;
+  var h = parseFloat(document.getElementById('dtf-h').value) || 0;
+  var qty = parseInt(document.getElementById('dtf-qty').value) || 1;
+  var discPct = parseFloat(document.getElementById('dtf-disc').value) || 0;
+
+  if(!w || !h){ document.getElementById('dtf-comparison').style.display='none'; return; }
+
+  var tier = getDTFTier(w, h);
+  var tierLabel = tier === 'pocket' ? '≤4×4" Pocket/Sleeve' : tier === 'standard' ? '≤12×12" Standard' : '>12×12" Large';
+
+  // --- GANG SHEET CALC ---
+  // Qty break index
+  var qi = qty >= 100 ? 3 : qty >= 50 ? 2 : qty >= 25 ? 1 : 0;
+  var gangUnitRetail = DTF_GANG[tier][qi];
+  var gangUnit = gangUnitRetail * (1 - discPct/100);
+  var gangTotal = gangUnit * qty;
+
+  // --- BY-THE-FOOT CALC ---
+  // Linear feet = height in inches / 12 (each print takes its height in roll length)
+  // Width assumed to fit within 22" roll; multiple prints can share a row
+  var printsPerRow = Math.floor(DTF_ROLL_WIDTH / w);
+  if(printsPerRow < 1) printsPerRow = 1;
+  var rowsNeeded = Math.ceil(qty / printsPerRow);
+  var linearFeet = (rowsNeeded * h) / 12;
+  var footTotal = linearFeet * DTF_FOOT_RATE * (1 - discPct/100);
+  var footUnit = footTotal / qty;
+
+  // --- SHOW COMPARISON ---
+  var qBreakLabel = ['1–24','25–49','50–99','100+'][qi];
+  document.getElementById('dtf-comparison').style.display = 'block';
+
+  document.getElementById('dtf-gang-details').innerHTML =
+    'Size tier: ' + tierLabel + '<br>' +
+    'Qty break: ' + qBreakLabel + ' @ $' + gangUnitRetail.toFixed(2) + '/ea<br>' +
+    (discPct > 0 ? 'Discount: -' + discPct + '%<br>' : '') +
+    'Qty: ' + qty;
+
+  document.getElementById('dtf-foot-details').innerHTML =
+    'Prints/row on 22" roll: ' + printsPerRow + '<br>' +
+    'Rows needed: ' + rowsNeeded + '<br>' +
+    'Linear feet: ' + linearFeet.toFixed(2) + ' ft @ $' + DTF_FOOT_RATE.toFixed(2) + '/ft<br>' +
+    (discPct > 0 ? 'Discount: -' + discPct + '%<br>' : '') +
+    'Qty: ' + qty;
+
+  document.getElementById('dtf-gang-total').textContent = '$' + gangTotal.toFixed(2);
+  document.getElementById('dtf-gang-each').textContent = '$' + gangUnit.toFixed(2) + ' each';
+  document.getElementById('dtf-foot-total').textContent = '$' + footTotal.toFixed(2);
+  document.getElementById('dtf-foot-each').textContent = '$' + footUnit.toFixed(2) + ' each';
+
+  // Color code cards — green = cheaper, red = more expensive
+  var gangWins = gangTotal <= footTotal;
+  var diff = Math.abs(gangTotal - footTotal);
+
+  var greenStyle = 'border-color:#1A6B3C;background:#f0fff4;';
+  var redStyle = 'border-color:#B03028;background:#fff3f3;';
+  var neutralStyle = 'border-color:#C8A84B;background:#fffbe6;';
+
+  if(Math.abs(gangTotal - footTotal) < 0.50) {
+    document.getElementById('dtf-gang-card').style.cssText = 'padding:12px;' + neutralStyle;
+    document.getElementById('dtf-foot-card').style.cssText = 'padding:12px;' + neutralStyle;
+    document.getElementById('dtf-winner').innerHTML = '⚠️ Essentially the same price — difference is $' + diff.toFixed(2);
+    document.getElementById('dtf-winner').style.cssText = 'margin-top:10px;padding:10px 14px;font-size:13px;font-weight:600;border-left:4px solid #C8A84B;background:#fffbe6;color:#856404;';
+  } else if(gangWins) {
+    document.getElementById('dtf-gang-card').style.cssText = 'padding:12px;' + greenStyle;
+    document.getElementById('dtf-foot-card').style.cssText = 'padding:12px;' + redStyle;
+    document.getElementById('dtf-winner').innerHTML = '✅ Gang Sheet saves $' + diff.toFixed(2) + ' total ($' + (diff/qty).toFixed(2) + '/ea)';
+    document.getElementById('dtf-winner').style.cssText = 'margin-top:10px;padding:10px 14px;font-size:13px;font-weight:600;border-left:4px solid #1A6B3C;background:#f0fff4;color:#1A6B3C;';
+  } else {
+    document.getElementById('dtf-gang-card').style.cssText = 'padding:12px;' + redStyle;
+    document.getElementById('dtf-foot-card').style.cssText = 'padding:12px;' + greenStyle;
+    document.getElementById('dtf-winner').innerHTML = '✅ By-the-Foot saves $' + diff.toFixed(2) + ' total ($' + (diff/qty).toFixed(2) + '/ea)';
+    document.getElementById('dtf-winner').style.cssText = 'margin-top:10px;padding:10px 14px;font-size:13px;font-weight:600;border-left:4px solid #1A6B3C;background:#f0fff4;color:#1A6B3C;';
+  }
+
+  // Discount traffic light — uses gang sheet as primary price
+  var dtfDiscCheck = document.getElementById('dtf-discount-check');
+  dtfDiscCheck.style.display = 'block';
+  if(discPct === 0) {
+    dtfDiscCheck.style.display = 'none';
+  } else if(discPct >= 20) {
+    dtfDiscCheck.innerHTML = '🚫 Contact Matt or Lindsay before proceeding';
+    dtfDiscCheck.style.cssText = 'display:block;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #B03028;background:#fff3f3;color:#B03028;';
+  } else if(discPct >= 10) {
+    dtfDiscCheck.innerHTML = '⚠️ Workable — confirm with customer before quoting';
+    dtfDiscCheck.style.cssText = 'display:block;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #C8A84B;background:#fffbe6;color:#856404;';
+  } else {
+    dtfDiscCheck.innerHTML = '✅ Good to go';
+    dtfDiscCheck.style.cssText = 'display:block;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #1A6B3C;background:#f0fff4;color:#1A6B3C;';
+  }
+
+  // Best price for quote
+  var bestTotal = Math.min(gangTotal, footTotal);
+  var bestMethod = gangWins ? 'Gang Sheet' : 'By-the-Foot';
+  var desc = qty + 'x DTF Transfer ' + w + '×' + h + '" — ' + bestMethod;
+  var detailLines = [
+    ['Size', w + '×' + h + '"'],
+    ['Tier', tierLabel],
+    ['Method', bestMethod],
+    ['Qty', qty]
+  ];
+  if(discPct > 0) detailLines.push(['Discount', '-' + discPct + '%']);
+
+  var lines = [
+    ['Size', w + '×' + h + '"'],
+    ['Size Tier', tierLabel],
+    ['Best Method', bestMethod],
+    ['Gang Sheet Total', '$' + gangTotal.toFixed(2)],
+    ['By-the-Foot Total', '$' + footTotal.toFixed(2)],
+    ['Qty', qty]
+  ];
+  showResult('dtf-result', lines, bestTotal, qty, desc);
+  lastCalc.dtf = {desc: desc, total: bestTotal, qty: qty, details: detailLines};
+  showAddBtn('dtf-add');
 }
 
 function calcMagnets(){
