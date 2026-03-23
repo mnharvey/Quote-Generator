@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>L6I Operations Portal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&family=Courier+Prime:wght@400;700&display=swap');
+:root{--red:#B03028;--red-dark:#8a2020;--gold:#C8A84B;--navy:#1A1A2E;--navy-mid:#16213e;--charcoal:#2a2a2a;--gray:#444;--light-gray:#f5f4f1;--mid-gray:#ddd;--white:#fff;--cream:#faf9f6;--green:#1A6B3C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--charcoal);min-height:100vh;font-size:14px;}
+.header{background:var(--navy);border-bottom:3px solid var(--red);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200;}
+.header-right{display:flex;flex-direction:column;align-items:flex-end;}
+.header-title{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;}
+.header-sub{font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;}
+.portal-nav{display:flex;background:var(--navy-mid);border-bottom:1px solid rgba(255,255,255,0.08);}
+.portal-tab{flex:1;padding:12px 20px;background:none;border:none;border-bottom:3px solid transparent;color:rgba(255,255,255,0.5);font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;text-align:center;}
+.portal-tab.active{color:var(--gold);border-bottom-color:var(--red);}
+.portal-tab:hover{color:rgba(255,255,255,.8);}
+.view{display:none;}
+.view.active{display:flex;flex-direction:column;min-height:calc(100vh - 95px);}
+.launch-card{background:var(--cream);flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.launch-inner{max-width:480px;width:100%;text-align:center;}
+.launch-inner h2{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.launch-inner p{font-size:13px;color:var(--gray);margin-bottom:28px;line-height:1.6;}
+.launch-btn{display:block;width:100%;padding:14px;background:var(--red);color:var(--white);font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;text-decoration:none;margin-bottom:10px;transition:background .2s;}
+.launch-btn:hover{background:var(--red-dark);}
+.launch-btn.secondary{background:var(--navy);color:var(--gold);}
+.pin-screen{background:var(--navy-mid);flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.pin-card{background:var(--navy);border-top:4px solid var(--gold);padding:32px 28px;max-width:340px;width:100%;text-align:center;}
+.pin-card h2{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.pin-card p{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:24px;}
+.pin-dots{display:flex;justify-content:center;gap:10px;margin-bottom:24px;}
+.pin-dot{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.2);transition:all .15s;}
+.pin-dot.filled{background:var(--gold);border-color:var(--gold);}
+.pin-dot.error{background:var(--red);border-color:var(--red);}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:220px;margin:0 auto;}
+.pin-btn{padding:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:var(--white);font-family:'Oswald',sans-serif;font-size:18px;font-weight:600;cursor:pointer;transition:all .15s;}
+.pin-btn:hover{background:rgba(200,168,75,.2);border-color:var(--gold);}
+.pin-btn.clear{font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.4);}
+.pin-error{color:var(--red);font-size:12px;margin-top:12px;min-height:16px;font-family:'Oswald',sans-serif;letter-spacing:1px;text-transform:uppercase;}
+.inv-wrap{flex:1;display:flex;flex-direction:column;background:var(--cream);}
+.inv-subnav{display:flex;overflow-x:auto;background:var(--charcoal);scrollbar-width:none;border-bottom:2px solid var(--red);}
+.inv-subnav::-webkit-scrollbar{display:none;}
+.inv-tab{flex-shrink:0;padding:9px 15px;background:none;border:none;border-bottom:3px solid transparent;color:rgba(255,255,255,.45);font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.inv-tab.active{color:var(--gold);border-bottom-color:var(--red);}
+.stats-bar{background:var(--navy);padding:8px 16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.stat-pill{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);padding:4px 12px;border-radius:2px;text-align:center;}
+.stat-pill .sv{font-family:'Courier Prime',monospace;font-size:16px;font-weight:700;color:var(--white);}
+.stat-pill .sl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);}
+.stat-pill.s-alert .sv{color:#ff7070;}
+.stat-pill.s-warn .sv{color:#ffd166;}
+.stat-pill.s-ok .sv{color:#6bcb77;}
+.stats-bar-right{margin-left:auto;display:flex;gap:8px;}
+.inv-content{padding:14px 15px;flex:1;}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.sec-title{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;}
+.sec-sub{font-size:11px;color:var(--gray);margin-top:2px;}
+.toolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.search-wrap{flex:1;min-width:180px;position:relative;}
+.search-wrap input{width:100%;padding:8px 10px 8px 32px;border:1.5px solid var(--mid-gray);background:var(--white);font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--charcoal);outline:none;}
+.search-wrap input:focus{border-color:var(--red);}
+.search-wrap::before{content:'🔍';position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:12px;pointer-events:none;}
+.act-btn{padding:8px 14px;border:none;font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background .2s;}
+.act-btn.primary{background:var(--red);color:var(--white);}
+.act-btn.gold{background:var(--gold);color:var(--navy);}
+.act-btn.secondary{background:var(--navy);color:var(--gold);}
+.act-btn.outline{background:transparent;border:1.5px solid var(--navy);color:var(--navy);}
+.act-btn.danger{background:transparent;border:1px solid var(--mid-gray);color:var(--gray);font-size:10px;padding:6px 10px;}
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.cat-chip{padding:4px 12px;border:1.5px solid var(--mid-gray);background:var(--white);font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;color:var(--gray);transition:all .15s;}
+.cat-chip.active{background:var(--navy);color:var(--gold);border-color:var(--navy);}
+.tbl-wrap{background:var(--white);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+thead tr{background:var(--navy);}
+thead th{font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gold);padding:9px 10px;text-align:left;white-space:nowrap;cursor:pointer;user-select:none;}
+thead th:hover{background:var(--navy-mid);}
+tbody tr{border-bottom:1px solid #eef0f4;}
+tbody tr:hover{background:#f8f8f5;}
+tbody tr:nth-child(even){background:#fafaf7;}
+td{padding:8px 10px;vertical-align:middle;}
+td.iname{font-weight:600;color:var(--navy);}
+td.sku{font-family:'Courier Prime',monospace;font-size:11px;color:#888;}
+td.num{text-align:right;font-family:'Courier Prime',monospace;}
+td.ctr{text-align:center;}
+td.cost-td{color:#2a6099;font-weight:600;font-family:'Courier Prime',monospace;}
+td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.qty-cell{display:flex;align-items:center;gap:3px;justify-content:flex-end;}
+.qbtn{width:20px;height:20px;background:var(--mid-gray);border:none;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--charcoal);transition:all .15s;line-height:1;}
+.qbtn:hover{background:var(--navy);color:var(--gold);}
+.qnum{min-width:32px;text-align:center;font-weight:700;font-size:13px;font-family:'Courier Prime',monospace;cursor:text;padding:1px 3px;}
+.qnum:focus{outline:2px solid var(--red);background:#fff8f0;}
+.badge{display:inline-block;padding:2px 8px;font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;}
+.b-red{background:#fde8e8;color:var(--red);border:1px solid #f5c6c6;}
+.b-orange{background:#fff0d6;color:#b05d00;border:1px solid #f0d090;}
+.b-green{background:#e6f9ee;color:var(--green);border:1px solid #aaddc0;}
+.empty{padding:40px;text-align:center;color:#bbb;font-style:italic;font-size:13px;}
+.vendor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;}
+.vcard{background:var(--white);border-top:3px solid var(--red);padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.vcard .vn{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.vcard .vcat{display:inline-block;background:rgba(200,168,75,.15);color:var(--charcoal);border:1px solid var(--gold);font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.5px;text-transform:uppercase;padding:2px 8px;margin-bottom:8px;}
+.vcard .vrow{font-size:12px;color:var(--gray);display:flex;gap:8px;margin-bottom:3px;}
+.vcard .vlbl{font-weight:600;color:var(--charcoal);min-width:70px;}
+.vcard .vactions{display:flex;gap:6px;margin-top:10px;border-top:1px solid var(--mid-gray);padding-top:10px;}
+.drop-zone{border:2px dashed var(--mid-gray);background:var(--white);padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px;}
+.drop-zone.drag{border-color:var(--gold);background:rgba(200,168,75,.07);}
+.drop-zone input[type=file]{display:none;}
+.import-result{background:rgba(26,26,46,.05);border-left:3px solid var(--gold);padding:12px 14px;font-size:12.5px;margin-top:10px;display:none;}
+.import-result.show{display:block;}
+.import-result h4{font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.how-to{background:var(--white);padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.how-to h3{font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:10px;}
+.how-to ol{padding-left:16px;font-size:13px;line-height:2;color:var(--gray);}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:400;align-items:center;justify-content:center;padding:15px;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--white);width:100%;max-width:460px;border-top:4px solid var(--red);}
+.modal-header{background:var(--navy);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;}
+.modal-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+.modal-x{background:none;border:none;color:rgba(255,255,255,.5);font-size:22px;cursor:pointer;line-height:1;}
+.modal-body{padding:18px;}
+.mform-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.mfield{display:flex;flex-direction:column;gap:4px;}
+.mfield.full{grid-column:1/-1;}
+.mfield label{font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:1px;}
+.mfield input,.mfield select{padding:8px 10px;border:1.5px solid var(--mid-gray);background:var(--white);font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--charcoal);outline:none;}
+.mfield input:focus,.mfield select:focus{border-color:var(--red);}
+.modal-footer{padding:12px 18px;border-top:1px solid var(--mid-gray);display:flex;justify-content:flex-end;gap:8px;background:var(--light-gray);}
+.modal-btn{padding:10px 20px;border:none;font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;}
+.modal-btn.save{background:var(--red);color:var(--white);}
+.modal-btn.cancel{background:var(--mid-gray);color:var(--charcoal);}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--navy);color:var(--white);padding:11px 18px;border-left:4px solid var(--gold);font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.25);transform:translateY(80px);opacity:0;transition:all .3s;z-index:999;max-width:300px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.rcv-yes{color:var(--green);font-weight:600;}
+.rcv-no{color:#aaa;}
+.rcv-par{color:#b05d00;font-weight:600;}
+</style>
+</head>
+<body>
+<div class="header">
+  <div style="font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;">L6I</div>
+  <div class="header-right">
+    <div class="header-title">Operations Portal</div>
+    <div class="header-sub">Little 6 Industries &middot; SDVOSB &middot; Maricopa AZ</div>
+  </div>
+</div>
+<div class="portal-nav">
+  <button class="portal-tab active" onclick="switchPortal('quotes')">&#128203; Sales Quote Tool</button>
+  <button class="portal-tab" onclick="switchPortal('inventory-gate')">&#128230; Inventory</button>
+</div>
+
+<!-- QUOTES -->
+<div class="view active" id="view-quotes">
+  <div class="launch-card">
+    <div class="launch-inner">
+      <h2>Sales Estimate Tool</h2>
+      <p>Open the full pricing calculator for corrugated signs, aluminum, vinyl, shirts, banners, magnets, cornhole trophies, embroidery, and more.</p>
+      <a class="launch-btn" href="https://mnharvey.github.io/Quote-Generator/index.html" target="_blank">Open Quote Tool &nearr;</a>
+      <p style="margin-top:16px;font-size:11px;color:#aaa;">Transfers42 &middot; Little 6 Industries &middot; Promo with Grace</p>
+    </div>
+  </div>
+</div>
+
+<!-- PIN GATE -->
+<div class="view" id="view-inventory-gate">
+  <div class="pin-screen">
+    <div class="pin-card">
+      <h2>Inventory Access</h2>
+      <p>Enter your 4-digit PIN to continue</p>
+      <div class="pin-dots" id="pin-dots">
+        <div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div>
+        <div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div>
+      </div>
+      <div class="pin-grid">
+        <button class="pin-btn" onclick="pinPress('1')">1</button>
+        <button class="pin-btn" onclick="pinPress('2')">2</button>
+        <button class="pin-btn" onclick="pinPress('3')">3</button>
+        <button class="pin-btn" onclick="pinPress('4')">4</button>
+        <button class="pin-btn" onclick="pinPress('5')">5</button>
+        <button class="pin-btn" onclick="pinPress('6')">6</button>
+        <button class="pin-btn" onclick="pinPress('7')">7</button>
+        <button class="pin-btn" onclick="pinPress('8')">8</button>
+        <button class="pin-btn" onclick="pinPress('9')">9</button>
+        <button class="pin-btn clear" onclick="pinClear()">Clear</button>
+        <button class="pin-btn" onclick="pinPress('0')">0</button>
+        <button class="pin-btn clear" onclick="pinDel()">&#9003;</button>
+      </div>
+      <div class="pin-error" id="pin-error"></div>
+    </div>
+  </div>
+</div>
+
+<!-- INVENTORY -->
+<div class="view" id="view-inventory">
+  <div class="inv-subnav">
+    <button class="inv-tab active" onclick="invTab('inv')">&#128230; Inventory</button>
+    <button class="inv-tab" onclick="invTab('reorder')">&#128308; Reorder</button>
+    <button class="inv-tab" onclick="invTab('log')">&#128203; Order Log</button>
+    <button class="inv-tab" onclick="invTab('vendors')">&#127962; Vendors</button>
+    <button class="inv-tab" onclick="invTab('import')">&#8679; Import CSV</button>
+    <button class="inv-tab" style="margin-left:auto;color:rgba(255,100,100,.6);" onclick="lockInventory()">&#128274; Lock</button>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-pill s-alert"><div class="sv" id="st-ro">0</div><div class="sl">Reorder</div></div>
+    <div class="stat-pill s-warn"><div class="sv" id="st-lw">0</div><div class="sl">Low</div></div>
+    <div class="stat-pill s-ok"><div class="sv" id="st-ok">0</div><div class="sl">OK</div></div>
+    <div class="stat-pill"><div class="sv" id="st-val">$0</div><div class="sl">Inv Value</div></div>
+    <div class="stats-bar-right">
+      <button class="act-btn gold" onclick="openItemModal()">+ Add Item</button>
+      <button class="act-btn secondary" onclick="exportCSV()">&#8595; CSV</button>
+    </div>
+  </div>
+  <div class="inv-wrap">
+    <div class="inv-content" id="ipanel-inv">
+      <div class="sec-head"><div><div class="sec-title">All Inventory</div><div class="sec-sub">Click +/- or tap qty to edit directly</div></div></div>
+      <div class="toolbar"><div class="search-wrap"><input type="text" id="inv-search" placeholder="Search items, SKUs, vendors..." oninput="renderInv()"></div></div>
+      <div class="cat-chips" id="cat-chips"></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr>
+          <th onclick="sortBy('name')">Item</th><th onclick="sortBy('sku')">SKU</th>
+          <th onclick="sortBy('category')">Category</th>
+          <th onclick="sortBy('qty')" style="text-align:right">Qty</th>
+          <th onclick="sortBy('reorder')" style="text-align:right">Reorder Pt</th>
+          <th>Status</th><th onclick="sortBy('cost')" style="text-align:right">Cost/Unit</th>
+          <th onclick="sortBy('vendor')">Vendor</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="inv-tbody"></tbody>
+      </table></div>
+    </div>
+    <div class="inv-content" id="ipanel-reorder" style="display:none">
+      <div class="sec-head"><div><div class="sec-title">Reorder List</div><div class="sec-sub">Items at or below reorder point</div></div></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Item</th><th>Category</th><th style="text-align:right">Qty on Hand</th><th style="text-align:right">Reorder Pt</th><th>Status</th><th style="text-align:right">Cost/Unit</th><th>Vendor</th><th>Log Order</th></tr></thead>
+        <tbody id="reorder-tbody"></tbody>
+      </table></div>
+    </div>
+    <div class="inv-content" id="ipanel-log" style="display:none">
+      <div class="sec-head"><div><div class="sec-title">Order Log</div><div class="sec-sub">Running record of all purchase orders</div></div><button class="act-btn primary" onclick="openLogModal()">+ Log Order</button></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Date</th><th>Item</th><th>Vendor</th><th style="text-align:right">Qty</th><th style="text-align:right">Unit Cost</th><th style="text-align:right">Total</th><th>Est. Arrival</th><th>Received</th><th>By</th><th></th></tr></thead>
+        <tbody id="log-tbody"></tbody>
+      </table></div>
+    </div>
+    <div class="inv-content" id="ipanel-vendors" style="display:none">
+      <div class="sec-head"><div><div class="sec-title">Vendor Directory</div><div class="sec-sub">All suppliers across all brands &mdash; with QB COGS categories</div></div><button class="act-btn primary" onclick="openVendorModal()">+ Add Vendor</button></div>
+      <div class="vendor-grid" id="vendor-grid"></div>
+    </div>
+    <div class="inv-content" id="ipanel-import" style="display:none">
+      <div class="sec-head"><div><div class="sec-title">Import CSV</div><div class="sec-sub">Drag &amp; drop to update quantities or add items in bulk</div></div></div>
+      <div class="drop-zone" id="drop-zone" onclick="document.getElementById('csv-file').click()">
+        <p style="font-size:22px;margin-bottom:8px">&#8679;</p>
+        <p><strong>Drag &amp; drop a CSV file here</strong> &mdash; or click to browse</p>
+        <p style="margin-top:6px;font-size:11px;color:#aaa;">Columns: name, sku, qty, cost, reorder, category, vendor</p>
+        <input type="file" id="csv-file" accept=".csv" onchange="handleFile(this.files[0])">
+      </div>
+      <div class="import-result" id="import-result"></div>
+      <div class="how-to">
+        <h3>Tips for CSV Import</h3>
+        <ol>
+          <li>Export from InkSoft: Reports &rarr; Order Report &rarr; Export CSV</li>
+          <li>Add a qty column showing units used/sold</li>
+          <li>Match item names or SKUs to what's already in inventory</li>
+          <li>Drop the file above &mdash; quantities update automatically</li>
+          <li>You can also build a CSV in Excel and drag it here for bulk updates</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ITEM MODAL -->
+<div class="modal-overlay" id="item-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="item-modal-title">Add Item</div><button class="modal-x" onclick="closeModal('item-modal')">&times;</button></div>
+    <div class="modal-body"><input type="hidden" id="im-id">
+      <div class="mform-grid">
+        <div class="mfield full"><label>Item Name *</label><input type="text" id="im-name"></div>
+        <div class="mfield"><label>SKU / Part #</label><input type="text" id="im-sku"></div>
+        <div class="mfield"><label>Category</label><select id="im-cat"><option>DTF Materials</option><option>Substrate Blanks</option><option>Laser & UV</option><option>Promo & Print</option><option>Packaging</option><option>Other</option></select></div>
+        <div class="mfield"><label>Unit</label><input type="text" id="im-unit" placeholder="Roll, Each, Liter..."></div>
+        <div class="mfield"><label>Qty on Hand</label><input type="number" id="im-qty" min="0" value="0"></div>
+        <div class="mfield"><label>Reorder Point</label><input type="number" id="im-reorder" min="0" value="0"></div>
+        <div class="mfield"><label>Cost per Unit ($)</label><input type="number" id="im-cost" step="0.01" min="0"></div>
+        <div class="mfield"><label>Preferred Vendor</label><input type="text" id="im-vendor"></div>
+        <div class="mfield full"><label>Notes</label><input type="text" id="im-notes"></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="modal-btn cancel" onclick="closeModal('item-modal')">Cancel</button><button class="modal-btn save" onclick="saveItem()">Save Item</button></div>
+  </div>
+</div>
+
+<!-- LOG MODAL -->
+<div class="modal-overlay" id="log-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Log Purchase Order</div><button class="modal-x" onclick="closeModal('log-modal')">&times;</button></div>
+    <div class="modal-body"><input type="hidden" id="lm-id">
+      <div class="mform-grid">
+        <div class="mfield full"><label>Item</label><select id="lm-item"></select></div>
+        <div class="mfield"><label>Date Ordered</label><input type="date" id="lm-date"></div>
+        <div class="mfield"><label>Vendor</label><input type="text" id="lm-vendor"></div>
+        <div class="mfield"><label>Qty Ordered</label><input type="number" id="lm-qty" min="1"></div>
+        <div class="mfield"><label>Unit Cost ($)</label><input type="number" id="lm-cost" step="0.01" min="0"></div>
+        <div class="mfield"><label>Est. Arrival</label><input type="date" id="lm-arrival"></div>
+        <div class="mfield"><label>Ordered By</label><input type="text" id="lm-by" value="Matt Harvey"></div>
+        <div class="mfield"><label>Received?</label><select id="lm-rcv"><option value="No">No - Pending</option><option value="Yes">Yes - Received</option><option value="Partial">Partial</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="modal-btn cancel" onclick="closeModal('log-modal')">Cancel</button><button class="modal-btn save" onclick="saveLog()">Save Order</button></div>
+  </div>
+</div>
+
+<!-- VENDOR MODAL -->
+<div class="modal-overlay" id="vendor-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="vm-title">Add Vendor</div><button class="modal-x" onclick="closeModal('vendor-modal')">&times;</button></div>
+    <div class="modal-body"><input type="hidden" id="vm-id">
+      <div class="mform-grid">
+        <div class="mfield full"><label>Vendor Name *</label><input type="text" id="vm-name"></div>
+        <div class="mfield"><label>Category</label><select id="vm-cat"><option>Blank Apparel</option><option>DTF / Vinyl</option><option>Laser/UV Materials</option><option>Promo / Print</option><option>Packaging</option><option>Inks & Consumables</option><option>Software / Services</option><option>Other</option></select></div>
+        <div class="mfield"><label>Website</label><input type="text" id="vm-web"></div>
+        <div class="mfield"><label>Account #</label><input type="text" id="vm-acct"></div>
+        <div class="mfield"><label>QB COGS Category</label><input type="text" id="vm-qb" placeholder="COGS - Printing Supplies"></div>
+        <div class="mfield"><label>Rep Name</label><input type="text" id="vm-rep"></div>
+        <div class="mfield"><label>Rep Contact</label><input type="text" id="vm-contact"></div>
+        <div class="mfield"><label>Lead Time</label><input type="text" id="vm-lead"></div>
+        <div class="mfield"><label>Terms</label><input type="text" id="vm-terms"></div>
+        <div class="mfield full"><label>Notes</label><input type="text" id="vm-notes"></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="modal-btn cancel" onclick="closeModal('vendor-modal')">Cancel</button><button class="modal-btn save" onclick="saveVendor()">Save Vendor</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PIN='6262';
+let portalUnlocked=false;
+
+function switchPortal(v){
+  document.querySelectorAll('.portal-tab').forEach((t,i)=>t.classList.toggle('active',i===(v==='quotes'?0:1)));
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  if(v==='inventory-gate'){
+    if(portalUnlocked){document.getElementById('view-inventory').classList.add('active');}
+    else{document.getElementById('view-inventory-gate').classList.add('active');}
+  }else{document.getElementById('view-'+v).classList.add('active');}
+}
+
+let pinEntry='';
+function pinPress(d){
+  if(pinEntry.length>=4)return;
+  pinEntry+=d;updateDots();
+  if(pinEntry.length===4){
+    if(pinEntry===PIN){
+      portalUnlocked=true;pinEntry='';updateDots();
+      document.getElementById('view-inventory-gate').classList.remove('active');
+      document.getElementById('view-inventory').classList.add('active');
+      renderInv();renderStats();
+    }else{
+      document.getElementById('pin-error').textContent='Incorrect PIN';
+      document.querySelectorAll('.pin-dot').forEach(d=>d.classList.add('error'));
+      setTimeout(()=>{pinEntry='';updateDots();document.getElementById('pin-error').textContent='';document.querySelectorAll('.pin-dot').forEach(d=>{d.classList.remove('error','filled');});},900);
+    }
+  }
+}
+function pinDel(){pinEntry=pinEntry.slice(0,-1);updateDots();}
+function pinClear(){pinEntry='';updateDots();}
+function updateDots(){for(let i=0;i<4;i++){const d=document.getElementById('pd'+i);d.classList.toggle('filled',i<pinEntry.length);d.classList.remove('error');}}
+function lockInventory(){portalUnlocked=false;pinEntry='';document.getElementById('view-inventory').classList.remove('active');document.getElementById('view-inventory-gate').classList.add('active');document.querySelectorAll('.portal-tab').forEach((t,i)=>t.classList.toggle('active',i===1));updateDots();}
+document.addEventListener('keydown',e=>{if(!document.getElementById('view-inventory-gate').classList.contains('active'))return;if(/^[0-9]$/.test(e.key))pinPress(e.key);if(e.key==='Backspace')pinDel();if(e.key==='Escape')pinClear();});
+
+const K={items:'l6i_items',log:'l6i_log',vendors:'l6i_vendors'};
+function load(k){try{return JSON.parse(localStorage.getItem(k))||[];}catch{return[];}}
+function save(k,d){localStorage.setItem(k,JSON.stringify(d));}
+let items=load(K.items),logData=load(K.log),vendors=load(K.vendors);
+let sortCol='name',sortDir=1,filterCat='all';
+
+if(!items.length){
+  items=[
+    {id:uid(),name:'DTF Film Roll 24"',sku:'DTF-FILM-24',category:'DTF Materials',unit:'Roll',qty:8,reorder:3,cost:42,vendor:'DTFSuperstore',notes:''},
+    {id:uid(),name:'DTF Film Roll 13"',sku:'DTF-FILM-13',category:'DTF Materials',unit:'Roll',qty:5,reorder:2,cost:22,vendor:'DTFSuperstore',notes:''},
+    {id:uid(),name:'DTF White Ink',sku:'DTF-INK-WHT',category:'DTF Materials',unit:'Liter',qty:3,reorder:1,cost:38,vendor:'DTFSuperstore',notes:''},
+    {id:uid(),name:'DTF Hot Melt Powder White',sku:'DTF-PWD-WHT',category:'DTF Materials',unit:'Kg',qty:6,reorder:2,cost:18,vendor:'DTFSuperstore',notes:''},
+    {id:uid(),name:'DTF Hot Melt Powder Black',sku:'DTF-PWD-BLK',category:'DTF Materials',unit:'Kg',qty:2,reorder:1,cost:18,vendor:'DTFSuperstore',notes:''},
+    {id:uid(),name:'Gildan 64000 S',sku:'BLK-G64-S',category:'Substrate Blanks',unit:'Each',qty:48,reorder:12,cost:2.85,vendor:'SanMar',notes:''},
+    {id:uid(),name:'Gildan 64000 M',sku:'BLK-G64-M',category:'Substrate Blanks',unit:'Each',qty:72,reorder:24,cost:2.85,vendor:'SanMar',notes:''},
+    {id:uid(),name:'Gildan 64000 L',sku:'BLK-G64-L',category:'Substrate Blanks',unit:'Each',qty:60,reorder:24,cost:2.85,vendor:'SanMar',notes:''},
+    {id:uid(),name:'Gildan 64000 XL',sku:'BLK-G64-XL',category:'Substrate Blanks',unit:'Each',qty:48,reorder:12,cost:2.85,vendor:'SanMar',notes:''},
+    {id:uid(),name:"Twiddy's Blank Tee M",sku:'TWD-TEE-M',category:'Substrate Blanks',unit:'Each',qty:30,reorder:10,cost:3.20,vendor:"Twiddy's Blanks",notes:''},
+    {id:uid(),name:'Cast Acrylic Clear 1/8"',sku:'LAS-ACR-CLR',category:'Laser & UV',unit:'Sheet',qty:20,reorder:5,cost:4.50,vendor:'Polymershapes',notes:''},
+    {id:uid(),name:'Cast Acrylic Black 1/8"',sku:'LAS-ACR-BLK',category:'Laser & UV',unit:'Sheet',qty:15,reorder:5,cost:4.50,vendor:'Polymershapes',notes:''},
+    {id:uid(),name:'Birch Plywood 1/8" 12x24',sku:'LAS-WD-BIRCH',category:'Laser & UV',unit:'Sheet',qty:25,reorder:8,cost:3.20,vendor:'Woodworkers Source AZ',notes:''},
+    {id:uid(),name:'MDF Sheet 1/8"',sku:'LAS-MDF',category:'Laser & UV',unit:'Sheet',qty:20,reorder:6,cost:2.50,vendor:'Woodworkers Source AZ',notes:''},
+    {id:uid(),name:'UV Ink White Mimaki',sku:'UV-INK-WHT',category:'Laser & UV',unit:'Liter',qty:2,reorder:1,cost:95,vendor:'JDS Industries',notes:''},
+    {id:uid(),name:'Engraving Aluminum Sheet',sku:'LAS-ALU',category:'Laser & UV',unit:'Sheet',qty:10,reorder:3,cost:7.50,vendor:'JDS Industries',notes:''},
+    {id:uid(),name:'Adhesive Vinyl White 24"',sku:'VNL-WHT-24',category:'Promo & Print',unit:'Roll',qty:4,reorder:1,cost:48,vendor:'Polymershapes',notes:''},
+    {id:uid(),name:'Eco-Solvent Vinyl 54"',sku:'VNL-ES-54',category:'Promo & Print',unit:'Roll',qty:3,reorder:1,cost:65,vendor:'Polymershapes',notes:'Mimaki UCJV300'},
+    {id:uid(),name:'Corrugated Plastic Sheets',sku:'PRN-CORR',category:'Promo & Print',unit:'Sheet',qty:30,reorder:10,cost:2.20,vendor:'Bestofsigns',notes:''},
+    {id:uid(),name:'Banner Material 13oz',sku:'PRN-BNR',category:'Promo & Print',unit:'Sq Ft',qty:50,reorder:20,cost:0.85,vendor:'Navitor',notes:''},
+    {id:uid(),name:'Business Card Stock',sku:'PRN-BC',category:'Promo & Print',unit:'Pack',qty:10,reorder:3,cost:14,vendor:'Ennis',notes:'EIN: 81-2214725'},
+    {id:uid(),name:'Shipping Boxes 12x12x8',sku:'PKG-BOX-12',category:'Packaging',unit:'Each',qty:40,reorder:15,cost:1.20,vendor:'Uline',notes:''},
+    {id:uid(),name:'Bubble Mailers 10x13',sku:'PKG-MAIL',category:'Packaging',unit:'Each',qty:60,reorder:20,cost:0.45,vendor:'Uline',notes:''},
+  ];
+  save(K.items,items);
+}
+if(!vendors.length){
+  vendors=[
+    {id:uid(),name:'SanMar',category:'Blank Apparel',website:'sanmar.com',acct:'',rep:'',contact:'',lead:'2-4 days',terms:'Net 30',qb:'COGS - Supplies & Materials',notes:'Primary blank apparel vendor'},
+    {id:uid(),name:"Twiddy's Blanks",category:'Blank Apparel',website:'',acct:'',rep:'',contact:'',lead:'',terms:'',qb:'COGS - Supplies & Materials',notes:'Blank items for customization'},
+    {id:uid(),name:'DTFSuperstore',category:'DTF / Vinyl',website:'dtfsuperstore.com',acct:'',rep:'',contact:'',lead:'3-5 days',terms:'Credit Card',qb:'COGS - Printing Supplies',notes:'Films, powders, inks'},
+    {id:uid(),name:'Ninja Transfers',category:'DTF / Vinyl',website:'ninjatransfers.com',acct:'',rep:'',contact:'',lead:'3-5 days',terms:'Credit Card',qb:'COGS - Printing Supplies',notes:'DTF inks & transfer paper'},
+    {id:uid(),name:'Polymershapes',category:'Laser/UV Materials',website:'polymershapes.com',acct:'',rep:'',contact:'',lead:'3-5 days',terms:'Net 30',qb:'COGS - Printing Supplies',notes:'Vinyl, acrylic, eco-solvent media'},
+    {id:uid(),name:'JDS Industries',category:'Laser/UV Materials',website:'jdsindustries.com',acct:'',rep:'',contact:'',lead:'3-5 days',terms:'Net 30',qb:'COGS - Printing Supplies',notes:'UV printing media, acrylic, aluminum'},
+    {id:uid(),name:'Woodworkers Source AZ',category:'Laser/UV Materials',website:'woodworkerssource.com',acct:'',rep:'',contact:'',lead:'In-store',terms:'Credit Card',qb:'COGS - Printing Supplies',notes:'Wood sheets, MDF for laser'},
+    {id:uid(),name:'Bestofsigns',category:'Promo / Print',website:'bestofsigns.com',acct:'',rep:'',contact:'',lead:'3-5 days',terms:'Credit Card',qb:'COGS - Printing Supplies',notes:'Specialty vinyl, corrugated, reflective'},
+    {id:uid(),name:'Navitor',category:'Promo / Print',website:'navitor.com',acct:'',rep:'',contact:'',lead:'5-7 days',terms:'Net 30',qb:'COGS - Printing Supplies',notes:'Banners, foam board, corrugated'},
+    {id:uid(),name:'Ennis',category:'Promo / Print',website:'ennis.com',acct:'EIN: 81-2214725',rep:'',contact:'',lead:'5-7 days',terms:'Net 30',qb:'COGS - Printing Supplies',notes:'Business cards, forms'},
+    {id:uid(),name:'Uline',category:'Packaging',website:'uline.com',acct:'',rep:'',contact:'',lead:'1-3 days',terms:'Net 30',qb:'COGS - Supplies & Materials',notes:'Shipping boxes, mailers, tape'},
+    {id:uid(),name:'Alibaba',category:'Laser/UV Materials',website:'alibaba.com',acct:'',rep:'',contact:'',lead:'2-4 weeks',terms:'Credit Card',qb:'COGS - Printing Supplies',notes:'UV inks, specialty media, blanks'},
+    {id:uid(),name:'Lightburn Software',category:'Software / Services',website:'lightburnsoftware.com',acct:'',rep:'',contact:'',lead:'Instant',terms:'Annual',qb:'Memberships & Subscriptions',notes:'Laser engraving software'},
+    {id:uid(),name:'GoDaddy',category:'Software / Services',website:'godaddy.com',acct:'',rep:'',contact:'',lead:'',terms:'Annual',qb:'Memberships & Subscriptions',notes:'Email, domain, hosting'},
+    {id:uid(),name:'Graphicsflow',category:'Software / Services',website:'graphicsflow.com',acct:'',rep:'',contact:'',lead:'',terms:'Monthly',qb:'Memberships & Subscriptions',notes:'Design platform'},
+  ];
+  save(K.vendors,vendors);
+}
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5);}
+function status(it){if(it.qty<=it.reorder)return 'reorder';if(it.qty<=it.reorder*1.2)return 'low';return 'ok';}
+function badge(it){const s=status(it);if(s==='reorder')return '<span class="badge b-red">REORDER</span>';if(s==='low')return '<span class="badge b-orange">LOW</span>';return '<span class="badge b-green">OK</span>';}
+
+function renderStats(){let ro=0,lw=0,ok=0,val=0;items.forEach(it=>{const s=status(it);if(s==='reorder')ro++;else if(s==='low')lw++;else ok++;val+=(it.qty||0)*(it.cost||0);});document.getElementById('st-ro').textContent=ro;document.getElementById('st-lw').textContent=lw;document.getElementById('st-ok').textContent=ok;document.getElementById('st-val').textContent='$'+Math.round(val).toLocaleString();}
+
+function renderChips(){const cats=['all',...new Set(items.map(i=>i.category))].sort();const cnts={};items.forEach(i=>{cnts[i.category]=(cnts[i.category]||0)+1;});document.getElementById('cat-chips').innerHTML=cats.map(c=>{const lbl=c==='all'?`All (${items.length})`:`${c} (${cnts[c]||0})`;return `<div class="cat-chip${filterCat===c?' active':''}" onclick="setFC('${c}')">${lbl}</div>`;}).join('');}
+function setFC(c){filterCat=c;renderInv();}
+
+function filteredItems(){const q=(document.getElementById('inv-search')?.value||'').toLowerCase();return items.filter(it=>{if(filterCat!=='all'&&it.category!==filterCat)return false;if(q&&!`${it.name} ${it.sku} ${it.vendor} ${it.category}`.toLowerCase().includes(q))return false;return true;}).sort((a,b)=>{let av=a[sortCol]||'',bv=b[sortCol]||'';if(typeof av==='number')return(av-bv)*sortDir;return av.toString().localeCompare(bv.toString())*sortDir;});}
+
+function renderInv(){renderChips();renderStats();const list=filteredItems();const tbody=document.getElementById('inv-tbody');if(!list.length){tbody.innerHTML='<tr><td colspan="9"><div class="empty">No items match your filter.</div></td></tr>';return;}tbody.innerHTML=list.map(it=>`<tr><td class="iname">${e(it.name)}</td><td class="sku">${e(it.sku)}</td><td>${e(it.category)}</td><td class="num"><div class="qty-cell"><button class="qbtn" onclick="adjQty('${it.id}',-1)">-</button><span class="qnum" contenteditable="true" onblur="setQty('${it.id}',this)" onkeydown="if(event.key==='Enter')this.blur()">${it.qty}</span><button class="qbtn" onclick="adjQty('${it.id}',1)">+</button></div></td><td class="num">${it.reorder}</td><td class="ctr">${badge(it)}</td><td class="num cost-td">$${(+it.cost||0).toFixed(2)}</td><td class="vnd" title="${e(it.vendor)}">${e(it.vendor)}</td><td><button class="act-btn outline" style="padding:5px 8px;font-size:10px;" onclick="openItemModal('${it.id}')">Edit</button> <button class="act-btn outline" style="padding:5px 8px;font-size:10px;" onclick="openLogFromItem('${it.id}')">Order</button> <button class="act-btn danger" onclick="deleteItem('${it.id}')">X</button></td></tr>`).join('');}
+
+function sortBy(col){if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}renderInv();}
+function adjQty(id,d){const it=items.find(i=>i.id===id);if(!it)return;it.qty=Math.max(0,(it.qty||0)+d);save(K.items,items);renderInv();toast(`${it.name}: qty = ${it.qty}`);}
+function setQty(id,el){const it=items.find(i=>i.id===id);if(!it)return;const v=parseInt(el.textContent);if(!isNaN(v)&&v>=0){it.qty=v;save(K.items,items);renderStats();toast(`${it.name}: qty = ${v}`);}else el.textContent=it.qty;}
+function deleteItem(id){if(!confirm('Delete this item?'))return;items=items.filter(i=>i.id!==id);save(K.items,items);renderInv();toast('Item deleted.');}
+
+function renderReorder(){const list=items.filter(it=>status(it)!=='ok').sort((a,b)=>{const o={reorder:0,low:1};return o[status(a)]-o[status(b)];});const tbody=document.getElementById('reorder-tbody');if(!list.length){tbody.innerHTML='<tr><td colspan="8"><div class="empty">All items at healthy stock levels!</div></td></tr>';return;}tbody.innerHTML=list.map(it=>`<tr><td class="iname">${e(it.name)}</td><td>${e(it.category)}</td><td class="num">${it.qty}</td><td class="num">${it.reorder}</td><td class="ctr">${badge(it)}</td><td class="num cost-td">$${(+it.cost||0).toFixed(2)}</td><td class="vnd">${e(it.vendor)}</td><td><button class="act-btn gold" onclick="openLogFromItem('${it.id}')" style="padding:5px 12px;">Log Order</button></td></tr>`).join('');}
+
+function openLogModal(pre){document.getElementById('lm-id').value='';document.getElementById('lm-date').value=new Date().toISOString().split('T')[0];document.getElementById('lm-arrival').value='';document.getElementById('lm-qty').value='';document.getElementById('lm-cost').value='';document.getElementById('lm-rcv').value='No';document.getElementById('lm-by').value='Matt Harvey';const sel=document.getElementById('lm-item');sel.innerHTML=items.map(i=>`<option value="${i.id}">${e(i.name)}</option>`).join('');if(pre){sel.value=pre;const it=items.find(i=>i.id===pre);if(it){document.getElementById('lm-vendor').value=it.vendor;document.getElementById('lm-cost').value=it.cost||'';}}sel.onchange=()=>{const it=items.find(i=>i.id===sel.value);if(it)document.getElementById('lm-vendor').value=it.vendor;};if(!pre&&items.length){const it=items.find(i=>i.id===sel.value);if(it)document.getElementById('lm-vendor').value=it.vendor;}openModal('log-modal');}
+function openLogFromItem(id){openLogModal(id);invTab('log');}
+function saveLog(){const itemId=document.getElementById('lm-item').value;const qty=+document.getElementById('lm-qty').value||0;if(!itemId||!qty){alert('Item and quantity required.');return;}const entry={id:uid(),itemId,itemName:items.find(i=>i.id===itemId)?.name||'',date:document.getElementById('lm-date').value,vendor:document.getElementById('lm-vendor').value.trim(),qty,cost:+document.getElementById('lm-cost').value||0,arrival:document.getElementById('lm-arrival').value,received:document.getElementById('lm-rcv').value,by:document.getElementById('lm-by').value.trim()};logData.unshift(entry);save(K.log,logData);closeModal('log-modal');renderLog();toast('Order logged.');}
+function renderLog(){const tbody=document.getElementById('log-tbody');if(!logData.length){tbody.innerHTML='<tr><td colspan="10"><div class="empty">No orders logged yet.</div></td></tr>';return;}tbody.innerHTML=logData.map(l=>{const tot=(l.qty||0)*(l.cost||0);const rcvCls=l.received==='Yes'?'rcv-yes':l.received==='Partial'?'rcv-par':'rcv-no';return`<tr><td>${l.date||'-'}</td><td class="iname">${e(l.itemName)}</td><td class="vnd">${e(l.vendor)}</td><td class="num">${l.qty}</td><td class="num cost-td">$${(l.cost||0).toFixed(2)}</td><td class="num cost-td">$${tot.toFixed(2)}</td><td>${l.arrival||'-'}</td><td class="${rcvCls}">${l.received}</td><td>${e(l.by)}</td><td><button class="act-btn danger" onclick="deleteLog('${l.id}')">X</button></td></tr>`;}).join('');}
+function deleteLog(id){if(!confirm('Delete?'))return;logData=logData.filter(l=>l.id!==id);save(K.log,logData);renderLog();}
+
+function openVendorModal(id){document.getElementById('vm-title').textContent=id?'Edit Vendor':'Add Vendor';document.getElementById('vm-id').value=id||'';const v=id?vendors.find(x=>x.id===id):{};['name','web','acct','qb','rep','contact','lead','terms','notes'].forEach(k=>{const el=document.getElementById('vm-'+k);if(el)el.value=v?.[k]||'';});if(v&&v.category)document.getElementById('vm-cat').value=v.category;openModal('vendor-modal');}
+function saveVendor(){const name=document.getElementById('vm-name').value.trim();if(!name){alert('Vendor name required.');return;}const data={name,category:document.getElementById('vm-cat').value,website:document.getElementById('vm-web').value.trim(),acct:document.getElementById('vm-acct').value.trim(),qb:document.getElementById('vm-qb').value.trim(),rep:document.getElementById('vm-rep').value.trim(),contact:document.getElementById('vm-contact').value.trim(),lead:document.getElementById('vm-lead').value.trim(),terms:document.getElementById('vm-terms').value.trim(),notes:document.getElementById('vm-notes').value.trim()};const id=document.getElementById('vm-id').value;if(id){const idx=vendors.findIndex(v=>v.id===id);vendors[idx]={...vendors[idx],...data};}else vendors.push({id:uid(),...data});save(K.vendors,vendors);closeModal('vendor-modal');renderVendors();toast('Vendor saved.');}
+function deleteVendor(id){if(!confirm('Delete vendor?'))return;vendors=vendors.filter(v=>v.id!==id);save(K.vendors,vendors);renderVendors();}
+function renderVendors(){const grid=document.getElementById('vendor-grid');if(!vendors.length){grid.innerHTML='<p>No vendors yet.</p>';return;}grid.innerHTML=vendors.map(v=>`<div class="vcard"><div class="vn">${e(v.name)}</div><span class="vcat">${e(v.category)}</span>${v.website?`<div class="vrow"><span class="vlbl">Website</span><a href="https://${v.website}" target="_blank" style="color:var(--red)">${v.website}</a></div>`:''} ${v.acct?`<div class="vrow"><span class="vlbl">Account</span>${e(v.acct)}</div>`:''} ${v.qb?`<div class="vrow"><span class="vlbl">QB COGS</span>${e(v.qb)}</div>`:''} ${v.rep?`<div class="vrow"><span class="vlbl">Rep</span>${e(v.rep)}</div>`:''} ${v.contact?`<div class="vrow"><span class="vlbl">Contact</span>${e(v.contact)}</div>`:''} ${v.lead?`<div class="vrow"><span class="vlbl">Lead Time</span>${e(v.lead)}</div>`:''} ${v.terms?`<div class="vrow"><span class="vlbl">Terms</span>${e(v.terms)}</div>`:''} ${v.notes?`<div class="vrow" style="font-style:italic;color:#888;">${e(v.notes)}</div>`:''}<div class="vactions"><button class="act-btn outline" onclick="openVendorModal('${v.id}')" style="font-size:10px;padding:5px 10px;">Edit</button><button class="act-btn danger" onclick="deleteVendor('${v.id}')">Delete</button></div></div>`).join('');}
+
+function openItemModal(id){document.getElementById('item-modal-title').textContent=id?'Edit Item':'Add Item';document.getElementById('im-id').value=id||'';const it=id?items.find(i=>i.id===id):{};document.getElementById('im-name').value=it.name||'';document.getElementById('im-sku').value=it.sku||'';document.getElementById('im-cat').value=it.category||'DTF Materials';document.getElementById('im-unit').value=it.unit||'';document.getElementById('im-qty').value=it.qty||0;document.getElementById('im-reorder').value=it.reorder||0;document.getElementById('im-cost').value=it.cost||'';document.getElementById('im-vendor').value=it.vendor||'';document.getElementById('im-notes').value=it.notes||'';openModal('item-modal');}
+function saveItem(){const name=document.getElementById('im-name').value.trim();if(!name){alert('Item name required.');return;}const id=document.getElementById('im-id').value;const data={name,sku:document.getElementById('im-sku').value.trim(),category:document.getElementById('im-cat').value,unit:document.getElementById('im-unit').value.trim(),qty:+document.getElementById('im-qty').value||0,reorder:+document.getElementById('im-reorder').value||0,cost:+document.getElementById('im-cost').value||0,vendor:document.getElementById('im-vendor').value.trim(),notes:document.getElementById('im-notes').value.trim()};if(id){const idx=items.findIndex(i=>i.id===id);items[idx]={...items[idx],...data};toast('Item updated.');}else{items.push({id:uid(),...data});toast('Item added.');}save(K.items,items);closeModal('item-modal');renderInv();}
+
+const dz=document.getElementById('drop-zone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');const f=e.dataTransfer.files[0];if(f)handleFile(f);});
+function handleFile(file){if(!file||!file.name.endsWith('.csv')){showIR('error','Please drop a .csv file.');return;}const r=new FileReader();r.onload=e=>processCSV(e.target.result,file.name);r.readAsText(file);}
+function processCSV(text,fname){const lines=text.trim().split('\n').filter(l=>l.trim());if(lines.length<2){showIR('error','CSV appears empty.');return;}const hdrs=lines[0].toLowerCase().replace(/\r/g,'').split(',').map(h=>h.trim().replace(/"/g,''));const ni=hdrs.findIndex(h=>h.includes('name'));const si=hdrs.findIndex(h=>h.includes('sku')||h.includes('part'));const qi=hdrs.findIndex(h=>h==='qty'||h.includes('quant'));const ci=hdrs.findIndex(h=>h.includes('cost')||h.includes('price'));const ri=hdrs.findIndex(h=>h.includes('reorder'));const cati=hdrs.findIndex(h=>h.includes('cat')||h.includes('type'));const vi=hdrs.findIndex(h=>h.includes('vendor')||h.includes('supplier'));if(ni<0&&si<0){showIR('error','CSV needs a "name" or "sku" column.');return;}let added=0,updated=0,skipped=0;const preview=[];for(let i=1;i<lines.length;i++){const cols=parseCSVLine(lines[i]);const csvName=ni>=0?cols[ni]?.trim():'';const csvSku=si>=0?cols[si]?.trim():'';if(!csvName&&!csvSku){skipped++;continue;}let ex=items.find(it=>csvSku&&it.sku&&it.sku.toLowerCase()===csvSku.toLowerCase());if(!ex&&csvName)ex=items.find(it=>it.name.toLowerCase()===csvName.toLowerCase());const nQ=qi>=0?parseFloat(cols[qi])||null:null;const nC=ci>=0?parseFloat(cols[ci])||null:null;const nR=ri>=0?parseFloat(cols[ri])||null:null;const nV=vi>=0?cols[vi]?.trim():null;const nCat=cati>=0?cols[cati]?.trim():null;if(ex){if(nQ!==null)ex.qty=nQ;if(nC!==null)ex.cost=nC;if(nR!==null)ex.reorder=nR;if(nV)ex.vendor=nV;updated++;preview.push(`Updated: ${ex.name} qty=${ex.qty}`);}else{items.push({id:uid(),name:csvName||csvSku,sku:csvSku||'',category:nCat||'Other',unit:'Each',qty:nQ||0,reorder:nR||0,cost:nC||0,vendor:nV||'',notes:''});added++;preview.push(`Added: ${csvName||csvSku}`);}}save(K.items,items);renderInv();showIR('ok',`Import done from <strong>${fname}</strong> - ${updated} updated, ${added} added, ${skipped} skipped`,preview.slice(0,10));toast(`Import: ${updated} updated, ${added} added.`);}
+function parseCSVLine(line){const r=[];let cur='';let inQ=false;for(const c of line.replace(/\r/g,'')){if(c==='"'){inQ=!inQ;continue;}if(c===','&&!inQ){r.push(cur);cur='';continue;}cur+=c;}r.push(cur);return r;}
+function showIR(type,msg,list=[]){const el=document.getElementById('import-result');el.className='import-result show';el.innerHTML=`<h4 style="color:${type==='error'?'var(--red)':'var(--green)'}">${type==='error'?'Import Error':'Import Results'}</h4><p>${msg}</p>${list.length?`<ul>${list.map(i=>`<li>${e(i)}</li>`).join('')}</ul>`:''}`;}
+function exportCSV(){const h=['name','sku','category','unit','qty','reorder','cost','vendor','notes'];const rows=items.map(it=>h.map(k=>`"${(it[k]||'').toString().replace(/"/g,'""')}"`));const csv=[h.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`l6i_inventory_${new Date().toISOString().split('T')[0]}.csv`;a.click();}
+
+function invTab(t){document.querySelectorAll('.inv-tab').forEach((b,i)=>b.classList.toggle('active',['inv','reorder','log','vendors','import'][i]===t));['inv','reorder','log','vendors','import'].forEach(p=>{document.getElementById('ipanel-'+p).style.display=p===t?'block':'none';});if(t==='reorder')renderReorder();if(t==='log')renderLog();if(t==='vendors')renderVendors();}
+function openModal(id){document.getElementById(id).classList.add('show');}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+document.querySelectorAll('.modal-overlay').forEach(m=>{m.addEventListener('click',ev=>{if(ev.target===m)m.classList.remove('show');});});
+let tt;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2800);}
+function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+renderInv();
+</script>
+</body>
+</html>
