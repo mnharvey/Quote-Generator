@@ -334,10 +334,19 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
     <div class="inv-content" id="ipanel-invoice" style="display:none">
       <div class="sec-head"><div><div class="sec-title">&#129494; Invoice AI Parser</div><div class="sec-sub">Drop a vendor invoice PDF — Claude reads it and updates your inventory</div></div></div>
 
-      <!-- API key notice -->
-      <div id="inv-api-notice" style="background:#fff8e1;border-left:4px solid var(--gold);padding:12px 14px;margin-bottom:14px;font-size:12.5px;">
-        <strong style="font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1px;font-size:11px;">API Key Required</strong>
-        <p style="margin-top:4px;color:var(--gray);">To activate AI invoice parsing, open this file, find <code>const ANTHROPIC_API_KEY</code> near the top of the &lt;script&gt; section, and replace <code>'YOUR_API_KEY_HERE'</code> with your actual key. One line change.</p>
+      <!-- API key setup -->
+      <div id="inv-api-notice" style="background:#fff8e1;border-left:4px solid var(--gold);padding:12px 14px;margin-bottom:14px;font-size:12.5px;display:none;">
+        <strong style="font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1px;font-size:11px;">⚠️ API Key Not Set</strong>
+        <p style="margin-top:4px;color:var(--gray);">Enter your Anthropic API key below to activate invoice parsing. It saves to this device only — never to any file or server.</p>
+      </div>
+      <div id="inv-api-setup" style="display:none;background:var(--white);padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:14px;">
+        <div style="font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:10px;">Enter Anthropic API Key</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." style="flex:1;min-width:200px;padding:9px 10px;border:1.5px solid var(--mid-gray);font-family:'Courier Prime',monospace;font-size:13px;">
+          <button class="act-btn gold" onclick="saveApiKey()">Save Key</button>
+          <button class="act-btn secondary" onclick="clearApiKey()">Clear Saved Key</button>
+        </div>
+        <p style="font-size:11px;color:#aaa;margin-top:8px;">Saved to this browser only via localStorage. Never sent anywhere except Anthropic's API.</p>
       </div>
 
       <div class="drop-zone" id="invoice-drop" onclick="document.getElementById('invoice-file').click()" style="border-color:var(--gold);">
@@ -591,6 +600,7 @@ function invTab(t){
   if(t==='reorder')renderReorder();
   if(t==='log')renderLog();
   if(t==='vendors')renderVendors();
+  if(t==='invoice')checkApiKeyOnLoad();
   if(t!=='scan')stopCamera();
 }
 function openModal(id){document.getElementById(id).classList.add('show');}
@@ -759,15 +769,51 @@ function addFromScan() {
 }
 
 // ── INVOICE AI PARSER ─────────────────────────────────────────────────────────
-// ⚠️  REPLACE THIS WITH YOUR ACTUAL ANTHROPIC API KEY
-const ANTHROPIC_API_KEY = 'YOUR_API_KEY_HERE';
+// API key stored in localStorage — never in the file
+function getApiKey() { return localStorage.getItem('l6i_api_key') || ''; }
+function setApiKey(k) { localStorage.setItem('l6i_api_key', k.trim()); }
+
+function saveApiKey() {
+  const k = document.getElementById('api-key-input').value.trim();
+  if (!k.startsWith('sk-ant-')) { toast('❌ That doesn\'t look like a valid Anthropic key.'); return; }
+  setApiKey(k);
+  document.getElementById('api-key-input').value = '';
+  document.getElementById('inv-api-setup').style.display = 'none';
+  document.getElementById('inv-api-notice').style.display = 'none';
+  document.getElementById('invoice-drop').style.display = 'block';
+  toast('✅ API key saved to this device.');
+}
+
+function clearApiKey() {
+  localStorage.removeItem('l6i_api_key');
+  showApiKeySetup();
+  toast('API key cleared.');
+}
+
+function showApiKeySetup() {
+  document.getElementById('inv-api-notice').style.display = 'block';
+  document.getElementById('inv-api-setup').style.display = 'block';
+  document.getElementById('invoice-drop').style.display = 'none';
+  document.getElementById('invoice-preview').style.display = 'none';
+}
+
+function checkApiKeyOnLoad() {
+  if (!getApiKey()) {
+    showApiKeySetup();
+  } else {
+    document.getElementById('inv-api-notice').style.display = 'none';
+    document.getElementById('inv-api-setup').style.display = 'none';
+    document.getElementById('invoice-drop').style.display = 'block';
+  }
+}
 
 let invoiceParsedItems = [];
 
 async function handleInvoiceFile(file) {
   if (!file) return;
-  if (ANTHROPIC_API_KEY === 'YOUR_API_KEY_HERE') {
-    alert('Add your Anthropic API key first.\n\nOpen this file, find:\n  const ANTHROPIC_API_KEY = \'YOUR_API_KEY_HERE\'\n\nReplace with your actual key.');
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    showApiKeySetup();
     return;
   }
   document.getElementById('invoice-drop').style.display = 'none';
@@ -776,7 +822,6 @@ async function handleInvoiceFile(file) {
   try {
     const base64 = await fileToBase64(file);
     const isPDF = file.type === 'application/pdf';
-    const isImage = file.type.startsWith('image/');
     const mediaType = isPDF ? 'application/pdf' : file.type;
     const inventoryList = items.map(i => `${i.sku||'no-sku'} | ${i.name} | ${i.category}`).join('\n');
     const prompt = `You are parsing a vendor invoice for a print shop called Little 6 Industries. 
@@ -786,14 +831,12 @@ Return ONLY valid JSON array, no markdown, no explanation:
 [{"vendor_item_name": "...", "sku": "...", "qty": 0, "unit_cost": 0.00, "matched_sku": "..._or_null", "matched_name": "..._or_null", "is_new": true/false}]
 matched_sku and matched_name should be the best match from my inventory list above, or null if no match.
 is_new = true if no match found.`;
-
     const contentBlock = isPDF
       ? { type: 'document', source: { type: 'base64', media_type: mediaType, data: base64 } }
       : { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } };
-
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 2000,
@@ -801,6 +844,7 @@ is_new = true if no match found.`;
       })
     });
     const data = await response.json();
+    if (data.error) throw new Error(data.error.message);
     const text = data.content?.map(b => b.text || '').join('') || '';
     const clean = text.replace(/```json|```/g, '').trim();
     invoiceParsedItems = JSON.parse(clean);
