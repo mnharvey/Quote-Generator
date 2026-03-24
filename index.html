@@ -145,6 +145,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="mobile-nav-btn" onclick="showPanel('dtf',this)">🖨️ DTF Transfers</button>
   <button class="mobile-nav-btn" onclick="showPanel('embroidery',this)">🧵 Embroidery</button>
   <button class="mobile-nav-btn" onclick="showPanel('cornhole',this)">🏆 Cornhole</button>
+  <button class="mobile-nav-btn" onclick="showPanel('woodletters',this)">🪵 Wood Letters</button>
   <button class="mobile-nav-btn" onclick="showPanel('ref',this)">📋 All Prices</button>
   <button class="mobile-nav-btn" onclick="showPanel('banners',this)">🚩 Banners</button>
   <button class="mobile-nav-btn" onclick="showPanel('magnets',this)">🧲 Magnets</button>
@@ -167,6 +168,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="cat-btn" onclick="showPanel('embroidery',this)"><span>🧵</span> Embroidery</button>
   <div class="sidebar-section">Hard Goods</div>
   <button class="cat-btn" onclick="showPanel('cornhole',this)"><span>🏆</span> Cornhole Trophies</button>
+  <button class="cat-btn" onclick="showPanel('woodletters',this)"><span>🪵</span> Wood Letter Cutouts</button>
   <div class="sidebar-section">More Products</div>
   <button class="cat-btn" onclick="showPanel('banners',this)"><span>🚩</span> Banners</button>
   <button class="cat-btn" onclick="showPanel('magnets',this)"><span>🧲</span> Vehicle Magnets</button>
@@ -469,6 +471,72 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="result-card" id="dtf-result"></div>
     <button class="add-to-quote-btn" id="dtf-add" style="display:none" onclick="addToQuote('dtf')">+ ADD TO ESTIMATE</button>
     <div class="note-box">Gang Sheet: $8.50/ft retail · By-the-Foot: $6.35/ft wholesale. Both use 22.3" roll with 0.25" cut gap per print. Front + back = 2 sides.</div>
+  </div>
+
+
+  <!-- WOOD LETTERS -->
+  <div class="panel" id="panel-woodletters">
+    <div class="panel-title">Wood Letter Cutouts</div>
+    <div class="panel-desc">Laser cut · 1/8" MDF or Birch · Natural, Stained, or UV Printed</div>
+
+    <div class="form-row">
+      <div class="field"><label>Width (inches)</label>
+        <input type="number" id="wl-w" value="10" min="0.5" step="0.5" oninput="calcWoodLetters()"></div>
+      <div class="field"><label>Height (inches)</label>
+        <input type="number" id="wl-h" value="5" min="0.5" step="0.5" oninput="calcWoodLetters()"></div>
+    </div>
+
+    <div class="form-row">
+      <div class="field"><label>Material</label>
+        <select id="wl-material" onchange="calcWoodLetters()">
+          <option value="0.04">1/8" MDF — $0.04/sq in</option>
+          <option value="0.08">1/8" Birch — $0.08/sq in</option>
+        </select></div>
+      <div class="field"><label>Finish</label>
+        <select id="wl-finish" onchange="calcWoodLetters()">
+          <option value="0">Natural (no finish)</option>
+          <option value="0.04">Stained — +$0.04/sq in</option>
+          <option value="0.08">UV Printed pattern/color — +$0.08/sq in</option>
+        </select></div>
+    </div>
+
+    <div class="form-row">
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="wl-qty" value="1" min="1" oninput="calcWoodLetters()"></div>
+      <div class="field"><label>Qty Discount</label>
+        <div id="wl-qty-label" style="padding:8px 0;font-size:13px;color:var(--gray)">Full price (1–10)</div></div>
+    </div>
+
+    <div class="form-row single">
+      <div class="field"><label>Additional Discount</label>
+        <select id="wl-disc" onchange="calcWoodLetters()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off — Veteran / Nonprofit</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
+        </select></div>
+    </div>
+
+    <div id="wl-margin-check" style="display:none;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #ccc"></div>
+    <div id="wl-discount-check" style="display:none;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #ccc"></div>
+
+    <button class="calc-btn" onclick="calcWoodLetters()">CALCULATE</button>
+    <div class="result-card" id="wl-result"></div>
+    <button class="add-to-quote-btn" id="wl-add" style="display:none" onclick="addToQuote('wl')">+ ADD TO ESTIMATE</button>
+
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Material</th><th>Base $/sq in</th><th>Stained</th><th>UV Printed</th></tr></thead><tbody>
+      <tr><td>1/8" MDF</td><td>$0.04</td><td>$0.08</td><td>$0.12</td></tr>
+      <tr><td>1/8" Birch</td><td>$0.08</td><td>$0.12</td><td>$0.16</td></tr>
+    </tbody></table>
+    <table class="price-table" style="margin-top:8px"><thead><tr><th>Quantity</th><th>Discount</th></tr></thead><tbody>
+      <tr><td>1–10</td><td>Full price</td></tr>
+      <tr><td>11–25</td><td>10% off</td></tr>
+      <tr><td>26+</td><td>20% off</td></tr>
+    </tbody></table>
+    <div class="note-box">Price is per piece based on bounding box (W × H). Intricate cuts or very small detail may affect pricing — confirm with Matt.</div>
   </div>
 
   <!-- CORNHOLE -->
@@ -1598,6 +1666,98 @@ function calcDTF(){
   showResult('dtf-result', lines, bestTotal, qty, desc);
   lastCalc.dtf = {desc: desc, total: bestTotal, qty: qty, details: detailLines};
   showAddBtn('dtf-add');
+}
+
+
+function calcWoodLetters(){
+  var w = parseFloat(document.getElementById('wl-w').value) || 0;
+  var h = parseFloat(document.getElementById('wl-h').value) || 0;
+  var matRate = parseFloat(document.getElementById('wl-material').value) || 0.04;
+  var finishRate = parseFloat(document.getElementById('wl-finish').value) || 0;
+  var qty = parseInt(document.getElementById('wl-qty').value) || 1;
+  var discPct = parseFloat(document.getElementById('wl-disc').value) || 0;
+
+  if(!w || !h) return;
+
+  var sqIn = w * h;
+  var ratePerSqIn = matRate + finishRate;
+  var baseUnit = sqIn * ratePerSqIn;
+
+  // Qty break
+  var qtyDisc = qty >= 26 ? 20 : qty >= 11 ? 10 : 0;
+  var qtyLabel = qty >= 26 ? '20% off (26+)' : qty >= 11 ? '10% off (11–25)' : 'Full price (1–10)';
+  document.getElementById('wl-qty-label').textContent = qtyLabel;
+
+  var unitAfterQty = baseUnit * (1 - qtyDisc/100);
+  var unitFinal = unitAfterQty * (1 - discPct/100);
+  var total = unitFinal * qty;
+
+  var matLabel = document.getElementById('wl-material').options[document.getElementById('wl-material').selectedIndex].text.split('—')[0].trim();
+  var finishLabel = document.getElementById('wl-finish').options[document.getElementById('wl-finish').selectedIndex].text.split('—')[0].trim();
+  var desc = qty + 'x Wood Cutout ' + w + '×' + h + '" ' + matLabel + ' — ' + finishLabel;
+
+  var lines = [
+    ['Material', matLabel],
+    ['Finish', finishLabel],
+    ['Size', w + '×' + h + '" (' + sqIn.toFixed(1) + ' sq in)'],
+    ['Rate', '$' + ratePerSqIn.toFixed(2) + '/sq in'],
+    ['Base price', '$' + baseUnit.toFixed(2) + ' ea']
+  ];
+  if(qtyDisc > 0) lines.push(['Qty discount', '-' + qtyDisc + '% (' + qtyLabel + ')']);
+  if(discPct > 0) lines.push(['Additional disc', '-' + discPct + '%']);
+  lines.push(['Qty', qty]);
+
+  showResult('wl-result', lines, total, qty, desc);
+
+  var detailLines = [
+    ['Material', matLabel],
+    ['Finish', finishLabel],
+    ['Size', w + '×' + h + '"'],
+    ['Rate', '$' + ratePerSqIn.toFixed(2) + '/sq in']
+  ];
+  if(qtyDisc > 0) detailLines.push(['Qty disc', '-' + qtyDisc + '%']);
+  if(discPct > 0) detailLines.push(['Discount', '-' + discPct + '%']);
+  detailLines.push(['Qty', qty]);
+
+  lastCalc.wl = {desc: desc, total: total, qty: qty, details: detailLines};
+  showAddBtn('wl-add');
+
+  // Traffic light 1 — margin check (MDF cost ~$0.01/sq in, Birch ~$0.02/sq in est.)
+  var estCost = sqIn * (matRate * 0.25); // rough material cost ~25% of base laser rate
+  var marginCheck = document.getElementById('wl-margin-check');
+  if(unitFinal > 0 && estCost > 0) {
+    var margin = ((unitFinal - estCost) / unitFinal) * 100;
+    marginCheck.style.display = 'block';
+    if(margin >= 50) {
+      marginCheck.innerHTML = '✅ Good to go';
+      marginCheck.style.cssText = 'display:block;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #1A6B3C;background:#f0fff4;color:#1A6B3C;';
+    } else if(margin >= 10) {
+      marginCheck.innerHTML = '⚠️ Workable — confirm with customer before quoting';
+      marginCheck.style.cssText = 'display:block;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #C8A84B;background:#fffbe6;color:#856404;';
+    } else {
+      marginCheck.innerHTML = '🚫 Contact Matt or Lindsay before proceeding';
+      marginCheck.style.cssText = 'display:block;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #B03028;background:#fff3f3;color:#B03028;';
+    }
+  } else {
+    marginCheck.style.display = 'none';
+  }
+
+  // Traffic light 2 — discount check
+  var totalDiscPct = 1 - ((1 - qtyDisc/100) * (1 - discPct/100));
+  totalDiscPct = totalDiscPct * 100;
+  var discCheck = document.getElementById('wl-discount-check');
+  if(discPct === 0) {
+    discCheck.style.display = 'none';
+  } else if(totalDiscPct >= 35) {
+    discCheck.innerHTML = '🚫 Contact Matt or Lindsay before proceeding';
+    discCheck.style.cssText = 'display:block;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #B03028;background:#fff3f3;color:#B03028;';
+  } else if(totalDiscPct >= 20) {
+    discCheck.innerHTML = '⚠️ Workable — confirm with customer before quoting';
+    discCheck.style.cssText = 'display:block;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #C8A84B;background:#fffbe6;color:#856404;';
+  } else {
+    discCheck.innerHTML = '✅ Good to go';
+    discCheck.style.cssText = 'display:block;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #1A6B3C;background:#f0fff4;color:#1A6B3C;';
+  }
 }
 
 function calcMagnets(){
