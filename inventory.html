@@ -135,6 +135,25 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
 .rcv-par{color:#b05d00;font-weight:600;}
 .rcv-btn{padding:4px 10px;border:none;font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;background:var(--green);color:var(--white);transition:opacity .2s;}
 .rcv-btn:hover{opacity:.85;}
+/* Burn rate cards */
+.br-card{background:var(--white);border-top:4px solid var(--mid-gray);padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+.br-card.br-ok{border-top-color:var(--green);}
+.br-card.br-warn{border-top-color:#d68910;}
+.br-card.br-danger{border-top-color:var(--red);}
+.br-card-name{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.br-card-meta{font-size:12px;color:var(--gray);margin-bottom:10px;}
+.br-bar-wrap{background:#eee;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px;}
+.br-bar{height:100%;border-radius:4px;transition:width .4s;}
+.br-bar.ok{background:var(--green);}
+.br-bar.warn{background:#d68910;}
+.br-bar.danger{background:var(--red);}
+.br-days{font-family:'Courier Prime',monospace;font-size:20px;font-weight:700;}
+.br-days.ok{color:var(--green);}
+.br-days.warn{color:#d68910;}
+.br-days.danger{color:var(--red);}
+.br-reorder-date{font-size:11px;color:#888;margin-top:4px;}
+.rcv-btn{padding:4px 10px;border:none;font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;background:var(--green);color:var(--white);transition:opacity .2s;}
+.rcv-btn:hover{opacity:.85;}
 .inv-line-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--mid-gray);flex-wrap:wrap;}
 .inv-line-item:last-child{border-bottom:none;}
 .ili-check{width:16px;height:16px;accent-color:var(--red);cursor:pointer;flex-shrink:0;}
@@ -212,6 +231,7 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
     <button class="inv-tab" onclick="invTab('import')">&#8679; Import CSV</button>
     <button class="inv-tab" onclick="invTab('scan')">&#128247; Scan</button>
     <button class="inv-tab" onclick="invTab('invoice')">&#129494; Invoice AI</button>
+    <button class="inv-tab" onclick="invTab('burnrate')">&#128293; Burn Rate</button>
     <button class="inv-tab" style="margin-left:auto;color:rgba(255,100,100,.6);" onclick="lockInventory()">&#128274; Lock</button>
   </div>
   <div class="stats-bar">
@@ -219,9 +239,18 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
     <div class="stat-pill s-warn"><div class="sv" id="st-lw">0</div><div class="sl">Low</div></div>
     <div class="stat-pill s-ok"><div class="sv" id="st-ok">0</div><div class="sl">OK</div></div>
     <div class="stat-pill"><div class="sv" id="st-val">$0</div><div class="sl">Inv Value</div></div>
+    <div class="stat-pill" id="st-film-pill" style="cursor:pointer;" onclick="invTab('burnrate')">
+      <div class="sv" id="st-film-days" style="font-size:13px;">—</div>
+      <div class="sl">Film Days</div>
+    </div>
+    <div class="stat-pill" id="st-vinyl-pill" style="cursor:pointer;" onclick="invTab('burnrate')">
+      <div class="sv" id="st-vinyl-days" style="font-size:13px;">—</div>
+      <div class="sl">Vinyl Days</div>
+    </div>
     <div class="stats-bar-right">
       <button class="act-btn gold" onclick="openItemModal()">+ Add Item</button>
       <button class="act-btn secondary" onclick="exportCSV()">&#8595; CSV</button>
+      <button class="act-btn outline" onclick="resetToDefaults()" style="font-size:9px;padding:6px 10px;border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.4);">&#8635; Reset</button>
     </div>
   </div>
   <div class="inv-wrap">
@@ -387,6 +416,114 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
       </div>
     </div>
 
+    <!-- BURN RATE PANEL -->
+    <div class="inv-content" id="ipanel-burnrate" style="display:none">
+      <div class="sec-head">
+        <div><div class="sec-title">&#128293; Burn Rate</div><div class="sec-sub">Daily waste estimates · Days remaining · Reorder forecasting</div></div>
+        <button class="act-btn primary" onclick="saveBurnSettings()">Save Settings</button>
+      </div>
+
+      <!-- Settings Card -->
+      <div style="background:var(--white);padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:16px;">
+        <div style="font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:14px;">&#9881; Burn Rate Settings</div>
+
+        <!-- DTF Film -->
+        <div style="background:#f8f9fc;border-left:3px solid var(--red);padding:12px 14px;margin-bottom:12px;">
+          <div style="font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:10px;">DTF Film Consumption</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;">
+            <div>
+              <label style="font-family:'Oswald',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray);display:block;margin-bottom:5px;">Waste ft/day <span style="color:#aaa;font-size:9px;">(cleaning/setup)</span></label>
+              <input type="number" id="br-dtf-waste" value="8.5" step="0.1" min="0" style="width:100%;padding:8px;border:1.5px solid var(--mid-gray);font-family:'Courier Prime',monospace;font-size:14px;">
+              <div style="font-size:10px;color:#aaa;margin-top:3px;">102 in/day measured</div>
+            </div>
+            <div>
+              <label style="font-family:'Oswald',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray);display:block;margin-bottom:5px;">Production ft/day <span style="color:#aaa;font-size:9px;">(avg printed)</span></label>
+              <input type="number" id="br-dtf-prod" value="48.0" step="0.5" min="0" style="width:100%;padding:8px;border:1.5px solid var(--mid-gray);font-family:'Courier Prime',monospace;font-size:14px;">
+              <div style="font-size:10px;color:#aaa;margin-top:3px;">18,846ft ÷ 13mo ÷ 22 days</div>
+            </div>
+            <div>
+              <label style="font-family:'Oswald',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray);display:block;margin-bottom:5px;">Roll Size (ft)</label>
+              <input type="number" id="br-roll-size" value="328" step="1" min="1" style="width:100%;padding:8px;border:1.5px solid var(--mid-gray);font-family:'Courier Prime',monospace;font-size:14px;">
+            </div>
+          </div>
+          <div style="margin-top:10px;padding:8px 10px;background:rgba(176,48,40,.07);font-size:12px;color:var(--charcoal);">
+            Total: <strong id="br-dtf-total">56.5 ft/day</strong> &nbsp;·&nbsp; <span id="br-dtf-roll-days">~5.8 days/roll</span> &nbsp;·&nbsp; <span id="br-dtf-weekly">~282 ft/week</span>
+          </div>
+        </div>
+
+        <!-- DTF Ink -->
+        <div style="background:#f8f9fc;border-left:3px solid var(--gold);padding:12px 14px;margin-bottom:12px;">
+          <div style="font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#b08000;margin-bottom:10px;">DTF Ink Consumption</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;">
+            <div>
+              <label style="font-family:'Oswald',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray);display:block;margin-bottom:5px;">Cleaning ml/day</label>
+              <input type="number" id="br-ink-clean" value="66.7" step="0.5" min="0" style="width:100%;padding:8px;border:1.5px solid var(--mid-gray);font-family:'Courier Prime',monospace;font-size:14px;">
+              <div style="font-size:10px;color:#aaa;margin-top:3px;">1L ÷ 15 operating days</div>
+            </div>
+            <div>
+              <label style="font-family:'Oswald',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray);display:block;margin-bottom:5px;">Production ml/day <span style="color:#aaa;font-size:9px;">(fill in later)</span></label>
+              <input type="number" id="br-ink-prod" value="0" step="0.5" min="0" style="width:100%;padding:8px;border:1.5px solid var(--mid-gray);font-family:'Courier Prime',monospace;font-size:14px;">
+              <div style="font-size:10px;color:#aaa;margin-top:3px;">Track 2 weeks to calculate</div>
+            </div>
+          </div>
+          <div style="margin-top:10px;padding:8px 10px;background:rgba(200,168,75,.1);font-size:12px;color:var(--charcoal);">
+            Total: <strong id="br-ink-total">66.7 ml/day</strong> &nbsp;·&nbsp; <span id="br-ink-liter-days">~15 days/liter (cleaning only)</span>
+          </div>
+          <div style="margin-top:6px;font-size:11px;color:#aaa;font-style:italic;">⚠️ Production ink not yet tracked — add daily log data after 2 weeks to complete this.</div>
+        </div>
+
+        <!-- Vinyl + Other -->
+        <div style="background:#f8f9fc;border-left:3px solid var(--navy);padding:12px 14px;margin-bottom:12px;">
+          <div style="font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:10px;">Other Consumables</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;">
+            <div>
+              <label style="font-family:'Oswald',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray);display:block;margin-bottom:5px;">Sticker Vinyl Waste (in/day)</label>
+              <input type="number" id="br-vinyl-rate" value="10" step="0.5" min="0" style="width:100%;padding:8px;border:1.5px solid var(--mid-gray);font-family:'Courier Prime',monospace;font-size:14px;">
+              <div style="font-size:10px;color:#aaa;margin-top:3px;">Range: 4–16 in/day</div>
+            </div>
+            <div>
+              <label style="font-family:'Oswald',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray);display:block;margin-bottom:5px;">Lead Time Buffer (days)</label>
+              <input type="number" id="br-lead-buffer" value="7" step="1" min="1" style="width:100%;padding:8px;border:1.5px solid var(--mid-gray);font-family:'Courier Prime',monospace;font-size:14px;">
+              <div style="font-size:10px;color:#aaa;margin-top:3px;">Alert this many days before empty</div>
+            </div>
+            <div style="display:flex;flex-direction:column;justify-content:flex-end;">
+              <label style="font-family:'Oswald',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray);display:block;margin-bottom:8px;">Include Saturday?</label>
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                <input type="checkbox" id="br-saturday" style="width:18px;height:18px;accent-color:var(--red);">
+                <span style="font-size:13px;color:var(--charcoal);">Yes — 6 days/week</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:11px;color:#888;border-top:1px solid var(--mid-gray);padding-top:10px;">
+          Operating days: <strong id="br-days-per-week">5 days/week</strong> &nbsp;·&nbsp;
+          DTF film total: <strong id="br-ftpw">~282 ft/week</strong> &nbsp;·&nbsp;
+          Vinyl waste: <strong id="br-vinpw">~0.83 ft/week</strong>
+        </div>
+      </div>
+
+      <!-- Burn Rate Cards -->
+      <div id="br-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:16px;"></div>
+
+      <!-- All items with burn rate -->
+      <div style="background:var(--white);padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);">
+        <div style="font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:12px;">All Tracked Consumption Items</div>
+        <div class="tbl-wrap"><table>
+          <thead><tr>
+            <th>Item</th>
+            <th style="text-align:right">On Hand</th>
+            <th style="text-align:right">Est. Remaining</th>
+            <th style="text-align:right">Daily Use</th>
+            <th style="text-align:right">Days Left</th>
+            <th>Est. Reorder Date</th>
+            <th>Status</th>
+          </tr></thead>
+          <tbody id="br-tbody"></tbody>
+        </table></div>
+      </div>
+    </div>
+
   </div><!-- end inv-wrap -->
 </div><!-- end view-inventory -->
 
@@ -497,8 +634,9 @@ function save(k,d){localStorage.setItem(k,JSON.stringify(d));}
 let items=load(K.items),logData=load(K.log),vendors=load(K.vendors);
 let sortCol='name',sortDir=1,filterCat='all';
 
-if(!items.length){
+function seedItems(){
   items=[
+
     // DTF Materials
     {id:uid(),name:'DTF Film Roll 24"',sku:'DTF-FILM-24',category:'DTF Materials',unit:'Roll',qty:8,reorder:3,cost:42,vendor:'DTFSuperstore',notes:''},
     {id:uid(),name:'DTF Film Roll 13"',sku:'DTF-FILM-13',category:'DTF Materials',unit:'Roll',qty:5,reorder:2,cost:22,vendor:'DTFSuperstore',notes:''},
@@ -633,7 +771,7 @@ if(!items.length){
   ];
   save(K.items,items);
 }
-if(!vendors.length){
+function seedVendors(){
   vendors=[
     {id:uid(),name:'JPPlus',category:'Laser/UV Materials',website:'jpplus.com',acct:'',rep:'',contact:'',lead:'3-5 days',terms:'Net 30',qb:'COGS - Printing Supplies',notes:'Acrylic, sublimation blanks, drinkware, awards, Saddle Collection, Rowmark, CerMark'},
     {id:uid(),name:"Twiddy's Blanks",category:'Blank Apparel',website:'',acct:'',rep:'',contact:'',lead:'',terms:'',qb:'COGS - Supplies & Materials',notes:'Blank items for customization'},
@@ -654,11 +792,15 @@ if(!vendors.length){
   save(K.vendors,vendors);
 }
 
+// Auto-seed on first load
+if(!items.length) seedItems();
+if(!vendors.length) seedVendors();
+
 function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5);}
 function status(it){if(it.qty<=it.reorder)return 'reorder';if(it.qty<=it.reorder*1.2)return 'low';return 'ok';}
 function badge(it){const s=status(it);if(s==='reorder')return '<span class="badge b-red">REORDER</span>';if(s==='low')return '<span class="badge b-orange">LOW</span>';return '<span class="badge b-green">OK</span>';}
 
-function renderStats(){let ro=0,lw=0,ok=0,val=0;items.forEach(it=>{const s=status(it);if(s==='reorder')ro++;else if(s==='low')lw++;else ok++;val+=(it.qty||0)*(it.cost||0);});document.getElementById('st-ro').textContent=ro;document.getElementById('st-lw').textContent=lw;document.getElementById('st-ok').textContent=ok;document.getElementById('st-val').textContent='$'+Math.round(val).toLocaleString();}
+function renderStats(){let ro=0,lw=0,ok=0,val=0;items.forEach(it=>{const s=status(it);if(s==='reorder')ro++;else if(s==='low')lw++;else ok++;val+=(it.qty||0)*(it.cost||0);});document.getElementById('st-ro').textContent=ro;document.getElementById('st-lw').textContent=lw;document.getElementById('st-ok').textContent=ok;document.getElementById('st-val').textContent='$'+Math.round(val).toLocaleString();try{const br=loadBR();const consumed=[];items.forEach(it=>{const r=calcBurn(it,br);if(r)consumed.push({item:it,result:r});});updateBurnStatPills(consumed,br);}catch(err){}}
 
 function renderChips(){const cats=['all',...new Set(items.map(i=>i.category))].sort();const cnts={};items.forEach(i=>{cnts[i.category]=(cnts[i.category]||0)+1;});document.getElementById('cat-chips').innerHTML=cats.map(c=>{const lbl=c==='all'?`All (${items.length})`:`${c} (${cnts[c]||0})`;return `<div class="cat-chip${filterCat===c?' active':''}" onclick="setFC('${c}')">${lbl}</div>`;}).join('');}
 function setFC(c){filterCat=c;renderInv();}
@@ -699,8 +841,8 @@ function showIR(type,msg,list=[]){const el=document.getElementById('import-resul
 function exportCSV(){const h=['name','sku','category','unit','qty','reorder','cost','vendor','notes'];const rows=items.map(it=>h.map(k=>`"${(it[k]||'').toString().replace(/"/g,'""')}"`));const csv=[h.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`l6i_inventory_${new Date().toISOString().split('T')[0]}.csv`;a.click();}
 
 function invTab(t){
-  document.querySelectorAll('.inv-tab').forEach((b,i)=>b.classList.toggle('active',['inv','reorder','log','vendors','import','scan','invoice'][i]===t));
-  ['inv','reorder','log','vendors','import','scan','invoice'].forEach(p=>{
+  document.querySelectorAll('.inv-tab').forEach((b,i)=>b.classList.toggle('active',['inv','reorder','log','vendors','import','scan','invoice','burnrate'][i]===t));
+  ['inv','reorder','log','vendors','import','scan','invoice','burnrate'].forEach(p=>{
     const el=document.getElementById('ipanel-'+p);
     if(el) el.style.display=p===t?'block':'none';
   });
@@ -708,6 +850,7 @@ function invTab(t){
   if(t==='log')renderLog();
   if(t==='vendors')renderVendors();
   if(t==='invoice')checkApiKeyOnLoad();
+  if(t==='burnrate')renderBurnRate();
   if(t!=='scan')stopCamera();
 }
 function openModal(id){document.getElementById(id).classList.add('show');}
@@ -717,7 +860,158 @@ let tt;
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2800);}
 function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// ── MARK RECEIVED ─────────────────────────────────────────────────────────────
+// ── BURN RATE ENGINE ──────────────────────────────────────────────────────────
+const BR_KEY = 'l6i_burnrate';
+const BR_DEFAULTS = {
+  dtfWasteRate: 8.5,     // ft/day — cleaning/setup waste
+  dtfProdRate: 48.0,     // ft/day — actual production (18,846ft / 13mo / 22 days)
+  rollSize: 328,         // ft per roll
+  vinylRate: 10,         // inches/day waste
+  inkCleanRate: 66.7,    // ml/day — cleaning only (1L / 15 operating days)
+  inkProdRate: 0,        // ml/day — production ink (fill in when measured)
+  leadBuffer: 7,         // days buffer before alert
+  saturday: false
+};
+
+function loadBR() {
+  try { return {...BR_DEFAULTS, ...JSON.parse(localStorage.getItem(BR_KEY))}; }
+  catch { return {...BR_DEFAULTS}; }
+}
+function saveBR(d) { localStorage.setItem(BR_KEY, JSON.stringify(d)); }
+
+function daysPerWeek() {
+  const br = loadBR();
+  return br.saturday ? 6 : 5;
+}
+
+// Returns operating days between today and a future date
+function addOperatingDays(days) {
+  const br = loadBR();
+  const maxDay = br.saturday ? 6 : 5; // 6=Saturday, 5=Friday
+  let d = new Date();
+  let count = 0;
+  while (count < days) {
+    d.setDate(d.getDate() + 1);
+    const dow = d.getDay(); // 0=Sun,6=Sat
+    if (dow >= 1 && dow <= maxDay) count++;
+  }
+  return d;
+}
+
+function formatDate(d) {
+  return d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+}
+
+function calcBurn(item, br) {
+  const sku = item.sku || '';
+  const name = item.name.toLowerCase();
+  let dailyFt = 0, feetLeft = 0, label = '', breakdown = '';
+  if (sku.includes('DTF-FILM') || name.includes('dtf film')) {
+    dailyFt = br.dtfWasteRate + br.dtfProdRate;
+    feetLeft = (item.qty || 0) * br.rollSize;
+    label = `${item.qty} roll${item.qty!==1?'s':''} · ~${Math.round(feetLeft)} ft`;
+    breakdown = `${br.dtfProdRate} ft/day production + ${br.dtfWasteRate} ft/day waste`;
+  } else if (sku.includes('VNL') || (name.includes('vinyl') && !name.includes('dtf'))) {
+    dailyFt = br.vinylRate / 12;
+    feetLeft = (item.qty || 0) * 150;
+    label = `${item.qty} roll${item.qty!==1?'s':''} · ~${Math.round(feetLeft)} ft`;
+    breakdown = `${br.vinylRate} in/day waste`;
+  } else if (sku.includes('DTF-INK') || (name.includes('dtf') && name.includes('ink'))) {
+    const totalInk = br.inkCleanRate + br.inkProdRate;
+    if (totalInk <= 0) return null;
+    dailyFt = totalInk / 1000;
+    feetLeft = item.qty * 1000;
+    label = `${item.qty} L on hand · ${Math.round(feetLeft)} ml`;
+    breakdown = `${br.inkCleanRate} ml/day cleaning${br.inkProdRate > 0 ? ` + ${br.inkProdRate} ml/day production` : ' (production TBD)'}`;
+  } else return null;
+  if (dailyFt <= 0) return null;
+  const daysLeft = Math.floor(feetLeft / dailyFt);
+  const reorderDate = addOperatingDays(Math.max(0, daysLeft - br.leadBuffer));
+  const pct = Math.min(100, Math.round((daysLeft / 90) * 100));
+  const level = daysLeft <= br.leadBuffer ? 'danger' : daysLeft <= br.leadBuffer * 3 ? 'warn' : 'ok';
+  return { daysLeft, reorderDate, pct, level, feetLeft, dailyFt, label, breakdown };
+}
+
+function renderBurnRate() {
+  const br = loadBR();
+  document.getElementById('br-dtf-waste').value  = br.dtfWasteRate;
+  document.getElementById('br-dtf-prod').value   = br.dtfProdRate;
+  document.getElementById('br-roll-size').value  = br.rollSize;
+  document.getElementById('br-vinyl-rate').value = br.vinylRate;
+  document.getElementById('br-ink-clean').value  = br.inkCleanRate;
+  document.getElementById('br-ink-prod').value   = br.inkProdRate;
+  document.getElementById('br-lead-buffer').value= br.leadBuffer;
+  document.getElementById('br-saturday').checked = br.saturday;
+  updateBRSummaryLine(br);
+  const consumed = [];
+  items.forEach(it => { const r = calcBurn(it, br); if(r) consumed.push({item:it, result:r}); });
+  const cards = document.getElementById('br-cards');
+  if (!consumed.length) {
+    cards.innerHTML = '<p style="color:#aaa;font-size:13px;font-style:italic;">No consumption items found — DTF film, vinyl, and ink items appear here automatically.</p>';
+  } else {
+    cards.innerHTML = consumed.map(({item, result:r}) => `<div class="br-card br-${r.level}"><div class="br-card-name">${e(item.name)}</div><div class="br-card-meta">${r.label}</div><div style="font-size:11px;color:#aaa;margin-bottom:8px;">${r.breakdown}</div><div class="br-bar-wrap"><div class="br-bar ${r.level}" style="width:${r.pct}%"></div></div><div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:6px;"><div><span class="br-days ${r.level}">${r.daysLeft}</span><span style="font-size:12px;color:#888;"> days left</span></div><div style="text-align:right;"><div style="font-size:11px;color:#888;">Est. reorder</div><div style="font-family:'Oswald',sans-serif;font-size:13px;color:var(--navy);">${formatDate(r.reorderDate)}</div></div></div>${r.level==='danger'?`<div style="background:#fde8e8;color:var(--red);font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;margin-top:8px;">⚠️ Order within ${br.leadBuffer} days</div>`:''}</div>`).join('');
+  }
+  const tbody = document.getElementById('br-tbody');
+  if (!consumed.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty">No consumption items tracked yet.</div></td></tr>';
+  } else {
+    tbody.innerHTML = consumed.map(({item, result:r}) => `<tr><td class="iname">${e(item.name)}</td><td class="num">${item.qty} ${e(item.unit)}</td><td class="num">${Math.round(r.feetLeft)} ft</td><td class="num">${r.dailyFt.toFixed(2)} ft/day<br><span style="font-size:10px;color:#aaa;">${r.breakdown}</span></td><td class="num"><span class="br-days ${r.level}" style="font-size:14px;">${r.daysLeft}</span></td><td>${formatDate(r.reorderDate)}</td><td><span class="badge ${r.level==='danger'?'b-red':r.level==='warn'?'b-orange':'b-green'}">${r.level==='danger'?'⚠️ ORDER NOW':r.level==='warn'?'PLAN ORDER':'OK'}</span></td></tr>`).join('');
+  }
+  updateBurnStatPills(consumed, br);
+}
+
+function updateBurnStatPills(consumed, br) {
+  const film  = consumed.find(c => c.item.sku?.includes('DTF-FILM') || c.item.name.toLowerCase().includes('dtf film'));
+  const vinyl = consumed.find(c => c.item.sku?.includes('VNL') || (c.item.name.toLowerCase().includes('vinyl') && !c.item.name.toLowerCase().includes('dtf')));
+  if (film) { const d=film.result.daysLeft; document.getElementById('st-film-days').textContent=d+'d'; document.getElementById('st-film-pill').querySelector('.sv').style.color=d<=br.leadBuffer?'#ff7070':d<=br.leadBuffer*3?'#ffd166':'#6bcb77'; }
+  else { document.getElementById('st-film-days').textContent='—'; }
+  if (vinyl) { const d=vinyl.result.daysLeft; document.getElementById('st-vinyl-days').textContent=d+'d'; document.getElementById('st-vinyl-pill').querySelector('.sv').style.color=d<=br.leadBuffer?'#ff7070':d<=br.leadBuffer*3?'#ffd166':'#6bcb77'; }
+  else { document.getElementById('st-vinyl-days').textContent='—'; }
+}
+
+function updateBRSummaryLine(br) {
+  const dpw = br.saturday ? 6 : 5;
+  const dtfTotal = br.dtfWasteRate + br.dtfProdRate;
+  const daysPerRoll = dtfTotal > 0 ? (br.rollSize / dtfTotal).toFixed(1) : '—';
+  const inkTotal = br.inkCleanRate + br.inkProdRate;
+  document.getElementById('br-days-per-week').textContent = dpw + ' days/week';
+  document.getElementById('br-dtf-total').textContent = dtfTotal.toFixed(1) + ' ft/day';
+  document.getElementById('br-dtf-roll-days').textContent = `~${daysPerRoll} days/roll`;
+  document.getElementById('br-dtf-weekly').textContent = `~${(dtfTotal*dpw).toFixed(0)} ft/week`;
+  document.getElementById('br-ink-total').textContent = inkTotal.toFixed(1) + ' ml/day';
+  document.getElementById('br-ink-liter-days').textContent = inkTotal>0 ? `~${(1000/inkTotal).toFixed(0)} days/liter` : '—';
+  document.getElementById('br-ftpw').textContent = `~${(dtfTotal*dpw).toFixed(0)} ft/week`;
+  document.getElementById('br-vinpw').textContent = `~${((br.vinylRate/12)*dpw).toFixed(2)} ft/week`;
+}
+
+['br-dtf-waste','br-dtf-prod','br-roll-size','br-vinyl-rate','br-ink-clean','br-ink-prod','br-lead-buffer'].forEach(id => {
+  document.getElementById(id)?.addEventListener('input', () => updateBRSummaryLine(getBRFromForm()));
+});
+document.getElementById('br-saturday')?.addEventListener('change', () => updateBRSummaryLine(getBRFromForm()));
+
+function getBRFromForm() {
+  return {
+    dtfWasteRate: +document.getElementById('br-dtf-waste').value  || BR_DEFAULTS.dtfWasteRate,
+    dtfProdRate:  +document.getElementById('br-dtf-prod').value   || BR_DEFAULTS.dtfProdRate,
+    rollSize:     +document.getElementById('br-roll-size').value  || BR_DEFAULTS.rollSize,
+    vinylRate:    +document.getElementById('br-vinyl-rate').value || BR_DEFAULTS.vinylRate,
+    inkCleanRate: +document.getElementById('br-ink-clean').value  || BR_DEFAULTS.inkCleanRate,
+    inkProdRate:  +document.getElementById('br-ink-prod').value   || 0,
+    leadBuffer:   +document.getElementById('br-lead-buffer').value|| BR_DEFAULTS.leadBuffer,
+    saturday:     document.getElementById('br-saturday').checked
+  };
+}
+
+function saveBurnSettings() {
+  const br = getBRFromForm();
+  saveBR(br);
+  renderBurnRate();
+  renderStats();
+  toast('✅ Burn rate settings saved.');
+}
+
+
+
 function markReceived(logId) {
   const entry = logData.find(l => l.id === logId);
   if (!entry) return;
@@ -1035,8 +1329,17 @@ if (invDz) {
   invDz.addEventListener('drop', e => { e.preventDefault(); invDz.classList.remove('drag'); const f = e.dataTransfer.files[0]; if(f) handleInvoiceFile(f); });
 }
 
-renderInv();
+function resetToDefaults() {
+  if (!confirm('Reset inventory to 107-item defaults?\n\nOrder Log and Burn Rate settings will be kept.')) return;
+  localStorage.removeItem(K.items);
+  localStorage.removeItem(K.vendors);
+  items = []; vendors = [];
+  seedItems(); seedVendors();
+  renderInv(); renderVendors(); renderStats();
+  toast('✅ Reset complete — 107 items loaded.');
+}
 
+renderInv();
 </script>
 </body>
 </html>
