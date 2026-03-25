@@ -122,6 +122,24 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   .quote-close-btn{display:none!important;}
 }
 
+
+.sales-tip-toggle{width:100%;padding:9px 14px;background:var(--navy);color:var(--gold);border:none;font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;text-align:left;margin-top:14px;display:flex;align-items:center;gap:8px;}
+.sales-tip-toggle:hover{background:#16213e;}
+.sales-tip-body{display:none;border:1.5px solid var(--navy);border-top:none;padding:12px 14px;background:#faf9f6;}
+.sales-tip-body.open{display:block;}
+.st-head{font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin:10px 0 5px;border-bottom:1px solid var(--mid-gray);padding-bottom:4px;}
+.st-head:first-child{margin-top:0;}
+.st-list{list-style:none;padding:0;margin:0 0 4px;}
+.st-list li{font-size:12px;color:var(--charcoal);line-height:1.7;padding-left:10px;position:relative;}
+.st-list li::before{content:"·";position:absolute;left:0;color:var(--red);font-weight:700;}
+.st-list li strong{color:var(--navy);}
+.st-pitch{font-size:12px;color:var(--charcoal);line-height:1.7;border-left:3px solid var(--red);padding-left:10px;font-style:italic;}
+/* Full sales tips panel */
+.stip-card{background:var(--white);border:1.5px solid var(--mid-gray);padding:14px;margin-bottom:14px;}
+.stip-card-title{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.stip-card-sub{font-size:11px;color:var(--gray);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--mid-gray);}
+.stip-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:600px){.stip-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -147,6 +165,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="mobile-nav-btn" onclick="showPanel('cornhole',this)">🏆 Cornhole</button>
   <button class="mobile-nav-btn" onclick="showPanel('woodletters',this)">🪵 Wood Letters</button>
   <button class="mobile-nav-btn" onclick="showPanel('ref',this)">📋 All Prices</button>
+  <button class="mobile-nav-btn" onclick="showPanel('salestips',this)">💬 Sales Tips</button>
   <button class="mobile-nav-btn" onclick="showPanel('banners',this)">🚩 Banners</button>
   <button class="mobile-nav-btn" onclick="showPanel('magnets',this)">🧲 Magnets</button>
   <button class="mobile-nav-btn" onclick="showPanel('stickers',this)">🏷 Stickers</button>
@@ -174,6 +193,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="cat-btn" onclick="showPanel('magnets',this)"><span>🧲</span> Vehicle Magnets</button>
   <button class="cat-btn" onclick="showPanel('stickers',this)"><span>🏷</span> Stickers</button>
   <div class="sidebar-section">Reference</div>
+  <button class="cat-btn" onclick="showPanel('salestips',this)"><span>💬</span> Sales Tips</button>
   <button class="cat-btn" onclick="showPanel('ref',this)"><span>📋</span> All Pricing</button>
   <button class="cat-btn" onclick="showPanel('resources',this)"><span>🔗</span> Brand Resources</button>
 </nav>
@@ -211,6 +231,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <button class="calc-btn" onclick="calcCorr4()">CALCULATE</button>
     <div class="result-card" id="c4-result"></div>
     <button class="add-to-quote-btn" id="c4-add" style="display:none" onclick="addToQuote('c4')">+ ADD TO ESTIMATE</button>
+
+  <button class="sales-tip-toggle" onclick="toggleTip('c4')"><span>💬</span> Sales Tips</button>
+  <div class="sales-tip-body" id="tip-c4">
+    <div class="st-head">🎯 Best For</div>
+    <ul class="st-list"><li>Real estate &amp; political campaigns</li><li>Event signage &amp; grand openings</li><li>School &amp; church yard signs</li><li>Fundraisers — sell to families</li><li>Seasonal promotions</li></ul>
+    <div class="st-head">💡 Talking Points</div>
+    <ul class="st-list"><li>Fastest turnaround in Maricopa — 48–72 hrs</li><li>H-stakes included — no hardware needed</li><li>Full color, weatherproof — looks sharp outdoors</li><li>Very low cost per sign at volume</li></ul>
+    <div class="st-head">🛡️ Objection Handlers</div>
+    <ul class="st-list"><li><strong>"I can get these online cheaper"</strong> — Shipping takes 7–10 days and they arrive damaged. We are local, next-day pickup, you proof it first.</li><li><strong>"I only need 5"</strong> — That is fine. No large minimum on corrugated.</li><li><strong>"We already have a sign vendor"</strong> — Do they also do shirts, DTF, and embroidery? One vendor saves time and budget.</li></ul>
+  </div>
     <div class="note-box">Custom shapes and edge-to-edge printing available — call for quote. Wire stakes sold separately.</div>
     <div class="section-divider"></div>
     <table class="price-table"><thead><tr><th>Size</th><th>Type</th><th>1</th><th>10</th><th>100</th><th>500</th><th>1,000</th></tr></thead><tbody>
@@ -260,6 +290,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <button class="calc-btn" onclick="calcCorr10()">CALCULATE</button>
     <div class="result-card" id="c10-result"></div>
     <button class="add-to-quote-btn" id="c10-add" style="display:none" onclick="addToQuote('c10')">+ ADD TO ESTIMATE</button>
+
+  <button class="sales-tip-toggle" onclick="toggleTip('c10')"><span>💬</span> Sales Tips</button>
+  <div class="sales-tip-body" id="tip-c10">
+    <div class="st-head">🎯 Best For</div>
+    <ul class="st-list"><li>Permanent outdoor displays</li><li>Restaurant menu boards</li><li>Real estate and commercial signage</li><li>Events needing a premium look</li></ul>
+    <div class="st-head">💡 Talking Points</div>
+    <ul class="st-list"><li>10mm is noticeably sturdier — stands up to wind and repeated use</li><li>Looks more like a real sign, less like a campaign sign</li><li>Great upsell from 4mm for customers who want longevity</li></ul>
+    <div class="st-head">🛡️ Objection Handlers</div>
+    <ul class="st-list"><li><strong>"Why pay more for 10mm?"</strong> — It lasts 3x longer outdoors. If they are reusing it, it pays for itself after one use.</li></ul>
+  </div>
     <div class="note-box">Real estate: perfect for listing &amp; rider signs. Call for custom sizes and grommet pricing.</div>
     <div class="section-divider"></div>
     <table class="price-table"><thead><tr><th>Size</th><th>Type</th><th>1</th><th>2</th><th>5</th><th>10</th><th>20</th></tr></thead><tbody>
@@ -314,6 +354,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <button class="calc-btn" onclick="calcAluminum()">CALCULATE</button>
     <div class="result-card" id="al-result"></div>
     <button class="add-to-quote-btn" id="al-add" style="display:none" onclick="addToQuote('al')">+ ADD TO ESTIMATE</button>
+
+  <button class="sales-tip-toggle" onclick="toggleTip('al')"><span>💬</span> Sales Tips</button>
+  <div class="sales-tip-body" id="tip-al">
+    <div class="st-head">🎯 Best For</div>
+    <ul class="st-list"><li>Permanent outdoor business signage</li><li>HOA, parking, and safety signs</li><li>Government &amp; facilities — SDVOSB advantage</li><li>Retail storefronts &amp; building ID</li></ul>
+    <div class="st-head">💡 Talking Points</div>
+    <ul class="st-list"><li>Aluminum never fades, warps, or cracks — permanent solution</li><li>SDVOSB status makes us a preferred vendor for gov and federal buyers</li><li>UV printed full color, no extra setup fee</li></ul>
+    <div class="st-head">🛡️ Objection Handlers</div>
+    <ul class="st-list"><li><strong>"It is too expensive"</strong> — Compare to repainting or replacing cheap signs every year. Aluminum is a one-time cost.</li><li><strong>"We use a national sign company"</strong> — Ask their lead time. We are 48–72 hrs and local.</li></ul>
+  </div>
   </div>
 
   <!-- VINYL -->
@@ -343,6 +393,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <button class="calc-btn" onclick="calcVinyl()">CALCULATE</button>
     <div class="result-card" id="vn-result"></div>
     <button class="add-to-quote-btn" id="vn-add" style="display:none" onclick="addToQuote('vn')">+ ADD TO ESTIMATE</button>
+
+  <button class="sales-tip-toggle" onclick="toggleTip('vn')"><span>💬</span> Sales Tips</button>
+  <div class="sales-tip-body" id="tip-vn">
+    <div class="st-head">🎯 Best For</div>
+    <ul class="st-list"><li>Vehicle branding &amp; fleet wraps</li><li>Window graphics &amp; storefronts</li><li>Hard hat &amp; helmet stickers</li><li>Brand swag &amp; giveaways</li></ul>
+    <div class="st-head">💡 Talking Points</div>
+    <ul class="st-list"><li>Weatherproof vinyl — outdoor rated, will not fade or peel</li><li>Custom die-cut shapes — any size, any design</li><li>Min 15 stickers — very accessible entry point</li><li>Great add-on to any sign or shirt order</li></ul>
+    <div class="st-head">🛡️ Objection Handlers</div>
+    <ul class="st-list"><li><strong>"I will just order from Sticker Mule"</strong> — 10-day shipping and no local support. We are here, you can hold the proof before you commit.</li><li><strong>"I do not need many"</strong> — 15 is the minimum. Very low cost to test a design.</li></ul>
+  </div>
   </div>
 
   <!-- SHIRTS -->
@@ -403,6 +463,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <button class="calc-btn" onclick="calcShirts()">CALCULATE</button>
     <div class="result-card" id="sh-result"></div>
     <button class="add-to-quote-btn" id="sh-add" style="display:none" onclick="addToQuote('sh')">+ ADD TO ESTIMATE</button>
+
+  <button class="sales-tip-toggle" onclick="toggleTip('sh')"><span>💬</span> Sales Tips</button>
+  <div class="sales-tip-body" id="tip-sh">
+    <div class="st-head">🎯 Best For</div>
+    <ul class="st-list"><li>Corporate uniforms &amp; team gear</li><li>Restaurant &amp; hospitality staff</li><li>School spirit wear &amp; fundraisers</li><li>Sports teams &amp; leagues</li><li>Event merchandise &amp; clothing lines</li></ul>
+    <div class="st-head">💡 Talking Points</div>
+    <ul class="st-list"><li>37 brands — Nike, Carhartt, North Face, Bella+Canvas and more</li><li>DTF or embroidery on any garment — full color, no screen fees</li><li>48–72 hr turnaround</li><li>Bulk discount at 100+ pieces — drops automatically</li><li>SDVOSB preferred vendor for government buyers</li></ul>
+    <div class="st-head">🛡️ Objection Handlers</div>
+    <ul class="st-list"><li><strong>"We use a national vendor"</strong> — Ask their lead time. We are local, 48–72 hrs, owner answers the phone.</li><li><strong>"It is too expensive"</strong> — Pricing is MSRP. At 100+ pieces bulk discount kicks in. Veterans and nonprofits get additional discount.</li><li><strong>"We want Nike"</strong> — We are authorized SanMar dealers for Nike, North Face, Carhartt, TravisMathew, and more.</li></ul>
+  </div>
     <div class="note-box">Pricing = MSRP. 100+ garments qualifies for bulk discount — call Lindsay for large orders. XL+ sizes may incur upcharge. Veterans &amp; nonprofits qualify for bulk discount at lower quantities.</div>
   </div>
 
@@ -473,6 +543,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="note-box">Gang Sheet: $8.50/ft retail · By-the-Foot: $6.35/ft wholesale. Both use 22.3" roll with 0.25" cut gap per print. Front + back = 2 sides.</div>
   </div>
 
+  <button class="sales-tip-toggle" onclick="toggleTip('dtf')"><span>💬</span> Sales Tips</button>
+  <div class="sales-tip-body" id="tip-dtf">
+    <div class="st-head">🎯 Best For</div>
+    <ul class="st-list"><li>Businesses &amp; clothing lines buying transfers in bulk</li><li>Customers with their own heat press</li><li>Small batch custom apparel — 1 to 1,000</li><li>Schools, sports teams, churches</li></ul>
+    <div class="st-head">💡 Talking Points</div>
+    <ul class="st-list"><li>No minimums — order exactly what you need</li><li>Full color, no setup fees — any design prints</li><li>Works on cotton, poly, blends, nylon, and more</li><li>Gang sheet packs multiple designs — maximize value per foot</li><li>Wholesale rate at $6.35/ft for bulk buyers</li></ul>
+    <div class="st-head">🛡️ Objection Handlers</div>
+    <ul class="st-list"><li><strong>"Screen print is cheaper"</strong> — Only at 72+ pieces, same color. DTF wins on small runs, multicolor, and mixed sizes.</li><li><strong>"I have a guy"</strong> — Ask about turnaround and minimums. We're 48–72 hrs, no minimums.</li><li><strong>"I'll just order online"</strong> — We're local, faster, and you talk to a real person.</li></ul>
+  </div>
+
 
   <!-- WOOD LETTERS -->
   <div class="panel" id="panel-woodletters">
@@ -526,6 +606,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="result-card" id="wl-result"></div>
     <button class="add-to-quote-btn" id="wl-add" style="display:none" onclick="addToQuote('wl')">+ ADD TO ESTIMATE</button>
 
+  <button class="sales-tip-toggle" onclick="toggleTip('wl')"><span>💬</span> Sales Tips</button>
+  <div class="sales-tip-body" id="tip-wl">
+    <div class="st-head">🎯 Best For</div>
+    <ul class="st-list"><li>Weddings &amp; event signage</li><li>Home decor &amp; personalized gifts</li><li>Retail store displays</li><li>Photo booth props</li><li>School &amp; church decorations</li></ul>
+    <div class="st-head">💡 Talking Points</div>
+    <ul class="st-list"><li>MDF starts at $0.04/sq in — very accessible price point</li><li>Birch adds natural wood grain — premium upgrade that sells itself</li><li>UV print option adds full-color patterns and art</li><li>26+ pieces unlocks 20% off automatically</li></ul>
+    <div class="st-head">🛡️ Objection Handlers</div>
+    <ul class="st-list"><li><strong>"I can get this on Etsy"</strong> — Etsy ships in 1–2 weeks. We are local, fast, and customize on the spot.</li><li><strong>"Is the quality good?"</strong> — Laser cut is machined precision. No saw marks. UV print is vibrant and durable.</li><li><strong>"Can I get a sample?"</strong> — Yes. Small cutout at cost to prove the quality.</li></ul>
+  </div>
+
     <div class="section-divider"></div>
     <table class="price-table"><thead><tr><th>Material</th><th>Base $/sq in</th><th>Stained</th><th>UV Printed</th></tr></thead><tbody>
       <tr><td>1/8" MDF</td><td>$0.04</td><td>$0.08</td><td>$0.12</td></tr>
@@ -562,6 +652,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <button class="calc-btn" onclick="calcCornhole()">CALCULATE</button>
     <div class="result-card" id="ch-result"></div>
     <button class="add-to-quote-btn" id="ch-add" style="display:none" onclick="addToQuote('ch')">+ ADD TO ESTIMATE</button>
+
+  <button class="sales-tip-toggle" onclick="toggleTip('ch')"><span>💬</span> Sales Tips</button>
+  <div class="sales-tip-body" id="tip-ch">
+    <div class="st-head">🎯 Best For</div>
+    <ul class="st-list"><li>Sports tournaments &amp; leagues</li><li>Corporate team events</li><li>Wedding &amp; party favors</li><li>School &amp; church fundraisers</li><li>Custom awards &amp; trophies</li></ul>
+    <div class="st-head">💡 Talking Points</div>
+    <ul class="st-list"><li>Laser cut birch — clean edges, premium feel</li><li>UV printed full color — any logo or design</li><li>Pairs well with a shirt order for complete event packages</li><li>Nobody else in Maricopa does these</li></ul>
+    <div class="st-head">🛡️ Objection Handlers</div>
+    <ul class="st-list"><li><strong>"I can get trophies cheaper"</strong> — Not like this. Custom laser-cut wood with full color print is a different product.</li><li><strong>"We do not do cornhole"</strong> — These work as wall art, awards, and decor too.</li></ul>
+  </div>
     <div class="section-divider"></div>
     <table class="price-table"><thead><tr><th>Quantity</th><th>Price Each</th></tr></thead><tbody>
       <tr><td>1–4</td><td>$20.00</td></tr><tr><td>5–19</td><td>$18.00</td></tr>
@@ -702,6 +802,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <button class="calc-btn" onclick="calcBanners()">CALCULATE</button>
     <div class="result-card" id="bn-result"></div>
     <button class="add-to-quote-btn" id="bn-add" style="display:none" onclick="addToQuote('bn')">+ ADD TO ESTIMATE</button>
+
+  <button class="sales-tip-toggle" onclick="toggleTip('bn')"><span>💬</span> Sales Tips</button>
+  <div class="sales-tip-body" id="tip-bn">
+    <div class="st-head">🎯 Best For</div>
+    <ul class="st-list"><li>Trade shows &amp; events</li><li>Restaurant &amp; retail promotions</li><li>Grand openings &amp; seasonal sales</li><li>Sports &amp; school spirit</li></ul>
+    <div class="st-head">💡 Talking Points</div>
+    <ul class="st-list"><li>Weather-resistant vinyl — indoor or outdoor</li><li>Grommets included — hang anywhere</li><li>Fast turnaround — great for last-minute events</li><li>Custom sizes available beyond standard</li></ul>
+    <div class="st-head">🛡️ Objection Handlers</div>
+    <ul class="st-list"><li><strong>"We have a banner already"</strong> — When did you last update it? Stale banners hurt the brand.</li><li><strong>"It is just a banner"</strong> — It is the first thing people see at your booth or storefront. It sets the tone.</li></ul>
+  </div>
     <div class="note-box">Custom sizes available — call for quote. Prices subject to change — Lindsay updates via Google Sheet.</div>
     <div class="section-divider"></div>
     <table class="price-table"><thead><tr><th colspan="2">Hanging Banners</th></tr></thead><tbody>
@@ -753,6 +863,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <button class="calc-btn" onclick="calcMagnets()">CALCULATE</button>
     <div class="result-card" id="mg-result"></div>
     <button class="add-to-quote-btn" id="mg-add" style="display:none" onclick="addToQuote('mg')">+ ADD TO ESTIMATE</button>
+
+  <button class="sales-tip-toggle" onclick="toggleTip('mg')"><span>💬</span> Sales Tips</button>
+  <div class="sales-tip-body" id="tip-mg">
+    <div class="st-head">🎯 Best For</div>
+    <ul class="st-list"><li>Mobile businesses — plumbers, contractors, landscapers</li><li>Food trucks &amp; delivery vehicles</li><li>Real estate agents</li><li>Anyone who parks in public regularly</li></ul>
+    <div class="st-head">💡 Talking Points</div>
+    <ul class="st-list"><li>Remove and reattach in seconds — no commitment</li><li>Full color on any vehicle</li><li>Min 2 — very low entry point</li><li>Great upsell for anyone buying a sign</li></ul>
+    <div class="st-head">🛡️ Objection Handlers</div>
+    <ul class="st-list"><li><strong>"I do not want to commit to a wrap"</strong> — Magnets are removable. Park it, pull it, transfer to another vehicle.</li><li><strong>"My truck already has lettering"</strong> — Magnets work alongside permanent lettering. Great for seasonal promotions.</li></ul>
+  </div>
     <div class="note-box">Flat pricing — no qty break discount. Minimum order: 2 per size. Via FireSprint.</div>
     <div class="section-divider"></div>
     <table class="price-table"><thead><tr><th>Size</th><th>Price Each</th><th>Min Order</th></tr></thead><tbody>
@@ -791,6 +911,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <button class="calc-btn" onclick="calcStickers()">CALCULATE</button>
     <div class="result-card" id="st-result"></div>
     <button class="add-to-quote-btn" id="st-add" style="display:none" onclick="addToQuote('st')">+ ADD TO ESTIMATE</button>
+
+  <button class="sales-tip-toggle" onclick="toggleTip('st')"><span>💬</span> Sales Tips</button>
+  <div class="sales-tip-body" id="tip-st">
+    <div class="st-head">🎯 Best For</div>
+    <ul class="st-list"><li>Product packaging &amp; labeling</li><li>Brand swag &amp; giveaways</li><li>Events &amp; fundraisers</li><li>Hard hat, laptop, water bottle stickers</li></ul>
+    <div class="st-head">💡 Talking Points</div>
+    <ul class="st-list"><li>Die-cut to any shape — not just rectangles</li><li>Weatherproof vinyl — outdoor rated</li><li>15 minimum — very accessible to test a design</li><li>Cheap way to get your logo everywhere</li></ul>
+    <div class="st-head">🛡️ Objection Handlers</div>
+    <ul class="st-list"><li><strong>"Stickers are cheap promo"</strong> — That is the point. Low cost, high visibility. People put them everywhere.</li><li><strong>"I only need a few"</strong> — 15 is the minimum. Order a small run to test, scale up when they sell out.</li></ul>
+  </div>
     <div class="note-box">Pricing breaks at 50/100/250/500 pieces. Die-cut shape standard. Kiss cut available. Spot gloss available at extra charge. Design fee $25 if artwork needed.</div>
     <div class="section-divider"></div>
     <div style="font-family:Oswald,sans-serif;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Premium — UV Rated Outdoor Vinyl</div>
@@ -848,6 +978,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <button class="calc-btn" onclick="calcEmbroidery()">CALCULATE</button>
     <div class="result-card" id="em-result"></div>
     <button class="add-to-quote-btn" id="em-add" style="display:none" onclick="addToQuote('em')">+ ADD TO ESTIMATE</button>
+
+  <button class="sales-tip-toggle" onclick="toggleTip('em')"><span>💬</span> Sales Tips</button>
+  <div class="sales-tip-body" id="tip-em">
+    <div class="st-head">🎯 Best For</div>
+    <ul class="st-list"><li>Corporate polos &amp; uniforms</li><li>Hats &amp; headwear branding</li><li>Premium gifts &amp; awards</li><li>Patches &amp; badges</li></ul>
+    <div class="st-head">💡 Talking Points</div>
+    <ul class="st-list"><li>$35 setup fee — one-time per design, then reorder forever</li><li>Tajima machine — commercial grade, clean thread work</li><li>Works on hats, polos, jackets, patches</li><li>Stitch count determines price — simple logos cost less</li></ul>
+    <div class="st-head">🛡️ Objection Handlers</div>
+    <ul class="st-list"><li><strong>"DTF is cheaper"</strong> — For high-wash items like workwear and hats, embroidery lasts longer. Different product.</li><li><strong>"The setup fee is too much"</strong> — It is one-time. Order once, reorder forever at the per-piece rate.</li><li><strong>"Can you match our logo colors?"</strong> — Yes. We thread-match to Pantone and brand standards.</li></ul>
+  </div>
     <div class="note-box">Stitch count is estimated — add ~2,000 stitches buffer until final digitization confirmed. Setup fee is one-time per new design. Bring your own garments or let us source.</div>
     <div class="section-divider"></div>
     <table class="price-table"><thead><tr><th>Stitches</th><th>1–11</th><th>12–23</th><th>24–71</th><th>72–143</th><th>144–287</th><th>288–499</th><th>500+</th></tr></thead><tbody>
@@ -1758,6 +1898,16 @@ function calcWoodLetters(){
     discCheck.innerHTML = '✅ Good to go';
     discCheck.style.cssText = 'display:block;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #1A6B3C;background:#f0fff4;color:#1A6B3C;';
   }
+}
+
+
+function toggleTip(pid){
+  var body = document.getElementById('tip-'+pid);
+  if(!body) return;
+  body.classList.toggle('open');
+  // Update button arrow
+  var btn = body.previousElementSibling;
+  if(btn) btn.querySelector('span').textContent = body.classList.contains('open') ? '🔽' : '💬';
 }
 
 function calcMagnets(){
