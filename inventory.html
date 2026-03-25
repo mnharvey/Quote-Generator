@@ -836,7 +836,181 @@ dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');}
 dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
 dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');const f=e.dataTransfer.files[0];if(f)handleFile(f);});
 function handleFile(file){if(!file||!file.name.endsWith('.csv')){showIR('error','Please drop a .csv file.');return;}const r=new FileReader();r.onload=e=>processCSV(e.target.result,file.name);r.readAsText(file);}
-function processCSV(text,fname){const lines=text.trim().split('\n').filter(l=>l.trim());if(lines.length<2){showIR('error','CSV appears empty.');return;}const hdrs=lines[0].toLowerCase().replace(/\r/g,'').split(',').map(h=>h.trim().replace(/"/g,''));const ni=hdrs.findIndex(h=>h.includes('name'));const si=hdrs.findIndex(h=>h.includes('sku')||h.includes('part'));const qi=hdrs.findIndex(h=>h==='qty'||h.includes('quant'));const ci=hdrs.findIndex(h=>h.includes('cost')||h.includes('price'));const ri=hdrs.findIndex(h=>h.includes('reorder'));const cati=hdrs.findIndex(h=>h.includes('cat')||h.includes('type'));const vi=hdrs.findIndex(h=>h.includes('vendor')||h.includes('supplier'));if(ni<0&&si<0){showIR('error','CSV needs a "name" or "sku" column.');return;}let added=0,updated=0,skipped=0;const preview=[];for(let i=1;i<lines.length;i++){const cols=parseCSVLine(lines[i]);const csvName=ni>=0?cols[ni]?.trim():'';const csvSku=si>=0?cols[si]?.trim():'';if(!csvName&&!csvSku){skipped++;continue;}let ex=items.find(it=>csvSku&&it.sku&&it.sku.toLowerCase()===csvSku.toLowerCase());if(!ex&&csvName)ex=items.find(it=>it.name.toLowerCase()===csvName.toLowerCase());const nQ=qi>=0?parseFloat(cols[qi])||null:null;const nC=ci>=0?parseFloat(cols[ci])||null:null;const nR=ri>=0?parseFloat(cols[ri])||null:null;const nV=vi>=0?cols[vi]?.trim():null;const nCat=cati>=0?cols[cati]?.trim():null;if(ex){if(nQ!==null)ex.qty=nQ;if(nC!==null)ex.cost=nC;if(nR!==null)ex.reorder=nR;if(nV)ex.vendor=nV;updated++;preview.push(`Updated: ${ex.name} qty=${ex.qty}`);}else{items.push({id:uid(),name:csvName||csvSku,sku:csvSku||'',category:nCat||'Other',unit:'Each',qty:nQ||0,reorder:nR||0,cost:nC||0,vendor:nV||'',notes:''});added++;preview.push(`Added: ${csvName||csvSku}`);}}save(K.items,items);renderInv();showIR('ok',`Import done from <strong>${fname}</strong> - ${updated} updated, ${added} added, ${skipped} skipped`,preview.slice(0,10));toast(`Import: ${updated} updated, ${added} added.`);}
+
+// ── InkSoft consumption constants ────────────────────────────────────────────
+const DTF_ROLL_FEET = 328;          // feet per roll of DTF film
+const DTF_FILM_WIDTH = 22.3;        // inches (working width)
+const DTF_WORKING_PCT = 0.75;       // 75% of film width is active print area
+const DTF_POWDER_KG_PER_FT = 0.003; // kg of powder per linear foot
+const DTF_INK_CMYK_L_PER_SQFT = 0.0015; // liters per sq ft per CMYK channel
+const DTF_INK_WHITE_L_PER_SQFT = 0.003; // white uses ~2x CMYK
+
+function calcDTFConsumption(linearFeet) {
+  const sqFtPerFoot = (DTF_FILM_WIDTH * DTF_WORKING_PCT / 12); // sq ft of print area per linear foot
+  const totalSqFt = linearFeet * sqFtPerFoot;
+  return {
+    filmRolls:   linearFeet / DTF_ROLL_FEET,
+    powderKg:    linearFeet * DTF_POWDER_KG_PER_FT,
+    inkCMYK_L:   totalSqFt * DTF_INK_CMYK_L_PER_SQFT, // per channel
+    inkWhite_L:  totalSqFt * DTF_INK_WHITE_L_PER_SQFT,
+  };
+}
+
+function deductItem(skuOrName, amount, unit, preview, deductions) {
+  const it = items.find(i =>
+    (i.sku && i.sku.toLowerCase() === skuOrName.toLowerCase()) ||
+    i.name.toLowerCase().includes(skuOrName.toLowerCase())
+  );
+  if (!it) return;
+  const before = it.qty;
+  it.qty = Math.max(0, Math.round((it.qty - amount) * 1000) / 1000);
+  deductions++;
+  preview.push(`▼ ${it.name}: ${before} → ${it.qty} ${unit}`);
+  return 1;
+}
+
+function processCSV(text, fname) {
+  const lines = text.trim().split('\n').filter(l => l.trim());
+  if (lines.length < 2) { showIR('error', 'CSV appears empty.'); return; }
+  const hdrs = lines[0].toLowerCase().replace(/\r/g, '').split(',').map(h => h.trim().replace(/"/g, ''));
+
+  // Detect if this is an InkSoft Order Detail Report
+  const isInkSoft = hdrs.includes('order id') && hdrs.includes('product sku') && hdrs.includes('quantity');
+
+  if (isInkSoft) {
+    processInkSoftCSV(lines, hdrs, fname);
+    return;
+  }
+
+  // ── Standard inventory CSV (set quantities directly) ─────────────────────
+  const ni=hdrs.findIndex(h=>h.includes('name'));
+  const si=hdrs.findIndex(h=>h.includes('sku')||h.includes('part'));
+  const qi=hdrs.findIndex(h=>h==='qty'||h.includes('quant'));
+  const ci=hdrs.findIndex(h=>h.includes('cost')||h.includes('price'));
+  const ri=hdrs.findIndex(h=>h.includes('reorder'));
+  const cati=hdrs.findIndex(h=>h.includes('cat')||h.includes('type'));
+  const vi=hdrs.findIndex(h=>h.includes('vendor')||h.includes('supplier'));
+  if(ni<0&&si<0){showIR('error','CSV needs a "name" or "sku" column.');return;}
+  let added=0,updated=0,skipped=0;const preview=[];
+  for(let i=1;i<lines.length;i++){
+    const cols=parseCSVLine(lines[i]);
+    const csvName=ni>=0?cols[ni]?.trim():'';
+    const csvSku=si>=0?cols[si]?.trim():'';
+    if(!csvName&&!csvSku){skipped++;continue;}
+    let ex=items.find(it=>csvSku&&it.sku&&it.sku.toLowerCase()===csvSku.toLowerCase());
+    if(!ex&&csvName)ex=items.find(it=>it.name.toLowerCase()===csvName.toLowerCase());
+    const nQ=qi>=0?parseFloat(cols[qi])||null:null;
+    const nC=ci>=0?parseFloat(cols[ci])||null:null;
+    const nR=ri>=0?parseFloat(cols[ri])||null:null;
+    const nV=vi>=0?cols[vi]?.trim():null;
+    const nCat=cati>=0?cols[cati]?.trim():null;
+    if(ex){if(nQ!==null)ex.qty=nQ;if(nC!==null)ex.cost=nC;if(nR!==null)ex.reorder=nR;if(nV)ex.vendor=nV;updated++;preview.push(`Updated: ${ex.name} qty=${ex.qty}`);}
+    else{items.push({id:uid(),name:csvName||csvSku,sku:csvSku||'',category:nCat||'Other',unit:'Each',qty:nQ||0,reorder:nR||0,cost:nC||0,vendor:nV||'',notes:''});added++;preview.push(`Added: ${csvName||csvSku}`);}
+  }
+  save(K.items,items);renderInv();
+  showIR('ok',`Import done from <strong>${fname}</strong> — ${updated} updated, ${added} added, ${skipped} skipped`,preview.slice(0,15));
+  toast(`Import: ${updated} updated, ${added} added.`);
+}
+
+function processInkSoftCSV(lines, hdrs, fname) {
+  // Column indices
+  const skuIdx  = hdrs.findIndex(h => h === 'product sku');
+  const nameIdx = hdrs.findIndex(h => h === 'product name');
+  const qtyIdx  = hdrs.findIndex(h => h === 'quantity');
+  const sizeIdx = hdrs.findIndex(h => h === 'product size');
+
+  // Aggregate by SKU across all rows
+  const agg = {}; // sku -> { name, totalQty, sizes[] }
+  for (let i = 1; i < lines.length; i++) {
+    const cols = parseCSVLine(lines[i]);
+    const sku  = cols[skuIdx]?.trim();
+    const name = cols[nameIdx]?.trim();
+    const qty  = parseFloat(cols[qtyIdx]) || 0;
+    const size = cols[sizeIdx]?.trim() || '';
+    if (!sku || qty === 0) continue;
+    if (!agg[sku]) agg[sku] = { name, totalQty: 0, sizes: [] };
+    agg[sku].totalQty += qty;
+    agg[sku].sizes.push(size);
+  }
+
+  const preview = [];
+  let dtfFeet = 0;
+
+  for (const [sku, data] of Object.entries(agg)) {
+    const { name, totalQty } = data;
+    const skuLow = sku.toLowerCase();
+
+    // ── DTF by the foot ───────────────────────────────────────────────────
+    if (skuLow === 'dtf-rtp-foot' || skuLow.includes('dtf') && skuLow.includes('foot')) {
+      dtfFeet += totalQty;
+      const c = calcDTFConsumption(totalQty);
+      preview.push(`📏 DTF by foot: ${totalQty} ft consumed`);
+      preview.push(`  ▼ Film: ${c.filmRolls.toFixed(4)} rolls`);
+      preview.push(`  ▼ Powder White: ${c.powderKg.toFixed(3)} kg`);
+      preview.push(`  ▼ Ink White: ${c.inkWhite_L.toFixed(4)} L`);
+      preview.push(`  ▼ Ink CMYK (each): ${c.inkCMYK_L.toFixed(4)} L`);
+      // Deduct film
+      const film24 = items.find(i => i.sku === 'DTF-FILM-24' || (i.name.toLowerCase().includes('dtf film') && i.name.includes('24')));
+      if (film24) { film24.qty = Math.max(0, Math.round((film24.qty - c.filmRolls) * 10000) / 10000); }
+      // Deduct powder
+      const pwdW = items.find(i => i.sku === 'DTF-PWD-WHT' || i.name.toLowerCase().includes('powder white'));
+      if (pwdW) { pwdW.qty = Math.max(0, Math.round((pwdW.qty - c.powderKg) * 10000) / 10000); }
+      // Deduct white ink
+      const inkW = items.find(i => i.sku === 'DTF-INK-WHT' || i.name.toLowerCase().includes('white ink'));
+      if (inkW) { inkW.qty = Math.max(0, Math.round((inkW.qty - c.inkWhite_L) * 10000) / 10000); }
+      continue;
+    }
+
+    // ── DTF individual transfers ──────────────────────────────────────────
+    if (skuLow.includes('dtf') && (skuLow.includes('transfer') || skuLow.includes('single') || skuLow.includes('upload'))) {
+      // Estimate footage from size field — parse inches from size like "7 inches" or "10x12"
+      let estFeet = 0;
+      data.sizes.forEach(sz => {
+        const match = sz.match(/(\d+\.?\d*)\s*x\s*(\d+\.?\d*)/i);
+        if (match) {
+          estFeet += (parseFloat(match[2]) / 12) * totalQty; // height in feet
+        } else {
+          const inches = sz.match(/(\d+\.?\d*)\s*in/i);
+          if (inches) estFeet += (parseFloat(inches[1]) / 12) * totalQty;
+          else estFeet += (7 / 12) * totalQty; // default 7" if unknown
+        }
+      });
+      if (estFeet > 0) {
+        dtfFeet += estFeet;
+        const c = calcDTFConsumption(estFeet);
+        preview.push(`🖨 DTF individual (${totalQty} units ≈ ${estFeet.toFixed(2)} ft)`);
+        preview.push(`  ▼ Film: ${c.filmRolls.toFixed(4)} rolls`);
+        preview.push(`  ▼ Powder White: ${c.powderKg.toFixed(3)} kg`);
+        const film24 = items.find(i => i.sku === 'DTF-FILM-24' || (i.name.toLowerCase().includes('dtf film') && i.name.includes('24')));
+        if (film24) film24.qty = Math.max(0, film24.qty - c.filmRolls);
+        const pwdW = items.find(i => i.sku === 'DTF-PWD-WHT' || i.name.toLowerCase().includes('powder white'));
+        if (pwdW) pwdW.qty = Math.max(0, pwdW.qty - c.powderKg);
+      }
+      continue;
+    }
+
+    // ── Blank apparel — direct 1:1 deduction by SKU ───────────────────────
+    const blankIt = items.find(i =>
+      (i.sku && i.sku.toLowerCase() === skuLow) ||
+      (i.category === 'Substrate Blanks' && i.name.toLowerCase().includes(sku.toLowerCase()))
+    );
+    if (blankIt) {
+      const before = blankIt.qty;
+      blankIt.qty = Math.max(0, blankIt.qty - totalQty);
+      preview.push(`👕 ${blankIt.name}: ${before} → ${blankIt.qty}`);
+      continue;
+    }
+
+    // ── Unmatched — log it ────────────────────────────────────────────────
+    preview.push(`⚠ Not matched: ${sku} (${name}) qty ${totalQty}`);
+  }
+
+  save(K.items, items);
+  renderInv();
+  const totalFtMsg = dtfFeet > 0 ? ` · ${dtfFeet.toFixed(1)} DTF ft processed` : '';
+  showIR('ok', `<strong>InkSoft import complete</strong>${totalFtMsg}`, preview);
+  toast(`InkSoft import done — ${Object.keys(agg).length} SKUs processed`);
+}
 function parseCSVLine(line){const r=[];let cur='';let inQ=false;for(const c of line.replace(/\r/g,'')){if(c==='"'){inQ=!inQ;continue;}if(c===','&&!inQ){r.push(cur);cur='';continue;}cur+=c;}r.push(cur);return r;}
 function showIR(type,msg,list=[]){const el=document.getElementById('import-result');el.className='import-result show';el.innerHTML=`<h4 style="color:${type==='error'?'var(--red)':'var(--green)'}">${type==='error'?'Import Error':'Import Results'}</h4><p>${msg}</p>${list.length?`<ul>${list.map(i=>`<li>${e(i)}</li>`).join('')}</ul>`:''}`;}
 function exportCSV(){const h=['name','sku','category','unit','qty','reorder','cost','vendor','notes'];const rows=items.map(it=>h.map(k=>`"${(it[k]||'').toString().replace(/"/g,'""')}"`));const csv=[h.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`l6i_inventory_${new Date().toISOString().split('T')[0]}.csv`;a.click();}
