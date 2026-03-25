@@ -1675,7 +1675,10 @@ function updateShirtStyles(){
     opt.setAttribute('data-desc', item.desc);
     opt.setAttribute('data-case', item.case !== undefined ? item.case : null);
     var caseLabel = item.case ? ' · cost $' + item.case.toFixed(2) : '';
-    opt.textContent = item.style + ' — ' + item.desc.replace(brand+' ','').substring(0,40) + ' — $' + item.msrp.toFixed(2) + caseLabel;
+    var hasInfo = getShirtSalesKey(item.style) !== null;
+    var star = hasInfo ? '★ ' : '';
+    opt.textContent = star + item.style + ' — ' + item.desc.replace(brand+' ','').substring(0,40) + ' — $' + item.msrp.toFixed(2) + caseLabel;
+    if(hasInfo) opt.style.fontWeight = 'bold';
     styleSel.appendChild(opt);
   });
   updateShirtPrice();
@@ -1735,18 +1738,24 @@ var SHIRT_SALES_DATA = {
 };
 
 function getShirtSalesKey(styleNum) {
-  var s = (styleNum || '').toUpperCase().replace(/[^A-Z0-9]/g,'');
-  // Direct match first
-  for(var key in SHIRT_SALES_DATA) {
+  if(!styleNum) return null;
+  var s = styleNum.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  // Build sorted keys — longest first so BC3001 matches before 3001
+  var keys = Object.keys(SHIRT_SALES_DATA).sort(function(a,b){ return b.length - a.length; });
+  for(var i=0; i<keys.length; i++) {
+    var key = keys[i];
     var k = key.toUpperCase().replace(/[^A-Z0-9]/g,'');
-    if(s === k || s.indexOf(k) !== -1) return key;
+    // Exact match or style starts with key (BC3001B -> BC3001)
+    if(s === k || s.indexOf(k) === 0) return key;
+    // Style contains key and key is alpha+numeric (not just numbers to avoid false matches)
+    if(/[A-Z]/.test(k) && s.indexOf(k) !== -1) return key;
   }
-  // Numeric suffix match (e.g. "64000" matches "64000")
+  // Pure numeric styles (Gildan 64000, 8000 etc) — only match if brand matches
   var nums = s.replace(/[A-Z]/g,'');
-  if(nums.length >= 3) {
-    for(var key in SHIRT_SALES_DATA) {
-      var kn = key.replace(/[A-Z]/g,'');
-      if(kn && nums.indexOf(kn) !== -1) return key;
+  if(nums.length >= 4) {
+    for(var i=0; i<keys.length; i++) {
+      var kn = keys[i].replace(/[A-Z]/g,'');
+      if(kn && kn.length >= 4 && nums === kn) return keys[i];
     }
   }
   return null;
