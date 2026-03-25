@@ -411,7 +411,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="panel-desc">Full SanMar catalog · Priced at MSRP · DTF + press optional · 100+ unlocks bulk discount</div>
     <div class="form-row">
       <div class="field"><label>Brand</label>
-        <select id="sh-brand" onchange="updateShirtCategories()"></select></div>
+        <select id="sh-brand" onchange="updateShirtCategories();updateShirtSalesCard();"></select></div>
       <div class="field"><label>Category</label>
         <select id="sh-category" onchange="updateShirtStyles()"></select></div>
     </div>
@@ -1685,6 +1685,194 @@ function updateShirtStyles(){
 }
 
 
+
+var BRAND_SALES_DATA = {
+  'BELLA+CANVAS': {
+    tags: ['Premium', 'Fashion Forward', 'Retail Fit', 'Print Favorite'],
+    fabric: 'Airlume combed ring-spun cotton — ultra soft, retail quality',
+    best: 'Clothing lines, boutique brands, anyone who wants a shirt that looks and feels like it came from a retail store.',
+    pitch: 'The go-to blank for serious clothing brands. Soft, structured, and prints beautifully with DTF. If quality matters to the customer, start here.'
+  },
+  'NEXT LEVEL APPAREL': {
+    tags: ['Premium Soft', 'Fashion Fit', 'Heathered Options'],
+    fabric: 'CVC and triblend blends — softer than standard cotton',
+    best: 'Lifestyle brands, fitness studios, anyone wanting premium softness with a fashion-forward fit.',
+    pitch: 'Next Level sits just below Bella+Canvas in price but delivers similar softness. Great for customers who want premium feel without the premium price tag.'
+  },
+  'GILDAN': {
+    tags: ['Value', 'High Volume', 'Reliable', 'Wide Colors'],
+    fabric: 'Cotton and cotton/poly blends — dependable, consistent',
+    best: 'Schools, churches, large events, nonprofits, anyone needing volume on a budget without sacrificing printability.',
+    pitch: 'The workhorse of the industry. Consistent quality, massive color selection, and the price makes bulk orders easy to say yes to. DTF presses clean every time.'
+  },
+  'PORT & CO': {
+    tags: ['Budget', 'Classic', 'High Volume', 'Up to 6XL'],
+    fabric: 'Heavyweight cotton — durable, long-lasting',
+    best: 'Bulk orders, political campaigns, large giveaways, youth programs, inclusive sizing needs.',
+    pitch: 'Lowest price point in the catalog without sacrificing printability. Available up to 6XL — great when you need to outfit everyone regardless of size.'
+  },
+  'PORT AUTHORITY': {
+    tags: ['Professional', 'Polos & Wovens', 'Corporate', 'Workwear'],
+    fabric: 'Varies by style — cotton, poly, performance blends',
+    best: 'Corporate uniforms, office staff, professional services, hospitality, government buyers.',
+    pitch: 'Port Authority is the corporate uniform brand. Polos, wovens, and outerwear that look professional and hold up to daily wear. Great for businesses that want their team to look sharp and consistent.'
+  },
+  'SPORT-TEK': {
+    tags: ['Performance', 'PosiCharge', 'Athletic', 'Moisture Wicking'],
+    fabric: 'Polyester with PosiCharge color-lock technology',
+    best: 'Athletic teams, gyms, outdoor events, performance-focused corporate wear, anyone working in Arizona heat.',
+    pitch: 'PosiCharge locks in color so it will not fade. Moisture wicking keeps wearers dry. If the the customer team is active — on a field, in a gym, or outdoors — Sport-Tek is the answer.'
+  },
+  'DISTRICT': {
+    tags: ['Fashion', 'Tri-blend', 'Relaxed Fit', 'Soft'],
+    fabric: 'Ring-spun cotton and tri-blend options',
+    best: 'Boutique brands, casual lifestyle apparel, womens-focused lines, anyone wanting a relaxed fashion fit.',
+    pitch: 'District bridges the gap between value and fashion. Relaxed fits, soft fabrics, and trend-forward cuts that print beautifully. Great alternative to Bella+Canvas for budget-conscious fashion brands.'
+  },
+  'AUGUSTA SPORTSWEAR': {
+    tags: ['Athletic', 'Team Sports', 'Youth Options', 'Performance'],
+    fabric: 'Performance polyester and blends — athletic construction',
+    best: 'Sports leagues, school teams, youth athletics, spirit wear programs.',
+    pitch: 'Augusta is built for teams. Athletic fits, moisture-wicking performance, and youth sizes make this the go-to for schools and leagues. Pairs perfectly with DTF for full-color team logos.'
+  },
+  'NIKE': {
+    tags: ['Premium', 'Brand Recognition', 'Corporate', 'Authorized'],
+    fabric: 'Performance fabrics — Dri-FIT and cotton blends',
+    best: 'Corporate clients, golf events, executive gifts, anyone who wants the swoosh on their team gear.',
+    pitch: 'We are authorized SanMar dealers for Nike. That means your customer gets the real deal — not knockoffs. The swoosh alone sells the shirt. Great for corporate clients who want to impress.'
+  },
+  'CARHARTT': {
+    tags: ['Workwear', 'Durable', 'Brand Recognition', 'Authorized'],
+    fabric: 'Heavyweight cotton and canvas — built to last',
+    best: 'Construction crews, trades, outdoor workers, ranchers, anyone who needs gear that survives real work.',
+    pitch: 'Carhartt sells itself. Anyone in the trades already trusts the brand. Put a logo on it and it becomes the best-dressed work crew in the jobsite. We are authorized — these are the real thing.'
+  },
+  'THE NORTH FACE': {
+    tags: ['Premium', 'Outdoor', 'Brand Recognition', 'Authorized'],
+    fabric: 'Performance and fleece fabrics — outdoor engineered',
+    best: 'Corporate gifts, outdoor companies, executive giveaways, premium event merchandise.',
+    pitch: 'North Face is a status brand. Clients who receive North Face branded gear feel valued. Great for corporate gifts and premium swag bags where you want to make an impression.'
+  },
+  'COMFORT COLORS': {
+    tags: ['Vintage Wash', 'Garment Dyed', 'Trendy', 'Soft'],
+    fabric: '100% ring-spun cotton, garment-dyed for vintage look',
+    best: 'Boutique clothing lines, vintage aesthetic brands, college and university merch, anyone chasing a worn-in look.',
+    pitch: 'Comfort Colors is having a moment. The garment-dyed vintage look is everywhere right now. If a customer wants their brand to look like it has been around for decades — this is the shirt.'
+  },
+  'CHAMPION': {
+    tags: ['Heritage', 'Athletic', 'Streetwear', 'Brand Recognition'],
+    fabric: 'Cotton and fleece blends — classic construction',
+    best: 'Streetwear brands, athleisure, school spirit wear, nostalgia-driven campaigns.',
+    pitch: 'Champion is back in a big way. The heritage brand is popular with younger demographics and streetwear crowds. Great for schools and brands that want that athletic lifestyle aesthetic.'
+  },
+  'NEW ERA': {
+    tags: ['Headwear', 'Caps', 'Brand Recognition', 'Sports'],
+    fabric: 'Varies — wool blends, performance fabrics',
+    best: 'Anyone needing branded caps — sports teams, corporate events, promotional giveaways.',
+    pitch: 'New Era is the gold standard in caps. Structured, clean, and instantly recognizable. A great upsell on any apparel order — ask if they need matching hats.'
+  },
+  'OGIO': {
+    tags: ['Bags', 'Corporate', 'Premium', 'Tech-Focused'],
+    fabric: 'Varies — bags and packs',
+    best: 'Corporate gifts, tech companies, executive giveaways, golf events.',
+    pitch: 'OGIO bags are premium corporate gifts. Tech professionals and executives recognize and appreciate the brand. Great for companies that want their logo on something people will actually use every day.'
+  },
+  'TRAVISMATHEW': {
+    tags: ['Premium', 'Golf', 'Lifestyle', 'Authorized'],
+    fabric: 'Performance and lifestyle fabrics',
+    best: 'Golf events, executive corporate wear, premium lifestyle brands, upscale hospitality.',
+    pitch: 'TravisMathew is a premium lifestyle brand that started in golf. Great for corporate clients who golf, upscale events, or any brand that wants to communicate quality and lifestyle.'
+  },
+  'EDDIE BAUER': {
+    tags: ['Outdoor', 'Premium', 'Corporate', 'Authorized'],
+    fabric: 'Outdoor performance and casual fabrics',
+    best: 'Outdoor companies, corporate gifts, premium giveaways, nature and adventure brands.',
+    pitch: 'Eddie Bauer carries instant credibility for outdoor and adventure brands. Great for corporate clients who want a premium outdoor lifestyle feel on their team gear.'
+  },
+  'BROOKS BROTHERS': {
+    tags: ['Premium', 'Professional', 'Executive', 'Authorized'],
+    fabric: 'Premium cotton and professional fabrics',
+    best: 'Financial services, law firms, executive teams, anyone who wants the most professional branded apparel available.',
+    pitch: 'Brooks Brothers is the most professional brand in the catalog. If a customer wants their team to project serious executive credibility, nothing communicates that better than a Brooks Brothers polo with their logo.'
+  },
+  'TOMMY BAHAMA': {
+    tags: ['Resort', 'Lifestyle', 'Premium', 'Authorized'],
+    fabric: 'Silk, linen, and premium casual fabrics',
+    best: 'Resorts, country clubs, upscale hospitality, golf events, tropical-themed corporate events.',
+    pitch: 'Tommy Bahama is a lifestyle statement. Perfect for resorts, beach events, and corporate clients in hospitality who want their team to embody a relaxed luxury feel.'
+  },
+  'ALLMADE': {
+    tags: ['Sustainable', 'Eco-Friendly', 'Premium', 'Ethical'],
+    fabric: '50% recycled polyester / 25% organic cotton / 25% modal',
+    best: 'Eco-conscious brands, nonprofits, companies with sustainability messaging, B-corps.',
+    pitch: 'Made from recycled plastic bottles and organic cotton. If a customer has a sustainability story to tell, Allmade lets their shirt tell it for them. Great differentiator for eco-conscious brands.'
+  },
+  'TENTREE': {
+    tags: ['Sustainable', 'Eco', 'Premium', 'Plants Trees'],
+    fabric: 'Organic and sustainable materials',
+    best: 'Environmental nonprofits, outdoor brands, eco-conscious companies, B-corps.',
+    pitch: 'tentree plants ten trees for every item sold. Built-in sustainability story that customers love. Perfect for brands that want their merch to do good in the world.'
+  },
+  'RABBIT SKINS': {
+    tags: ['Infant', 'Toddler', 'Youth', 'Soft'],
+    fabric: 'Soft cotton — baby and toddler safe',
+    best: 'Youth programs, family events, baby showers, daycares, pediatric businesses.',
+    pitch: 'Rabbit Skins covers the youngest customers. Soft, safe fabrics for infants and toddlers. Great for family-focused events and brands that want to outfit the whole family.'
+  },
+  'JERZEES': {
+    tags: ['Value', 'Fleece', 'Sweatshirts', 'Volume'],
+    fabric: 'Cotton/poly blends — fleece and activewear',
+    best: 'Budget-conscious sweatshirt and hoodie orders, schools, youth programs.',
+    pitch: 'Jerzees is the value play for fleece. When a customer needs hoodies or sweatshirts at a price that works for a school or youth program, Jerzees delivers without drama.'
+  },
+  'A4': {
+    tags: ['Performance', 'Athletic', 'Team Sports', 'Youth'],
+    fabric: 'Performance polyester — moisture management',
+    best: 'Sports leagues, school athletics, youth teams, coaches and staff.',
+    pitch: 'A4 is a solid performance brand at a lower price point than Sport-Tek. Great for schools and leagues that need athletic gear across a big roster without blowing the budget.'
+  },
+  'RED KAP': {
+    tags: ['Workwear', 'Industrial', 'Uniform', 'Durable'],
+    fabric: 'Industrial-grade fabrics — built for work environments',
+    best: 'Manufacturing, automotive, food service, industrial workwear, utility companies.',
+    pitch: 'Red Kap is the workwear standard for industrial environments. If the customer needs uniforms that survive a real shift — grease, chemicals, heavy use — Red Kap is the call.'
+  },
+  'CORNERSTONE': {
+    tags: ['Workwear', 'Utility', 'Professional', 'Durable'],
+    fabric: 'Work-grade cotton and poly blends',
+    best: 'Trades, construction, maintenance crews, anyone needing functional work uniforms.',
+    pitch: 'Cornerstone focuses on workwear that functions. Lots of pocket options, durable construction, and professional appearance. Great for clients who need their team to look organized on the job.'
+  },
+  'RICHARDSON': {
+    tags: ['Headwear', 'Caps', 'Trucker', 'Snapback'],
+    fabric: 'Varies — foam, mesh, wool blends',
+    best: 'Truckers, outdoor brands, streetwear, casual team caps, promotional headwear.',
+    pitch: 'Richardson is the trucker cap brand. The 112 snapback is one of the most popular caps in the industry. Great upsell on any order — people always need hats.'
+  },
+  'STANLEY/STELLA': {
+    tags: ['Sustainable', 'European', 'Organic', 'Premium'],
+    fabric: 'Organic and sustainable cotton',
+    best: 'European-style brands, sustainable fashion, premium eco-conscious apparel.',
+    pitch: 'Stanley/Stella is the premium sustainable option from Europe. Organic cotton, ethical manufacturing, and a fashion-forward cut. For customers who want the highest standard in sustainable branded apparel.'
+  },
+};
+
+function getBrandSalesKey(brand) {
+  if(!brand) return null;
+  var b = brand.toUpperCase().replace(/[^A-Z0-9+]/g,' ').trim();
+  // Direct match
+  if(BRAND_SALES_DATA[b]) return b;
+  // Partial match
+  for(var key in BRAND_SALES_DATA) {
+    if(b.indexOf(key) !== -1 || key.indexOf(b) !== -1) return key;
+    // Handle NEXT LEVEL APPAREL -> NEXT LEVEL APPAREL
+    var bwords = b.split(' ');
+    var kwords = key.split(' ');
+    if(bwords[0] === kwords[0] && bwords.length > 1 && kwords.length > 1) return key;
+  }
+  return null;
+}
+
 var SHIRT_SALES_DATA = {
   // Keyed by style number prefix for flexible matching
   'BC3001': {name:'Bella+Canvas BC3001',fabric:'100% Airlume combed ring-spun cotton',tags:['Premium','Retail Fit','Print Favorite','Unisex'],
@@ -1765,12 +1953,33 @@ function updateShirtSalesCard() {
   var styleSel = document.getElementById('sh-shirt');
   if(!styleSel) return;
   var styleNum = styleSel.options[styleSel.selectedIndex] ? styleSel.options[styleSel.selectedIndex].getAttribute('data-style') : '';
+  var brand = document.getElementById('sh-brand') ? document.getElementById('sh-brand').value : '';
   var card = document.getElementById('sh-sales-card');
-  var key = getShirtSalesKey(styleNum);
-  if(!key || !SHIRT_SALES_DATA[key]) { card.style.display='none'; return; }
-  var d = SHIRT_SALES_DATA[key];
+  if(!card) return;
+
+  // Try style-specific first, fall back to brand
+  var styleKey = getShirtSalesKey(styleNum);
+  var brandKey = getBrandSalesKey(brand);
+  var d = null;
+  var level = '';
+
+  if(styleKey && SHIRT_SALES_DATA[styleKey]) {
+    d = SHIRT_SALES_DATA[styleKey];
+    level = 'style';
+  } else if(brandKey && BRAND_SALES_DATA[brandKey]) {
+    d = BRAND_SALES_DATA[brandKey];
+    d = {name: brand + ' — Brand Overview', fabric: d.fabric, tags: d.tags, best: d.best, pitch: d.pitch};
+    level = 'brand';
+  }
+
+  if(!d) { card.style.display='none'; return; }
+
   card.style.display = 'block';
-  document.getElementById('sh-sc-name').textContent = d.name;
+  // Show indicator for brand vs style level
+  var levelBadge = level === 'style'
+    ? '<span style="background:var(--red);color:white;font-size:9px;font-family:Oswald,sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;margin-left:8px;">Style Info</span>'
+    : '<span style="background:#555;color:var(--gold);font-size:9px;font-family:Oswald,sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;margin-left:8px;">Brand Overview</span>';
+  document.getElementById('sh-sc-name').innerHTML = d.name + levelBadge;
   document.getElementById('sh-sc-fabric').textContent = d.fabric;
   var tagsHtml = d.tags.map(function(t){
     return '<span style="background:var(--gold);color:var(--navy);font-family:Oswald,sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;">'+t+'</span>';
