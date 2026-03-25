@@ -1653,12 +1653,18 @@ function updateShirtCategories(){
   var catSel = document.getElementById('sh-category');
   catSel.innerHTML = '';
   if(!SANMAR_CATALOG[brand]) return;
-  Object.keys(SANMAR_CATALOG[brand]).sort().forEach(function(cat){
+  var cats = Object.keys(SANMAR_CATALOG[brand]).sort();
+  cats.forEach(function(cat){
     var opt = document.createElement('option');
     opt.value = cat;
     opt.textContent = cat;
     catSel.appendChild(opt);
   });
+  // Default to a tee/shirt category if one exists
+  var preferred = cats.find(function(c){ var cu = c.toUpperCase(); return cu === 'TEES' || cu === 'T-SHIRTS'; });
+  if(!preferred) preferred = cats.find(function(c){ var cu = c.toUpperCase(); return cu.indexOf('TEE') !== -1 || cu.indexOf('T-SHIRT') !== -1; });
+  if(!preferred) preferred = cats.find(function(c){ var cu = c.toUpperCase(); return cu.indexOf('SHIRT') !== -1; });
+  if(preferred) catSel.value = preferred;
   updateShirtStyles();
 }
 
