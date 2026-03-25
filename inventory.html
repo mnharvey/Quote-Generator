@@ -231,6 +231,7 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
     <button class="inv-tab" onclick="invTab('import')">&#8679; Import CSV</button>
     <button class="inv-tab" onclick="invTab('scan')">&#128247; Scan</button>
     <button class="inv-tab" onclick="invTab('invoice')">&#129494; Invoice AI</button>
+    <button class="inv-tab" onclick="invTab('expiry')">⏰ Expiring</button>
     <button class="inv-tab" onclick="invTab('burnrate')">&#128293; Burn Rate</button>
     <button class="inv-tab" style="margin-left:auto;color:rgba(255,100,100,.6);" onclick="lockInventory()">&#128274; Lock</button>
   </div>
@@ -239,6 +240,7 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
     <div class="stat-pill s-warn"><div class="sv" id="st-lw">0</div><div class="sl">Low</div></div>
     <div class="stat-pill s-ok"><div class="sv" id="st-ok">0</div><div class="sl">OK</div></div>
     <div class="stat-pill"><div class="sv" id="st-val">$0</div><div class="sl">Inv Value</div></div>
+    <div class="stat-pill" id="st-exp-pill" style="display:none;cursor:pointer;" onclick="invTab('expiry')"><div class="sv" id="st-exp">0</div><div class="sl">Expiring</div></div>
     <div class="stat-pill" id="st-film-pill" style="cursor:pointer;" onclick="invTab('burnrate')">
       <div class="sv" id="st-film-days" style="font-size:13px;">—</div>
       <div class="sl">Film Days</div>
@@ -525,6 +527,25 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
       </div>
     </div>
 
+    <!-- EXPIRY PANEL -->
+    <div class="inv-content" id="ipanel-expiry" style="display:none">
+      <div class="sec-head">
+        <div><div class="sec-title">⏰ Expiring Items</div><div class="sec-sub">Items expiring within 90 days or already expired</div></div>
+      </div>
+      <div class="tbl-wrap"><table>
+        <thead><tr>
+          <th>Item</th><th>SKU</th><th>Category</th>
+          <th>Expiry Date</th><th>Days Left</th><th>Status</th>
+          <th style="text-align:right">Qty</th><th>Vendor</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="expiry-tbody"></tbody>
+      </table></div>
+      <div style="background:var(--white);padding:14px 16px;margin-top:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);font-size:12px;color:var(--gray);">
+        <strong style="font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Tip:</strong>
+        Set expiry dates on UV inks, CerMark, DTF inks, and powders when you receive them. Edit any item to add an expiry date and shelf life.
+      </div>
+    </div>
+
   </div><!-- end inv-wrap -->
 </div><!-- end view-inventory -->
 
@@ -543,6 +564,8 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
         <div class="mfield"><label>Cost per Unit ($)</label><input type="number" id="im-cost" step="0.01" min="0"></div>
         <div class="mfield"><label>Preferred Vendor</label><input type="text" id="im-vendor"></div>
         <div class="mfield full"><label>Notes</label><input type="text" id="im-notes"></div>
+        <div class="mfield"><label>Expiry Date</label><input type="date" id="im-expiry"></div>
+        <div class="mfield"><label>Default Shelf Life (days)</label><input type="number" id="im-shelflife" min="0" placeholder="e.g. 365"></div>
       </div>
     </div>
     <div class="modal-footer"><button class="modal-btn cancel" onclick="closeModal('item-modal')">Cancel</button><button class="modal-btn save" onclick="saveItem()">Save Item</button></div>
@@ -801,7 +824,70 @@ function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(
 function status(it){if(it.qty<=it.reorder)return 'reorder';if(it.qty<=it.reorder*1.2)return 'low';return 'ok';}
 function badge(it){const s=status(it);if(s==='reorder')return '<span class="badge b-red">REORDER</span>';if(s==='low')return '<span class="badge b-orange">LOW</span>';return '<span class="badge b-green">OK</span>';}
 
-function renderStats(){let ro=0,lw=0,ok=0,val=0;items.forEach(it=>{const s=status(it);if(s==='reorder')ro++;else if(s==='low')lw++;else ok++;val+=(it.qty||0)*(it.cost||0);});document.getElementById('st-ro').textContent=ro;document.getElementById('st-lw').textContent=lw;document.getElementById('st-ok').textContent=ok;document.getElementById('st-val').textContent='$'+Math.round(val).toLocaleString();try{const br=loadBR();const consumed=[];items.forEach(it=>{const r=calcBurn(it,br);if(r)consumed.push({item:it,result:r});});updateBurnStatPills(consumed,br);}catch(err){}}
+function expiryDays(it){
+  if(!it.expiry)return null;
+  const diff=Math.ceil((new Date(it.expiry)-new Date())/(1000*60*60*24));
+  return diff;
+}
+function expiryBadge(days){
+  if(days===null)return '';
+  if(days<0)return '<span class="badge b-red">EXPIRED</span>';
+  if(days<=30)return `<span class="badge b-red">${days}d</span>`;
+  if(days<=90)return `<span class="badge b-orange">${days}d</span>`;
+  return `<span class="badge b-green">${days}d</span>`;
+}
+
+function renderStats(){
+  let ro=0,lw=0,ok=0,val=0,exp=0;
+  items.forEach(it=>{
+    const s=status(it);
+    if(s==='reorder')ro++;else if(s==='low')lw++;else ok++;
+    val+=(it.qty||0)*(it.cost||0);
+    const d=expiryDays(it);
+    if(d!==null&&d<=90)exp++;
+  });
+  document.getElementById('st-ro').textContent=ro;
+  document.getElementById('st-lw').textContent=lw;
+  document.getElementById('st-ok').textContent=ok;
+  document.getElementById('st-val').textContent='$'+Math.round(val).toLocaleString();
+  const expPill=document.getElementById('st-exp-pill');
+  if(exp>0){
+    document.getElementById('st-exp').textContent=exp;
+    expPill.style.display='block';
+    expPill.className='stat-pill '+(items.some(it=>{const d=expiryDays(it);return d!==null&&d<0;})?'s-alert':'s-warn');
+  } else {
+    expPill.style.display='none';
+  }
+  try{const br=loadBR();const consumed=[];items.forEach(it=>{const r=calcBurn(it,br);if(r)consumed.push({item:it,result:r});});updateBurnStatPills(consumed,br);}catch(err){}
+}
+
+function renderExpiry(){
+  const today = new Date();
+  const list = items
+    .filter(it => it.expiry)
+    .map(it => ({ ...it, days: expiryDays(it) }))
+    .filter(it => it.days <= 90)
+    .sort((a,b) => a.days - b.days);
+  const tbody = document.getElementById('expiry-tbody');
+  if(!list.length){
+    tbody.innerHTML='<tr><td colspan="9"><div class="empty">No items expiring within 90 days. 🎉<br><br>Edit any item to add an expiry date.</div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map(it => {
+    const rowCls = it.days < 0 ? 'style="background:#fff5f5;"' : it.days <= 30 ? 'style="background:#fff9f0;"' : '';
+    return `<tr ${rowCls}>
+      <td class="iname">${e(it.name)}</td>
+      <td class="sku">${e(it.sku)}</td>
+      <td>${e(it.category)}</td>
+      <td>${it.expiry}</td>
+      <td class="num" style="font-family:'Courier Prime',monospace;font-weight:700;">${it.days < 0 ? '⛔ '+Math.abs(it.days)+'d ago' : it.days+'d'}</td>
+      <td class="ctr">${expiryBadge(it.days)}</td>
+      <td class="num">${it.qty}</td>
+      <td class="vnd">${e(it.vendor)}</td>
+      <td><button class="act-btn outline" style="padding:5px 8px;font-size:10px;" onclick="openItemModal('${it.id}')">Edit</button></td>
+    </tr>`;
+  }).join('');
+}
 
 function renderChips(){const cats=['all',...new Set(items.map(i=>i.category))].sort();const cnts={};items.forEach(i=>{cnts[i.category]=(cnts[i.category]||0)+1;});document.getElementById('cat-chips').innerHTML=cats.map(c=>{const lbl=c==='all'?`All (${items.length})`:`${c} (${cnts[c]||0})`;return `<div class="cat-chip${filterCat===c?' active':''}" onclick="setFC('${c}')">${lbl}</div>`;}).join('');}
 function setFC(c){filterCat=c;renderInv();}
@@ -828,8 +914,8 @@ function saveVendor(){const name=document.getElementById('vm-name').value.trim()
 function deleteVendor(id){if(!confirm('Delete vendor?'))return;vendors=vendors.filter(v=>v.id!==id);save(K.vendors,vendors);renderVendors();}
 function renderVendors(){const grid=document.getElementById('vendor-grid');if(!vendors.length){grid.innerHTML='<p>No vendors yet.</p>';return;}grid.innerHTML=vendors.map(v=>`<div class="vcard"><div class="vn">${e(v.name)}</div><span class="vcat">${e(v.category)}</span>${v.website?`<div class="vrow"><span class="vlbl">Website</span><a href="https://${v.website}" target="_blank" style="color:var(--red)">${v.website}</a></div>`:''} ${v.acct?`<div class="vrow"><span class="vlbl">Account</span>${e(v.acct)}</div>`:''} ${v.qb?`<div class="vrow"><span class="vlbl">QB COGS</span>${e(v.qb)}</div>`:''} ${v.rep?`<div class="vrow"><span class="vlbl">Rep</span>${e(v.rep)}</div>`:''} ${v.contact?`<div class="vrow"><span class="vlbl">Contact</span>${e(v.contact)}</div>`:''} ${v.lead?`<div class="vrow"><span class="vlbl">Lead Time</span>${e(v.lead)}</div>`:''} ${v.terms?`<div class="vrow"><span class="vlbl">Terms</span>${e(v.terms)}</div>`:''} ${v.notes?`<div class="vrow" style="font-style:italic;color:#888;">${e(v.notes)}</div>`:''}<div class="vactions"><button class="act-btn outline" onclick="openVendorModal('${v.id}')" style="font-size:10px;padding:5px 10px;">Edit</button><button class="act-btn danger" onclick="deleteVendor('${v.id}')">Delete</button></div></div>`).join('');}
 
-function openItemModal(id){document.getElementById('item-modal-title').textContent=id?'Edit Item':'Add Item';document.getElementById('im-id').value=id||'';const it=id?items.find(i=>i.id===id):{};document.getElementById('im-name').value=it.name||'';document.getElementById('im-sku').value=it.sku||'';document.getElementById('im-cat').value=it.category||'DTF Materials';document.getElementById('im-unit').value=it.unit||'';document.getElementById('im-qty').value=it.qty||0;document.getElementById('im-reorder').value=it.reorder||0;document.getElementById('im-cost').value=it.cost||'';document.getElementById('im-vendor').value=it.vendor||'';document.getElementById('im-notes').value=it.notes||'';openModal('item-modal');}
-function saveItem(){const name=document.getElementById('im-name').value.trim();if(!name){alert('Item name required.');return;}const id=document.getElementById('im-id').value;const data={name,sku:document.getElementById('im-sku').value.trim(),category:document.getElementById('im-cat').value,unit:document.getElementById('im-unit').value.trim(),qty:+document.getElementById('im-qty').value||0,reorder:+document.getElementById('im-reorder').value||0,cost:+document.getElementById('im-cost').value||0,vendor:document.getElementById('im-vendor').value.trim(),notes:document.getElementById('im-notes').value.trim()};if(id){const idx=items.findIndex(i=>i.id===id);items[idx]={...items[idx],...data};toast('Item updated.');}else{items.push({id:uid(),...data});toast('Item added.');}save(K.items,items);closeModal('item-modal');renderInv();}
+function openItemModal(id){document.getElementById('item-modal-title').textContent=id?'Edit Item':'Add Item';document.getElementById('im-id').value=id||'';const it=id?items.find(i=>i.id===id):{};document.getElementById('im-name').value=it.name||'';document.getElementById('im-sku').value=it.sku||'';document.getElementById('im-cat').value=it.category||'DTF Materials';document.getElementById('im-unit').value=it.unit||'';document.getElementById('im-qty').value=it.qty||0;document.getElementById('im-reorder').value=it.reorder||0;document.getElementById('im-cost').value=it.cost||'';document.getElementById('im-vendor').value=it.vendor||'';document.getElementById('im-notes').value=it.notes||'';document.getElementById('im-expiry').value=it.expiry||'';document.getElementById('im-shelflife').value=it.shelflife||'';openModal('item-modal');}
+function saveItem(){const name=document.getElementById('im-name').value.trim();if(!name){alert('Item name required.');return;}const id=document.getElementById('im-id').value;const data={name,sku:document.getElementById('im-sku').value.trim(),category:document.getElementById('im-cat').value,unit:document.getElementById('im-unit').value.trim(),qty:+document.getElementById('im-qty').value||0,reorder:+document.getElementById('im-reorder').value||0,cost:+document.getElementById('im-cost').value||0,vendor:document.getElementById('im-vendor').value.trim(),notes:document.getElementById('im-notes').value.trim(),expiry:document.getElementById('im-expiry').value||'',shelflife:+document.getElementById('im-shelflife').value||0};if(id){const idx=items.findIndex(i=>i.id===id);items[idx]={...items[idx],...data};toast('Item updated.');}else{items.push({id:uid(),...data});toast('Item added.');}save(K.items,items);closeModal('item-modal');renderInv();}
 
 const dz=document.getElementById('drop-zone');
 dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
@@ -1016,8 +1102,8 @@ function showIR(type,msg,list=[]){const el=document.getElementById('import-resul
 function exportCSV(){const h=['name','sku','category','unit','qty','reorder','cost','vendor','notes'];const rows=items.map(it=>h.map(k=>`"${(it[k]||'').toString().replace(/"/g,'""')}"`));const csv=[h.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`l6i_inventory_${new Date().toISOString().split('T')[0]}.csv`;a.click();}
 
 function invTab(t){
-  document.querySelectorAll('.inv-tab').forEach((b,i)=>b.classList.toggle('active',['inv','reorder','log','vendors','import','scan','invoice','burnrate'][i]===t));
-  ['inv','reorder','log','vendors','import','scan','invoice','burnrate'].forEach(p=>{
+  document.querySelectorAll('.inv-tab').forEach((b,i)=>b.classList.toggle('active',['inv','reorder','log','vendors','import','scan','invoice','expiry','burnrate'][i]===t));
+  ['inv','reorder','log','vendors','import','scan','invoice','expiry','burnrate'].forEach(p=>{
     const el=document.getElementById('ipanel-'+p);
     if(el) el.style.display=p===t?'block':'none';
   });
@@ -1025,6 +1111,7 @@ function invTab(t){
   if(t==='log')renderLog();
   if(t==='vendors')renderVendors();
   if(t==='invoice')checkApiKeyOnLoad();
+  if(t==='expiry')renderExpiry();
   if(t==='burnrate')renderBurnRate();
   if(t!=='scan')stopCamera();
 }
