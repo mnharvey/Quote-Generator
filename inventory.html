@@ -250,6 +250,7 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
       <div class="sl">Vinyl Days</div>
     </div>
     <div class="stats-bar-right">
+      <button class="act-btn outline" onclick="refreshAll()" style="font-size:10px;padding:6px 12px;border-color:var(--gold);color:var(--gold);">↻ Refresh</button>
       <button class="act-btn gold" onclick="openItemModal()">+ Add Item</button>
       <button class="act-btn secondary" onclick="exportCSV()">&#8595; CSV</button>
       <button class="act-btn outline" onclick="resetToDefaults()" style="font-size:9px;padding:6px 10px;border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.4);">&#8635; Reset</button>
@@ -1099,6 +1100,14 @@ function processInkSoftCSV(lines, hdrs, fname) {
 }
 function parseCSVLine(line){const r=[];let cur='';let inQ=false;for(const c of line.replace(/\r/g,'')){if(c==='"'){inQ=!inQ;continue;}if(c===','&&!inQ){r.push(cur);cur='';continue;}cur+=c;}r.push(cur);return r;}
 function showIR(type,msg,list=[]){const el=document.getElementById('import-result');el.className='import-result show';el.innerHTML=`<h4 style="color:${type==='error'?'var(--red)':'var(--green)'}">${type==='error'?'Import Error':'Import Results'}</h4><p>${msg}</p>${list.length?`<ul>${list.map(i=>`<li>${e(i)}</li>`).join('')}</ul>`:''}`;}
+function refreshAll(){
+  items = load(K.items);
+  logData = load(K.log);
+  vendors = load(K.vendors);
+  renderInv();
+  renderStats();
+  toast('✅ Inventory refreshed');
+}
 function exportCSV(){const h=['name','sku','category','unit','qty','reorder','cost','vendor','notes'];const rows=items.map(it=>h.map(k=>`"${(it[k]||'').toString().replace(/"/g,'""')}"`));const csv=[h.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`l6i_inventory_${new Date().toISOString().split('T')[0]}.csv`;a.click();}
 
 function invTab(t){
