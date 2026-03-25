@@ -419,6 +419,13 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <div class="field"><label>Style</label>
         <select id="sh-shirt" onchange="updateShirtPrice()"></select></div>
     </div>
+    <div id="sh-sales-card" style="display:none;background:var(--navy);padding:12px 14px;margin:8px 0;border-left:4px solid var(--gold);">
+      <div id="sh-sc-name" style="font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;"></div>
+      <div id="sh-sc-fabric" style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:6px;"></div>
+      <div id="sh-sc-tags" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;"></div>
+      <div id="sh-sc-best" style="font-size:12px;color:rgba(255,255,255,.85);line-height:1.6;margin-bottom:6px;border-top:1px solid rgba(255,255,255,.1);padding-top:6px;"></div>
+      <div id="sh-sc-pitch" style="font-size:12px;color:var(--gold);line-height:1.6;font-style:italic;border-top:1px solid rgba(255,255,255,.1);padding-top:6px;"></div>
+    </div>
     <div class="form-row triple">
       <div class="field"><label>Shirt Price (MSRP)</label>
         <input type="number" id="sh-msrp" value="0" step="0.01" min="0" readonly style="background:#f5f4f1;color:#666"></div>
@@ -543,15 +550,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="note-box">Gang Sheet: $8.50/ft retail · By-the-Foot: $6.35/ft wholesale. Both use 22.3" roll with 0.25" cut gap per print. Front + back = 2 sides.</div>
   </div>
 
-  <button class="sales-tip-toggle" onclick="toggleTip('dtf')"><span>💬</span> Sales Tips</button>
-  <div class="sales-tip-body" id="tip-dtf">
-    <div class="st-head">🎯 Best For</div>
-    <ul class="st-list"><li>Businesses &amp; clothing lines buying transfers in bulk</li><li>Customers with their own heat press</li><li>Small batch custom apparel — 1 to 1,000</li><li>Schools, sports teams, churches</li></ul>
-    <div class="st-head">💡 Talking Points</div>
-    <ul class="st-list"><li>No minimums — order exactly what you need</li><li>Full color, no setup fees — any design prints</li><li>Works on cotton, poly, blends, nylon, and more</li><li>Gang sheet packs multiple designs — maximize value per foot</li><li>Wholesale rate at $6.35/ft for bulk buyers</li></ul>
-    <div class="st-head">🛡️ Objection Handlers</div>
-    <ul class="st-list"><li><strong>"Screen print is cheaper"</strong> — Only at 72+ pieces, same color. DTF wins on small runs, multicolor, and mixed sizes.</li><li><strong>"I have a guy"</strong> — Ask about turnaround and minimums. We're 48–72 hrs, no minimums.</li><li><strong>"I'll just order online"</strong> — We're local, faster, and you talk to a real person.</li></ul>
-  </div>
+
 
 
   <!-- WOOD LETTERS -->
@@ -1510,10 +1509,96 @@ function updateShirtStyles(){
   updateShirtPrice();
 }
 
+
+var SHIRT_SALES_DATA = {
+  // Keyed by style number prefix for flexible matching
+  'BC3001': {name:'Bella+Canvas BC3001',fabric:'100% Airlume combed ring-spun cotton',tags:['Premium','Retail Fit','Print Favorite','Unisex'],
+    best:'Clothing lines, retail brands, fashion-forward merch. Anyone who cares about the hand feel and wants a shirt people will wear off the clock.',
+    pitch:'Softest shirt in the game. Retail fit — not boxy. Holds DTF color better than almost any other blank. If the customer wants a shirt people actually wear on weekends, this is it.'},
+  'BC8800': {name:'Bella+Canvas BC8800 Flowy Tank',fabric:'100% Airlume combed ring-spun cotton',tags:['Womens','Flowy','Soft','Tank'],
+    best:'Boutique brands, yoga studios, womens lifestyle apparel, summer events.',
+    pitch:'Flowy racerback silhouette with buttery soft feel. Flattering on all body types. DTF prints clean and vivid on white and light colors.'},
+  'BC3200': {name:'Bella+Canvas BC3200 Baseball Tee',fabric:'52% cotton / 48% polyester Airlume blend',tags:['Unisex','Raglan','Retail Look','Casual'],
+    best:'Lifestyle brands, casual event shirts, vintage-style merch, anyone wanting a classic raglan look.',
+    pitch:'Contrast raglan sleeves give it a vintage retail feel straight off the rack. Soft blend that drapes well. Great for brands that want something different from the standard tee.'},
+  'BC1200': {name:'Bella+Canvas BC1200 Baby Tee',fabric:'100% Airlume combed ring-spun cotton, 32 singles',tags:['Womens','Fitted','Trendy','Micro Rib'],
+    best:'Trendy boutique brands, youth clothing lines, anyone chasing a fitted vintage aesthetic.',
+    pitch:'Micro-rib texture is instantly recognizable as premium. Snug fit is on-trend. Customers who want their brand to look like a retail boutique — this is the shirt.'},
+  'NL6210': {name:'Next Level 6210 CVC Tee',fabric:'60% combed ring-spun cotton / 40% polyester CVC blend',tags:['Heathered','Premium Soft','Great DTF Surface'],
+    best:'Brands wanting a heathered vintage look. Corporate casual, lifestyle brands, anyone who wants a step above Gildan without going full premium.',
+    pitch:'CVC blend gives a subtle heathered texture that DTF loves. Looks more expensive than it is. Comes in tons of heather colorways — easy to match brand colors.'},
+  'NL6010': {name:'Next Level 6010 Triblend',fabric:'50% polyester / 25% cotton / 25% rayon triblend',tags:['Ultra Soft','Triblend','Fashion Fit','Premium'],
+    best:'Boutique brands, yoga studios, lifestyle apparel, anyone who wants the softest shirt available.',
+    pitch:'Three-fabric blend creates a broken-in barely-there feel straight out of the bag. Drapes beautifully and flatters all body types. Customers keep coming back — which means repeat orders.'},
+  '64000': {name:'Gildan Softstyle 64000',fabric:'100% ring-spun cotton (some colors poly blend)',tags:['Value','Soft','Best Seller','65+ Colors'],
+    best:'Schools, churches, large events, nonprofits, anyone needing volume on a budget.',
+    pitch:'Best value shirt on the market. Softer than standard Gildan. 65+ colors. When a customer needs 200 shirts and needs to keep costs down, this is the answer. DTF presses clean every time.'},
+  '8000': {name:'Gildan Dryblend 8000',fabric:'50% cotton / 50% polyester DryBlend moisture-wicking',tags:['Performance','Moisture Wicking','Value','Sports'],
+    best:'Sports teams, outdoor events, labor crews, construction companies, anyone who needs moisture management at a low price.',
+    pitch:'DryBlend moisture-wicking at Gildan pricing. Works in Arizona heat without soaking through. Perfect for sports leagues and outdoor work crews. DTF adheres well to the poly-cotton blend.'},
+  'PC61': {name:'Port & Company PC61 Core Cotton',fabric:'100% heavyweight cotton (heathers are cotton/poly)',tags:['Budget','Heavyweight','Classic Fit','Up to 6XL'],
+    best:'Bulk orders, political campaigns, large giveaways, youth programs, anyone with a tight per-shirt budget.',
+    pitch:'Lowest price point in the catalog without sacrificing printability. Heavyweight cotton holds up wash after wash. Available up to 6XL — great for inclusive sizing on large orders.'},
+  'ST350': {name:'Sport-Tek ST350 PosiCharge Competitor',fabric:'100% polyester with PosiCharge color-lock technology',tags:['Performance','PosiCharge','Athletic','Color Lock'],
+    best:'Athletic teams, gyms, running clubs, performance-focused corporate wear, outdoor workers.',
+    pitch:'PosiCharge locks in color — no fading after 50+ washes. Moisture wicking, snag-resistant, tag-free. If the customer has a team on a field or court, this is the shirt. DTF bonds exceptionally well to the polyester.'},
+  'ST640': {name:'Sport-Tek ST640 RacerMesh Polo',fabric:'3.8 oz 100% polyester flat back mesh, PosiCharge',tags:['Performance','Polo','Moisture Wicking','Professional'],
+    best:'Corporate casual, team uniforms, golf outings, restaurants wanting a polished staff look.',
+    pitch:'Professional polish meets athletic performance. PosiCharge keeps colors sharp. Three-button placket looks sharp with a logo on the chest. Great upsell from a tee to a polo for corporate clients.'},
+  'LST640': {name:'Sport-Tek LST640 Womens RacerMesh Polo',fabric:'3.8 oz 100% polyester flat back mesh, PosiCharge',tags:['Womens','Performance','Polo','Professional'],
+    best:'Female corporate staff, womens team uniforms, healthcare and hospitality.',
+    pitch:'Contoured silhouette designed for women — not a shrunken mens polo. Same PosiCharge performance. Mixed-gender teams appreciate having a proper womens cut available.'},
+  'DM1170L': {name:'District DM1170L Womens V-Neck',fabric:'100% combed ring-spun cotton',tags:['Womens','Slim Fit','Soft','V-Neck'],
+    best:'Womens corporate uniforms, boutique apparel, restaurants, spas, professional services.',
+    pitch:'Slim feminine fit that looks intentional. Ultra-smooth combed cotton takes DTF beautifully. Great for customers who want their full team in a coordinated, professional look.'},
+  'PC54': {name:'Port & Company PC54 Core Cotton',fabric:'100% cotton',tags:['Value','Classic','Reliable','High Volume'],
+    best:'Bulk basics, events, giveaways, nonprofits.',
+    pitch:'Reliable, consistent, affordable. When the customer just needs shirts that look good and last, PC54 delivers every time.'},
+  '3066': {name:'Augusta 3066 Youth Tri-Blend',fabric:'50% polyester / 37% cotton / 13% rayon',tags:['Youth','Triblend','Athletic','Team Sports'],
+    best:'Youth sports teams, school spirit wear, kids events, summer camps.',
+    pitch:'Athletic fit built for kids who actually move. Moisture-wicking for practice and game day. Tri-blend softness means kids will actually want to wear it. Sells in league packages.'},
+  '361': {name:'Augusta 361 Youth Sleeve Stripe Jersey',fabric:'50% polyester / 50% cotton jersey knit',tags:['Youth','Retro','Team','Spirit Wear'],
+    best:'Youth sports leagues, school spirit shirts, retro-themed events.',
+    pitch:'Bold contrast sleeve stripes give it that classic athletic jersey look. Great for teams that want something that reads as a uniform without the price tag of a full jersey.'},
+};
+
+function getShirtSalesKey(styleNum) {
+  // Match style number to sales data key
+  var s = (styleNum || '').toUpperCase().replace(/\s/g,'');
+  for(var key in SHIRT_SALES_DATA) {
+    if(s.indexOf(key) !== -1 || s === key) return key;
+  }
+  // Try partial — last 4-5 chars
+  for(var key in SHIRT_SALES_DATA) {
+    if(s.indexOf(key.replace(/[A-Z]+/,'')) !== -1) return key;
+  }
+  return null;
+}
+
+function updateShirtSalesCard() {
+  var styleSel = document.getElementById('sh-shirt');
+  if(!styleSel) return;
+  var styleNum = styleSel.options[styleSel.selectedIndex] ? styleSel.options[styleSel.selectedIndex].getAttribute('data-style') : '';
+  var card = document.getElementById('sh-sales-card');
+  var key = getShirtSalesKey(styleNum);
+  if(!key || !SHIRT_SALES_DATA[key]) { card.style.display='none'; return; }
+  var d = SHIRT_SALES_DATA[key];
+  card.style.display = 'block';
+  document.getElementById('sh-sc-name').textContent = d.name;
+  document.getElementById('sh-sc-fabric').textContent = d.fabric;
+  var tagsHtml = d.tags.map(function(t){
+    return '<span style="background:var(--gold);color:var(--navy);font-family:Oswald,sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;">'+t+'</span>';
+  }).join('');
+  document.getElementById('sh-sc-tags').innerHTML = tagsHtml;
+  document.getElementById('sh-sc-best').innerHTML = '<strong style="color:rgba(255,255,255,.5);font-size:10px;text-transform:uppercase;letter-spacing:1px;">Best For: </strong>' + d.best;
+  document.getElementById('sh-sc-pitch').innerHTML = '"' + d.pitch + '"';
+}
+
 function updateShirtPrice(){
   var styleSel = document.getElementById('sh-shirt');
   var msrp = parseFloat(styleSel.value) || 0;
   document.getElementById('sh-msrp').value = msrp.toFixed(2);
+  updateShirtSalesCard();
   // Populate case price if available
   var casePrice = styleSel.options[styleSel.selectedIndex] ? styleSel.options[styleSel.selectedIndex].getAttribute('data-case') : null;
   var caseField = document.getElementById('sh-case');
