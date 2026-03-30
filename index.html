@@ -1234,11 +1234,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="section-divider"></div>
     <table class="price-table"><thead><tr><th>Quantity</th><th>Price Each</th></tr></thead><tbody>
       <tr><td>1–19</td><td>$13.50</td></tr>
-      <tr><td>20–49</td><td>TBD</td></tr>
-      <tr><td>50–99</td><td>TBD</td></tr>
-      <tr><td>100+</td><td>TBD</td></tr>
+      <tr><td>20–49</td><td>$11.00</td></tr>
+      <tr><td>50–99</td><td>$9.50</td></tr>
+      <tr><td>100+</td><td>$8.50</td></tr>
     </tbody></table>
-    <div class="note-box">Qty break pricing at 20/50/100 coming soon. Contact Lindsay to confirm current bulk rates.</div>
+    <div class="note-box">Standard plate size · UV printed full color · Blank cost $3.00 each (case of 30). Confirm large order pricing with Lindsay.</div>
   </div>
 
   <!-- TABLECLOTHS -->
@@ -1729,9 +1729,9 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <div class="quote-footer">
     <div class="quote-subtotal"><span>Items</span><span id="q-count">0</span></div>
     <div class="quote-grand"><span class="quote-grand-label">Total</span><span class="quote-grand-val" id="q-total">$0.00</span></div>
-    <div style="padding:8px 14px 0;">
-    <label style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);font-family:Oswald,sans-serif;font-weight:600;display:block;margin-bottom:4px;">Quote Notes</label>
-    <textarea id="q-notes" placeholder="Add notes, links, size info, options... (e.g. Sizes S-XL standard, 2XL+ add $2 each. See sanmar.com for full specs.)" style="width:100%;padding:8px 10px;font-family:Source Sans 3,sans-serif;font-size:12px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:var(--white);resize:vertical;min-height:60px;outline:none;" rows="3"></textarea>
+    <div style="padding:10px 14px 4px;">
+    <label style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);font-family:Oswald,sans-serif;font-weight:600;display:block;margin-bottom:6px;">✏️ Quote Notes <span style="font-family:Source Sans 3,sans-serif;font-weight:400;font-size:10px;color:rgba(255,255,255,.4);text-transform:none;letter-spacing:0;">(visible on PDF and email)</span></label>
+    <textarea id="q-notes" placeholder="Type notes here — sizes, links, options, special instructions...&#10;e.g. Sizes S–XL standard pricing. 2XL+ add $2 each.&#10;Sanmar spec: sanmar.com/style/BC3001" style="width:100%;padding:10px;font-family:Source Sans 3,sans-serif;font-size:12px;line-height:1.6;border:1.5px solid var(--gold);background:rgba(255,255,255,.05);color:var(--white);resize:vertical;min-height:72px;outline:none;box-sizing:border-box;" rows="4"></textarea>
   </div>
   <div class="quote-actions">
       <button class="qa-btn primary" onclick="printQuote()">🖨 Print Estimate</button>
@@ -2851,10 +2851,10 @@ function calcCanopy(){
 
 // LICENSE PLATE QTY BREAKS — update prices when confirmed
 var LP_TIERS = [
-  {min: 1,   max: 19,  price: 13.50, label: '1–19'},
-  {min: 20,  max: 49,  price: null,  label: '20–49 — TBD'},
-  {min: 50,  max: 99,  price: null,  label: '50–99 — TBD'},
-  {min: 100, max: 9999,price: null,  label: '100+ — TBD'},
+  {min: 1,   max: 19,  price: 13.50, label: '1–19 — $13.50 each'},
+  {min: 20,  max: 49,  price: 11.00, label: '20–49 — $11.00 each'},
+  {min: 50,  max: 99,  price: 9.50,  label: '50–99 — $9.50 each'},
+  {min: 100, max: 9999,price: 8.50,  label: '100+ — $8.50 each'},
 ];
 
 function calcLicensePlates(){
@@ -2872,25 +2872,11 @@ function calcLicensePlates(){
   var lines, total, desc;
   desc = qty + 'x Custom License Plate';
 
-  if(tier.price === null) {
-    // TBD tier — show at base price with flag
-    total = 13.50 * qty * (1 - discPct/100);
-    lines = [
-      ['Unit Price', '$13.50 (bulk rate TBD)'],
-      ['Qty break', tier.label],
-      ['Note', 'Confirm bulk rate with Lindsay before sending'],
-      ['Qty', qty]
-    ];
-    if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
-    showResult('lp-result', lines, total, qty, desc);
-    lastCalc.lp = {desc: desc, total: total, qty: qty, details: [['Unit', '$13.50 est.'], ['Qty break', tier.label], ['Note', 'Confirm bulk rate with Lindsay'], ['Qty', qty]]};
-  } else {
-    total = tier.price * qty * (1 - discPct/100);
-    lines = [['Unit Price', '$' + tier.price.toFixed(2)], ['Qty break', tier.label], ['Qty', qty]];
-    if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
-    showResult('lp-result', lines, total, qty, desc);
-    lastCalc.lp = {desc: desc, total: total, qty: qty, details: [['Unit', '$' + tier.price.toFixed(2) + ' ea'], ['Qty break', tier.label], ['Qty', qty]]};
-  }
+  total = tier.price * qty * (1 - discPct/100);
+  lines = [['Unit Price', '$' + tier.price.toFixed(2) + ' ea'], ['Qty break', tier.label], ['Qty', qty]];
+  if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+  showResult('lp-result', lines, total, qty, desc);
+  lastCalc.lp = {desc: desc, total: total, qty: qty, details: [['Unit', '$' + tier.price.toFixed(2) + ' ea'], ['Qty break', tier.label], ['Qty', qty]]};
 
   showAddBtn('lp-add');
 }
