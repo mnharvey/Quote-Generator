@@ -1172,9 +1172,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="section-divider"></div>
     <table class="price-table"><thead><tr><th>Quantity</th><th>Price Each</th></tr></thead><tbody>
       <tr><td>1–19</td><td>$13.50</td></tr>
-      <tr><td>20+</td><td>Contact Lindsay for qty pricing</td></tr>
+      <tr><td>20–49</td><td>TBD</td></tr>
+      <tr><td>50–99</td><td>TBD</td></tr>
+      <tr><td>100+</td><td>TBD</td></tr>
     </tbody></table>
-    <div class="note-box">Standard plate size. UV printed full color. Contact Lindsay for qty breaks at 20+ pieces.</div>
+    <div class="note-box">Qty break pricing at 20/50/100 coming soon. Contact Lindsay to confirm current bulk rates.</div>
   </div>
 
   <!-- TABLECLOTHS -->
@@ -2775,28 +2777,49 @@ function calcCanopy(){
 
 
 
+// LICENSE PLATE QTY BREAKS — update prices when confirmed
+var LP_TIERS = [
+  {min: 1,   max: 19,  price: 13.50, label: '1–19'},
+  {min: 20,  max: 49,  price: null,  label: '20–49 — TBD'},
+  {min: 50,  max: 99,  price: null,  label: '50–99 — TBD'},
+  {min: 100, max: 9999,price: null,  label: '100+ — TBD'},
+];
+
 function calcLicensePlates(){
   var qty = parseInt(document.getElementById('lp-qty').value) || 1;
   var discPct = parseFloat(document.getElementById('lp-disc').value) || 0;
-  var unitPrice = 13.50;
-  var qtyNote = '';
 
-  if(qty >= 20) {
-    qtyNote = '20+ qty — contact Lindsay for break pricing';
-    document.getElementById('lp-qty-label').textContent = 'Contact Lindsay for 20+ pricing';
-  } else {
-    qtyNote = '1–19 pieces @ $13.50 each';
-    document.getElementById('lp-qty-label').textContent = '1–19 pieces — $13.50 each';
+  // Find tier
+  var tier = LP_TIERS[0];
+  for(var i = 0; i < LP_TIERS.length; i++){
+    if(qty >= LP_TIERS[i].min) tier = LP_TIERS[i];
   }
 
-  var total = unitPrice * qty * (1 - discPct/100);
-  var desc = qty + 'x Custom License Plate';
-  var lines = [['Unit Price', '$13.50'], ['Qty', qty]];
-  if(qty >= 20) lines.push(['Note', 'Contact Lindsay for bulk rate']);
-  if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+  document.getElementById('lp-qty-label').textContent = tier.label;
 
-  showResult('lp-result', lines, total, qty, desc);
-  lastCalc.lp = {desc: desc, total: total, qty: qty, details: [['Unit', '$13.50 ea'], ['Qty', qty], ['Note', qty >= 20 ? 'Confirm bulk rate with Lindsay' : '']]};
+  var lines, total, desc;
+  desc = qty + 'x Custom License Plate';
+
+  if(tier.price === null) {
+    // TBD tier — show at base price with flag
+    total = 13.50 * qty * (1 - discPct/100);
+    lines = [
+      ['Unit Price', '$13.50 (bulk rate TBD)'],
+      ['Qty break', tier.label],
+      ['Note', 'Confirm bulk rate with Lindsay before sending'],
+      ['Qty', qty]
+    ];
+    if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+    showResult('lp-result', lines, total, qty, desc);
+    lastCalc.lp = {desc: desc, total: total, qty: qty, details: [['Unit', '$13.50 est.'], ['Qty break', tier.label], ['Note', 'Confirm bulk rate with Lindsay'], ['Qty', qty]]};
+  } else {
+    total = tier.price * qty * (1 - discPct/100);
+    lines = [['Unit Price', '$' + tier.price.toFixed(2)], ['Qty break', tier.label], ['Qty', qty]];
+    if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+    showResult('lp-result', lines, total, qty, desc);
+    lastCalc.lp = {desc: desc, total: total, qty: qty, details: [['Unit', '$' + tier.price.toFixed(2) + ' ea'], ['Qty break', tier.label], ['Qty', qty]]};
+  }
+
   showAddBtn('lp-add');
 }
 
