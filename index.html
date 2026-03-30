@@ -158,6 +158,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 .hcc-icon{font-size:24px;margin-bottom:6px;}
 .hcc-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
 .hcc-items{font-size:11px;color:var(--gray);line-height:1.6;}
+
+.panel-notes-wrap{margin-top:10px;margin-bottom:2px;}
+.panel-notes-wrap label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray);font-family:'Oswald',sans-serif;font-weight:600;display:block;margin-bottom:5px;}
+.panel-notes-wrap textarea{width:100%;padding:9px 10px;font-family:'Source Sans 3',sans-serif;font-size:12px;line-height:1.5;border:1.5px solid var(--mid-gray);background:var(--white);color:var(--charcoal);resize:vertical;min-height:56px;outline:none;box-sizing:border-box;}
+.panel-notes-wrap textarea:focus{border-color:var(--red);}
 </style>
 </head>
 <body>
@@ -314,7 +319,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="25">25% off</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcCorr4()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcCorr4()">CALCULATE</button>
     <div class="result-card" id="c4-result"></div>
     <button class="add-to-quote-btn" id="c4-add" style="display:none" onclick="addToQuote('c4')">+ ADD TO ESTIMATE</button>
 
@@ -373,7 +382,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="25">25% off</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcCorr10()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcCorr10()">CALCULATE</button>
     <div class="result-card" id="c10-result"></div>
     <button class="add-to-quote-btn" id="c10-add" style="display:none" onclick="addToQuote('c10')">+ ADD TO ESTIMATE</button>
 
@@ -437,7 +450,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="25">25% off</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcAluminum()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcAluminum()">CALCULATE</button>
     <div class="result-card" id="al-result"></div>
     <button class="add-to-quote-btn" id="al-add" style="display:none" onclick="addToQuote('al')">+ ADD TO ESTIMATE</button>
 
@@ -476,7 +493,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="25">25% off</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcVinyl()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcVinyl()">CALCULATE</button>
     <div class="result-card" id="vn-result"></div>
     <button class="add-to-quote-btn" id="vn-add" style="display:none" onclick="addToQuote('vn')">+ ADD TO ESTIMATE</button>
 
@@ -553,7 +574,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         </select></div>
     </div>
     <div id="sh-discount-check" style="display:none;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #ccc"></div>
-    <button class="calc-btn" onclick="calcShirts()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcShirts()">CALCULATE</button>
     <div class="result-card" id="sh-result"></div>
     <button class="add-to-quote-btn" id="sh-add" style="display:none" onclick="addToQuote('sh')">+ ADD TO ESTIMATE</button>
 
@@ -630,7 +655,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <!-- Discount traffic light -->
     <div id="dtf-discount-check" style="display:none;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #ccc"></div>
 
-    <button class="calc-btn" onclick="calcDTF()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcDTF()">CALCULATE</button>
     <div class="result-card" id="dtf-result"></div>
     <button class="add-to-quote-btn" id="dtf-add" style="display:none" onclick="addToQuote('dtf')">+ ADD TO ESTIMATE</button>
     <div class="note-box">Gang Sheet: $8.50/ft retail · By-the-Foot: $6.35/ft wholesale. Both use 22.3" roll with 0.25" cut gap per print. Front + back = 2 sides.</div>
@@ -687,7 +716,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div id="wl-margin-check" style="display:none;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #ccc"></div>
     <div id="wl-discount-check" style="display:none;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:600;border-left:4px solid #ccc"></div>
 
-    <button class="calc-btn" onclick="calcWoodLetters()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcWoodLetters()">CALCULATE</button>
     <div class="result-card" id="wl-result"></div>
     <button class="add-to-quote-btn" id="wl-add" style="display:none" onclick="addToQuote('wl')">+ ADD TO ESTIMATE</button>
 
@@ -756,7 +789,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         </select></div>
     </div>
 
-    <button class="calc-btn" onclick="calcCanopy()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcCanopy()">CALCULATE</button>
     <div class="result-card" id="cn-result"></div>
     <button class="add-to-quote-btn" id="cn-add" style="display:none" onclick="addToQuote('cn')">+ ADD TO ESTIMATE</button>
 
@@ -820,7 +857,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="25">25% off</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcCornhole()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcCornhole()">CALCULATE</button>
     <div class="result-card" id="ch-result"></div>
     <button class="add-to-quote-btn" id="ch-add" style="display:none" onclick="addToQuote('ch')">+ ADD TO ESTIMATE</button>
 
@@ -970,7 +1011,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="25">25% off</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcBanners()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcBanners()">CALCULATE</button>
     <div class="result-card" id="bn-result"></div>
     <button class="add-to-quote-btn" id="bn-add" style="display:none" onclick="addToQuote('bn')">+ ADD TO ESTIMATE</button>
 
@@ -1031,7 +1076,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="25">25% off</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcMagnets()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcMagnets()">CALCULATE</button>
     <div class="result-card" id="mg-result"></div>
     <button class="add-to-quote-btn" id="mg-add" style="display:none" onclick="addToQuote('mg')">+ ADD TO ESTIMATE</button>
 
@@ -1079,7 +1128,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="25">25% off</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcStickers()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcStickers()">CALCULATE</button>
     <div class="result-card" id="st-result"></div>
     <button class="add-to-quote-btn" id="st-add" style="display:none" onclick="addToQuote('st')">+ ADD TO ESTIMATE</button>
 
@@ -1146,7 +1199,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="25">25% off</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcEmbroidery()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcEmbroidery()">CALCULATE</button>
     <div class="result-card" id="em-result"></div>
     <button class="add-to-quote-btn" id="em-add" style="display:none" onclick="addToQuote('em')">+ ADD TO ESTIMATE</button>
 
@@ -1228,7 +1285,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="15">15% off — Veteran / Nonprofit</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcLicensePlates()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcLicensePlates()">CALCULATE</button>
     <div class="result-card" id="lp-result"></div>
     <button class="add-to-quote-btn" id="lp-add" style="display:none" onclick="addToQuote('lp')">+ ADD TO ESTIMATE</button>
     <div class="section-divider"></div>
@@ -1264,7 +1325,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div style="background:var(--navy);color:var(--gold);padding:14px;margin:12px 0;font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;letter-spacing:.5px;border-left:4px solid var(--gold);">
       📞 Pricing for tablecloths is by quote — contact Matt or Lindsay at 520-705-4026 or sales@little6llc.com
     </div>
-    <button class="calc-btn" onclick="alert('Tablecloth pricing is by quote. Please contact Matt or Lindsay at 520-705-4026.')">REQUEST QUOTE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="alert('Tablecloth pricing is by quote. Please contact Matt or Lindsay at 520-705-4026.')">REQUEST QUOTE</button>
     <div class="note-box">Custom tablecloths are available for 6ft and 8ft tables. Logo front or full coverage. Also available as part of Canopy Tent Package E or F.</div>
   </div>
 
@@ -1304,7 +1369,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="20">20% off</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcTumblers()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcTumblers()">CALCULATE</button>
     <div class="result-card" id="tb-result"></div>
     <button class="add-to-quote-btn" id="tb-add" style="display:none" onclick="addToQuote('tb')">+ ADD TO ESTIMATE</button>
     <div class="section-divider"></div>
@@ -1349,7 +1418,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="15">15% off — Veteran / Nonprofit</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcOrnaments()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcOrnaments()">CALCULATE</button>
     <div class="result-card" id="or-result"></div>
     <button class="add-to-quote-btn" id="or-add" style="display:none" onclick="addToQuote('or')">+ ADD TO ESTIMATE</button>
     <div class="section-divider"></div>
@@ -1391,7 +1464,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="15">15% off — Veteran / Nonprofit</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcPVCards()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcPVCards()">CALCULATE</button>
     <div class="result-card" id="pv-result"></div>
     <button class="add-to-quote-btn" id="pv-add" style="display:none" onclick="addToQuote('pv')">+ ADD TO ESTIMATE</button>
     <div class="section-divider"></div>
@@ -1417,7 +1494,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="15">15% off — Veteran / Nonprofit</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcMedals()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcMedals()">CALCULATE</button>
     <div class="result-card" id="md-result"></div>
     <button class="add-to-quote-btn" id="md-add" style="display:none" onclick="addToQuote('md')">+ ADD TO ESTIMATE</button>
     <div class="note-box">$6 each includes neck ribbon. Source: mypremierline.com. Contact Lindsay for custom engraving add-on pricing.</div>
@@ -1453,7 +1534,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="15">15% off</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcBags()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcBags()">CALCULATE</button>
     <div class="result-card" id="bg-result"></div>
     <button class="add-to-quote-btn" id="bg-add" style="display:none" onclick="addToQuote('bg')">+ ADD TO ESTIMATE</button>
     <div class="section-divider"></div>
@@ -1487,7 +1572,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="15">15% off — Veteran / Nonprofit</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcGolfBalls()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcGolfBalls()">CALCULATE</button>
     <div class="result-card" id="gb-result"></div>
     <button class="add-to-quote-btn" id="gb-add" style="display:none" onclick="addToQuote('gb')">+ ADD TO ESTIMATE</button>
     <div class="section-divider"></div>
@@ -1523,7 +1612,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="15">15% off — Veteran / Nonprofit</option>
         </select></div>
     </div>
-    <button class="calc-btn" onclick="calcBadgeBuddies()">CALCULATE</button>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea id="q-notes" placeholder="Add notes, size info, links, special instructions..." oninput="syncNotes(this)"></textarea>
+    </div>
+        <button class="calc-btn" onclick="calcBadgeBuddies()">CALCULATE</button>
     <div class="result-card" id="bb-result"></div>
     <button class="add-to-quote-btn" id="bb-add" style="display:none" onclick="addToQuote('bb')">+ ADD TO ESTIMATE</button>
     <div class="section-divider"></div>
@@ -1729,10 +1822,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <div class="quote-footer">
     <div class="quote-subtotal"><span>Items</span><span id="q-count">0</span></div>
     <div class="quote-grand"><span class="quote-grand-label">Total</span><span class="quote-grand-val" id="q-total">$0.00</span></div>
-    <div style="padding:10px 14px 4px;">
-    <label style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);font-family:Oswald,sans-serif;font-weight:600;display:block;margin-bottom:6px;">✏️ Quote Notes <span style="font-family:Source Sans 3,sans-serif;font-weight:400;font-size:10px;color:rgba(255,255,255,.4);text-transform:none;letter-spacing:0;">(visible on PDF and email)</span></label>
-    <textarea id="q-notes" placeholder="Type notes here — sizes, links, options, special instructions...&#10;e.g. Sizes S–XL standard pricing. 2XL+ add $2 each.&#10;Sanmar spec: sanmar.com/style/BC3001" style="width:100%;padding:10px;font-family:Source Sans 3,sans-serif;font-size:12px;line-height:1.6;border:1.5px solid var(--gold);background:rgba(255,255,255,.05);color:var(--white);resize:vertical;min-height:72px;outline:none;box-sizing:border-box;" rows="4"></textarea>
-  </div>
+  
   <div class="quote-actions">
       <button class="qa-btn primary" onclick="printQuote()">🖨 Print Estimate</button>
       <button class="qa-btn secondary" onclick="copyQuote()">📋 Copy</button>
@@ -2005,7 +2095,7 @@ function buildQuoteText(){
   if(rep)t+='Sales Rep: '+rep+'\n';
   t+='Date: '+date+'\n\n';
   quoteItems.forEach(function(i){t+='* '+i.desc+': $'+i.total.toFixed(2)+'\n';});
-  var qn=document.getElementById('q-notes').value;
+  var qn=getQuoteNotes();
   if(qn){t+='\nNotes:\n'+qn+'\n';}
   t+='\nTOTAL: $'+total.toFixed(2)+'\n\n';
   t+='\n--- ESTIMATE TERMS ---\n';
@@ -2058,7 +2148,7 @@ function sendEmail(){
       items:quoteItems,
       overallDiscount:overallDiscVal,
       overallDiscountType:'pct',
-      notes:(notes ? notes + (document.getElementById('q-notes').value ? '\n\n' + document.getElementById('q-notes').value : '') : document.getElementById('q-notes').value || ''),
+      notes:(notes ? notes + (getQuoteNotes() ? '\n\n' + getQuoteNotes() : '') : getQuoteNotes() || ''),
       salesRep:rep
     };
     if(attachmentData){
@@ -2128,7 +2218,7 @@ function printQuote(){
   win.document.write('<hr>');
   win.document.write('<div class="meta"><div><div class="ml">Customer</div><div>'+name+'</div></div><div><div class="ml">Company</div><div>'+(co||'--')+'</div></div><div><div class="ml">Email</div><div>'+(email||'--')+'</div></div><div><div class="ml">Date</div><div>'+date+'</div></div>'+(rep?'<div><div class="ml">Sales Rep</div><div>'+rep+'</div></div>':'')+'</div>');
   win.document.write('<table><thead><tr><th>Description</th><th style="text-align:right">Total</th></tr></thead><tbody>'+rows+'<tr class="total-row"><td>ESTIMATE TOTAL</td><td style="text-align:right;font-family:monospace">$'+total.toFixed(2)+'</td></tr></tbody></table>');
-    var quoteNotes = document.getElementById('q-notes').value;
+    var quoteNotes = getQuoteNotes();
   if(quoteNotes) {
     win.document.write('<div style="margin-top:16px;padding:12px;background:#f5f4f1;border-left:3px solid #B03028;font-size:12px;color:#444;line-height:1.6;white-space:pre-wrap;"><strong style=\"font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#888;\">Notes</strong><br>' + quoteNotes.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>');
   }
@@ -3180,6 +3270,14 @@ function runHomeSearch(){
   resultsDiv.style.display = 'block';
   resultsDiv.innerHTML = html;
 }
+
+
+var _globalNotes = '';
+function syncNotes(el){
+  _globalNotes = el.value;
+  document.querySelectorAll('#q-notes').forEach(function(t){ if(t !== el) t.value = _globalNotes; });
+}
+function getQuoteNotes(){ return _globalNotes; }
 
 function toggleTip(pid){
   var body = document.getElementById('tip-'+pid);
