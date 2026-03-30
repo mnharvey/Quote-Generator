@@ -164,7 +164,9 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="mobile-nav-btn" onclick="showPanel('embroidery',this)">🧵 Embroidery</button>
   <button class="mobile-nav-btn" onclick="showPanel('cornhole',this)">🏆 Cornhole</button>
   <button class="mobile-nav-btn" onclick="showPanel('woodletters',this)">🪵 Wood Letters</button>
-    <button class="mobile-nav-btn" onclick="showPanel('tumblers',this)">🥤 Tumblers</button>
+    <button class="mobile-nav-btn" onclick="showPanel('licenseplates',this)">🪪 License Plates</button>
+  <button class="mobile-nav-btn" onclick="showPanel('tablecloths',this)">🪄 Tablecloths</button>
+  <button class="mobile-nav-btn" onclick="showPanel('tumblers',this)">🥤 Tumblers</button>
   <button class="mobile-nav-btn" onclick="showPanel('ornaments',this)">🎄 Ornaments</button>
   <button class="mobile-nav-btn" onclick="showPanel('pvcards',this)">🪪 PVC Cards</button>
   <button class="mobile-nav-btn" onclick="showPanel('medals',this)">🏅 Medals</button>
@@ -201,6 +203,8 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="cat-btn" onclick="showPanel('banners',this)"><span>🚩</span> Banners</button>
   <button class="cat-btn" onclick="showPanel('magnets',this)"><span>🧲</span> Vehicle Magnets</button>
   <button class="cat-btn" onclick="showPanel('stickers',this)"><span>🏷</span> Stickers</button>
+  <button class="cat-btn" onclick="showPanel('licenseplates',this)"><span>🪪</span> License Plates</button>
+  <button class="cat-btn" onclick="showPanel('tablecloths',this)"><span>🪄</span> Tablecloths</button>
   <button class="cat-btn" onclick="showPanel('tumblers',this)"><span>🥤</span> Tumblers</button>
   <button class="cat-btn" onclick="showPanel('ornaments',this)"><span>🎄</span> Ornaments</button>
   <button class="cat-btn" onclick="showPanel('pvcards',this)"><span>🪪</span> PVC Cards</button>
@@ -1141,6 +1145,64 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   </div>
 
 
+
+
+  <!-- LICENSE PLATES -->
+  <div class="panel" id="panel-licenseplates">
+    <div class="panel-title">License Plates</div>
+    <div class="panel-desc">Custom laser engraved · Aluminum · Full color UV print option</div>
+    <div class="form-row">
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="lp-qty" value="5" min="1" oninput="calcLicensePlates()"></div>
+      <div class="field"><label>Qty Break</label>
+        <div id="lp-qty-label" style="padding:8px 0;font-size:13px;color:var(--gray)">—</div></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="lp-disc" onchange="calcLicensePlates()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off — Veteran / Nonprofit</option>
+        </select></div>
+    </div>
+    <button class="calc-btn" onclick="calcLicensePlates()">CALCULATE</button>
+    <div class="result-card" id="lp-result"></div>
+    <button class="add-to-quote-btn" id="lp-add" style="display:none" onclick="addToQuote('lp')">+ ADD TO ESTIMATE</button>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Quantity</th><th>Price Each</th></tr></thead><tbody>
+      <tr><td>1–19</td><td>$13.50</td></tr>
+      <tr><td>20+</td><td>Contact Lindsay for qty pricing</td></tr>
+    </tbody></table>
+    <div class="note-box">Standard plate size. UV printed full color. Contact Lindsay for qty breaks at 20+ pieces.</div>
+  </div>
+
+  <!-- TABLECLOTHS -->
+  <div class="panel" id="panel-tablecloths">
+    <div class="panel-title">Custom Tablecloths</div>
+    <div class="panel-desc">6-foot tables · Full color logo front · Contact for pricing</div>
+    <div class="form-row">
+      <div class="field"><label>Table Size</label>
+        <select id="tc-size">
+          <option value="6ft">6 ft table</option>
+          <option value="8ft">8 ft table</option>
+        </select></div>
+      <div class="field"><label>Print Option</label>
+        <select id="tc-print">
+          <option value="front">Logo front only</option>
+          <option value="full">Full color all sides</option>
+        </select></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="tc-qty" value="1" min="1"></div>
+    </div>
+    <div style="background:var(--navy);color:var(--gold);padding:14px;margin:12px 0;font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;letter-spacing:.5px;border-left:4px solid var(--gold);">
+      📞 Pricing for tablecloths is by quote — contact Matt or Lindsay at 520-705-4026 or sales@little6llc.com
+    </div>
+    <button class="calc-btn" onclick="alert('Tablecloth pricing is by quote. Please contact Matt or Lindsay at 520-705-4026.')">REQUEST QUOTE</button>
+    <div class="note-box">Custom tablecloths are available for 6ft and 8ft tables. Logo front or full coverage. Also available as part of Canopy Tent Package E or F.</div>
+  </div>
 
   <!-- TUMBLERS -->
   <div class="panel" id="panel-tumblers">
@@ -2711,6 +2773,32 @@ function calcCanopy(){
   showAddBtn('cn-add');
 }
 
+
+
+function calcLicensePlates(){
+  var qty = parseInt(document.getElementById('lp-qty').value) || 1;
+  var discPct = parseFloat(document.getElementById('lp-disc').value) || 0;
+  var unitPrice = 13.50;
+  var qtyNote = '';
+
+  if(qty >= 20) {
+    qtyNote = '20+ qty — contact Lindsay for break pricing';
+    document.getElementById('lp-qty-label').textContent = 'Contact Lindsay for 20+ pricing';
+  } else {
+    qtyNote = '1–19 pieces @ $13.50 each';
+    document.getElementById('lp-qty-label').textContent = '1–19 pieces — $13.50 each';
+  }
+
+  var total = unitPrice * qty * (1 - discPct/100);
+  var desc = qty + 'x Custom License Plate';
+  var lines = [['Unit Price', '$13.50'], ['Qty', qty]];
+  if(qty >= 20) lines.push(['Note', 'Contact Lindsay for bulk rate']);
+  if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+
+  showResult('lp-result', lines, total, qty, desc);
+  lastCalc.lp = {desc: desc, total: total, qty: qty, details: [['Unit', '$13.50 ea'], ['Qty', qty], ['Note', qty >= 20 ? 'Confirm bulk rate with Lindsay' : '']]};
+  showAddBtn('lp-add');
+}
 
 // TUMBLERS
 var TUMBLER_PRICE = {
