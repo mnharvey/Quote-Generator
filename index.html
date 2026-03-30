@@ -723,12 +723,12 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="form-row single">
       <div class="field"><label>Package</label>
         <select id="cn-pkg" onchange="calcCanopy()">
-          <option value="725|A">Package A — Custom printed roof only — $725</option>
-          <option value="850|B">Package B — Roof + 1 printed back wall (full) — $850</option>
-          <option value="988|C">Package C — Roof + 1 printed half wall — $988</option>
-          <option value="1113|D">Package D — Roof + 3 printed full walls — $1,113</option>
-          <option value="1113|E">Package E — Roof + 1 full wall + 2 half walls + tablecloth — $1,113</option>
-          <option value="1413|F">Package F — Full setup: roof, walls, tablecloth, flags &amp; poles — $1,413</option>
+          <option value="675|Basic">Basic — Canopy + frame + carry bag — $675</option>
+          <option value="0|B">Package B — Roof + 1 full back wall — Contact Lindsay</option>
+          <option value="0|C">Package C — Roof + 1 half wall — Contact Lindsay</option>
+          <option value="0|D">Package D — Roof + 3 full walls — Contact Lindsay</option>
+          <option value="0|E">Package E — Roof + walls + tablecloth — Contact Lindsay</option>
+          <option value="0|F">Package F — Full setup with flags — Contact Lindsay</option>
         </select>
       </div>
     </div>
@@ -736,11 +736,8 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="form-row">
       <div class="field"><label>Qty (tents)</label>
         <input type="number" id="cn-qty" value="1" min="1" oninput="calcCanopy()"></div>
-      <div class="field"><label>Tent Bag (+$100 each)</label>
-        <select id="cn-bag" onchange="calcCanopy()">
-          <option value="0">No bag</option>
-          <option value="100">Add tent bag — $100 each</option>
-        </select></div>
+      <div class="field"><label>Tent Bag</label>
+        <div style="padding:8px 0;font-size:12px;color:var(--gray)">Included in Basic package</div></div>
     </div>
 
     <div class="form-row">
@@ -792,16 +789,15 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 
     <div class="section-divider"></div>
     <table class="price-table"><thead><tr><th>Package</th><th>Includes</th><th>Price</th></tr></thead><tbody>
-      <tr><td>A</td><td>Custom printed roof</td><td>$725</td></tr>
-      <tr><td>B</td><td>Roof + 1 full back wall</td><td>$850</td></tr>
-      <tr><td>C</td><td>Roof + 1 half wall</td><td>$988</td></tr>
-      <tr><td>D</td><td>Roof + 3 full walls</td><td>$1,113</td></tr>
-      <tr><td>E</td><td>Roof + 1 full wall + 2 half walls + tablecloth</td><td>$1,113</td></tr>
-      <tr><td>F</td><td>Full setup — roof, walls, tablecloth, flags &amp; poles</td><td>$1,413</td></tr>
-      <tr><td colspan="2">Tent bag (add-on)</td><td>$100</td></tr>
+      <tr><td>Basic</td><td>Canopy + 40mm aluminum frame + carry bag</td><td>$675</td></tr>
+      <tr><td>B</td><td>Roof + 1 full back wall</td><td>Contact Lindsay</td></tr>
+      <tr><td>C</td><td>Roof + 1 half wall</td><td>Contact Lindsay</td></tr>
+      <tr><td>D</td><td>Roof + 3 full walls</td><td>Contact Lindsay</td></tr>
+      <tr><td>E</td><td>Roof + walls + tablecloth</td><td>Contact Lindsay</td></tr>
+      <tr><td>F</td><td>Full setup with flags &amp; poles</td><td>Contact Lindsay</td></tr>
       <tr><td colspan="2">Design fee (if needed)</td><td>$100</td></tr>
     </tbody></table>
-    <div class="note-box">All tents are 10x10 aluminum frame. Prices include custom printing. Contact Matt or Lindsay for multi-tent orders or custom configurations.</div>
+    <div class="note-box">All tents are 10x10 · 40mm aluminum hex frame · dye-sublimated weatherproof fabric (B2Signs). Packages B–F — contact Lindsay for current pricing.</div>
   </div>
 
   <!-- CORNHOLE -->
@@ -1733,7 +1729,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <div class="quote-footer">
     <div class="quote-subtotal"><span>Items</span><span id="q-count">0</span></div>
     <div class="quote-grand"><span class="quote-grand-label">Total</span><span class="quote-grand-val" id="q-total">$0.00</span></div>
-    <div class="quote-actions">
+    <div style="padding:8px 14px 0;">
+    <label style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);font-family:Oswald,sans-serif;font-weight:600;display:block;margin-bottom:4px;">Quote Notes</label>
+    <textarea id="q-notes" placeholder="Add notes, links, size info, options... (e.g. Sizes S-XL standard, 2XL+ add $2 each. See sanmar.com for full specs.)" style="width:100%;padding:8px 10px;font-family:Source Sans 3,sans-serif;font-size:12px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:var(--white);resize:vertical;min-height:60px;outline:none;" rows="3"></textarea>
+  </div>
+  <div class="quote-actions">
       <button class="qa-btn primary" onclick="printQuote()">🖨 Print Estimate</button>
       <button class="qa-btn secondary" onclick="copyQuote()">📋 Copy</button>
       <button class="qa-btn email-btn" onclick="showEmailModal()">✉ Email Estimate</button>
@@ -2005,6 +2005,8 @@ function buildQuoteText(){
   if(rep)t+='Sales Rep: '+rep+'\n';
   t+='Date: '+date+'\n\n';
   quoteItems.forEach(function(i){t+='* '+i.desc+': $'+i.total.toFixed(2)+'\n';});
+  var qn=document.getElementById('q-notes').value;
+  if(qn){t+='\nNotes:\n'+qn+'\n';}
   t+='\nTOTAL: $'+total.toFixed(2)+'\n\n';
   t+='\n--- ESTIMATE TERMS ---\n';
   t+='This is a price estimate, not a final invoice. Prices are subject to change based on\n';
@@ -2056,7 +2058,7 @@ function sendEmail(){
       items:quoteItems,
       overallDiscount:overallDiscVal,
       overallDiscountType:'pct',
-      notes:notes,
+      notes:(notes ? notes + (document.getElementById('q-notes').value ? '\n\n' + document.getElementById('q-notes').value : '') : document.getElementById('q-notes').value || ''),
       salesRep:rep
     };
     if(attachmentData){
@@ -2126,7 +2128,11 @@ function printQuote(){
   win.document.write('<hr>');
   win.document.write('<div class="meta"><div><div class="ml">Customer</div><div>'+name+'</div></div><div><div class="ml">Company</div><div>'+(co||'--')+'</div></div><div><div class="ml">Email</div><div>'+(email||'--')+'</div></div><div><div class="ml">Date</div><div>'+date+'</div></div>'+(rep?'<div><div class="ml">Sales Rep</div><div>'+rep+'</div></div>':'')+'</div>');
   win.document.write('<table><thead><tr><th>Description</th><th style="text-align:right">Total</th></tr></thead><tbody>'+rows+'<tr class="total-row"><td>ESTIMATE TOTAL</td><td style="text-align:right;font-family:monospace">$'+total.toFixed(2)+'</td></tr></tbody></table>');
-  win.document.write('<div class="footer">Little 6 Industries LLC | SDVOSB Certified | 520-705-4026 | sales@little6llc.com | little6llc.com<br><strong>ESTIMATE ONLY -- Not a final invoice.</strong> Prices subject to change based on final artwork and specs. Reply to approve and receive a formal invoice. Valid 30 days.</div>');
+    var quoteNotes = document.getElementById('q-notes').value;
+  if(quoteNotes) {
+    win.document.write('<div style="margin-top:16px;padding:12px;background:#f5f4f1;border-left:3px solid #B03028;font-size:12px;color:#444;line-height:1.6;white-space:pre-wrap;"><strong style=\"font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#888;\">Notes</strong><br>' + quoteNotes.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>');
+  }
+    win.document.write('<div class="footer">Little 6 Industries LLC | SDVOSB Certified | 520-705-4026 | sales@little6llc.com | little6llc.com<br><strong>ESTIMATE ONLY -- Not a final invoice.</strong> Prices subject to change based on final artwork and specs. Reply to approve and receive a formal invoice. Valid 30 days.</div>');
   win.document.write('</body></html>');
   win.document.close();
   win.print();
