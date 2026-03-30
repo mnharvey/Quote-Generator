@@ -2904,7 +2904,7 @@ function calcCanopy(){
   var basePrice = parseFloat(pkgVal[0]);
   var pkgLetter = pkgVal[1];
   var qty = parseInt(document.getElementById('cn-qty').value) || 1;
-  var bagPrice = parseFloat(document.getElementById('cn-bag').value) || 0;
+  var bagPrice = 0; // bag included in Basic package
   var artFee = parseFloat(document.getElementById('cn-art').value) || 0;
   var discPct = parseFloat(document.getElementById('cn-disc').value) || 0;
 
@@ -2914,7 +2914,6 @@ function calcCanopy(){
 
   var pkgLabel = pkgSel.options[pkgSel.selectedIndex].text.split(' — ')[0];
   var desc = qty + 'x ' + pkgLabel;
-  if(bagPrice > 0) desc += ' + Tent Bag';
   if(artFee > 0) desc += ' + Design';
 
   var lines = [
@@ -2923,7 +2922,6 @@ function calcCanopy(){
   ];
   if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
   lines.push(['Tent Subtotal', '$' + tentTotal.toFixed(2)]);
-  if(bagPrice > 0) lines.push(['Tent Bag', '$' + bagTotal.toFixed(2)]);
   if(artFee > 0) lines.push(['Design Fee', '$' + artFee.toFixed(2)]);
   lines.push(['Qty', qty]);
 
@@ -2931,7 +2929,6 @@ function calcCanopy(){
 
   var detailLines = [['Package', pkgLabel], ['Per tent', '$' + basePrice.toFixed(2)]];
   if(discPct > 0) detailLines.push(['Discount', '-' + discPct + '%']);
-  if(bagPrice > 0) detailLines.push(['Bag', '+$' + bagTotal.toFixed(2)]);
   if(artFee > 0) detailLines.push(['Design', '+$' + artFee.toFixed(2)]);
   detailLines.push(['Qty', qty]);
 
