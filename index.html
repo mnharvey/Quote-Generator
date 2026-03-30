@@ -164,8 +164,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="mobile-nav-btn" onclick="showPanel('embroidery',this)">🧵 Embroidery</button>
   <button class="mobile-nav-btn" onclick="showPanel('cornhole',this)">🏆 Cornhole</button>
   <button class="mobile-nav-btn" onclick="showPanel('woodletters',this)">🪵 Wood Letters</button>
+    <button class="mobile-nav-btn" onclick="showPanel('tumblers',this)">🥤 Tumblers</button>
+  <button class="mobile-nav-btn" onclick="showPanel('ornaments',this)">🎄 Ornaments</button>
+  <button class="mobile-nav-btn" onclick="showPanel('pvcards',this)">🪪 PVC Cards</button>
+  <button class="mobile-nav-btn" onclick="showPanel('medals',this)">🏅 Medals</button>
+  <button class="mobile-nav-btn" onclick="showPanel('bags',this)">🎒 Cinch Bags</button>
+  <button class="mobile-nav-btn" onclick="showPanel('golfballs',this)">⛳ Golf Balls</button>
+  <button class="mobile-nav-btn" onclick="showPanel('badgebuddies',this)">🏷 Badge Buddies</button>
   <button class="mobile-nav-btn" onclick="showPanel('ref',this)">📋 All Prices</button>
   <button class="mobile-nav-btn" onclick="showPanel('salestips',this)">💬 Sales Tips</button>
+  <button class="mobile-nav-btn" onclick="showPanel('canopy',this)">⛺ Canopy Tents</button>
   <button class="mobile-nav-btn" onclick="showPanel('banners',this)">🚩 Banners</button>
   <button class="mobile-nav-btn" onclick="showPanel('magnets',this)">🧲 Magnets</button>
   <button class="mobile-nav-btn" onclick="showPanel('stickers',this)">🏷 Stickers</button>
@@ -188,10 +196,18 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <div class="sidebar-section">Hard Goods</div>
   <button class="cat-btn" onclick="showPanel('cornhole',this)"><span>🏆</span> Cornhole Trophies</button>
   <button class="cat-btn" onclick="showPanel('woodletters',this)"><span>🪵</span> Wood Letter Cutouts</button>
+  <button class="cat-btn" onclick="showPanel('canopy',this)"><span>⛺</span> Canopy Tents</button>
   <div class="sidebar-section">More Products</div>
   <button class="cat-btn" onclick="showPanel('banners',this)"><span>🚩</span> Banners</button>
   <button class="cat-btn" onclick="showPanel('magnets',this)"><span>🧲</span> Vehicle Magnets</button>
   <button class="cat-btn" onclick="showPanel('stickers',this)"><span>🏷</span> Stickers</button>
+  <button class="cat-btn" onclick="showPanel('tumblers',this)"><span>🥤</span> Tumblers</button>
+  <button class="cat-btn" onclick="showPanel('ornaments',this)"><span>🎄</span> Ornaments</button>
+  <button class="cat-btn" onclick="showPanel('pvcards',this)"><span>🪪</span> PVC Cards</button>
+  <button class="cat-btn" onclick="showPanel('medals',this)"><span>🏅</span> Medals</button>
+  <button class="cat-btn" onclick="showPanel('bags',this)"><span>🎒</span> Cinch Bags</button>
+  <button class="cat-btn" onclick="showPanel('golfballs',this)"><span>⛳</span> Golf Balls</button>
+  <button class="cat-btn" onclick="showPanel('badgebuddies',this)"><span>🪪</span> Badge Buddies</button>
   <div class="sidebar-section">Reference</div>
   <button class="cat-btn" onclick="showPanel('salestips',this)"><span>💬</span> Sales Tips</button>
   <button class="cat-btn" onclick="showPanel('ref',this)"><span>📋</span> All Pricing</button>
@@ -628,6 +644,96 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="note-box">Price is per piece based on bounding box (W × H). Intricate cuts or very small detail may affect pricing — confirm with Matt.</div>
   </div>
 
+
+  <!-- CANOPY TENTS -->
+  <div class="panel" id="panel-canopy">
+    <div class="panel-title">Custom Canopy Tents</div>
+    <div class="panel-desc">10x10 Aluminum Frame · Custom Printed Roof & Walls · 6 Package Options</div>
+
+    <div class="form-row single">
+      <div class="field"><label>Package</label>
+        <select id="cn-pkg" onchange="calcCanopy()">
+          <option value="725|A">Package A — Custom printed roof only — $725</option>
+          <option value="850|B">Package B — Roof + 1 printed back wall (full) — $850</option>
+          <option value="988|C">Package C — Roof + 1 printed half wall — $988</option>
+          <option value="1113|D">Package D — Roof + 3 printed full walls — $1,113</option>
+          <option value="1113|E">Package E — Roof + 1 full wall + 2 half walls + tablecloth — $1,113</option>
+          <option value="1413|F">Package F — Full setup: roof, walls, tablecloth, flags &amp; poles — $1,413</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field"><label>Qty (tents)</label>
+        <input type="number" id="cn-qty" value="1" min="1" oninput="calcCanopy()"></div>
+      <div class="field"><label>Tent Bag (+$100 each)</label>
+        <select id="cn-bag" onchange="calcCanopy()">
+          <option value="0">No bag</option>
+          <option value="100">Add tent bag — $100 each</option>
+        </select></div>
+    </div>
+
+    <div class="form-row">
+      <div class="field"><label>Art / Design</label>
+        <select id="cn-art" onchange="calcCanopy()">
+          <option value="0">Customer provides print-ready art</option>
+          <option value="100">Design fee — $100</option>
+        </select></div>
+      <div class="field"><label>Discount</label>
+        <select id="cn-disc" onchange="calcCanopy()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off — Veteran / Nonprofit</option>
+          <option value="20">20% off</option>
+        </select></div>
+    </div>
+
+    <button class="calc-btn" onclick="calcCanopy()">CALCULATE</button>
+    <div class="result-card" id="cn-result"></div>
+    <button class="add-to-quote-btn" id="cn-add" style="display:none" onclick="addToQuote('cn')">+ ADD TO ESTIMATE</button>
+
+    <button class="sales-tip-toggle" onclick="toggleTip('cn')"><span>💬</span> Sales Tips</button>
+    <div class="sales-tip-body" id="tip-cn">
+      <div class="st-head">🎯 Best For</div>
+      <ul class="st-list">
+        <li>Farmers markets, craft fairs, outdoor vendors</li>
+        <li>Corporate trade shows and events</li>
+        <li>Sports teams, school booster clubs</li>
+        <li>Nonprofits and fundraisers</li>
+        <li>Food trucks and mobile businesses</li>
+        <li>Real estate open houses and pop-up shops</li>
+      </ul>
+      <div class="st-head">💡 Talking Points</div>
+      <ul class="st-list">
+        <li>Full color custom print — not just a banner clipped to a generic tent</li>
+        <li>Aluminum frame — lightweight and durable, sets up in minutes</li>
+        <li>6 package options from roof-only to full event setup with flags</li>
+        <li>Tablecloth and half walls included in upper packages</li>
+        <li>One vendor — we handle design, print, and delivery</li>
+      </ul>
+      <div class="st-head">🛡️ Objection Handlers</div>
+      <ul class="st-list">
+        <li><strong>"That seems expensive"</strong> — This is a custom branded 10x10 aluminum tent, not a $99 popup from Amazon. It represents your brand at every event for years.</li>
+        <li><strong>"We already have a tent"</strong> — Is it branded? A plain white tent at a market blends in. A custom printed roof stops people mid-walk.</li>
+        <li><strong>"We only do one event a year"</strong> — One event with a professional setup pays for itself in perceived credibility and new customers.</li>
+      </ul>
+    </div>
+
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Package</th><th>Includes</th><th>Price</th></tr></thead><tbody>
+      <tr><td>A</td><td>Custom printed roof</td><td>$725</td></tr>
+      <tr><td>B</td><td>Roof + 1 full back wall</td><td>$850</td></tr>
+      <tr><td>C</td><td>Roof + 1 half wall</td><td>$988</td></tr>
+      <tr><td>D</td><td>Roof + 3 full walls</td><td>$1,113</td></tr>
+      <tr><td>E</td><td>Roof + 1 full wall + 2 half walls + tablecloth</td><td>$1,113</td></tr>
+      <tr><td>F</td><td>Full setup — roof, walls, tablecloth, flags &amp; poles</td><td>$1,413</td></tr>
+      <tr><td colspan="2">Tent bag (add-on)</td><td>$100</td></tr>
+      <tr><td colspan="2">Design fee (if needed)</td><td>$100</td></tr>
+    </tbody></table>
+    <div class="note-box">All tents are 10x10 aluminum frame. Prices include custom printing. Contact Matt or Lindsay for multi-tent orders or custom configurations.</div>
+  </div>
+
   <!-- CORNHOLE -->
   <div class="panel" id="panel-cornhole">
     <div class="panel-title">Cornhole Trophies</div>
@@ -1034,6 +1140,274 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     </tbody></table>
   </div>
 
+
+
+  <!-- TUMBLERS -->
+  <div class="panel" id="panel-tumblers">
+    <div class="panel-title">Tumblers — Laser Engraved</div>
+    <div class="panel-desc">Polar Camel · Single or double sided · Retail and wholesale pricing</div>
+    <div class="form-row">
+      <div class="field"><label>Tumbler Size / Style</label>
+        <select id="tb-style" onchange="calcTumblers()">
+          <option value="19.60|40oz Stanley Style LTM7401">40oz Stanley Style — $19.60 blank</option>
+          <option value="9.95|20oz Basic Tumbler LTM7203">20oz Basic Tumbler — $9.95 blank</option>
+        </select></div>
+      <div class="field"><label>Order Type</label>
+        <select id="tb-type" onchange="calcTumblers()">
+          <option value="single">Single / Less than case</option>
+          <option value="retail">Retail by the Case</option>
+          <option value="wholesale">Wholesale by the Case</option>
+        </select></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Engraving</label>
+        <select id="tb-engrave" onchange="calcTumblers()">
+          <option value="single">Single sided</option>
+          <option value="double">Double sided</option>
+        </select></div>
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="tb-qty" value="1" min="1" oninput="calcTumblers()"></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="tb-disc" onchange="calcTumblers()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off — Veteran / Nonprofit</option>
+          <option value="20">20% off</option>
+        </select></div>
+    </div>
+    <button class="calc-btn" onclick="calcTumblers()">CALCULATE</button>
+    <div class="result-card" id="tb-result"></div>
+    <button class="add-to-quote-btn" id="tb-add" style="display:none" onclick="addToQuote('tb')">+ ADD TO ESTIMATE</button>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Order Type</th><th>Single Side</th><th>Double Side</th></tr></thead><tbody>
+      <tr><td>Single / Less than case</td><td>$40.48</td><td>$40.48</td></tr>
+      <tr><td>Retail by case (40oz)</td><td>$29.65</td><td>$31.65</td></tr>
+      <tr><td>Wholesale by case (40oz)</td><td>$27.65</td><td>$29.65</td></tr>
+      <tr><td>Retail by case (20oz)</td><td>$17.88</td><td>$19.88</td></tr>
+      <tr><td>Wholesale by case (20oz)</td><td>$15.88</td><td>$17.88</td></tr>
+    </tbody></table>
+    <div class="note-box">Case = 12 per color (40oz) or 24 per color (20oz). Price includes blank tumbler + engraving.</div>
+  </div>
+
+  <!-- ORNAMENTS -->
+  <div class="panel" id="panel-ornaments">
+    <div class="panel-title">Ornaments</div>
+    <div class="panel-desc">1/8" MDF or Acrylic · 3" and 4" · Laser cut &amp; engraved · Qty breaks</div>
+    <div class="form-row">
+      <div class="field"><label>Size</label>
+        <select id="or-size" onchange="calcOrnaments()">
+          <option value="3">3" Ornament</option>
+          <option value="4">4" Ornament</option>
+        </select></div>
+      <div class="field"><label>Material</label>
+        <select id="or-mat" onchange="calcOrnaments()">
+          <option value="mdf">1/8" MDF</option>
+          <option value="acrylic">1/8" Acrylic</option>
+        </select></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="or-qty" value="10" min="1" oninput="calcOrnaments()"></div>
+      <div class="field"><label>Qty Break</label>
+        <div id="or-qty-label" style="padding:8px 0;font-size:13px;color:var(--gray)">—</div></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="or-disc" onchange="calcOrnaments()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off — Veteran / Nonprofit</option>
+        </select></div>
+    </div>
+    <button class="calc-btn" onclick="calcOrnaments()">CALCULATE</button>
+    <div class="result-card" id="or-result"></div>
+    <button class="add-to-quote-btn" id="or-add" style="display:none" onclick="addToQuote('or')">+ ADD TO ESTIMATE</button>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Size</th><th>Material</th><th>1–9</th><th>10–49</th><th>50–99</th><th>100+</th></tr></thead><tbody>
+      <tr><td>3"</td><td>MDF</td><td>$4.00</td><td>$3.00</td><td>$2.25</td><td>$1.25</td></tr>
+      <tr><td>3"</td><td>Acrylic</td><td>$5.00</td><td>$3.25</td><td>$2.75</td><td>$1.75</td></tr>
+      <tr><td>4"</td><td>MDF</td><td>$5.00</td><td>$3.75</td><td>$2.75</td><td>$2.25</td></tr>
+      <tr><td>4"</td><td>Acrylic</td><td>$6.00</td><td>$4.25</td><td>$3.25</td><td>$2.75</td></tr>
+    </tbody></table>
+    <div class="note-box">Includes ornament and basic ribbon. Does not include individual packaging.</div>
+  </div>
+
+  <!-- PVC CARDS -->
+  <div class="panel" id="panel-pvcards">
+    <div class="panel-title">PVC Cards</div>
+    <div class="panel-desc">Regular or Holographic · Laser engraved · Custom ID, loyalty, and membership cards</div>
+    <div class="form-row">
+      <div class="field"><label>Card Type</label>
+        <select id="pv-type" onchange="calcPVCards()">
+          <option value="regular">Regular PVC</option>
+          <option value="holo">Holographic PVC</option>
+        </select></div>
+      <div class="field"><label>Sides</label>
+        <select id="pv-sides" onchange="calcPVCards()">
+          <option value="single">Single sided</option>
+          <option value="double">Double sided</option>
+        </select></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="pv-qty" value="50" min="1" oninput="calcPVCards()"></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="pv-disc" onchange="calcPVCards()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off — Veteran / Nonprofit</option>
+        </select></div>
+    </div>
+    <button class="calc-btn" onclick="calcPVCards()">CALCULATE</button>
+    <div class="result-card" id="pv-result"></div>
+    <button class="add-to-quote-btn" id="pv-add" style="display:none" onclick="addToQuote('pv')">+ ADD TO ESTIMATE</button>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Type</th><th>50 pcs</th><th>100 pcs</th></tr></thead><tbody>
+      <tr><td>Regular PVC</td><td>$45.00</td><td>$80.00</td></tr>
+      <tr><td>Holographic PVC</td><td>$85.00</td><td>$150.00</td></tr>
+    </tbody></table>
+    <div class="note-box">Double sided add 20% to base price. Custom card art required — design fee may apply.</div>
+  </div>
+
+  <!-- MEDALS -->
+  <div class="panel" id="panel-medals">
+    <div class="panel-title">Medals with Neck Ribbon</div>
+    <div class="panel-desc">1st, 2nd, 3rd place · Custom awards · $6 each</div>
+    <div class="form-row">
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="md-qty" value="3" min="1" oninput="calcMedals()"></div>
+      <div class="field"><label>Discount</label>
+        <select id="md-disc" onchange="calcMedals()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off — Veteran / Nonprofit</option>
+        </select></div>
+    </div>
+    <button class="calc-btn" onclick="calcMedals()">CALCULATE</button>
+    <div class="result-card" id="md-result"></div>
+    <button class="add-to-quote-btn" id="md-add" style="display:none" onclick="addToQuote('md')">+ ADD TO ESTIMATE</button>
+    <div class="note-box">$6 each includes neck ribbon. Source: mypremierline.com. Contact Lindsay for custom engraving add-on pricing.</div>
+  </div>
+
+  <!-- CINCH BAGS -->
+  <div class="panel" id="panel-bags">
+    <div class="panel-title">Cinch / Drawstring Bags</div>
+    <div class="panel-desc">DTF printed · Multiple styles · Qty breaks</div>
+    <div class="form-row single">
+      <div class="field"><label>Style</label>
+        <select id="bg-style" onchange="calcBags()">
+          <option value="7.18|LB Basic Drawstring (Polyester)">LB Basic Drawstring Pack — Polyester</option>
+          <option value="7.45|Q-Tees Cotton Sport Pack">Q-Tees Cotton Economical Sport Pack</option>
+          <option value="8.15|Port Authority Ultra-Core Cinch">Port Authority Ultra-Core Cinch Pack</option>
+          <option value="8.58|Port Authority Core Cotton Cinch">Port Authority Core Cotton Cinch</option>
+          <option value="10.29|Port Authority Zip-It Cinch Pack">Port Authority Zip-It Cinch Pack</option>
+          <option value="11.15|Port &amp; Company Core Fleece Cinch">Port &amp; Company Core Fleece Sweatshirt Cinch</option>
+        </select></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="bg-qty" value="10" min="5" oninput="calcBags()"></div>
+      <div class="field"><label>Qty Break</label>
+        <div id="bg-qty-label" style="padding:8px 0;font-size:13px;color:var(--gray)">—</div></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="bg-disc" onchange="calcBags()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off — Veteran / Nonprofit</option>
+          <option value="15">15% off</option>
+        </select></div>
+    </div>
+    <button class="calc-btn" onclick="calcBags()">CALCULATE</button>
+    <div class="result-card" id="bg-result"></div>
+    <button class="add-to-quote-btn" id="bg-add" style="display:none" onclick="addToQuote('bg')">+ ADD TO ESTIMATE</button>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Style</th><th>5–9</th><th>10–24</th><th>25–49</th><th>50–149</th><th>150+</th></tr></thead><tbody>
+      <tr><td>LB Basic (Poly)</td><td>$7.18</td><td>$6.61</td><td>$6.46</td><td>$6.25</td><td>$6.10</td></tr>
+      <tr><td>Q-Tees Cotton</td><td>$7.45</td><td>$6.85</td><td>$6.71</td><td>$6.48</td><td>$6.33</td></tr>
+      <tr><td>PA Ultra-Core</td><td>$8.15</td><td>$7.50</td><td>$7.34</td><td>$7.09</td><td>$6.93</td></tr>
+      <tr><td>PA Core Cotton</td><td>$8.58</td><td>$7.89</td><td>$7.72</td><td>$7.46</td><td>$7.29</td></tr>
+      <tr><td>PA Zip-It</td><td>$10.29</td><td>$9.47</td><td>$9.26</td><td>$8.95</td><td>$8.75</td></tr>
+      <tr><td>P&amp;C Fleece</td><td>$11.15</td><td>$10.26</td><td>$10.04</td><td>$9.70</td><td>$9.48</td></tr>
+    </tbody></table>
+    <div class="note-box">No setup fees. Veterans, public service, and nonprofits receive additional 10% off all quantities.</div>
+  </div>
+
+  <!-- GOLF BALLS -->
+  <div class="panel" id="panel-golfballs">
+    <div class="panel-title">Golf Balls — Laser Engraved</div>
+    <div class="panel-desc">UV laser engraved · Sold in sets of 3 · Custom logo or text</div>
+    <div class="form-row">
+      <div class="field"><label>Quantity (sets of 3)</label>
+        <input type="number" id="gb-qty" value="5" min="1" oninput="calcGolfBalls()"></div>
+      <div class="field"><label>Qty Break</label>
+        <div id="gb-qty-label" style="padding:8px 0;font-size:13px;color:var(--gray)">—</div></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="gb-disc" onchange="calcGolfBalls()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off — Veteran / Nonprofit</option>
+        </select></div>
+    </div>
+    <button class="calc-btn" onclick="calcGolfBalls()">CALCULATE</button>
+    <div class="result-card" id="gb-result"></div>
+    <button class="add-to-quote-btn" id="gb-add" style="display:none" onclick="addToQuote('gb')">+ ADD TO ESTIMATE</button>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Quantity (sets)</th><th>Price per set</th><th>Total</th></tr></thead><tbody>
+      <tr><td>3 sets (9 balls)</td><td>$7.50</td><td>$22.50</td></tr>
+      <tr><td>5 sets (15 balls)</td><td>$8.50</td><td>$42.50</td></tr>
+      <tr><td>10 sets (30 balls)</td><td>$8.25</td><td>$82.50</td></tr>
+      <tr><td>50 sets (150 balls)</td><td>$8.00</td><td>$400.00</td></tr>
+      <tr><td>100 sets (300 balls)</td><td>$7.75</td><td>$775.00</td></tr>
+    </tbody></table>
+    <div class="note-box">Price includes UV laser engraving. Great for corporate gifts, golf events, and tournaments. Custom logo preferred in vector format.</div>
+  </div>
+
+  <!-- BADGE BUDDIES -->
+  <div class="panel" id="panel-badgebuddies">
+    <div class="panel-title">Badge Buddies</div>
+    <div class="panel-desc">Horizontal or Vertical · Laser engraved · ID and name badge accessories</div>
+    <div class="form-row">
+      <div class="field"><label>Orientation</label>
+        <select id="bb-orient" onchange="calcBadgeBuddies()">
+          <option value="horiz|3.375x3.15">Horizontal (3.375" x 3.15")</option>
+          <option value="vert|2.25x4.35">Vertical (2.25" x 4.35")</option>
+        </select></div>
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="bb-qty" value="10" min="1" oninput="calcBadgeBuddies()"></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Discount</label>
+        <select id="bb-disc" onchange="calcBadgeBuddies()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off — Veteran / Nonprofit</option>
+        </select></div>
+    </div>
+    <button class="calc-btn" onclick="calcBadgeBuddies()">CALCULATE</button>
+    <div class="result-card" id="bb-result"></div>
+    <button class="add-to-quote-btn" id="bb-add" style="display:none" onclick="addToQuote('bb')">+ ADD TO ESTIMATE</button>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Quantity</th><th>Price Each</th></tr></thead><tbody>
+      <tr><td>1–19</td><td>$2.25</td></tr>
+      <tr><td>20–49</td><td>$1.75</td></tr>
+      <tr><td>50+</td><td>$1.25</td></tr>
+    </tbody></table>
+    <div class="note-box">Fits over standard ID badges. Custom text or logo laser engraved. Great for hospitals, schools, and corporate staff.</div>
+  </div>
 
   <!-- SALES TIPS PANEL -->
   <div class="panel" id="panel-salestips">
@@ -2294,6 +2668,201 @@ function calcDTF(){
   showAddBtn('dtf-add');
 }
 
+
+
+function calcCanopy(){
+  var pkgSel = document.getElementById('cn-pkg');
+  var pkgVal = pkgSel.value.split('|');
+  var basePrice = parseFloat(pkgVal[0]);
+  var pkgLetter = pkgVal[1];
+  var qty = parseInt(document.getElementById('cn-qty').value) || 1;
+  var bagPrice = parseFloat(document.getElementById('cn-bag').value) || 0;
+  var artFee = parseFloat(document.getElementById('cn-art').value) || 0;
+  var discPct = parseFloat(document.getElementById('cn-disc').value) || 0;
+
+  var tentTotal = basePrice * (1 - discPct/100) * qty;
+  var bagTotal = bagPrice * qty;
+  var total = tentTotal + bagTotal + artFee;
+
+  var pkgLabel = pkgSel.options[pkgSel.selectedIndex].text.split(' — ')[0];
+  var desc = qty + 'x ' + pkgLabel;
+  if(bagPrice > 0) desc += ' + Tent Bag';
+  if(artFee > 0) desc += ' + Design';
+
+  var lines = [
+    ['Package', pkgLabel],
+    ['Base Price', '$' + basePrice.toFixed(2) + ' ea']
+  ];
+  if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+  lines.push(['Tent Subtotal', '$' + tentTotal.toFixed(2)]);
+  if(bagPrice > 0) lines.push(['Tent Bag', '$' + bagTotal.toFixed(2)]);
+  if(artFee > 0) lines.push(['Design Fee', '$' + artFee.toFixed(2)]);
+  lines.push(['Qty', qty]);
+
+  showResult('cn-result', lines, total, qty, desc);
+
+  var detailLines = [['Package', pkgLabel], ['Per tent', '$' + basePrice.toFixed(2)]];
+  if(discPct > 0) detailLines.push(['Discount', '-' + discPct + '%']);
+  if(bagPrice > 0) detailLines.push(['Bag', '+$' + bagTotal.toFixed(2)]);
+  if(artFee > 0) detailLines.push(['Design', '+$' + artFee.toFixed(2)]);
+  detailLines.push(['Qty', qty]);
+
+  lastCalc.cn = {desc: desc, total: total, qty: qty, details: detailLines};
+  showAddBtn('cn-add');
+}
+
+
+// TUMBLERS
+var TUMBLER_PRICE = {
+  '40oz': { single: { single: 40.48, retail: 29.65, wholesale: 27.65 }, double: { single: 40.48, retail: 31.65, wholesale: 29.65 } },
+  '20oz': { single: { single: 27.94, retail: 17.88, wholesale: 15.88 }, double: { single: 27.94, retail: 19.88, wholesale: 17.88 } }
+};
+function calcTumblers(){
+  var styleVal = document.getElementById('tb-style').value.split('|');
+  var blankCost = parseFloat(styleVal[0]);
+  var styleLabel = styleVal[1];
+  var is40oz = styleLabel.indexOf('40oz') !== -1 || styleLabel.indexOf('40') !== -1;
+  var sizeKey = is40oz ? '40oz' : '20oz';
+  var orderType = document.getElementById('tb-type').value;
+  var engrave = document.getElementById('tb-engrave').value;
+  var qty = parseInt(document.getElementById('tb-qty').value) || 1;
+  var discPct = parseFloat(document.getElementById('tb-disc').value) || 0;
+  var unitPrice = TUMBLER_PRICE[sizeKey][engrave][orderType];
+  var total = unitPrice * qty * (1 - discPct/100);
+  var engLabel = engrave === 'single' ? 'Single sided' : 'Double sided';
+  var typeLabel = orderType === 'single' ? 'Single/Less than case' : orderType === 'retail' ? 'Retail by case' : 'Wholesale by case';
+  var desc = qty + 'x ' + styleLabel.split(' ').slice(0,3).join(' ') + ' — ' + engLabel;
+  var lines = [['Style', styleLabel], ['Order Type', typeLabel], ['Engraving', engLabel], ['Unit Price', '$' + unitPrice.toFixed(2)]];
+  if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+  lines.push(['Qty', qty]);
+  showResult('tb-result', lines, total, qty, desc);
+  lastCalc.tb = {desc:desc, total:total, qty:qty, details:[['Style',styleLabel],['Type',typeLabel],['Engraving',engLabel],['Qty',qty]]};
+  showAddBtn('tb-add');
+}
+
+// ORNAMENTS
+var ORNAMENT_PRICE = {
+  '3': { mdf: [4.00, 3.00, 2.25, 1.25], acrylic: [5.00, 3.25, 2.75, 1.75] },
+  '4': { mdf: [5.00, 3.75, 2.75, 2.25], acrylic: [6.00, 4.25, 3.25, 2.75] }
+};
+function calcOrnaments(){
+  var size = document.getElementById('or-size').value;
+  var mat = document.getElementById('or-mat').value;
+  var qty = parseInt(document.getElementById('or-qty').value) || 1;
+  var discPct = parseFloat(document.getElementById('or-disc').value) || 0;
+  var tiers = ORNAMENT_PRICE[size][mat];
+  var ti = qty >= 100 ? 3 : qty >= 50 ? 2 : qty >= 10 ? 1 : 0;
+  var unitPrice = tiers[ti];
+  var labels = ['1–9 (full price)', '10–49', '50–99', '100+'];
+  document.getElementById('or-qty-label').textContent = labels[ti];
+  var total = unitPrice * qty * (1 - discPct/100);
+  var matLabel = mat === 'mdf' ? '1/8" MDF' : '1/8" Acrylic';
+  var desc = qty + 'x ' + size + '" Ornament — ' + matLabel;
+  var lines = [['Size', size + '"'], ['Material', matLabel], ['Qty break', labels[ti]], ['Unit', '$' + unitPrice.toFixed(2)]];
+  if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+  lines.push(['Qty', qty]);
+  showResult('or-result', lines, total, qty, desc);
+  lastCalc.or = {desc:desc, total:total, qty:qty, details:[['Size',size+'"'],['Material',matLabel],['Qty break',labels[ti]],['Qty',qty]]};
+  showAddBtn('or-add');
+}
+
+// PVC CARDS
+function calcPVCards(){
+  var type = document.getElementById('pv-type').value;
+  var sides = document.getElementById('pv-sides').value;
+  var qty = parseInt(document.getElementById('pv-qty').value) || 50;
+  var discPct = parseFloat(document.getElementById('pv-disc').value) || 0;
+  // Base prices per 50/100 then extrapolate
+  var base50 = type === 'regular' ? 45 : 85;
+  var base100 = type === 'regular' ? 80 : 150;
+  var rateEach = qty <= 50 ? base50/50 : base100/100;
+  if(sides === 'double') rateEach *= 1.20;
+  var total = rateEach * qty * (1 - discPct/100);
+  var typeLabel = type === 'regular' ? 'Regular PVC' : 'Holographic PVC';
+  var sideLabel = sides === 'single' ? 'Single sided' : 'Double sided';
+  var desc = qty + 'x ' + typeLabel + ' Card — ' + sideLabel;
+  var lines = [['Type', typeLabel], ['Sides', sideLabel], ['Rate', '$' + rateEach.toFixed(2) + ' ea']];
+  if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+  lines.push(['Qty', qty]);
+  showResult('pv-result', lines, total, qty, desc);
+  lastCalc.pv = {desc:desc, total:total, qty:qty, details:[['Type',typeLabel],['Sides',sideLabel],['Qty',qty]]};
+  showAddBtn('pv-add');
+}
+
+// MEDALS
+function calcMedals(){
+  var qty = parseInt(document.getElementById('md-qty').value) || 1;
+  var discPct = parseFloat(document.getElementById('md-disc').value) || 0;
+  var unitPrice = 6.00;
+  var total = unitPrice * qty * (1 - discPct/100);
+  var desc = qty + 'x Medal with Neck Ribbon';
+  var lines = [['Unit Price', '$6.00'], ['Includes', 'Neck ribbon']];
+  if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+  lines.push(['Qty', qty]);
+  showResult('md-result', lines, total, qty, desc);
+  lastCalc.md = {desc:desc, total:total, qty:qty, details:[['Unit','$6.00 ea'],['Qty',qty]]};
+  showAddBtn('md-add');
+}
+
+// CINCH BAGS
+var BAG_DISCOUNTS = [0, 0.08, 0.10, 0.13, 0.15];
+function calcBags(){
+  var styleVal = document.getElementById('bg-style').value.split('|');
+  var basePrice = parseFloat(styleVal[0]);
+  var styleLabel = styleVal[1];
+  var qty = parseInt(document.getElementById('bg-qty').value) || 5;
+  var discPct = parseFloat(document.getElementById('bg-disc').value) || 0;
+  var qtyDisc = qty >= 150 ? 0.15 : qty >= 50 ? 0.13 : qty >= 25 ? 0.10 : qty >= 10 ? 0.08 : 0;
+  var qtyLabels = ['5–9 (full price)', '10–24 (-8%)', '25–49 (-10%)', '50–149 (-13%)', '150+ (-15%)'];
+  var qtyLabelIdx = qty >= 150 ? 4 : qty >= 50 ? 3 : qty >= 25 ? 2 : qty >= 10 ? 1 : 0;
+  document.getElementById('bg-qty-label').textContent = qtyLabels[qtyLabelIdx];
+  var unitPrice = basePrice * (1 - qtyDisc);
+  var total = unitPrice * qty * (1 - discPct/100);
+  var desc = qty + 'x ' + styleLabel;
+  var lines = [['Style', styleLabel], ['Base', '$' + basePrice.toFixed(2)], ['Qty break', qtyLabels[qtyLabelIdx]], ['Unit', '$' + unitPrice.toFixed(2)]];
+  if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+  lines.push(['Qty', qty]);
+  showResult('bg-result', lines, total, qty, desc);
+  lastCalc.bg = {desc:desc, total:total, qty:qty, details:[['Style',styleLabel],['Unit','$'+unitPrice.toFixed(2)],['Qty',qty]]};
+  showAddBtn('bg-add');
+}
+
+// GOLF BALLS
+var GOLF_TIERS = [{qty:3,price:7.50},{qty:5,price:8.50},{qty:10,price:8.25},{qty:50,price:8.00},{qty:100,price:7.75}];
+function calcGolfBalls(){
+  var qty = parseInt(document.getElementById('gb-qty').value) || 1;
+  var discPct = parseFloat(document.getElementById('gb-disc').value) || 0;
+  var tier = GOLF_TIERS[0];
+  for(var i=0;i<GOLF_TIERS.length;i++){ if(qty >= GOLF_TIERS[i].qty) tier = GOLF_TIERS[i]; }
+  var pricePerSet = tier.price;
+  document.getElementById('gb-qty-label').textContent = qty + ' sets (' + (qty*3) + ' balls) — $' + pricePerSet.toFixed(2) + '/set';
+  var total = pricePerSet * qty * (1 - discPct/100);
+  var desc = qty + ' sets (' + (qty*3) + ' balls) Golf Balls — Laser Engraved';
+  var lines = [['Sets', qty + ' (' + (qty*3) + ' balls)'], ['Per set', '$' + pricePerSet.toFixed(2)]];
+  if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+  showResult('gb-result', lines, total, qty, desc);
+  lastCalc.gb = {desc:desc, total:total, qty:qty, details:[['Sets',qty],['Balls',qty*3],['Per set','$'+pricePerSet.toFixed(2)]]};
+  showAddBtn('gb-add');
+}
+
+// BADGE BUDDIES
+function calcBadgeBuddies(){
+  var orientVal = document.getElementById('bb-orient').value.split('|');
+  var orientLabel = orientVal[0] === 'horiz' ? 'Horizontal' : 'Vertical';
+  var sizeLabel = orientVal[1];
+  var qty = parseInt(document.getElementById('bb-qty').value) || 1;
+  var discPct = parseFloat(document.getElementById('bb-disc').value) || 0;
+  var unitPrice = qty >= 50 ? 1.25 : qty >= 20 ? 1.75 : 2.25;
+  var qtyLabel = qty >= 50 ? '50+ ($1.25 ea)' : qty >= 20 ? '20–49 ($1.75 ea)' : '1–19 ($2.25 ea)';
+  var total = unitPrice * qty * (1 - discPct/100);
+  var desc = qty + 'x Badge Buddy — ' + orientLabel + ' (' + sizeLabel + ')';
+  var lines = [['Orientation', orientLabel], ['Size', sizeLabel], ['Qty break', qtyLabel], ['Unit', '$' + unitPrice.toFixed(2)]];
+  if(discPct > 0) lines.push(['Discount', '-' + discPct + '%']);
+  lines.push(['Qty', qty]);
+  showResult('bb-result', lines, total, qty, desc);
+  lastCalc.bb = {desc:desc, total:total, qty:qty, details:[['Orientation',orientLabel],['Size',sizeLabel],['Qty',qty]]};
+  showAddBtn('bb-add');
+}
 
 function calcWoodLetters(){
   var w = parseFloat(document.getElementById('wl-w').value) || 0;
