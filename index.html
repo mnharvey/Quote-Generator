@@ -202,6 +202,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="mobile-nav-btn" onclick="showPanel('banners',this)">🚩 Banners</button>
   <button class="mobile-nav-btn" onclick="showPanel('magnets',this)">🧲 Magnets</button>
   <button class="mobile-nav-btn" onclick="showPanel('stickers',this)">🏷 Stickers</button>
+  <button class="mobile-nav-btn" onclick="showPanel('promo',this)">🎁 Promo</button>
   <button class="mobile-nav-btn" onclick="showPanel('resources',this)">🔗 Resources</button>
 </div>
 
@@ -237,6 +238,8 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="cat-btn" onclick="showPanel('golfballs',this)"><span>⛳</span> Golf Balls</button>
   <button class="cat-btn" onclick="showPanel('badgebuddies',this)"><span>🏷</span> Badge Buddies</button>
   <button class="cat-btn" onclick="showPanel('bags',this)"><span>🎒</span> Cinch Bags</button>
+  <div class="sidebar-section">Promo Products</div>
+  <button class="cat-btn" onclick="showPanel('promo',this)"><span>🎁</span> Promo with Grace</button>
   <div class="sidebar-section">Reference</div>
   <button class="cat-btn" onclick="showPanel('salestips',this)"><span>💬</span> Sales Tips</button>
   <button class="cat-btn" onclick="showPanel('ref',this)"><span>📋</span> All Pricing</button>
@@ -1323,7 +1326,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <input type="number" id="tc-qty" value="1" min="1"></div>
     </div>
     <div style="background:var(--navy);color:var(--gold);padding:14px;margin:12px 0;font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;letter-spacing:.5px;border-left:4px solid var(--gold);">
-      📞 Pricing for tablecloths is by quote — contact Matt or Lindsay at 520-705-4026 or sales@little6llc.com
+      📞 Pricing for tablecloths is by quote — contact Matt or Lindsay at 520-705-4026 or <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="abd8cac7ced8ebc7c2dfdfc7ce9dc7c7c885c8c4c6">[email&#160;protected]</a>
     </div>
     <div class="panel-notes-wrap">
       <label>✏️ Notes for this estimate</label>
@@ -1799,6 +1802,159 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   </div>
 
 
+
+  <!-- PROMO PRODUCTS — Promo with Grace -->
+  <div class="panel" id="panel-promo">
+    <div class="panel-title">Promo with Grace</div>
+    <div class="panel-desc">Promotional products · DistributorCentral · Good · Better · Best — for rep use only</div>
+
+    <div class="note-box" style="margin-bottom:14px;">
+      <strong>Before you quote — set expectations:</strong><br>
+      ✅ <strong>Domestic stock</strong> = 7–14 business days, higher cost per unit.<br>
+      ⚠️ <strong>Overseas / import</strong> = 3–8 weeks sea freight, lower cost — plan ahead.<br>
+      🚨 <strong>Rush + overseas</strong> = air freight can 2–3× the product cost. Always confirm.<br>
+      📋 AI pricing is an industry estimate only — confirm with vendor before quoting customer.
+    </div>
+
+    <div class="form-row single">
+      <div class="field">
+        <label>What does the customer need?</label>
+        <textarea id="promo-request" rows="3"
+          placeholder="e.g. 150 branded coffee mugs for a bank employee appreciation event, budget around $8 each"
+          style="padding:9px 10px;border:1.5px solid var(--mid-gray);background:var(--white);font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--charcoal);outline:none;width:100%;resize:vertical;min-height:72px;"
+          oninput="promoClearResults()"></textarea>
+      </div>
+    </div>
+
+    <div class="form-row triple">
+      <div class="field">
+        <label>Quantity</label>
+        <input type="number" id="promo-qty" value="100" min="1" oninput="promoClearResults()">
+      </div>
+      <div class="field">
+        <label>Budget Per Unit</label>
+        <select id="promo-budget" onchange="promoClearResults()">
+          <option value="under5">Under $5</option>
+          <option value="5to10" selected>$5 – $10</option>
+          <option value="10to20">$10 – $20</option>
+          <option value="20to50">$20 – $50</option>
+          <option value="50plus">$50+</option>
+          <option value="nobudget">No budget specified</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Timeline</label>
+        <select id="promo-timeline" onchange="promoClearResults()">
+          <option value="rush">Rush — under 2 weeks</option>
+          <option value="standard" selected>Standard — 2–4 weeks</option>
+          <option value="relaxed">Relaxed — 4–8 weeks</option>
+          <option value="flexible">Flexible / No deadline</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row" style="grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--charcoal);cursor:pointer;padding:7px 10px;border:1.5px solid var(--mid-gray);background:var(--white);">
+        <input type="checkbox" id="flag-domestic" style="accent-color:var(--red);width:14px;height:14px;"> Domestic stock only
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--charcoal);cursor:pointer;padding:7px 10px;border:1.5px solid var(--mid-gray);background:var(--white);">
+        <input type="checkbox" id="flag-eco" style="accent-color:var(--red);width:14px;height:14px;"> Eco-friendly preferred
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--charcoal);cursor:pointer;padding:7px 10px;border:1.5px solid var(--mid-gray);background:var(--white);">
+        <input type="checkbox" id="flag-foodsafe" style="accent-color:var(--red);width:14px;height:14px;"> Food safe required
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--charcoal);cursor:pointer;padding:7px 10px;border:1.5px solid var(--mid-gray);background:var(--white);">
+        <input type="checkbox" id="flag-veterans" style="accent-color:var(--red);width:14px;height:14px;"> Veteran / Nonprofit discount
+      </label>
+    </div>
+
+    <button class="calc-btn" id="promo-search-btn" onclick="getPromoSuggestions()">🔍 FIND GOOD · BETTER · BEST</button>
+    <div id="promo-error" class="note-box" style="display:none;border-left-color:var(--red);color:var(--red);background:#fff3f3;margin-top:10px;"></div>
+
+    <div id="promo-loading" style="display:none;text-align:center;padding:28px 16px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Researching options...</div>
+      <div style="font-size:11px;color:#aaa;">Checking promo industry pricing, lead times, and sourcing</div>
+      <div style="margin-top:14px;display:flex;justify-content:center;gap:5px;">
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--gold);animation:promoPulse 1.2s ease-in-out infinite;"></div>
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--gold);animation:promoPulse 1.2s ease-in-out infinite .2s;"></div>
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--gold);animation:promoPulse 1.2s ease-in-out infinite .4s;"></div>
+      </div>
+    </div>
+
+    <div id="promo-results" style="display:none;">
+      <div style="background:var(--navy);padding:8px 12px;margin-top:12px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+        <span id="promo-context-text" style="font-size:11px;color:rgba(255,255,255,.5);font-family:'Source Sans 3',sans-serif;"></span>
+        <button onclick="promoClearResults()" style="background:none;border:none;color:rgba(255,255,255,.35);font-size:10px;cursor:pointer;font-family:'Oswald',sans-serif;letter-spacing:1px;text-transform:uppercase;">✕ NEW SEARCH</button>
+      </div>
+
+      <div id="promo-card-good" style="margin-bottom:10px;">
+        <div class="result-card show" style="border-left-color:#4a90d9;">
+          <div class="result-label" style="color:#4a90d9;">✓ GOOD</div>
+          <div class="promo-product-name" style="font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:6px;"></div>
+          <div class="promo-description" style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.5;margin-bottom:8px;"></div>
+          <div class="promo-tags" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;"></div>
+          <div class="result-total">
+            <span class="r-key">Est. Total</span>
+            <div><div class="r-val promo-total-price" style="color:#4a90d9;"></div><div class="promo-unit-line" style="font-family:'Courier Prime',monospace;font-size:11px;color:rgba(255,255,255,.4);"></div></div>
+          </div>
+          <div class="promo-talking-points" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:rgba(255,255,255,.6);line-height:1.5;"></div>
+        </div>
+        <button class="add-to-quote-btn" onclick="addPromoToQuote('good')" style="border-color:#4a90d9;color:#4a90d9;">+ ADD TO ESTIMATE</button>
+      </div>
+
+      <div id="promo-card-better" style="margin-bottom:10px;">
+        <div class="result-card show" style="border-left-color:var(--gold);">
+          <div class="result-label" style="color:var(--gold);">⭐ BETTER — Most Popular</div>
+          <div class="promo-product-name" style="font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:6px;"></div>
+          <div class="promo-description" style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.5;margin-bottom:8px;"></div>
+          <div class="promo-tags" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;"></div>
+          <div class="result-total">
+            <span class="r-key">Est. Total</span>
+            <div><div class="r-val promo-total-price" style="color:var(--gold);"></div><div class="promo-unit-line" style="font-family:'Courier Prime',monospace;font-size:11px;color:rgba(255,255,255,.4);"></div></div>
+          </div>
+          <div class="promo-talking-points" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:rgba(255,255,255,.6);line-height:1.5;"></div>
+        </div>
+        <button class="add-to-quote-btn" onclick="addPromoToQuote('better')" style="border-color:var(--gold);color:#a07d20;">+ ADD TO ESTIMATE</button>
+      </div>
+
+      <div id="promo-card-best" style="margin-bottom:10px;">
+        <div class="result-card show" style="border-left-color:var(--red);">
+          <div class="result-label" style="color:var(--red);">🏆 BEST — Premium Choice</div>
+          <div class="promo-product-name" style="font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:6px;"></div>
+          <div class="promo-description" style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.5;margin-bottom:8px;"></div>
+          <div class="promo-tags" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;"></div>
+          <div class="result-total">
+            <span class="r-key">Est. Total</span>
+            <div><div class="r-val promo-total-price" style="color:var(--red);"></div><div class="promo-unit-line" style="font-family:'Courier Prime',monospace;font-size:11px;color:rgba(255,255,255,.4);"></div></div>
+          </div>
+          <div class="promo-talking-points" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:rgba(255,255,255,.6);line-height:1.5;"></div>
+        </div>
+        <button class="add-to-quote-btn" onclick="addPromoToQuote('best')" style="border-color:var(--red);color:var(--red);">+ ADD TO ESTIMATE</button>
+      </div>
+
+      <div id="promo-upsell" class="note-box" style="display:none;border-left-color:var(--gold);"></div>
+    </div>
+
+    <div class="section-divider"></div>
+    <div style="font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:10px;">Quick Category Starters</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px;">
+      <button class="add-to-quote-btn" style="display:block;" onclick="promoQuickFill('Branded coffee mugs or travel tumblers')">☕ Drinkware</button>
+      <button class="add-to-quote-btn" style="display:block;" onclick="promoQuickFill('Branded pens or writing instruments')">🖊️ Pens / Writing</button>
+      <button class="add-to-quote-btn" style="display:block;" onclick="promoQuickFill('Branded tote bags or drawstring bags')">🎒 Bags / Totes</button>
+      <button class="add-to-quote-btn" style="display:block;" onclick="promoQuickFill('Branded hats or caps')">🧢 Hats / Caps</button>
+      <button class="add-to-quote-btn" style="display:block;" onclick="promoQuickFill('Branded power banks or tech accessories')">🔋 Tech Items</button>
+      <button class="add-to-quote-btn" style="display:block;" onclick="promoQuickFill('Branded notepads, padfolios, or desk items')">📓 Desk / Office</button>
+      <button class="add-to-quote-btn" style="display:block;" onclick="promoQuickFill('Branded t-shirts or polo shirts for a corporate event')">👕 Event Apparel</button>
+      <button class="add-to-quote-btn" style="display:block;" onclick="promoQuickFill('Branded keychains, lanyards, or small giveaway items')">🗝️ Small Giveaways</button>
+    </div>
+
+    <div class="note-box" style="margin-top:12px;">
+      <strong>Vendors on file:</strong> Leprechaun Promotions (ASI 67075) — Drinkware specialist.<br>
+      <strong>Adding a vendor?</strong> Contact Matt to add their specialties to the AI knowledge base.
+    </div>
+  </div>
+  <!-- end panel-promo -->
+
 </div><!-- /content -->
 
 <!-- QUOTE DRAWER -->
@@ -1871,7 +2027,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const SERVER_URL='https://api.little6llc.com:3001';
   const SHEET_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vR6BMt8raR1OUAspd8mJzJsj2Zj4N_hGQZV6oJo3XSqZI6oHGHBDO8Wf68FDTHR2A/pub?output=csv';
 
@@ -3434,12 +3590,210 @@ fetch(SHEET_URL)
   })
   .catch(function(){
     var el=document.getElementById('sheet-status');
-    if(el){el.textContent='Using built-in pricing';}
-  });
+   
+// ─── PROMO WITH GRACE ──────────────────────────────────────
 
-document.getElementById('q-date').value=new Date().toLocaleDateString();
-initShirtCatalog();
-showPanel('home', document.querySelector('.cat-btn'));
-</script>
-</body>
-</html>
+var PROMO_VENDORS = [
+  {
+    name: 'Leprechaun Promotions',
+    asi: '67075',
+    dcAccount: '109554',
+    specialties: ['drinkware','mugs','tumblers','cups','stadium cups','insulated products','coffee accessories','beverage holders','plastic cups'],
+    notes: 'Drinkware specialist. Strong on insulated products, stadium cups, and coffee accessories. Domestic and import options available.'
+  }
+];
+
+var promoCurrentResults = null;
+
+function promoClearResults() {
+  promoCurrentResults = null;
+  document.getElementById('promo-results').style.display = 'none';
+  document.getElementById('promo-error').style.display = 'none';
+  document.getElementById('promo-loading').style.display = 'none';
+}
+
+function promoQuickFill(text) {
+  document.getElementById('promo-request').value = text;
+  promoClearResults();
+  document.getElementById('promo-request').focus();
+}
+
+function getPromoSuggestions() {
+  var request = (document.getElementById('promo-request').value || '').trim();
+  if (!request) { alert('Please describe what the customer needs.'); return; }
+
+  var qty      = parseInt(document.getElementById('promo-qty').value) || 100;
+  var budget   = document.getElementById('promo-budget').value;
+  var timeline = document.getElementById('promo-timeline').value;
+  var domestic = document.getElementById('flag-domestic').checked;
+  var eco      = document.getElementById('flag-eco').checked;
+  var foodsafe = document.getElementById('flag-foodsafe').checked;
+  var veteran  = document.getElementById('flag-veterans').checked;
+
+  var budgetLabel   = {under5:'under $5/unit','5to10':'$5-$10/unit','10to20':'$10-$20/unit','20to50':'$20-$50/unit','50plus':'$50+/unit','nobudget':'no specific budget'}[budget]||budget;
+  var timelineLabel = {rush:'rush (under 2 weeks)',standard:'standard (2-4 weeks)',relaxed:'relaxed (4-8 weeks)',flexible:'flexible'}[timeline]||timeline;
+
+  var flags = [];
+  if (domestic) flags.push('domestic stock only - no overseas shipping');
+  if (eco)      flags.push('eco-friendly or sustainable preferred');
+  if (foodsafe) flags.push('must be food safe');
+  if (veteran)  flags.push('customer is veteran or nonprofit - note any applicable discounts');
+
+  var vendorContext = PROMO_VENDORS.map(function(v){
+    return '- '+v.name+' (ASI '+v.asi+'): '+v.notes+' Specialties: '+v.specialties.join(', ')+'.';
+  }).join('\n');
+
+  var prompt = [
+    'You are an expert promotional products sales assistant for Promo with Grace, a promotional products distributor (a brand of Little 6 Industries LLC, SDVOSB, Maricopa AZ).',
+    '',
+    'VENDORS ON FILE:',
+    vendorContext,
+    '',
+    'CUSTOMER REQUEST: '+request,
+    'QUANTITY: '+qty+' units',
+    'BUDGET: '+budgetLabel,
+    'TIMELINE: '+timelineLabel,
+    flags.length ? 'SPECIAL REQUIREMENTS: '+flags.join('; ') : '',
+    '',
+    'Return EXACTLY three tiers: Good, Better, Best.',
+    '',
+    'CRITICAL RULES:',
+    '1. Prices must be realistic promo industry averages at the given quantity. Do not underestimate.',
+    '2. Always flag if a product ships from overseas vs domestic stock.',
+    '3. If timeline is rush and product ships overseas, warn about air freight cost in the warning field.',
+    '4. Better tier = most commonly chosen option.',
+    '5. Include one specific talking point the rep can say to the customer.',
+    '6. If Leprechaun Promotions matches the request (drinkware), mention them by name.',
+    '',
+    'Respond ONLY with valid JSON - no markdown, no backticks, no explanation:',
+    '{',
+    '  "good":   { "name":"", "unitPrice":0.00, "totalPrice":0.00, "description":"", "leadTime":"", "origin":"domestic OR overseas", "originLabel":"", "talkingPoint":"", "warning":"", "tags":[] },',
+    '  "better": { "name":"", "unitPrice":0.00, "totalPrice":0.00, "description":"", "leadTime":"", "origin":"domestic OR overseas", "originLabel":"", "talkingPoint":"", "warning":"", "tags":[] },',
+    '  "best":   { "name":"", "unitPrice":0.00, "totalPrice":0.00, "description":"", "leadTime":"", "origin":"domestic OR overseas", "originLabel":"", "talkingPoint":"", "warning":"", "tags":[] },',
+    '  "upsell": ""',
+    '}'
+  ].filter(Boolean).join('\n');
+
+  document.getElementById('promo-loading').style.display = 'block';
+  document.getElementById('promo-results').style.display = 'none';
+  document.getElementById('promo-error').style.display = 'none';
+  var btn = document.getElementById('promo-search-btn');
+  btn.disabled = true;
+  btn.textContent = 'Searching...';
+
+  fetch(SERVER_URL + '/promo-suggest', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt: prompt, qty: qty })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    document.getElementById('promo-loading').style.display = 'none';
+    btn.disabled = false;
+    btn.textContent = '\uD83D\uDD0D FIND GOOD \u00B7 BETTER \u00B7 BEST';
+    if (!data.success) { showPromoError(data.error || 'Unknown error'); return; }
+    var result;
+    try {
+      var raw = data.text.replace(/```json|```/g,'').trim();
+      result = JSON.parse(raw);
+    } catch(e) { showPromoError('Could not parse response. Try again.'); return; }
+    promoCurrentResults = { good: result.good, better: result.better, best: result.best, qty: qty, request: request };
+    renderPromoResults(result, qty, request, budgetLabel, timelineLabel);
+  })
+  .catch(function(){
+    document.getElementById('promo-loading').style.display = 'none';
+    btn.disabled = false;
+    btn.textContent = '\uD83D\uDD0D FIND GOOD \u00B7 BETTER \u00B7 BEST';
+    showPromoError('Could not reach server. Check connection.');
+  });
+}
+
+function showPromoError(msg) {
+  var el = document.getElementById('promo-error');
+  el.textContent = 'Warning: ' + msg;
+  el.style.display = 'block';
+}
+
+var PROMO_ORIGIN = {
+  domestic: { label: 'Domestic Stock', color: 'var(--green)' },
+  overseas: { label: 'Ships Overseas', color: '#856404' },
+  import:   { label: 'Import / Overseas', color: '#856404' },
+  varies:   { label: 'Origin Varies', color: 'var(--gray)' }
+};
+
+function renderPromoResults(result, qty, request, budgetLabel, timelineLabel) {
+  ['good','better','best'].forEach(function(tier){
+    var d = result[tier];
+    if (!d) return;
+    var card = document.getElementById('promo-card-' + tier);
+    card.querySelector('.promo-product-name').textContent = d.name || '--';
+    card.querySelector('.promo-description').textContent  = d.description || '';
+    card.querySelector('.promo-total-price').textContent  = '$' + parseFloat(d.totalPrice || (d.unitPrice * qty) || 0).toFixed(2);
+    card.querySelector('.promo-unit-line').textContent    = '$' + parseFloat(d.unitPrice || 0).toFixed(2) + ' each x ' + qty;
+    card.querySelector('.promo-talking-points').textContent = 'Talking point: ' + (d.talkingPoint || '');
+    var tagsEl = card.querySelector('.promo-tags');
+    var tags = [];
+    var oKey = (d.origin || 'varies').toLowerCase().replace(/[^a-z]/g,'');
+    var oStyle = PROMO_ORIGIN[oKey] || PROMO_ORIGIN.varies;
+    tags.push({ text: d.originLabel || oStyle.label, color: oStyle.color });
+    if (d.leadTime) tags.push({ text: d.leadTime, color: 'var(--gray)' });
+    if (d.warning)  tags.push({ text: d.warning,  color: 'var(--red)' });
+    if (d.tags) d.tags.slice(0,3).forEach(function(t){ tags.push({ text: t, color: 'var(--gray)' }); });
+    tagsEl.innerHTML = tags.map(function(t){
+      return '<span style="display:inline-block;padding:2px 8px;font-size:10px;font-family:\'Oswald\',sans-serif;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:'+t.color+';border:1px solid '+t.color+'33;background:rgba(255,255,255,.04);">'+t.text+'</span>';
+    }).join('');
+  });
+  var upsellEl = document.getElementById('promo-upsell');
+  if (result.upsell && result.upsell.length > 5) {
+    upsellEl.textContent = 'Upsell opportunity: ' + result.upsell;
+    upsellEl.style.display = 'block';
+  } else {
+    upsellEl.style.display = 'none';
+  }
+  document.getElementById('promo-context-text').textContent =
+    '"' + request + '" - Qty ' + qty + ' - ' + budgetLabel + ' - ' + timelineLabel;
+  document.getElementById('promo-results').style.display = 'block';
+}
+
+function addPromoToQuote(tier) {
+  if (!promoCurrentResults || !promoCurrentResults[tier]) {
+    alert('No results to add. Run a search first.'); return;
+  }
+  var d    = promoCurrentResults[tier];
+  var qty  = promoCurrentResults.qty || 1;
+  var tierLabel = { good:'Good', better:'Better', best:'Best' }[tier];
+  var desc  = '[Promo with Grace] ' + d.name + ' (' + tierLabel + ') x' + qty;
+  var total = parseFloat(d.totalPrice || (d.unitPrice * qty) || 0);
+  var noteText = (d.leadTime || '') + (d.originLabel ? ' - ' + d.originLabel : '');
+  itemCounter++;
+  quoteItems.push({
+    desc: desc,
+    total: total,
+    qty: qty,
+    details: [
+      ['Unit price', '$' + parseFloat(d.unitPrice || 0).toFixed(2)],
+      ['Lead time',  d.leadTime || '--'],
+      ['Source',     'Promo with Grace / DC']
+    ],
+    note: noteText,
+    id: itemCounter
+  });
+  renderQuote();
+  var card = document.getElementById('promo-card-' + tier);
+  var btn  = card.querySelector('.add-to-quote-btn');
+  var orig = btn.textContent;
+  btn.textContent = '+ ADDED';
+  btn.style.background  = 'var(--green)';
+  btn.style.color       = 'white';
+  btn.style.borderColor = 'var(--green)';
+  setTimeout(function(){
+    btn.textContent = orig;
+    btn.style.background = btn.style.color = btn.style.borderColor = '';
+  }, 1500);
+}
+
+(function(){
+  var s = document.createElement('style');
+  s.textContent = '@keyframes promoPulse{0%,100%{opacity:.2;transform:scale(.8);}50%{opacity:1;transform:scale(1.1);}}';
+  document.head.appendChild(s);
+})();
