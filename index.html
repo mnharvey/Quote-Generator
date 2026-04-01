@@ -292,6 +292,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="hcc-title">Sales Tips</div>
         <div class="hcc-items">Talking points · Objection handlers · Cross-sell</div>
       </div>
+      <div class="home-cat-card" onclick="showPanel('promo', document.querySelector('.cat-btn'))">
+        <div class="hcc-icon">🎁</div>
+        <div class="hcc-title">Promo with Grace</div>
+        <div class="hcc-items">Good · Better · Best · AI-powered · DistributorCentral</div>
+      </div>
     </div>
   </div>
 
@@ -3590,7 +3595,9 @@ fetch(SHEET_URL)
   })
   .catch(function(){
     var el=document.getElementById('sheet-status');
-   
+    if(el){el.textContent='';el.style.color='';}
+  });
+
 // ─── PROMO WITH GRACE ──────────────────────────────────────
 
 var PROMO_VENDORS = [
@@ -3797,3 +3804,7 @@ function addPromoToQuote(tier) {
   s.textContent = '@keyframes promoPulse{0%,100%{opacity:.2;transform:scale(.8);}50%{opacity:1;transform:scale(1.1);}}';
   document.head.appendChild(s);
 })();
+
+</script>
+</body>
+</html>
