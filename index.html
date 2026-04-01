@@ -3698,7 +3698,7 @@ function getPromoSuggestions() {
     flags.length ? 'REQUIREMENTS: '+flags.join('; ') : '',
     'Return EXACTLY three tiers Good/Better/Best. Rules: realistic industry prices, flag overseas vs domestic, warn on rush+overseas=air freight, Better=most popular, include one rep talking point, mention Leprechaun if drinkware.',
     'CRITICAL: Respond with a single raw JSON object only. No text before or after. No markdown. No backticks. Start your response with { and end with }',
-    '{"good":{"name":"","unitPrice":0.00,"totalPrice":0.00,"description":"","leadTime":"","origin":"domestic","originLabel":"","talkingPoint":"","warning":"","tags":[]},"better":{"name":"","unitPrice":0.00,"totalPrice":0.00,"description":"","leadTime":"","origin":"domestic","originLabel":"","talkingPoint":"","warning":"","tags":[]},"best":{"name":"","unitPrice":0.00,"totalPrice":0.00,"description":"","leadTime":"","origin":"domestic","originLabel":"","talkingPoint":"","warning":"","tags":[]},"upsell":""}'
+    '{"good":{"name":"","unitPrice":0.00,"totalPrice":0.00,"description":"","leadTime":"","origin":"domestic","originLabel":"","talkingPoint":"","warning":"","tags":[]},"better":{"name":"","unitPrice":0.00,"totalPrice":0.00,"description":"","leadTime":"","origin":"domestic","originLabel":"","talkingPoint":"","warning":"","tags":[]},"best":{"name":"","unitPrice":0.00,"totalPrice":0.00,"description":"","leadTime":"","origin":"domestic","originLabel":"","talkingPoint":"","warning":"","tags":[]},"upsell":"","categoryMatch":"drinkware"}'
   ].filter(Boolean).join('\n');
 
   document.getElementById('promo-loading').style.display = 'block';
@@ -3725,8 +3725,12 @@ function getPromoSuggestions() {
       if (!jsonMatch) { showPromoError('Could not parse response. Try again.'); return; }
       result = JSON.parse(jsonMatch[0]);
     } catch(e) {showPromoError('Could not parse response. Try again.'); return;}
-    promoCurrentResults = {good:result.good, better:result.better, best:result.best, qty:qty, request:request};
+    promoCurrentResults = {good:result.good, better:result.better, best:result.best, qty:qty, request:request, categoryMatch:result.categoryMatch||''};
     renderPromoResults(result, qty, request, budgetLabel, timelineLabel);
+    var cat = result.categoryMatch || request;
+    renderVendorBlock(document.getElementById('promo-card-good'), cat);
+    renderVendorBlock(document.getElementById('promo-card-better'), cat);
+    renderVendorBlock(document.getElementById('promo-card-best'), cat);
   })
   .catch(function(){
     document.getElementById('promo-loading').style.display = 'none';
@@ -3774,6 +3778,31 @@ function renderPromoResults(result, qty, request, budgetLabel, timelineLabel) {
   else {upsellEl.style.display='none';}
   document.getElementById('promo-context-text').textContent = '"'+request+'" | Qty '+qty+' | '+budgetLabel+' | '+timelineLabel;
   document.getElementById('promo-results').style.display = 'block';
+}
+
+function renderVendorBlock(card, categoryMatch) {
+  var existing = card.querySelector('.promo-vendor-block');
+  if (existing) existing.remove();
+  var vendor = getVendorForCategory(categoryMatch || '');
+  if (!vendor) return;
+  var block = document.createElement('div');
+  block.className = 'promo-vendor-block';
+  block.style.cssText = 'background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:10px 14px;margin-top:10px;';
+  block.innerHTML =
+    '<div style="font-family:\'Oswald\',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">ORDER FROM</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
+      '<div>' +
+        '<div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Supplier</div>' +
+        '<div style="font-size:13px;font-weight:600;color:var(--white);">' + vendor.name + '</div>' +
+        '<div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:1px;">ASI ' + vendor.asi + ' &middot; DC #' + vendor.dcAccount + '</div>' +
+      '</div>' +
+      '<div>' +
+        '<div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Contact</div>' +
+        '<div style="font-size:13px;color:var(--white);">' + vendor.phone + '</div>' +
+        '<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:1px;">' + vendor.email + '</div>' +
+      '</div>' +
+    '</div>';
+  card.querySelector('.result-card').appendChild(block);
 }
 
 function addPromoToQuote(tier) {
