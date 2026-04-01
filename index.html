@@ -3644,7 +3644,7 @@ function getPromoSuggestions() {
     'REQUEST: '+request+' | QTY: '+qty+' | BUDGET: '+budgetLabel+' | TIMELINE: '+timelineLabel,
     flags.length ? 'REQUIREMENTS: '+flags.join('; ') : '',
     'Return EXACTLY three tiers Good/Better/Best. Rules: realistic industry prices, flag overseas vs domestic, warn on rush+overseas=air freight, Better=most popular, include one rep talking point, mention Leprechaun if drinkware.',
-    'Respond ONLY with valid JSON no markdown:',
+    'CRITICAL: Respond with a single raw JSON object only. No text before or after. No markdown. No backticks. Start your response with { and end with }',
     '{"good":{"name":"","unitPrice":0.00,"totalPrice":0.00,"description":"","leadTime":"","origin":"domestic","originLabel":"","talkingPoint":"","warning":"","tags":[]},"better":{"name":"","unitPrice":0.00,"totalPrice":0.00,"description":"","leadTime":"","origin":"domestic","originLabel":"","talkingPoint":"","warning":"","tags":[]},"best":{"name":"","unitPrice":0.00,"totalPrice":0.00,"description":"","leadTime":"","origin":"domestic","originLabel":"","talkingPoint":"","warning":"","tags":[]},"upsell":""}'
   ].filter(Boolean).join('\n');
 
@@ -3665,8 +3665,13 @@ function getPromoSuggestions() {
     btn.disabled = false; btn.textContent = '\uD83D\uDD0D FIND GOOD \u00B7 BETTER \u00B7 BEST';
     if (!data.success) {showPromoError(data.error||'Unknown error'); return;}
     var result;
-    try {result = JSON.parse(data.text.replace(/```json|```/g,'').trim());}
-    catch(e) {showPromoError('Could not parse response. Try again.'); return;}
+    try {
+      var raw = data.text;
+      // Strip any markdown or extra text, find the JSON object
+      var jsonMatch = raw.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) { showPromoError('Could not parse response. Try again.'); return; }
+      result = JSON.parse(jsonMatch[0]);
+    } catch(e) {showPromoError('Could not parse response. Try again.'); return;}
     promoCurrentResults = {good:result.good, better:result.better, best:result.best, qty:qty, request:request};
     renderPromoResults(result, qty, request, budgetLabel, timelineLabel);
   })
