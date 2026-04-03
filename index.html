@@ -3771,15 +3771,71 @@ function sendFeedback(){
 }
 
 // ─── PROMO WITH GRACE ────────────────────────────────────────
-var PROMO_VENDORS=[{
-  name:'Leprechaun Promotions',
-  asi:'67075',
-  dcAccount:'109554',
-  phone:'888-922-0080',
-  email:'customercare@leprechaunpromotions.com',
-  specialties:['drinkware','mugs','tumblers','cups','stadium cups','insulated products','coffee accessories','beverage holders','plastic cups'],
-  notes:'Drinkware specialist. Strong on insulated products, stadium cups, and coffee accessories. Domestic and import options available.'
-}];
+var PROMO_VENDORS=[
+  {
+    name:'Leprechaun Promotions',
+    asi:'67075',
+    dcAccount:'109554',
+    phone:'888-922-0080',
+    email:'customercare@leprechaunpromotions.com',
+    specialties:['drinkware','mugs','tumblers','cups','stadium cups','insulated products','coffee accessories','beverage holders','plastic cups'],
+    notes:'Drinkware specialist. Strong on insulated products, stadium cups, and coffee accessories. Domestic and import options available.'
+  },
+  {
+    name:'Pilot Pen',
+    asi:'',
+    dcAccount:'',
+    phone:'',
+    email:'',
+    specialties:['pens','writing instruments','ballpoint','rollerball','gel pen','markers','highlighters'],
+    notes:'Pilot Pen — premium writing instruments. Known for quality ballpoint, gel, and rollerball pens. Great for professional corporate gifts.'
+  },
+  {
+    name:'Pentel of America',
+    asi:'',
+    dcAccount:'',
+    phone:'',
+    email:'',
+    specialties:['pens','pencils','writing instruments','markers','mechanical pencils','correction'],
+    notes:'Pentel — full range of writing instruments including pens, pencils, markers, and correction products. Strong brand recognition.'
+  },
+  {
+    name:'Liqui-Mark Corp.',
+    asi:'',
+    dcAccount:'',
+    phone:'',
+    email:'',
+    specialties:['pens','writing instruments','promotional pens','budget pens','stylus pens','highlighters'],
+    notes:'Liqui-Mark — promotional writing instruments specialist. Wide range of budget to mid-range pens. Good for high-volume giveaways.'
+  },
+  {
+    name:'Liberty Bags',
+    asi:'',
+    dcAccount:'',
+    phone:'',
+    email:'',
+    specialties:['bags','totes','drawstring bags','tote bags','cotton bags','non-woven bags','backpacks','cinch bags'],
+    notes:'Liberty Bags — large bag and tote specialist based in Fort Worth TX. Wide selection of totes, drawstring bags, and backpacks at competitive prices.'
+  },
+  {
+    name:'BAG MAKERS Inc.',
+    asi:'',
+    dcAccount:'',
+    phone:'',
+    email:'',
+    specialties:['bags','totes','reusable bags','shopping bags','promotional bags','non-woven totes','custom bags'],
+    notes:'BAG MAKERS — promotional bag specialist. Strong on reusable shopping bags, totes, and non-woven promotional bags.'
+  },
+  {
+    name:'Koozie Group',
+    asi:'',
+    dcAccount:'',
+    phone:'',
+    email:'',
+    specialties:['bags','koozies','can coolers','drinkware','totes','cooler bags','lunch bags','beverage accessories'],
+    notes:'Koozie Group — known for can coolers and drinkware accessories, also strong on bags, totes, and cooler bags. Domestic production available.'
+  }
+];
 
 function getVendorForCategory(cat){
   if(!cat)return null;
