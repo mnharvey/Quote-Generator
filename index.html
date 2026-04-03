@@ -203,6 +203,8 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="mobile-nav-btn" onclick="showPanel('banners',this)">🚩 Banners</button>
   <button class="mobile-nav-btn" onclick="showPanel('magnets',this)">🧲 Magnets</button>
   <button class="mobile-nav-btn" onclick="showPanel('stickers',this)">🏷 Stickers</button>
+  <button class="mobile-nav-btn" onclick="showPanel('foamboard',this)">🪧 Foam Board</button>
+  <button class="mobile-nav-btn" onclick="showPanel('bigheads',this)">🙂 Big Heads</button>
   <button class="mobile-nav-btn" onclick="showPanel('promo',this)">🎁 Promo</button>
   <button class="mobile-nav-btn" onclick="showPanel('resources',this)">🔗 Resources</button>
 </div>
@@ -224,6 +226,8 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <div class="sidebar-section">Hard Goods</div>
   <button class="cat-btn" onclick="showPanel('cornhole',this)"><span>🏆</span> Cornhole Trophies</button>
   <button class="cat-btn" onclick="showPanel('woodletters',this)"><span>🪵</span> Wood Letter Cutouts</button>
+  <button class="cat-btn" onclick="showPanel('foamboard',this)"><span>🪧</span> Foam Board Prints</button>
+  <button class="cat-btn" onclick="showPanel('bigheads',this)"><span>🙂</span> Big Heads</button>
   <button class="cat-btn" onclick="showPanel('canopy',this)"><span>⛺</span> Canopy Tents</button>
   <button class="cat-btn" onclick="showPanel('ornaments',this)"><span>🎄</span> Ornaments</button>
   <div class="sidebar-section">Print &amp; Transfers</div>
@@ -276,7 +280,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <div class="home-cat-card" onclick="showPanel('cornhole', document.querySelector('.cat-btn'))">
         <div class="hcc-icon">🏆</div>
         <div class="hcc-title">Hard Goods</div>
-        <div class="hcc-items">Cornhole · Wood Letters · Canopy Tents · Ornaments</div>
+        <div class="hcc-items">Cornhole · Wood Letters · Canopy Tents · Ornaments · Foam Board · Big Heads</div>
       </div>
       <div class="home-cat-card" onclick="showPanel('banners', document.querySelector('.cat-btn'))">
         <div class="hcc-icon">🚩</div>
@@ -1945,6 +1949,112 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     </div>
   </div>
   <!-- end panel-promo -->
+
+  <!-- FOAM BOARD PRINTS -->
+  <div class="panel" id="panel-foamboard">
+    <div class="panel-title">Foam Board Prints</div>
+    <div class="panel-desc">18×24" full color print on foam board · Pickup at Little 6 Industries</div>
+    <div class="form-row">
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="fb-qty" value="1" min="1" oninput="calcFoamBoard()"></div>
+      <div class="field"><label>Discount</label>
+        <select id="fb-disc" onchange="calcFoamBoard()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off — Veteran / Nonprofit</option>
+          <option value="20">20% off</option>
+          <option value="25">25% off</option>
+        </select></div>
+    </div>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea class="item-note" placeholder="Add notes, artwork info, special instructions..."></textarea>
+    </div>
+    <button class="calc-btn" onclick="calcFoamBoard()">CALCULATE</button>
+    <div class="result-card" id="fb-result"></div>
+    <button class="add-to-quote-btn" id="fb-add" style="display:none" onclick="addToQuote('fb')">+ ADD TO ESTIMATE</button>
+    <button class="sales-tip-toggle" onclick="toggleTip('fb')"><span>💬</span> Sales Tips</button>
+    <div class="sales-tip-body" id="tip-fb">
+      <div class="st-head">🎯 Best For</div>
+      <ul class="st-list">
+        <li>Events, galas, and photo backdrops</li>
+        <li>Retail displays and point-of-sale signage</li>
+        <li>School and church events</li>
+        <li>Trade show displays</li>
+      </ul>
+      <div class="st-head">💡 Talking Points</div>
+      <ul class="st-list">
+        <li>Full color print — any design, any logo</li>
+        <li>Lightweight and easy to transport</li>
+        <li>18×24" is the standard display size</li>
+        <li>Local pickup — fast turnaround</li>
+      </ul>
+    </div>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Size</th><th>Price Each</th></tr></thead><tbody>
+      <tr><td>18×24"</td><td>$20.00</td></tr>
+    </tbody></table>
+    <div class="note-box">Full color print on rigid foam board. Customer must provide print-ready artwork. Design fee may apply.</div>
+  </div>
+
+  <!-- BIG HEADS -->
+  <div class="panel" id="panel-bigheads">
+    <div class="panel-title">Big Heads</div>
+    <div class="panel-desc">Custom photo cutouts on foam board · $20 each · 10+ get 25% off</div>
+    <div class="form-row">
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="bh-qty" value="1" min="1" oninput="calcBigHeads()"></div>
+      <div class="field"><label>Qty Break</label>
+        <div id="bh-qty-label" style="padding:8px 0;font-size:13px;color:var(--gray);">Full price (1–9)</div></div>
+    </div>
+    <div class="form-row single">
+      <div class="field"><label>Additional Discount</label>
+        <select id="bh-disc" onchange="calcBigHeads()">
+          <option value="0">No discount</option>
+          <option value="5">5% off</option>
+          <option value="10">10% off</option>
+          <option value="15">15% off — Veteran / Nonprofit</option>
+        </select></div>
+    </div>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea class="item-note" placeholder="Add notes, photo instructions, special instructions..."></textarea>
+    </div>
+    <button class="calc-btn" onclick="calcBigHeads()">CALCULATE</button>
+    <div class="result-card" id="bh-result"></div>
+    <button class="add-to-quote-btn" id="bh-add" style="display:none" onclick="addToQuote('bh')">+ ADD TO ESTIMATE</button>
+    <button class="sales-tip-toggle" onclick="toggleTip('bh')"><span>💬</span> Sales Tips</button>
+    <div class="sales-tip-body" id="tip-bh">
+      <div class="st-head">🎯 Best For</div>
+      <ul class="st-list">
+        <li>Sports teams and banquets</li>
+        <li>Birthdays and graduation parties</li>
+        <li>School spirit events</li>
+        <li>Corporate events and galas</li>
+        <li>Weddings and quinceañeras</li>
+      </ul>
+      <div class="st-head">💡 Talking Points</div>
+      <ul class="st-list">
+        <li>$20 each — order 10+ and save 25% automatically</li>
+        <li>Customer supplies the photo — we handle the rest</li>
+        <li>Die-cut to head shape on rigid foam board</li>
+        <li>Great upsell on any event order</li>
+      </ul>
+      <div class="st-head">🛡️ Objection Handlers</div>
+      <ul class="st-list">
+        <li><strong>"Is $20 the best you can do?"</strong> — Order 10 or more and it drops to $15 each automatically.</li>
+        <li><strong>"How long does it take?"</strong> — Send us a clear photo and we can turn it around fast. Ask Matt for current lead time.</li>
+      </ul>
+    </div>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Quantity</th><th>Price Each</th><th>Savings</th></tr></thead><tbody>
+      <tr><td>1–9</td><td>$20.00</td><td>—</td></tr>
+      <tr><td>10+</td><td>$15.00</td><td>25% off</td></tr>
+    </tbody></table>
+    <div class="note-box">Customer must provide a clear, high-resolution photo. Head cutout shape on rigid foam board. Pickup at Little 6 Industries.</div>
+  </div>
+
 </div><!-- /content -->
 
 <!-- QUOTE DRAWER -->
@@ -3582,6 +3692,35 @@ fetch(SHEET_URL)
     var el=document.getElementById('sheet-status');
     if(el){el.textContent='';el.style.color='';}
   });
+
+// ─── FOAM BOARD + BIG HEADS ─────────────────────────────────
+function calcFoamBoard(){
+  var qty = parseInt(document.getElementById('fb-qty').value)||1;
+  var discPct = parseFloat(document.getElementById('fb-disc').value)||0;
+  var rate = 20.00;
+  var total = rate * qty * (1 - discPct/100);
+  var desc = qty + 'x Foam Board Print 18x24"';
+  var lines = [['Size','18×24"'],['Rate Each','$'+rate.toFixed(2)],['Qty',qty]];
+  if(discPct>0) lines.push(['Discount','-'+discPct+'%']);
+  showResult('fb-result', lines, total, qty, desc);
+  lastCalc.fb = {desc:desc, total:total, qty:qty, details:[['Size','18×24"'],['Qty',qty]]};
+  showAddBtn('fb-add');
+}
+
+function calcBigHeads(){
+  var qty = parseInt(document.getElementById('bh-qty').value)||1;
+  var discPct = parseFloat(document.getElementById('bh-disc').value)||0;
+  var rate = qty >= 10 ? 15.00 : 20.00;
+  var label = qty >= 10 ? '10+ (25% off)' : '1–9 (full price)';
+  document.getElementById('bh-qty-label').textContent = label;
+  var total = rate * qty * (1 - discPct/100);
+  var desc = qty + 'x Big Head Custom Cutout';
+  var lines = [['Rate Each','$'+rate.toFixed(2)],['Qty break',label],['Qty',qty]];
+  if(discPct>0) lines.push(['Discount','-'+discPct+'%']);
+  showResult('bh-result', lines, total, qty, desc);
+  lastCalc.bh = {desc:desc, total:total, qty:qty, details:[['Rate','$'+rate.toFixed(2)+' ea'],['Qty break',label],['Qty',qty]]};
+  showAddBtn('bh-add');
+}
 
 // ─── SHIRT BRAND INIT ────────────────────────────────────────
 function populateShirtBrands(){
