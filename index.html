@@ -1666,6 +1666,12 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="panel-title">Sales Tips</div>
     <div class="panel-desc">Best use cases · Talking points · Objection handlers · Per product</div>
 
+    <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:2px solid var(--red);">
+      <button id="stab-tips" onclick="switchSalesTab('tips')" style="padding:9px 18px;background:var(--red);color:var(--white);border:none;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">💬 Sales Tips</button>
+      <button id="stab-sop" onclick="switchSalesTab('sop')" style="padding:9px 18px;background:var(--navy);color:rgba(255,255,255,.5);border:none;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">📘 Sales SOP</button>
+    </div>
+
+    <div id="stab-content-tips">
     <div class="stip-card">
       <div class="stip-card-title">🪧 Signs &amp; Decals</div>
       <div class="stip-card-sub">4mm Corrugated · 10mm · Aluminum · Vinyl · Banners · Magnets</div>
