@@ -313,6 +313,43 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     </div>
 
     <div class="section-divider"></div>
+
+    <!-- MARKUP CALCULATOR -->
+    <div style="background:var(--white);border:1.5px solid var(--mid-gray);padding:14px 16px;margin-bottom:14px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">💰 Markup Calculator</div>
+      <div style="font-size:12px;color:var(--gray);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--mid-gray);">Enter your cost and the market price — we'll tell you what markup to use.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+        <div class="field">
+          <label>Our Cost (4over, vendor, etc.)</label>
+          <input type="number" id="mc-cost" placeholder="e.g. 18.00" step="0.01" min="0" oninput="calcMarkup()">
+        </div>
+        <div class="field">
+          <label>Market / Competitor Price</label>
+          <input type="number" id="mc-market" placeholder="e.g. 45.00" step="0.01" min="0" oninput="calcMarkup()">
+        </div>
+      </div>
+      <div id="mc-result" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
+          <div style="background:var(--light-gray);padding:10px;text-align:center;">
+            <div style="font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">At Market Price</div>
+            <div id="mc-at-market" style="font-family:'Courier Prime',monospace;font-size:18px;font-weight:700;color:var(--navy);"></div>
+            <div id="mc-at-market-price" style="font-size:11px;color:var(--gray);margin-top:2px;"></div>
+          </div>
+          <div style="background:var(--light-gray);padding:10px;text-align:center;">
+            <div style="font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Sweet Spot (−20%)</div>
+            <div id="mc-sweet" style="font-family:'Courier Prime',monospace;font-size:18px;font-weight:700;color:var(--green);"></div>
+            <div id="mc-sweet-price" style="font-size:11px;color:var(--gray);margin-top:2px;"></div>
+          </div>
+          <div style="background:var(--light-gray);padding:10px;text-align:center;">
+            <div style="font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">At 250% Markup</div>
+            <div id="mc-at250" style="font-family:'Courier Prime',monospace;font-size:18px;font-weight:700;"></div>
+            <div id="mc-at250-price" style="font-size:11px;color:var(--gray);margin-top:2px;"></div>
+          </div>
+        </div>
+        <div id="mc-verdict" style="padding:10px 14px;font-size:13px;font-weight:600;border-left:4px solid #ccc;"></div>
+      </div>
+    </div>
+
     <div style="background:var(--navy);padding:14px 16px;border-left:4px solid var(--gold);">
       <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">💬 Tool Feedback</div>
       <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:10px;line-height:1.5;">Missing a product? Pricing off? Feature idea? Send Matt a note directly from here.</div>
@@ -3981,6 +4018,66 @@ function calcBigHeads(){
   showResult('bh-result', lines, total, qty, desc);
   lastCalc.bh = {desc:desc, total:total, qty:qty, details:[['Rate','$'+rate.toFixed(2)+' ea'],['Qty break',label],['Qty',qty]]};
   showAddBtn('bh-add');
+}
+
+// ─── MARKUP CALCULATOR ───────────────────────────────────────
+function calcMarkup() {
+  var cost   = parseFloat(document.getElementById('mc-cost').value)   || 0;
+  var market = parseFloat(document.getElementById('mc-market').value) || 0;
+  var result = document.getElementById('mc-result');
+
+  if (!cost || !market || cost <= 0 || market <= 0) {
+    result.style.display = 'none';
+    return;
+  }
+
+  result.style.display = 'block';
+
+  // Markup % = (price - cost) / cost * 100
+  var markupAtMarket = ((market - cost) / cost * 100);
+  var sweetPrice     = market * 0.80;  // 20% below market
+  var markupAtSweet  = ((sweetPrice - cost) / cost * 100);
+  var price250       = cost * 3.50;    // 250% markup = cost × 3.5
+  var markup250      = 250;
+  var diff250        = ((price250 - market) / market * 100); // how far above/below market
+
+  // At market price
+  document.getElementById('mc-at-market').textContent = Math.round(markupAtMarket) + '%';
+  document.getElementById('mc-at-market-price').textContent = '$' + market.toFixed(2) + ' sell price';
+
+  // Sweet spot
+  document.getElementById('mc-sweet').textContent = Math.round(markupAtSweet) + '%';
+  document.getElementById('mc-sweet-price').textContent = '$' + sweetPrice.toFixed(2) + ' sell price';
+
+  // At 250%
+  var el250 = document.getElementById('mc-at250');
+  el250.textContent = '250%';
+  document.getElementById('mc-at250-price').textContent = '$' + price250.toFixed(2) + ' sell price';
+
+  // Verdict
+  var verdict = document.getElementById('mc-verdict');
+  if (price250 <= market) {
+    // 250% is at or below market — great
+    el250.style.color = 'var(--green)';
+    verdict.style.borderLeftColor = 'var(--green)';
+    verdict.style.background = '#f0fff4';
+    verdict.style.color = 'var(--green)';
+    verdict.textContent = '✅ Quote it — your 250% price ($' + price250.toFixed(2) + ') is at or below market. You have room to spare.';
+  } else if (price250 <= market * 1.20) {
+    // Within 20% above market — competitive
+    el250.style.color = 'var(--gold)';
+    verdict.style.borderLeftColor = 'var(--gold)';
+    verdict.style.background = '#fffbe6';
+    verdict.style.color = '#856404';
+    verdict.textContent = '⚠️ Competitive — your 250% price ($' + price250.toFixed(2) + ') is ' + Math.round(diff250) + '% above market. Use ' + Math.round(markupAtMarket) + '% to match or ' + Math.round(markupAtSweet) + '% to undercut by 20%.';
+  } else {
+    // More than 20% above market — walk away
+    el250.style.color = 'var(--red)';
+    verdict.style.borderLeftColor = 'var(--red)';
+    verdict.style.background = '#fff3f3';
+    verdict.style.color = 'var(--red)';
+    verdict.textContent = '🚫 Walk away — your 250% price ($' + price250.toFixed(2) + ') is ' + Math.round(diff250) + '% above market. Even at market price your markup would only be ' + Math.round(markupAtMarket) + '%. Not worth the job.';
+  }
 }
 
 // ─── SALES TAB SWITCHER ──────────────────────────────────────
