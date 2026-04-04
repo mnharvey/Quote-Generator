@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -300,6 +299,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="hcc-icon">💬</div>
         <div class="hcc-title">Sales Tips</div>
         <div class="hcc-items">Talking points · Objection handlers · Cross-sell</div>
+      </div>
+      <div class="home-cat-card" onclick="showPanel('salestips', document.querySelector('.cat-btn')); setTimeout(function(){switchSalesTab('sop');},50);">
+        <div class="hcc-icon">📘</div>
+        <div class="hcc-title">Sales SOP</div>
+        <div class="hcc-items">How to quote · Step by step · Quick reference</div>
       </div>
       <div class="home-cat-card" onclick="showPanel('promo', document.querySelector('.cat-btn'))">
         <div class="hcc-icon">🎁</div>
@@ -1824,6 +1828,116 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <li style="color:rgba(255,255,255,.85)"><strong style="color:var(--gold)">Government buyer?</strong> — "We are SDVOSB certified — we can be added to your preferred vendor list."</li>
       </ul>
     </div>
+    </div><!-- end stab-content-tips -->
+
+    <div id="stab-content-sop" style="display:none;">
+      <div class="note-box" style="margin-bottom:16px;">
+        This tool exists so you can quote fast, quote right, and never leave a customer waiting. Follow these steps every time and we stay consistent — whether it's Matt, Lindsay, or a new rep on their first day.
+      </div>
+      <div class="stip-card">
+        <div class="stip-card-title">Step 1 — Set Up the Estimate</div>
+        <div class="stip-card-sub">Do this before you calculate anything</div>
+        <ul class="st-list">
+          <li>Open the Estimate Sheet — tap the bottom bar on mobile or right column on desktop</li>
+          <li>Enter the customer's <strong>name, company, and email</strong> first — if you skip this, the PDF goes out blank</li>
+          <li>Enter <strong>your name</strong> in the Sales Rep field — Matt needs to know who quoted what</li>
+          <li>Set the date — it defaults to today, double-check it</li>
+        </ul>
+        <div class="note-box" style="margin-top:8px;">⚡ Fill the estimate sheet first. It takes 30 seconds and saves you from re-sending a PDF with no customer name on it.</div>
+      </div>
+      <div class="stip-card">
+        <div class="stip-card-title">Step 2 — Build the Quote</div>
+        <div class="stip-card-sub">Pick a category, enter specs, watch the traffic light</div>
+        <ul class="st-list">
+          <li>Select a product from the sidebar or the Home search bar</li>
+          <li>Enter quantity, size, and options — then hit <strong>Calculate</strong></li>
+          <li>Watch the <strong>traffic light</strong> on discounts and margins:</li>
+        </ul>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0;">
+          <div style="background:#f0fff4;border-left:4px solid var(--green);padding:8px 10px;">
+            <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">✅ Green</div>
+            <div style="font-size:12px;color:var(--charcoal);">Good to go. Add to estimate.</div>
+          </div>
+          <div style="background:#fffbe6;border-left:4px solid var(--gold);padding:8px 10px;">
+            <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:#856404;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">⚠️ Yellow</div>
+            <div style="font-size:12px;color:var(--charcoal);">Cutting into margin. Confirm before quoting.</div>
+          </div>
+          <div style="background:#fff3f3;border-left:4px solid var(--red);padding:8px 10px;">
+            <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">🚫 Red</div>
+            <div style="font-size:12px;color:var(--charcoal);">Stop. Call Matt or Lindsay first.</div>
+          </div>
+        </div>
+        <ul class="st-list">
+          <li>Hit <strong>+ Add to Estimate</strong> — repeat for every product in the order</li>
+          <li>Add notes on any item needing clarification — artwork, sizes, special instructions</li>
+        </ul>
+      </div>
+      <div class="stip-card">
+        <div class="stip-card-title">Step 3 — Promo Products</div>
+        <div class="stip-card-sub">For branded giveaways, merch, and promotional items</div>
+        <ul class="st-list">
+          <li>Use the <strong>🎁 Promo with Grace</strong> panel — not DistributorCentral directly</li>
+          <li>Describe what the customer needs in plain English — quantity, budget, timeline</li>
+          <li>The tool returns <strong>Good / Better / Best</strong> — present all three if you can</li>
+          <li>Check the <strong>ORDER FROM</strong> block — that's who you call to place the order</li>
+          <li>Call the vendor directly — do not send the customer to DC or any supplier site</li>
+        </ul>
+        <div class="note-box" style="margin-top:8px;border-left-color:var(--gold);">⚠️ Promo pricing is an AI estimate. Always confirm exact pricing with the vendor before sending the PDF.</div>
+      </div>
+      <div class="stip-card">
+        <div class="stip-card-title">Step 4 — Send the Estimate</div>
+        <div class="stip-card-sub">The customer gets a branded PDF — they never see this tool</div>
+        <ul class="st-list">
+          <li>Hit <strong>✉ Email Estimate</strong> — server generates a branded PDF and sends automatically</li>
+          <li>A copy goes to sales@little6llc.com so Matt and Lindsay know what went out</li>
+          <li>Use <strong>Print</strong> if the customer is in person · Use <strong>Copy</strong> to paste into a text or DM</li>
+        </ul>
+        <div class="note-box" style="margin-top:8px;">📋 The estimate says "ESTIMATE ONLY — not a final invoice." That's intentional. It sets the right expectation.</div>
+      </div>
+      <div class="stip-card">
+        <div class="stip-card-title">Step 5 — Customer Approves</div>
+        <div class="stip-card-sub">What happens after they say yes</div>
+        <ul class="st-list">
+          <li><strong>In-house orders</strong> (signs, shirts, DTF, stickers, laser, wood) — notify Lindsay to schedule production</li>
+          <li><strong>Promo orders</strong> — call the vendor on the ORDER FROM block and place the order</li>
+          <li>Confirm artwork is ready before placing any order — missing art = missed deadline</li>
+        </ul>
+      </div>
+      <div class="stip-card">
+        <div class="stip-card-title">Step 6 — Discounts &amp; Approvals</div>
+        <div class="stip-card-sub">Know your limits before you promise anything</div>
+        <ul class="st-list">
+          <li>Standard discounts are built into every calculator — use them freely</li>
+          <li><strong>Veterans and nonprofits</strong> get 15% off — select it in the discount dropdown</li>
+          <li>Anything beyond standard discounts needs Matt or Lindsay approval first</li>
+          <li>Never promise a price you haven't calculated in the tool</li>
+        </ul>
+      </div>
+      <div class="stip-card">
+        <div class="stip-card-title">Step 7 — When You're Stuck</div>
+        <div class="stip-card-sub">You don't have to know everything</div>
+        <ul class="st-list">
+          <li><strong>Pricing question</strong> — check the traffic light first, then ask Lindsay</li>
+          <li><strong>Product not in the tool</strong> — Feedback button on Home, Matt will add it</li>
+          <li><strong>Something unusual</strong> — don't guess, call Matt</li>
+          <li><strong>Artwork issue</strong> — Lindsay handles all file prep and proofing</li>
+          <li><strong>Rush order</strong> — always confirm with Lindsay before promising a turnaround</li>
+        </ul>
+        <div class="note-box" style="margin-top:8px;border-left-color:var(--green);">✅ When in doubt, underpromise and ask. A customer who waits is better than a customer who got the wrong price.</div>
+      </div>
+      <div class="stip-card" style="background:var(--navy);border-color:var(--gold);">
+        <div class="stip-card-title" style="color:var(--gold);">Quick Reference</div>
+        <div class="stip-card-sub" style="color:rgba(255,255,255,.5);border-color:rgba(255,255,255,.15);">The short version</div>
+        <ul class="st-list">
+          <li style="color:rgba(255,255,255,.85);"><strong style="color:var(--gold);">Fill the estimate sheet first</strong> — name, company, email, rep name</li>
+          <li style="color:rgba(255,255,255,.85);"><strong style="color:var(--gold);">Watch the traffic light</strong> — green go, yellow confirm, red stop</li>
+          <li style="color:rgba(255,255,255,.85);"><strong style="color:var(--gold);">Promo = call the vendor</strong> — ORDER FROM block has everything</li>
+          <li style="color:rgba(255,255,255,.85);"><strong style="color:var(--gold);">Email Estimate sends the PDF</strong> — customer never sees this tool</li>
+          <li style="color:rgba(255,255,255,.85);"><strong style="color:var(--gold);">Rush = call Lindsay first</strong> — always</li>
+          <li style="color:rgba(255,255,255,.85);"><strong style="color:var(--gold);">Something missing?</strong> — Feedback button on Home</li>
+        </ul>
+      </div>
+    </div><!-- end stab-content-sop -->
 
   </div>
 
@@ -3861,6 +3975,23 @@ function calcBigHeads(){
   showResult('bh-result', lines, total, qty, desc);
   lastCalc.bh = {desc:desc, total:total, qty:qty, details:[['Rate','$'+rate.toFixed(2)+' ea'],['Qty break',label],['Qty',qty]]};
   showAddBtn('bh-add');
+}
+
+// ─── SALES TAB SWITCHER ──────────────────────────────────────
+function switchSalesTab(tab) {
+  var tips = document.getElementById('stab-content-tips');
+  var sop  = document.getElementById('stab-content-sop');
+  var btnTips = document.getElementById('stab-tips');
+  var btnSop  = document.getElementById('stab-sop');
+  if (tab === 'tips') {
+    tips.style.display = 'block'; sop.style.display = 'none';
+    btnTips.style.background = 'var(--red)'; btnTips.style.color = 'var(--white)';
+    btnSop.style.background = 'var(--navy)'; btnSop.style.color = 'rgba(255,255,255,.5)';
+  } else {
+    tips.style.display = 'none'; sop.style.display = 'block';
+    btnTips.style.background = 'var(--navy)'; btnTips.style.color = 'rgba(255,255,255,.5)';
+    btnSop.style.background = 'var(--red)'; btnSop.style.color = 'var(--white)';
+  }
 }
 
 // ─── SHIRT BRAND INIT ────────────────────────────────────────
