@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>L6I Field Sales Strategy</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&family=Courier+Prime:wght@400;700&display=swap');
+:root{--red:#B03028;--red-dark:#8a2020;--gold:#C8A84B;--navy:#1A1A2E;--navy-mid:#16213e;--charcoal:#2a2a2a;--gray:#444;--light-gray:#f5f4f1;--mid-gray:#ddd;--white:#fff;--cream:#faf9f6;--green:#1A6B3C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--charcoal);min-height:100vh;font-size:14px;}
+
+/* HEADER */
+.header{background:var(--navy);border-bottom:3px solid var(--red);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200;}
+.header-left{display:flex;flex-direction:column;}
+.header-title{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;}
+.header-sub{font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;}
+.l6-mark{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;}
+
+/* NAV */
+.mobile-nav{display:flex;overflow-x:auto;background:var(--navy-mid);border-bottom:1px solid rgba(255,255,255,0.08);scrollbar-width:none;}
+.mobile-nav::-webkit-scrollbar{display:none;}
+.mobile-nav-btn{flex-shrink:0;padding:10px 14px;background:none;border:none;border-bottom:3px solid transparent;color:rgba(255,255,255,0.5);font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:color .15s;}
+.mobile-nav-btn.active{color:var(--gold);border-bottom-color:var(--red);}
+
+/* CONTENT */
+.content{background:var(--cream);padding:18px 15px;min-height:calc(100vh - 99px);}
+.panel{display:none;}
+.panel.active{display:block;}
+.panel-title{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:4px;}
+.panel-desc{font-size:12px;color:var(--gray);margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--red);}
+
+/* HIGHLIGHT BOX */
+.highlight{background:var(--navy);border-left:4px solid var(--gold);padding:12px 15px;margin-bottom:12px;}
+.highlight p{color:rgba(255,255,255,0.85);font-size:13px;line-height:1.6;}
+.highlight strong{color:var(--gold);}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--mid-gray);border-top:3px solid var(--red);padding:14px 15px;margin-bottom:12px;}
+.card-label{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;background:var(--navy);display:inline-block;padding:2px 8px;margin-bottom:9px;}
+.card-label.maroon{background:var(--red);}
+.card-label.green{background:var(--green);}
+.card-title{font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;color:var(--navy);text-transform:uppercase;margin-bottom:6px;}
+p,li{font-size:13px;line-height:1.6;color:var(--charcoal);}
+li{margin-bottom:0.3rem;}
+ul{padding-left:1.1rem;}
+
+/* WEEKLY SCHEDULE */
+.weekly{display:grid;grid-template-columns:64px 1fr;gap:0;}
+.day{font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--gold);background:var(--navy);padding:0.65rem 0.5rem;text-align:center;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.tasks{font-size:12.5px;color:var(--charcoal);padding:0.65rem 0.85rem;border-bottom:1px solid var(--mid-gray);line-height:1.55;}
+
+/* PITCH BOXES */
+.pitch-box{border-left:3px solid var(--gold);background:var(--white);padding:0.85rem 1rem;margin-bottom:0.85rem;}
+.pitch-label{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--red);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.4rem;}
+.pitch-box p{font-size:13px;font-style:italic;color:var(--charcoal);}
+
+/* MINI GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;margin-top:0.5rem;}
+.mini-card{background:var(--white);border:1px solid var(--mid-gray);border-left:3px solid var(--red);padding:0.75rem 0.85rem;}
+.mini-title{font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:0.35rem;}
+.mini-card p{font-size:12px;color:var(--gray);}
+
+/* TOOLKIT */
+.tool-row{display:flex;align-items:flex-start;gap:0.75rem;padding:0.75rem 0;border-bottom:1px solid var(--mid-gray);}
+.tool-row:last-child{border-bottom:none;}
+.tool-num{font-family:'Courier Prime',monospace;font-size:16px;font-weight:700;color:var(--gold);width:24px;flex-shrink:0;}
+.tool-name{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;}
+.tool-desc{font-size:12px;color:var(--gray);line-height:1.5;}
+
+/* KPIs */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;margin-bottom:1rem;}
+.kpi{background:var(--navy);padding:0.85rem 0.6rem;text-align:center;}
+.kpi-num{font-family:'Courier Prime',monospace;font-size:24px;font-weight:700;color:var(--gold);}
+.kpi-label{font-size:10px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px;margin-top:3px;font-family:'Oswald',sans-serif;}
+
+/* RAMP */
+.ramp-row{display:grid;grid-template-columns:72px 1fr;gap:0;margin-bottom:3px;}
+.ramp-week{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--red);letter-spacing:1px;text-transform:uppercase;padding:0.5rem 0;}
+.ramp-task{font-size:12.5px;color:var(--charcoal);padding:0.5rem 0 0.5rem 0.75rem;border-bottom:1px solid var(--mid-gray);}
+
+/* RESULT CARD (used for note boxes) */
+.note-box{background:rgba(200,168,75,0.1);border-left:3px solid var(--gold);padding:9px 12px;font-size:12px;color:var(--gray);margin-top:10px;line-height:1.5;}
+
+@media(min-width:600px){.grid2{grid-template-columns:1fr 1fr;}}
+@media(max-width:460px){.grid2{grid-template-columns:1fr;}.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-title">Field Sales Strategy</div>
+    <div class="header-sub">Little 6 Industries LLC</div>
+  </div>
+  <div class="l6-mark">L6I</div>
+</div>
+
+<!-- NAV -->
+<div class="mobile-nav">
+  <button class="mobile-nav-btn active" onclick="show('activity',this)">Weekly Plan</button>
+  <button class="mobile-nav-btn" onclick="show('prospects',this)">Prospects</button>
+  <button class="mobile-nav-btn" onclick="show('pitches',this)">Talking Points</button>
+  <button class="mobile-nav-btn" onclick="show('toolkit',this)">Rep Toolkit</button>
+  <button class="mobile-nav-btn" onclick="show('kpis',this)">KPIs</button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- WEEKLY PLAN -->
+  <div id="activity" class="panel active">
+    <div class="panel-title">Weekly Activity Plan</div>
+    <div class="panel-desc">Part-time reps target 5 cold stops + 1 warm follow-up daily. Full-time reps double it.</div>
+    <div class="highlight">
+      <p><strong>The quote tool is your unfair advantage.</strong> Most competitors can't build and send a branded estimate from their phone. Do it in front of every warm prospect before you leave. Close the loop on the spot.</p>
+    </div>
+    <div class="card">
+      <div class="weekly">
+        <div class="day">Mon</div>
+        <div class="tasks">Plan the week. Pull 10–15 targets from Google Maps — restaurants, realtors, contractors in Maricopa and Casa Grande. Confirm any follow-ups from last week.</div>
+        <div class="day">Tue</div>
+        <div class="tasks">Cold stop block. Hit 8–12 businesses. Restaurants, salons, retail. Drop a leave-behind. If the owner is present, open the quote tool and build something on the spot.</div>
+        <div class="day">Wed</div>
+        <div class="tasks">Events and orgs day. Sports leagues, churches, school booster clubs, HOAs. Lead with the full package — spirit wear, banners, big heads, canopy tents.</div>
+        <div class="day">Thu</div>
+        <div class="tasks">Corporate and contractor block. Real estate offices, HVAC, plumbing, construction. Lead with tumblers, polos, truck magnets, yard signs. Leave a branded sample kit.</div>
+        <div class="day">Fri</div>
+        <div class="tasks">Warm lead follow-up. Call or text every interested prospect from the week. Send quote links. If a prospect went cold, drop a quick check-in text — no pressure, just presence.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROSPECTS -->
+  <div id="prospects" class="panel">
+    <div class="panel-title">Prospect Tracks</div>
+    <div class="panel-desc">Five segments, each with a different entry point and best ask.</div>
+    <div class="card">
+      <div class="card-label">Track 1</div>
+      <div class="card-title">Local commercial — restaurants, salons, gyms, retail</div>
+      <ul>
+        <li>Best ask: staff shirts, window graphics, event banners, stickers</li>
+        <li>Entry: walk in 2–4pm weekdays. Ask for the owner by name.</li>
+        <li>Trigger line: "How many staff do you have? Let me build a shirt quote right now."</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label maroon">Track 2</div>
+      <div class="card-title">Events &amp; orgs — leagues, churches, schools, HOAs</div>
+      <ul>
+        <li>Best ask: spirit wear packages, banners, big heads, foam board, canopy tents</li>
+        <li>Entry: athletic director, pastor, event coordinator — email or walk-in</li>
+        <li>Timing: target 8–12 weeks before season start or major event</li>
+        <li>Key pitch: "One vendor, one quote — shirts, banners, signs, and the big heads."</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Track 3</div>
+      <div class="card-title">Real estate &amp; contractors</div>
+      <ul>
+        <li>Best ask: yard signs, truck magnets, polos, tumblers, foam board</li>
+        <li>Entry: office drop-in or Chamber / BNI networking</li>
+        <li>Key pitch: "Your brand is on every job site and every door. We make sure it looks sharp."</li>
+        <li>Upsell path: shirts → signs → Promo with Grace gifting kits</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label green">Track 4 — SDVOSB Set-Aside</div>
+      <div class="card-title">Government &amp; nonprofit</div>
+      <ul>
+        <li>Best ask: branded apparel, event materials, engraved recognition items, promo kits</li>
+        <li>Entry: procurement officer, admin director, or foundation contact</li>
+        <li>Key pitch: "We're SDVOSB certified — you can purchase from us to hit your small business spend goals with less paperwork."</li>
+        <li>Always leave a capability statement + SDVOSB cert copy</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Track 5</div>
+      <div class="card-title">Corporate accounts — HR, marketing, gifting buyers</div>
+      <ul>
+        <li>Best ask: onboarding kits, event swag bundles, Promo with Grace Good/Better/Best packages</li>
+        <li>Entry: office manager, HR, or marketing coordinator</li>
+        <li>Key pitch: "Branded kit for every new hire or every tradeshow — shirts, tumbler, hat, notepad. Want to see tiers?"</li>
+        <li>Highest lifetime value segment. Push toward annual agreements.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TALKING POINTS -->
+  <div id="pitches" class="panel">
+    <div class="panel-title">Talking Points</div>
+    <div class="panel-desc">Lead with their world. The goal of the first stop is one thing: permission to build a quote.</div>
+    <div class="pitch-box">
+      <div class="pitch-label">Universal door opener</div>
+      <p>"Hey, I'm [name] with Little 6 Industries — we're a local print shop right here in Maricopa. Shirts, signs, banners, branded gear — all in-house, fast turnaround. Do you ever need anything like that for your team or your events?"</p>
+    </div>
+    <div class="pitch-box">
+      <div class="pitch-label">If they already have a vendor</div>
+      <p>"Totally understand — most people do. I'm not here to replace anyone. But if there's ever a rush job, a small run, or something they can't handle, I'd love to be your backup. Mind if I leave a card?"</p>
+    </div>
+    <div class="pitch-box">
+      <div class="pitch-label">Transition to the quote tool</div>
+      <p>"Here — let me pull up our quoting tool and build you an actual estimate right now. Takes two minutes, I'll email it to you before I leave. What do you order most — shirts, signs, or something else?"</p>
+    </div>
+    <div class="grid2">
+      <div class="mini-card"><div class="mini-title">Restaurants</div><p>Staff shirts, bag stickers, event banners. Local means not waiting two weeks from a warehouse.</p></div>
+      <div class="mini-card"><div class="mini-title">Sports leagues</div><p>Full spirit packages — jerseys, banners, big heads, canopy tents. One quote covers everything.</p></div>
+      <div class="mini-card"><div class="mini-title">Realtors</div><p>Yard signs, closing gifts, branded pens and tumblers. Listings move fast — so do we.</p></div>
+      <div class="mini-card"><div class="mini-title">Contractors</div><p>Truck magnets, polos, yard signs, hard hats. Your crew is your billboard. Make it sharp.</p></div>
+      <div class="mini-card"><div class="mini-title">Churches &amp; nonprofits</div><p>Event shirts, volunteer vests, banners. Community pricing, no minimum hassle.</p></div>
+      <div class="mini-card"><div class="mini-title">Government buyers</div><p>SDVOSB certified. Set-aside eligible. Fast turnaround, local production, counts toward your small biz goals.</p></div>
+    </div>
+  </div>
+
+  <!-- TOOLKIT -->
+  <div id="toolkit" class="panel">
+    <div class="panel-title">Rep Toolkit</div>
+    <div class="panel-desc">What every rep carries every time they're in the field.</div>
+    <div class="card">
+      <div class="tool-row">
+        <div class="tool-num">01</div>
+        <div><div class="tool-name">Mobile quote tool</div><div class="tool-desc">Your #1 asset. Practice the flow before every stop. Build a quote for every warm prospect before you walk out the door.</div></div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-num">02</div>
+        <div><div class="tool-name">Capability statement</div><div class="tool-desc">One page. Business overview, SDVOSB cert, NAICS codes, UEI/CAGE, contact info. Essential for government and corporate calls.</div></div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-num">03</div>
+        <div><div class="tool-name">Physical sample kit</div><div class="tool-desc">DTF transfer on a shirt, die-cut sticker, foam board sample, engraved tumbler. Let prospects touch the quality. Leave a sample when the door is warm.</div></div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-num">04</div>
+        <div><div class="tool-name">Leave-behind card</div><div class="tool-desc">Branded card with QR code linking to little6llc.com. Top 8–10 products listed. Short, scannable, stays on their desk.</div></div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-num">05</div>
+        <div><div class="tool-name">Good / Better / Best promo sheet</div><div class="tool-desc">One-page tiered promo product options from Promo with Grace. Perfect for corporate gifting and event organizers who don't know where to start.</div></div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-num">06</div>
+        <div><div class="tool-name">L6I branded apparel — on your body</div><div class="tool-desc">Embroidered polo or DTF-printed shirt, every stop, every day. You are a walking sample. If someone asks where you got the shirt, that's a lead.</div></div>
+      </div>
+    </div>
+    <div class="note-box">Every rep should be able to demo the quote tool cold in under 60 seconds. If they can't, they're not ready to go out.</div>
+  </div>
+
+  <!-- KPIs -->
+  <div id="kpis" class="panel">
+    <div class="panel-title">Rep Performance</div>
+    <div class="panel-desc">Baseline targets for a part-time rep working 3–4 days per week.</div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-num">20</div><div class="kpi-label">Cold stops / wk</div></div>
+      <div class="kpi"><div class="kpi-num">5</div><div class="kpi-label">Quotes built / wk</div></div>
+      <div class="kpi"><div class="kpi-num">2</div><div class="kpi-label">Closed orders / wk</div></div>
+      <div class="kpi"><div class="kpi-num">3</div><div class="kpi-label">Follow-ups / day</div></div>
+      <div class="kpi"><div class="kpi-num">1</div><div class="kpi-label">Org pitch / wk</div></div>
+      <div class="kpi"><div class="kpi-num">10%</div><div class="kpi-label">Target close rate</div></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Comp Structure Ideas</div>
+      <ul style="margin-top:0.4rem;">
+        <li>Base + 10–15% commission on margin from first order of any new account</li>
+        <li>Bonus for first closed order from a government or corporate account</li>
+        <li>Spiff for any on-site quote that closes within 7 days</li>
+        <li>Monthly leaderboard once you scale to multiple reps</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">30-Day Ramp Plan</div>
+      <div class="ramp-row">
+        <div class="ramp-week">Week 1</div>
+        <div class="ramp-task">Product training, quote tool practice, ride-along with Matt or Lindsay.</div>
+        <div class="ramp-week">Week 2</div>
+        <div class="ramp-task">First solo stops — warm targets only. Existing customers, referrals, familiar businesses.</div>
+        <div class="ramp-week">Week 3</div>
+        <div class="ramp-task">Cold stop blocks begin. 10 stops/day. Debrief at end of each week.</div>
+        <div class="ramp-week">Week 4</div>
+        <div class="ramp-task">Full activity rhythm. First performance review vs. KPIs above.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.mobile-nav-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+
+</body>
+</html>
