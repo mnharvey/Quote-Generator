@@ -21,6 +21,8 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 .mobile-nav{display:flex;overflow-x:auto;background:var(--navy-mid);border-bottom:1px solid rgba(255,255,255,0.08);scrollbar-width:none;}
 .mobile-nav::-webkit-scrollbar{display:none;}
 .mobile-nav-btn{flex-shrink:0;padding:10px 14px;background:none;border:none;border-bottom:3px solid transparent;color:rgba(255,255,255,0.5);font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:color .15s;}
+.mobile-nav-btn.nav-link{color:rgba(255,255,255,0.35);text-decoration:none;border-right:1px solid rgba(255,255,255,0.1);}
+.mobile-nav-btn.nav-link:hover{color:var(--gold);}
 .mobile-nav-btn.active{color:var(--gold);border-bottom-color:var(--red);}
 
 /* CONTENT */
@@ -99,6 +101,7 @@ ul{padding-left:1.1rem;}
 
 <!-- NAV -->
 <div class="mobile-nav">
+  <a class="mobile-nav-btn nav-link" href="https://mnharvey.github.io/Quote-Generator/index.html">&#8592; Quote Tool</a>
   <button class="mobile-nav-btn active" onclick="show('activity',this)">Weekly Plan</button>
   <button class="mobile-nav-btn" onclick="show('prospects',this)">Prospects</button>
   <button class="mobile-nav-btn" onclick="show('pitches',this)">Talking Points</button>
