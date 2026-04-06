@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Promo with Grace — Good · Better · Best</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&family=Courier+Prime:wght@400;700&display=swap');
+:root{--red:#B03028;--red-dark:#8a2020;--gold:#C8A84B;--navy:#1A1A2E;--navy-mid:#16213e;--charcoal:#2a2a2a;--gray:#555;--light-gray:#f5f4f1;--mid-gray:#ddd;--white:#fff;--cream:#faf9f6;--green:#1A6B3C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--cream);color:var(--charcoal);font-size:14px;}
+
+/* PAGE WRAPPER — letter size for print */
+.page{max-width:816px;margin:0 auto;background:var(--white);}
+
+/* HEADER */
+.sheet-header{background:var(--navy);padding:20px 28px 16px;border-bottom:4px solid var(--red);}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.brand-block{}
+.brand-name{font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,0.45);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
+.sheet-title{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;line-height:1;}
+.sheet-sub{font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+.l6-mark{font-family:'Oswald',sans-serif;font-size:32px;font-weight:700;color:var(--gold);letter-spacing:2px;line-height:1;}
+.header-desc{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;max-width:560px;border-top:1px solid rgba(255,255,255,0.1);padding-top:10px;}
+.header-desc strong{color:var(--gold);}
+
+/* TIER COLUMNS */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-bottom:3px solid var(--navy);}
+
+.tier{padding:20px 20px 24px;border-right:1px solid var(--mid-gray);}
+.tier:last-child{border-right:none;}
+
+.tier-header{margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid var(--mid-gray);}
+.tier-label{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.tier-name{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;line-height:1;}
+.tier-tagline{font-size:11px;color:var(--gray);margin-top:4px;line-height:1.4;}
+.tier-price{font-family:'Courier Prime',monospace;font-size:12px;font-weight:700;margin-top:6px;}
+
+/* GOOD */
+.tier.good .tier-label{color:var(--gray);}
+.tier.good .tier-name{color:var(--charcoal);}
+.tier.good .tier-header{border-bottom-color:var(--mid-gray);}
+.tier.good .tier-price{color:var(--gray);}
+
+/* BETTER */
+.tier.better{background:var(--light-gray);}
+.tier.better .tier-label{color:var(--red);}
+.tier.better .tier-name{color:var(--navy);}
+.tier.better .tier-header{border-bottom-color:var(--red);}
+.tier.better .tier-price{color:var(--red);}
+
+/* BEST */
+.tier.best{background:var(--navy);}
+.tier.best .tier-label{color:var(--gold);}
+.tier.best .tier-name{color:var(--white);}
+.tier.best .tier-tagline{color:rgba(255,255,255,0.5);}
+.tier.best .tier-header{border-bottom-color:var(--gold);}
+.tier.best .tier-price{color:var(--gold);}
+
+/* PRODUCT ITEMS */
+.product-list{list-style:none;padding:0;}
+.product-item{padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.06);display:flex;flex-direction:column;gap:2px;}
+.tier.best .product-item{border-bottom-color:rgba(255,255,255,0.08);}
+.product-item:last-child{border-bottom:none;}
+.product-name{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
+.tier.good .product-name{color:var(--charcoal);}
+.tier.better .product-name{color:var(--navy);}
+.tier.best .product-name{color:var(--white);}
+.product-detail{font-size:11px;color:var(--gray);line-height:1.4;}
+.tier.best .product-detail{color:rgba(255,255,255,0.45);}
+
+/* BEST BADGE */
+.popular-badge{display:inline-block;background:var(--gold);color:var(--navy);font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:1px 6px;margin-left:6px;vertical-align:middle;}
+
+/* WHO IT'S FOR */
+.tier-footer{margin-top:14px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.08);}
+.tier.best .tier-footer{border-top-color:rgba(255,255,255,0.12);}
+.footer-label{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
+.tier.good .footer-label{color:var(--gray);}
+.tier.better .footer-label{color:var(--red);}
+.tier.best .footer-label{color:var(--gold);}
+.footer-text{font-size:11px;line-height:1.5;color:var(--gray);}
+.tier.best .footer-text{color:rgba(255,255,255,0.5);}
+
+/* CTA STRIP */
+.cta-strip{background:var(--red);padding:14px 28px;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.cta-left{}
+.cta-headline{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.5px;}
+.cta-sub{font-size:11px;color:rgba(255,255,255,0.75);margin-top:2px;}
+.cta-right{display:flex;gap:20px;align-items:center;flex-shrink:0;}
+.cta-item{text-align:center;}
+.cta-item-label{font-family:'Oswald',sans-serif;font-size:9px;font-weight:600;color:rgba(255,255,255,0.6);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;}
+.cta-item-val{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--white);}
+.cta-divider{width:1px;height:32px;background:rgba(255,255,255,0.2);}
+
+/* FOOTER */
+.sheet-footer{background:var(--navy);padding:12px 28px;display:flex;justify-content:space-between;align-items:center;}
+.footer-brand{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--white);letter-spacing:.5px;}
+.footer-brand span{color:var(--gold);}
+.footer-tagline{font-size:10px;color:rgba(255,255,255,0.35);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;}
+.footer-contact{text-align:right;}
+.footer-contact div{font-size:11px;color:rgba(255,255,255,0.55);line-height:1.6;}
+.footer-contact a{color:var(--gold);text-decoration:none;}
+
+/* NOTE ROW */
+.note-row{background:rgba(200,168,75,0.08);border-top:1px solid rgba(200,168,75,0.2);border-bottom:1px solid rgba(200,168,75,0.2);padding:8px 28px;display:flex;align-items:center;gap:10px;}
+.note-icon{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;}
+.note-text{font-size:11px;color:var(--gray);line-height:1.5;}
+
+/* PRINT */
+@media print{
+  body{background:var(--white);}
+  .page{max-width:100%;box-shadow:none;}
+  .no-print{display:none;}
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .tiers{grid-template-columns:1fr;}
+  .tier{border-right:none;border-bottom:1px solid var(--mid-gray);}
+  .header-top{flex-direction:column;gap:8px;}
+  .cta-strip{flex-direction:column;align-items:flex-start;gap:10px;}
+  .cta-right{flex-wrap:wrap;}
+  .sheet-footer{flex-direction:column;gap:8px;text-align:center;}
+  .footer-contact{text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- PRINT BUTTON (screen only) -->
+<div class="no-print" style="background:var(--navy-mid);padding:10px 16px;text-align:right;">
+  <button onclick="window.print()" style="background:var(--red);color:var(--white);border:none;padding:8px 18px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">Print / Save PDF</button>
+  <a href="https://mnharvey.github.io/Quote-Generator/index.html" style="display:inline-block;margin-left:8px;background:var(--navy);border:1px solid var(--gold);color:var(--gold);padding:8px 18px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;">← Quote Tool</a>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="sheet-header">
+    <div class="header-top">
+      <div class="brand-block">
+        <div class="brand-name">Promo with Grace &nbsp;·&nbsp; A Little 6 Industries Brand</div>
+        <div class="sheet-title">Good · Better · Best</div>
+        <div class="sheet-sub">Promotional Products Guide</div>
+      </div>
+      <div class="l6-mark">L6I</div>
+    </div>
+    <div class="header-desc">
+      Not sure where to start? Every tier gets your brand in front of people — the difference is <strong>impression, durability, and perceived value.</strong> Choose by budget, audience, or occasion. We'll help you find the right fit.
+    </div>
+  </div>
+
+  <!-- NOTE ROW -->
+  <div class="note-row">
+    <div class="note-icon">How it works</div>
+    <div class="note-text">Tell us your product category, quantity, budget, and timeline — we'll find the best options across all three tiers and present them side by side. Pricing varies by item and quantity. All quotes are built on the spot.</div>
+  </div>
+
+  <!-- THREE TIERS -->
+  <div class="tiers">
+
+    <!-- GOOD -->
+    <div class="tier good">
+      <div class="tier-header">
+        <div class="tier-label">Tier One</div>
+        <div class="tier-name">Good</div>
+        <div class="tier-tagline">Gets your brand out there. Budget-friendly, fast, and functional.</div>
+        <div class="tier-price">Ask for quote →</div>
+      </div>
+      <ul class="product-list">
+        <li class="product-item">
+          <div class="product-name">Pens &amp; Writing</div>
+          <div class="product-detail">Ballpoint, stylus combo, retractable. High volume, low cost per unit.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Koozies &amp; Cozies</div>
+          <div class="product-detail">Foam or neoprene. Events, giveaways, sponsor tables.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Basic Tote Bags</div>
+          <div class="product-detail">Non-woven or cotton. Trade shows, community events, handouts.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Keychains</div>
+          <div class="product-detail">Metal or acrylic, custom shape or standard. Small, memorable, keeps moving.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Lanyards</div>
+          <div class="product-detail">Breakaway or standard, full-color imprint. Schools, events, staff ID.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Buttons &amp; Magnets</div>
+          <div class="product-detail">Pinback buttons or fridge magnets. Low minimums, fast production.</div>
+        </li>
+      </ul>
+      <div class="tier-footer">
+        <div class="footer-label">Best for</div>
+        <div class="footer-text">Mass giveaways, community events, trade show tables, first-time buyers testing the water.</div>
+      </div>
+    </div>
+
+    <!-- BETTER -->
+    <div class="tier better">
+      <div class="tier-header">
+        <div class="tier-label">Tier Two</div>
+        <div class="tier-name">Better <span class="popular-badge">Most Popular</span></div>
+        <div class="tier-tagline">Higher quality, longer lifespan. Items people actually keep and use.</div>
+        <div class="tier-price">Ask for quote →</div>
+      </div>
+      <ul class="product-list">
+        <li class="product-item">
+          <div class="product-name">Drinkware</div>
+          <div class="product-detail">Plastic tumblers, ceramic mugs, travel cups. Daily-use visibility.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Branded Apparel</div>
+          <div class="product-detail">T-shirts, polos, hats. DTF or embroidery. Wearable advertising.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Journals &amp; Notebooks</div>
+          <div class="product-detail">Soft or hardcover, custom cover. Corporate meetings, onboarding kits.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Branded Bags</div>
+          <div class="product-detail">Backpacks, drawstring, laptop sleeves. Higher perceived value than basic totes.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Umbrellas</div>
+          <div class="product-detail">Auto-open, vented canopy, full-color. Weather it out branded.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Power Banks</div>
+          <div class="product-detail">Pocket-size, laser-engraved or printed. Tech-forward, high retention.</div>
+        </li>
+      </ul>
+      <div class="tier-footer">
+        <div class="footer-label">Best for</div>
+        <div class="footer-text">Client appreciation, staff gifts, event sponsors, repeat customers, real estate closing gifts.</div>
+      </div>
+    </div>
+
+    <!-- BEST -->
+    <div class="tier best">
+      <div class="tier-header">
+        <div class="tier-label">Tier Three</div>
+        <div class="tier-name">Best</div>
+        <div class="tier-tagline">Premium, gift-worthy, lasting impression. They'll remember where it came from.</div>
+        <div class="tier-price">Ask for quote →</div>
+      </div>
+      <ul class="product-list">
+        <li class="product-item">
+          <div class="product-name">Engraved Tumblers</div>
+          <div class="product-detail">Stainless steel, laser-engraved. The gift people show off. Done in-house.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Premium Apparel Kits</div>
+          <div class="product-detail">Embroidered jacket or vest, hat, and tumbler. Full branded kit in a box.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Leather Goods</div>
+          <div class="product-detail">Portfolios, cardholders, padfolios. Debossed logo. Executive presence.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Tech Bundles</div>
+          <div class="product-detail">Wireless charger, earbuds, power bank — co-branded, gift-boxed.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Award &amp; Recognition Sets</div>
+          <div class="product-detail">Engraved acrylic, crystal, or metal plaques. Employee of the year, milestones.</div>
+        </li>
+        <li class="product-item">
+          <div class="product-name">Custom Gift Boxes</div>
+          <div class="product-detail">Curated multi-item kits, custom tissue and ribbon, branded box. Turnkey gifting.</div>
+        </li>
+      </ul>
+      <div class="tier-footer">
+        <div class="footer-label">Best for</div>
+        <div class="footer-text">Executive gifts, corporate onboarding, VIP clients, government recognition, high-value prospects.</div>
+      </div>
+    </div>
+
+  </div><!-- /tiers -->
+
+  <!-- CTA STRIP -->
+  <div class="cta-strip">
+    <div class="cta-left">
+      <div class="cta-headline">Ready to build your quote?</div>
+      <div class="cta-sub">Tell us your item, quantity, and budget — we'll find Good · Better · Best options on the spot.</div>
+    </div>
+    <div class="cta-right">
+      <div class="cta-item">
+        <div class="cta-item-label">Quote Tool</div>
+        <div class="cta-item-val">little6llc.com</div>
+      </div>
+      <div class="cta-divider"></div>
+      <div class="cta-item">
+        <div class="cta-item-label">Call or Text</div>
+        <div class="cta-item-val">(520) 705-4026</div>
+      </div>
+      <div class="cta-divider"></div>
+      <div class="cta-item">
+        <div class="cta-item-label">Email</div>
+        <div class="cta-item-val">sales@little6llc.com</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="sheet-footer">
+    <div>
+      <div class="footer-brand">LitTLE 6 <span>Industries LLC</span> &nbsp;·&nbsp; Promo with Grace</div>
+      <div class="footer-tagline">The Brand Behind the Brand &nbsp;·&nbsp; Maricopa, AZ &nbsp;·&nbsp; SDVOSB Certified</div>
+    </div>
+    <div class="footer-contact">
+      <div><a href="https://www.little6llc.com">www.little6llc.com</a></div>
+      <div>(520) 705-4026 &nbsp;·&nbsp; <a href="mailto:sales@little6llc.com">sales@little6llc.com</a></div>
+      <div>36380 W Alhambra St, Maricopa, AZ 85138</div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>
