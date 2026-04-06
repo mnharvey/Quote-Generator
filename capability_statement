@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capability Statement — LitTLE 6 Industries LLC</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&family=Courier+Prime:wght@400;700&display=swap');
+:root{--red:#B03028;--gold:#C8A84B;--navy:#1A1A2E;--navy-mid:#16213e;--charcoal:#2a2a2a;--gray:#555;--mid-gray:#ddd;--light-gray:#f5f4f1;--white:#fff;--cream:#faf9f6;--green:#1A6B3C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:var(--charcoal);font-size:13px;}
+
+/* PRINT BUTTON */
+.no-print{background:var(--navy-mid);padding:10px 16px;text-align:right;}
+.print-btn{background:var(--red);color:var(--white);border:none;padding:8px 18px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-right:8px;}
+.back-btn{display:inline-block;background:var(--navy);border:1px solid var(--gold);color:var(--gold);padding:8px 18px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
+
+/* PAGE — letter proportions */
+.page{max-width:850px;margin:0 auto;background:var(--white);box-shadow:0 2px 20px rgba(0,0,0,0.12);}
+
+/* HEADER */
+.cap-header{background:var(--navy);padding:0;border-bottom:4px solid var(--red);display:grid;grid-template-columns:1fr auto;}
+.header-left{padding:20px 24px 16px;}
+.doc-type{font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:4px;}
+.company-name{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--white);line-height:1;text-transform:uppercase;letter-spacing:.5px;}
+.company-name span{color:var(--gold);}
+.tagline{font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-top:5px;}
+.contact-block{font-size:11px;color:rgba(255,255,255,0.55);margin-top:10px;line-height:1.8;}
+.contact-block a{color:rgba(255,255,255,0.7);text-decoration:none;}
+.header-right{background:var(--red);padding:20px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:160px;text-align:center;}
+.l6-mark{font-family:'Oswald',sans-serif;font-size:36px;font-weight:700;color:var(--white);letter-spacing:3px;line-height:1;}
+.sdvosb-badge{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--white);letter-spacing:1.5px;text-transform:uppercase;background:rgba(255,255,255,0.15);padding:3px 8px;margin-top:8px;display:block;}
+.veteran-line{font-size:10px;color:rgba(255,255,255,0.7);margin-top:4px;letter-spacing:.5px;}
+
+/* BODY GRID */
+.body-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--mid-gray);}
+.col{padding:18px 20px;}
+.col-left{border-right:1px solid var(--mid-gray);}
+
+/* SECTION HEADERS */
+.section-head{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--white);background:var(--navy);letter-spacing:2px;text-transform:uppercase;padding:4px 10px;margin-bottom:10px;display:inline-block;}
+.section-head.red{background:var(--red);}
+
+/* CORE COMPETENCIES */
+.competency-list{list-style:none;padding:0;}
+.competency-list li{padding:5px 0;border-bottom:1px solid var(--mid-gray);font-size:12px;line-height:1.4;color:var(--charcoal);display:flex;align-items:flex-start;gap:8px;}
+.competency-list li:last-child{border-bottom:none;}
+.comp-dot{width:6px;height:6px;background:var(--red);flex-shrink:0;margin-top:4px;}
+
+/* DIFFERENTIATORS */
+.diff-list{list-style:none;padding:0;}
+.diff-list li{padding:5px 0;border-bottom:1px solid var(--mid-gray);font-size:12px;line-height:1.4;color:var(--charcoal);display:flex;align-items:flex-start;gap:8px;}
+.diff-list li:last-child{border-bottom:none;}
+.diff-dot{width:6px;height:6px;background:var(--gold);flex-shrink:0;margin-top:4px;}
+
+/* PAST PERFORMANCE */
+.perf-item{padding:10px 0;border-bottom:1px solid var(--mid-gray);}
+.perf-item:last-child{border-bottom:none;}
+.perf-client{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.3px;}
+.perf-meta{font-size:11px;color:var(--gray);margin-top:1px;}
+.perf-detail{font-size:12px;color:var(--charcoal);margin-top:3px;line-height:1.4;}
+.perf-value{font-family:'Courier Prime',monospace;font-size:13px;font-weight:700;color:var(--red);margin-top:3px;}
+
+/* COMPANY DATA */
+.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin-top:2px;}
+.data-item{}
+.data-label{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gold);background:var(--navy);letter-spacing:1.5px;text-transform:uppercase;padding:1px 5px;display:inline-block;margin-bottom:2px;}
+.data-val{font-family:'Courier Prime',monospace;font-size:12px;color:var(--charcoal);}
+.naics-list{margin-top:6px;}
+.naics-item{font-size:11px;color:var(--gray);padding:2px 0;border-bottom:1px solid var(--mid-gray);line-height:1.4;}
+.naics-item:last-child{border-bottom:none;}
+.naics-code{font-family:'Courier Prime',monospace;font-weight:700;color:var(--navy);}
+
+/* FOOTER */
+.cap-footer{background:var(--navy);padding:12px 24px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;}
+.footer-brand{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--white);letter-spacing:.5px;}
+.footer-brand span{color:var(--gold);}
+.footer-tagline{font-size:10px;color:rgba(255,255,255,0.35);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
+.footer-contact{text-align:right;}
+.footer-contact div{font-size:11px;color:rgba(255,255,255,0.55);line-height:1.7;}
+.footer-contact a{color:var(--gold);text-decoration:none;}
+
+/* FULL WIDTH SECTION */
+.full-col{padding:14px 20px;border-top:1px solid var(--mid-gray);}
+
+@media print{
+  .no-print{display:none;}
+  body{background:var(--white);}
+  .page{box-shadow:none;max-width:100%;}
+}
+@media(max-width:580px){
+  .body-grid{grid-template-columns:1fr;}
+  .col-left{border-right:none;border-bottom:1px solid var(--mid-gray);}
+  .cap-header{grid-template-columns:1fr;}
+  .header-right{min-width:auto;flex-direction:row;justify-content:flex-start;gap:16px;padding:12px 20px;}
+  .cap-footer{grid-template-columns:1fr;}
+  .footer-contact{text-align:left;}
+  .data-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="no-print">
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+  <a class="back-btn" href="https://mnharvey.github.io/Quote-Generator/index.html">← Quote Tool</a>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="cap-header">
+    <div class="header-left">
+      <div class="doc-type">Capability Statement</div>
+      <div class="company-name">LitTLE 6 <span>Industries LLC</span></div>
+      <div class="tagline">The Brand Behind the Brand</div>
+      <div class="contact-block">
+        36380 W Alhambra St, Maricopa, AZ 85138<br>
+        (520) 705-4026 &nbsp;·&nbsp; <a href="mailto:sales@little6llc.com">sales@little6llc.com</a> &nbsp;·&nbsp; <a href="https://www.little6llc.com">www.little6llc.com</a>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="l6-mark">L6I</div>
+      <span class="sdvosb-badge">SDVOSB Certified</span>
+      <div class="veteran-line">Veteran-Owned &amp; Woman-Led</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body-grid">
+
+    <!-- LEFT COLUMN -->
+    <div class="col col-left">
+
+      <div class="section-head">Core Competencies</div>
+      <ul class="competency-list">
+        <li><div class="comp-dot"></div>Direct-to-Film (DTF) transfer printing — gang sheets, individual transfers, wholesale by the foot</li>
+        <li><div class="comp-dot"></div>UV printing for hard goods — tumblers, keychains, acrylic, phone cases, and custom merchandise</li>
+        <li><div class="comp-dot"></div>Laser engraving on glass, metal, acrylic, and wood — trophies, awards, recognition items</li>
+        <li><div class="comp-dot"></div>Custom embroidery — polos, hats, jackets, uniforms</li>
+        <li><div class="comp-dot"></div>Signage and display — banners, foam board, corrugated signs, canopy tents, big heads</li>
+        <li><div class="comp-dot"></div>Die-cut vinyl stickers — custom shape, any size, weather-resistant</li>
+        <li><div class="comp-dot"></div>Promotional products and branded merchandise — full catalog via Promo with Grace, powered by DistributorCentral</li>
+        <li><div class="comp-dot"></div>Custom apparel decoration — print-and-press, screen-ready transfers, and full garment production</li>
+      </ul>
+
+      <div style="margin-top:16px;">
+        <div class="section-head">Differentiators</div>
+        <ul class="diff-list">
+          <li><div class="diff-dot"></div>100% in-house production — faster turnaround, tighter quality control, no outsourcing</li>
+          <li><div class="diff-dot"></div>Mobile quote tool — reps build and email a branded estimate on-site in under 5 minutes</li>
+          <li><div class="diff-dot"></div>Flexible minimums — serves single-item orders through large-scale production runs</li>
+          <li><div class="diff-dot"></div>SDVOSB certified — set-aside eligible for government and nonprofit procurement</li>
+          <li><div class="diff-dot"></div>Arizona-based, same-day local pickup available in Maricopa</li>
+          <li><div class="diff-dot"></div>48–72 hour standard turnaround vs. national average of 5–7 days</li>
+          <li><div class="diff-dot"></div>5-star Google reviews — verified customer satisfaction across 500+ completed orders</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col">
+
+      <div class="section-head red">Past Performance</div>
+
+      <div class="perf-item">
+        <div class="perf-client">Timberlake Crafts</div>
+        <div class="perf-meta">Tucson, AZ &nbsp;·&nbsp; 2024–Present &nbsp;·&nbsp; Ongoing</div>
+        <div class="perf-detail">Primary DTF transfer production partner. Gang sheets, transfers by the foot, wholesale fulfillment for apparel decoration business.</div>
+        <div class="perf-value">$78,000+</div>
+      </div>
+
+      <div class="perf-item">
+        <div class="perf-client">WHO! International Designs</div>
+        <div class="perf-meta">Scottsdale, AZ &nbsp;·&nbsp; 2026 &nbsp;·&nbsp; Ongoing</div>
+        <div class="perf-detail">Wholesale DTF transfers for branded gifting and merchandise company. Repeat commercial account.</div>
+        <div class="perf-value">$4,778 (Q1 2026)</div>
+      </div>
+
+      <div class="perf-item">
+        <div class="perf-client">Dukes Roadhouse</div>
+        <div class="perf-meta">Maricopa, AZ &nbsp;·&nbsp; 2025–2026</div>
+        <div class="perf-detail">Branded apparel, signage, and promotional materials for local restaurant group.</div>
+        <div class="perf-value">$3,869</div>
+      </div>
+
+      <div class="perf-item">
+        <div class="perf-client">Maricopa Little League</div>
+        <div class="perf-meta">Maricopa, AZ &nbsp;·&nbsp; 2026</div>
+        <div class="perf-detail">Spirit wear, event signage, and custom transfers for youth sports organization.</div>
+        <div class="perf-value">$1,296</div>
+      </div>
+
+      <div class="perf-item">
+        <div class="perf-client">Williamsburg Dental</div>
+        <div class="perf-meta">Maricopa, AZ &nbsp;·&nbsp; 2026</div>
+        <div class="perf-detail">Branded apparel and promotional products for local medical practice.</div>
+        <div class="perf-value">$679</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- COMPANY DATA — FULL WIDTH -->
+  <div class="full-col">
+    <div class="section-head">Company Data</div>
+    <div class="data-grid">
+      <div class="data-item">
+        <div class="data-label">UEI</div>
+        <div class="data-val">FVQ2JHZJGCG9</div>
+      </div>
+      <div class="data-item">
+        <div class="data-label">CAGE Code</div>
+        <div class="data-val">03D54</div>
+      </div>
+      <div class="data-item">
+        <div class="data-label">DUNS</div>
+        <div class="data-val">92-758-2085</div>
+      </div>
+      <div class="data-item">
+        <div class="data-label">Certifications</div>
+        <div class="data-val">SDVOSB &nbsp;·&nbsp; VOSB &nbsp;·&nbsp; SBA Registered</div>
+      </div>
+    </div>
+    <div class="naics-list" style="margin-top:10px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gray);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;">NAICS Codes</div>
+      <div class="naics-item"><span class="naics-code">323111</span> &nbsp;— Commercial Printing, except Screen and Books (Primary)</div>
+      <div class="naics-item"><span class="naics-code">314999</span> &nbsp;— All Other Miscellaneous Textile Product Mills</div>
+      <div class="naics-item"><span class="naics-code">339999</span> &nbsp;— All Other Miscellaneous Manufacturing</div>
+      <div class="naics-item"><span class="naics-code">541850</span> &nbsp;— Indoor and Outdoor Display Advertising</div>
+      <div class="naics-item"><span class="naics-code">541890</span> &nbsp;— Other Services Related to Advertising</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="cap-footer">
+    <div>
+      <div class="footer-brand">LitTLE 6 <span>Industries LLC</span></div>
+      <div class="footer-tagline">The Brand Behind the Brand &nbsp;·&nbsp; Maricopa, AZ &nbsp;·&nbsp; SDVOSB Certified</div>
+    </div>
+    <div class="footer-contact">
+      <div><a href="https://www.little6llc.com">www.little6llc.com</a></div>
+      <div>(520) 705-4026</div>
+      <div><a href="mailto:sales@little6llc.com">sales@little6llc.com</a></div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
