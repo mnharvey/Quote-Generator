@@ -1076,20 +1076,46 @@ function processInkSoftCSV(lines, hdrs, fname) {
       continue;
     }
 
-    // ── Blank apparel — direct 1:1 deduction by SKU ───────────────────────
-    const blankIt = items.find(i =>
-      (i.sku && i.sku.toLowerCase() === skuLow) ||
-      (i.category === 'Substrate Blanks' && i.name.toLowerCase().includes(sku.toLowerCase()))
-    );
+    // ── Blank apparel — skip here, handled separately by size below ───────
+    continue;
+  }
+
+  // ── Blank apparel — re-process by mfgSku + size ──────────────────────────
+  const mfgSkuIdx = hdrs.findIndex(h => h === 'manufacturer sku');
+  const apparelAgg = {};
+  for (let i = 1; i < lines.length; i++) {
+    const cols = parseCSVLine(lines[i]);
+    const prodSku = cols[skuIdx]?.trim() || '';
+    const mfgSku  = mfgSkuIdx >= 0 ? cols[mfgSkuIdx]?.trim() : '';
+    const size    = cols[sizeIdx]?.trim() || '';
+    const qty     = parseFloat(cols[qtyIdx]) || 0;
+    const skuLow  = prodSku.toLowerCase();
+    if (skuLow.includes('dtf') || skuLow.includes('transfer') || skuLow.includes('foot')) continue;
+    if (!mfgSku || qty === 0) continue;
+    const key = `${mfgSku}__${size}`;
+    if (!apparelAgg[key]) apparelAgg[key] = { mfgSku, size, qty: 0 };
+    apparelAgg[key].qty += qty;
+  }
+
+  for (const [key, data] of Object.entries(apparelAgg)) {
+    const { mfgSku, size, qty } = data;
+    const sizeNorm = size.replace(/\s+/g,'').toUpperCase();
+    const blankIt = items.find(i => {
+      if (i.category !== 'Substrate Blanks') return false;
+      const skuUp   = (i.sku||'').toUpperCase();
+      const nameUp  = i.name.toUpperCase();
+      const mfgUp   = mfgSku.toUpperCase();
+      const hasStyle = skuUp.includes(mfgUp) || nameUp.includes(mfgUp);
+      const hasSize  = skuUp.endsWith(sizeNorm) || nameUp.includes(' '+sizeNorm);
+      return hasStyle && hasSize;
+    });
     if (blankIt) {
       const before = blankIt.qty;
-      blankIt.qty = Math.max(0, blankIt.qty - totalQty);
-      preview.push(`👕 ${blankIt.name}: ${before} → ${blankIt.qty}`);
-      continue;
+      blankIt.qty = Math.max(0, blankIt.qty - qty);
+      preview.push(`👕 ${blankIt.name}: ${before} → ${blankIt.qty} (sold ${qty})`);
+    } else {
+      preview.push(`⚠ No match: ${mfgSku} size ${size} qty ${qty} — not in inventory`);
     }
-
-    // ── Unmatched — log it ────────────────────────────────────────────────
-    preview.push(`⚠ Not matched: ${sku} (${name}) qty ${totalQty}`);
   }
 
   save(K.items, items);
