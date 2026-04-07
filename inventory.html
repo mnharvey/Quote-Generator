@@ -231,6 +231,7 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
     <button class="inv-tab" onclick="invTab('import')">&#8679; Import CSV</button>
     <button class="inv-tab" onclick="invTab('scan')">&#128247; Scan</button>
     <button class="inv-tab" onclick="invTab('invoice')">&#129494; Invoice AI</button>
+    <button class="inv-tab" onclick="invTab('quickupdate')" style="color:var(--gold);">&#127908; Quick Update</button>
     <button class="inv-tab" onclick="invTab('expiry')">⏰ Expiring</button>
     <button class="inv-tab" onclick="invTab('burnrate')">&#128293; Burn Rate</button>
     <button class="inv-tab" style="margin-left:auto;color:rgba(255,100,100,.6);" onclick="lockInventory()">&#128274; Lock</button>
@@ -525,6 +526,54 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
           </tr></thead>
           <tbody id="br-tbody"></tbody>
         </table></div>
+      </div>
+    </div>
+
+    <!-- QUICK UPDATE PANEL -->
+    <div class="inv-content" id="ipanel-quickupdate" style="display:none">
+      <div class="sec-head">
+        <div><div class="sec-title">&#127908; Quick Update</div><div class="sec-sub">Talk or type — Claude figures out the inventory changes</div></div>
+      </div>
+
+      <!-- Chat history -->
+      <div id="qu-history" style="margin-bottom:12px;display:flex;flex-direction:column;gap:10px;"></div>
+
+      <!-- Pending changes confirmation -->
+      <div id="qu-confirm" style="display:none;background:var(--white);border-top:3px solid var(--gold);padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:12px;">
+        <div style="font-family:'Oswald',sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:10px;">Proposed Changes — Review &amp; Confirm</div>
+        <div id="qu-changes"></div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+          <button class="act-btn primary" onclick="applyQuickChanges()">✅ Apply All</button>
+          <button class="act-btn outline" onclick="cancelQuickChanges()">✕ Cancel</button>
+        </div>
+      </div>
+
+      <!-- Input area -->
+      <div style="background:var(--white);padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);">
+        <textarea id="qu-input" placeholder="Just talk or type naturally:&#10;&#10;• &quot;Received 2 rolls of 24&quot; DTF film from DTFSuperstore&quot;&#10;• &quot;Used about half a roll of white DTF ink this week&quot;&#10;• &quot;Sold 4 black XL Gildans at the market today&quot;&#10;• &quot;Lindsay used 3 Polar Camel black tumblers for an order&quot;&#10;• &quot;Got the JDS order — 12 white tumblers and 6 black ones&quot;" style="width:100%;min-height:100px;padding:10px;border:1.5px solid var(--mid-gray);font-family:'Source Sans 3',sans-serif;font-size:14px;resize:vertical;outline:none;line-height:1.5;" onkeydown="if((event.metaKey||event.ctrlKey)&&event.key==='Enter')sendQuickUpdate()"></textarea>
+
+        <!-- Image upload -->
+        <div style="display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap;">
+          <button class="act-btn primary" onclick="sendQuickUpdate()" style="flex:1;min-width:120px;">Send ↵</button>
+          <label class="act-btn secondary" style="cursor:pointer;flex:1;min-width:120px;text-align:center;">
+            📷 Add Photo
+            <input type="file" id="qu-photo" accept="image/*" capture="environment" style="display:none" onchange="handleQuPhoto(this)">
+          </label>
+          <button class="act-btn outline" onclick="clearQuChat()" style="font-size:10px;padding:6px 10px;">Clear</button>
+        </div>
+        <p style="font-size:11px;color:#aaa;margin-top:8px;">Tip: Use your phone's mic button on the keyboard to dictate. Ctrl+Enter to send.</p>
+      </div>
+
+      <!-- Examples -->
+      <div style="background:var(--white);padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-top:12px;">
+        <div style="font-family:'Oswald',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:8px;">Quick Examples — tap to use</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="cat-chip" onclick="setQuExample(this)">Received DTF film shipment</button>
+          <button class="cat-chip" onclick="setQuExample(this)">Used a roll of white ink this week</button>
+          <button class="cat-chip" onclick="setQuExample(this)">Sold shirts at market today</button>
+          <button class="cat-chip" onclick="setQuExample(this)">JDS order arrived today</button>
+          <button class="cat-chip" onclick="setQuExample(this)">Running low on powder</button>
+        </div>
       </div>
     </div>
 
@@ -1137,8 +1186,8 @@ function refreshAll(){
 function exportCSV(){const h=['name','sku','category','unit','qty','reorder','cost','vendor','notes'];const rows=items.map(it=>h.map(k=>`"${(it[k]||'').toString().replace(/"/g,'""')}"`));const csv=[h.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`l6i_inventory_${new Date().toISOString().split('T')[0]}.csv`;a.click();}
 
 function invTab(t){
-  document.querySelectorAll('.inv-tab').forEach((b,i)=>b.classList.toggle('active',['inv','reorder','log','vendors','import','scan','invoice','expiry','burnrate'][i]===t));
-  ['inv','reorder','log','vendors','import','scan','invoice','expiry','burnrate'].forEach(p=>{
+  document.querySelectorAll('.inv-tab').forEach((b,i)=>b.classList.toggle('active',['inv','reorder','log','vendors','import','scan','invoice','quickupdate','expiry','burnrate'][i]===t));
+  ['inv','reorder','log','vendors','import','scan','invoice','quickupdate','expiry','burnrate'].forEach(p=>{
     const el=document.getElementById('ipanel-'+p);
     if(el) el.style.display=p===t?'block':'none';
   });
@@ -1630,6 +1679,147 @@ function resetToDefaults() {
   seedItems(); seedVendors();
   renderInv(); renderVendors(); renderStats();
   toast('✅ Reset complete — 107 items loaded.');
+}
+
+// ── QUICK UPDATE ──────────────────────────────────────────────────────────────
+let quPendingChanges = [];
+let quPhotoBase64 = null;
+let quPhotoType = null;
+
+function setQuExample(btn) {
+  document.getElementById('qu-input').value = btn.textContent.trim();
+  document.getElementById('qu-input').focus();
+}
+
+function handleQuPhoto(input) {
+  if (!input.files[0]) return;
+  const file = input.files[0];
+  fileToBase64(file).then(b64 => {
+    quPhotoBase64 = b64;
+    quPhotoType = file.type;
+    toast('📷 Photo ready — hit Send to analyze');
+  });
+}
+
+function clearQuChat() {
+  document.getElementById('qu-history').innerHTML = '';
+  document.getElementById('qu-confirm').style.display = 'none';
+  document.getElementById('qu-input').value = '';
+  quPendingChanges = [];
+  quPhotoBase64 = null;
+  quPhotoType = null;
+  document.getElementById('qu-photo').value = '';
+}
+
+function addQuMessage(role, html) {
+  const history = document.getElementById('qu-history');
+  const isUser = role === 'user';
+  const div = document.createElement('div');
+  div.style.cssText = `display:flex;gap:10px;align-items:flex-start;${isUser?'flex-direction:row-reverse':''}`;
+  div.innerHTML = `
+    <div style="width:32px;height:32px;border-radius:50%;background:${isUser?'var(--red)':'var(--navy)'};display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">${isUser?'👤':'🤖'}</div>
+    <div style="flex:1;background:${isUser?'#fff0ec':'var(--white)'};padding:12px 14px;border-left:3px solid ${isUser?'var(--red)':'var(--gold)'};font-size:13px;line-height:1.6;max-width:90%;">${html}</div>`;
+  history.appendChild(div);
+  history.scrollTop = history.scrollHeight;
+}
+
+async function sendQuickUpdate() {
+  const input = document.getElementById('qu-input');
+  const text = input.value.trim();
+  if (!text && !quPhotoBase64) return;
+  const apiKey = getApiKey();
+  if (!apiKey) { invTab('invoice'); return; }
+
+  addQuMessage('user', quPhotoBase64
+    ? `<img src="data:${quPhotoType};base64,${quPhotoBase64}" style="max-width:200px;max-height:150px;display:block;margin-bottom:6px;border:1px solid var(--mid-gray)"><span>${e(text)||'(photo)'}</span>`
+    : e(text));
+  input.value = '';
+
+  const invContext = items.map(i => `${i.sku||'?'} | ${i.name} | qty:${i.qty} ${i.unit||''} | cat:${i.category}`).join('\n');
+
+  const typingId = 'qu-typing-'+Date.now();
+  const td = document.createElement('div');
+  td.id = typingId;
+  td.style.cssText = 'display:flex;gap:10px;align-items:center;padding:4px 0;';
+  td.innerHTML = `<div style="width:32px;height:32px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;">🤖</div><div style="font-size:12px;color:#aaa;font-style:italic;">thinking...</div>`;
+  document.getElementById('qu-history').appendChild(td);
+
+  try {
+    const response = await fetch('https://api.little6llc.com:3001/quick-update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        base64: quPhotoBase64 || '',
+        mediaType: quPhotoType || 'text/plain',
+        inventoryList: invContext,
+        userMessage: text || 'Analyze this photo for inventory updates'
+      })
+    });
+    const data = await response.json();
+    if (data.error) throw new Error(data.error);
+    const replyText = data.content?.map(b => b.text||'').join('') || '';
+    document.getElementById(typingId)?.remove();
+
+    const changesMatch = replyText.match(/<changes>([\s\S]*?)<\/changes>/);
+    const displayText = replyText.replace(/<changes>[\s\S]*?<\/changes>/g,'').trim();
+    addQuMessage('ai', displayText.replace(/\n/g,'<br>'));
+
+    if (changesMatch) {
+      try { quPendingChanges = JSON.parse(changesMatch[1].trim()); showQuConfirm(quPendingChanges); }
+      catch(err) { console.error('Changes parse error', err); }
+    }
+    quPhotoBase64 = null; quPhotoType = null;
+    document.getElementById('qu-photo').value = '';
+  } catch(err) {
+    document.getElementById(typingId)?.remove();
+    addQuMessage('ai', `❌ ${err.message}`);
+  }
+}
+
+function showQuConfirm(changes) {
+  const confirm = document.getElementById('qu-confirm');
+  confirm.style.display = 'block';
+  document.getElementById('qu-changes').innerHTML = changes.map((c,i) => {
+    const it = items.find(x => x.sku === c.sku);
+    const cur = it ? it.qty : '?';
+    const nxt = it ? (c.action==='add'?it.qty+c.amount:c.action==='subtract'?Math.max(0,it.qty-c.amount):c.amount) : c.amount;
+    const isNew = c.sku==='NEW'||!it;
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--mid-gray);flex-wrap:wrap;">
+      <input type="checkbox" id="qc-${i}" checked style="accent-color:var(--red);width:16px;height:16px;flex-shrink:0;">
+      <div style="flex:1;min-width:150px;"><div style="font-weight:600;font-size:13px;color:var(--navy);">${e(c.name)}</div>
+      <div style="font-size:11px;color:#888;">${e(c.reason||'')}${isNew?' <span style="color:var(--gold);">⚡ NEW</span>':''}</div></div>
+      <div style="font-family:'Courier Prime',monospace;font-size:13px;white-space:nowrap;">
+        ${isNew?`<span style="color:var(--gold);">Add ${c.amount} ${c.unit||''}</span>`:`${cur} → <strong style="color:${c.action==='add'?'var(--green)':'var(--red)'}">${nxt}</strong> ${it?.unit||''}`}
+      </div></div>`;
+  }).join('');
+  confirm.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function applyQuickChanges() {
+  let applied = 0;
+  quPendingChanges.forEach((c,i) => {
+    if (!document.getElementById(`qc-${i}`)?.checked) return;
+    const it = items.find(x => x.sku === c.sku);
+    if (!it || c.sku==='NEW') {
+      items.push({id:uid(),name:c.name,sku:c.sku==='NEW'?'':c.sku,category:'Other',unit:c.unit||'Each',qty:c.amount,reorder:0,cost:0,vendor:'',notes:'Added via Quick Update'});
+    } else {
+      if (c.action==='add') it.qty = Math.round((it.qty+c.amount)*1000)/1000;
+      else if (c.action==='subtract') it.qty = Math.max(0,Math.round((it.qty-c.amount)*1000)/1000);
+      else it.qty = c.amount;
+    }
+    applied++;
+  });
+  save(K.items,items); renderInv(); renderStats();
+  document.getElementById('qu-confirm').style.display = 'none';
+  quPendingChanges = [];
+  addQuMessage('ai', `✅ Applied ${applied} change${applied!==1?'s':''} to inventory.`);
+  toast(`✅ ${applied} update${applied!==1?'s':''} applied`);
+}
+
+function cancelQuickChanges() {
+  document.getElementById('qu-confirm').style.display = 'none';
+  quPendingChanges = [];
+  addQuMessage('ai','Changes cancelled — nothing was updated.');
 }
 
 renderInv();
