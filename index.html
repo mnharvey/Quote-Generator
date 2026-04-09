@@ -654,9 +654,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <label>✏️ Notes for this estimate</label>
       <textarea class="item-note" placeholder="Add notes, size info, links, special instructions..."></textarea>
     </div>
-        <button class="calc-btn" onclick="calcShirts()">CALCULATE</button>
-
-    <div class="section-divider" style="margin:14px 0 10px;"></div>
+        <div class="section-divider" style="margin:14px 0 10px;"></div>
     <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--navy);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">🎨 Build a Custom Shirt Order</div>
 
     <div class="form-row">
@@ -737,6 +735,22 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <div id="co-per-shirt" style="font-family:'Courier Prime',monospace;font-size:11px;color:rgba(255,255,255,.4);text-align:right;margin-top:2px;"></div>
     </div>
     <button class="add-to-quote-btn" id="co-add" style="display:none;" onclick="addCustomOrderToQuote()">+ ADD TO ESTIMATE</button>
+
+    <div class="section-divider" style="margin:14px 0 10px;"></div>
+    <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--navy);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">🤖 AI Shirt Advisor</div>
+    <div style="font-size:12px;color:var(--gray);margin-bottom:10px;">Describe the customer's event or need — get recommendations from our top styles.</div>
+    <div style="display:flex;gap:8px;margin-bottom:8px;">
+      <input type="text" id="shirt-ai-input" placeholder="e.g. golf tournament, church volunteer shirts, summer 5K run..." style="flex:1;padding:9px 10px;border:1.5px solid var(--mid-gray);font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--charcoal);outline:none;" onkeydown="if(event.key==='Enter')askShirtAdvisor()">
+      <button class="calc-btn" id="shirt-ai-btn" onclick="askShirtAdvisor()" style="white-space:nowrap;min-width:80px;">ASK</button>
+    </div>
+    <div id="shirt-ai-loading" style="display:none;font-size:12px;color:var(--gray);padding:8px 0;">Thinking...</div>
+    <div id="shirt-ai-result" style="display:none;background:var(--navy);padding:14px 16px;margin-bottom:8px;">
+      <div id="shirt-ai-text" style="font-size:13px;color:rgba(255,255,255,.85);line-height:1.7;white-space:pre-wrap;"></div>
+      <button onclick="addAdvisorToNotes()" style="margin-top:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;cursor:pointer;">📋 ADD TO NOTES</button>
+    </div>
+
+    <div class="section-divider" style="margin:14px 0 10px;"></div>
+    <button class="calc-btn" onclick="calcShirts()">CALCULATE</button>
     <div class="result-card" id="sh-result"></div>
     <button class="add-to-quote-btn" id="sh-add" style="display:none" onclick="addToQuote('sh')">+ ADD TO ESTIMATE</button>
 
@@ -4106,6 +4120,66 @@ function calcBigHeads(){
   showResult('bh-result', lines, total, qty, desc);
   lastCalc.bh = {desc:desc, total:total, qty:qty, details:[['Rate','$'+rate.toFixed(2)+' ea'],['Qty break',label],['Qty',qty]]};
   showAddBtn('bh-add');
+}
+
+// ─── AI SHIRT ADVISOR ────────────────────────────────────────
+var SHIRT_FAVORITES = [{"style": "64000", "brand": "Gildan", "name": "Softstyle T-Shirt", "fabric": "100% ring-spun cotton, 4.5 oz", "tags": ["soft", "everyday", "value", "screen print friendly"]}, {"style": "64000CVC", "brand": "Gildan", "name": "Softstyle CVC Tee", "fabric": "52% cotton / 48% polyester CVC, resists shrinking", "tags": ["soft", "won't shrink", "not 100% cotton", "everyday"]}, {"style": "DM130", "brand": "District", "name": "Perfect Tri Tee", "fabric": "50% polyester / 25% cotton / 25% rayon tri-blend", "tags": ["tri-blend", "premium", "soft", "lightweight", "won't shrink"]}, {"style": "NL6010", "brand": "Next Level Apparel", "name": "Adult Tri-Blend Tee", "fabric": "50% polyester / 25% cotton / 25% rayon", "tags": ["tri-blend", "premium", "retail fit", "won't shrink"]}, {"style": "ST450", "brand": "Sport-Tek", "name": "PosiCharge Competitor Cotton Touch Tee", "fabric": "3.8 oz 100% polyester with cotton feel, moisture-wicking", "tags": ["moisture-wicking", "athletic", "performance", "won't shrink", "golf", "outdoor events"]}, {"style": "ST420", "brand": "Sport-Tek", "name": "Posi-UV Pro Tee", "fabric": "100% polyester, UPF 50+ sun protection, moisture-wicking", "tags": ["moisture-wicking", "athletic", "UV protection", "outdoor", "golf", "summer events"]}, {"style": "8000", "brand": "Gildan", "name": "DryBlend 50/50 T-Shirt", "fabric": "50% cotton / 50% polyester blend, wicks moisture", "tags": ["won't shrink", "not 100% cotton", "moisture-wicking", "value", "workwear"]}, {"style": "18500", "brand": "Gildan", "name": "Heavy Blend Hooded Sweatshirt", "fabric": "50% cotton / 50% polyester fleece, 8 oz", "tags": ["heavy", "warm", "hoodie", "fall events", "won't shrink"]}, {"style": "BC8800", "brand": "BELLA+CANVAS", "name": "Women's Flowy Racerback Tank", "fabric": "65% polyester / 35% viscose, super soft drape", "tags": ["women's", "soft", "lightweight", "summer", "won't shrink"]}, {"style": "DT137L", "brand": "District", "name": "Women's Perfect Tri Rocker Tank", "fabric": "50% polyester / 25% cotton / 25% rayon tri-blend", "tags": ["women's", "tri-blend", "premium", "won't shrink"]}];
+
+function askShirtAdvisor() {
+  var input = (document.getElementById('shirt-ai-input').value || '').trim();
+  if (!input) { alert('Describe the customer\'s event or need first.'); return; }
+  var btn = document.getElementById('shirt-ai-btn');
+  btn.disabled = true; btn.textContent = '...';
+  document.getElementById('shirt-ai-loading').style.display = 'block';
+  document.getElementById('shirt-ai-result').style.display = 'none';
+
+  var favList = SHIRT_FAVORITES.map(function(s){
+    return '- ' + s.brand + ' ' + s.style + ' — ' + s.name + ' (' + s.fabric + ') Tags: ' + s.tags.join(', ');
+  }).join('\n');
+
+  var prompt = 'You are a branded apparel expert for Little 6 Industries LLC, a custom print shop in Maricopa AZ. ' +
+    'A customer needs shirts for: "' + input + '"\n\n' +
+    'Our favorite/stocked styles are:\n' + favList + '\n\n' +
+    'Recommend 2-3 styles from this list that best fit the customer\'s need. ' +
+    'For each recommendation explain WHY it fits (fabric, performance, feel, event type). ' +
+    'Keep it practical and conversational — this is for a sales rep to share with the customer. ' +
+    'Format: Style name (style number) — reason. Keep total response under 150 words.';
+
+  fetch(SERVER_URL + '/promo-suggest', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({prompt: prompt})
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    btn.disabled = false; btn.textContent = 'ASK';
+    document.getElementById('shirt-ai-loading').style.display = 'none';
+    if (data.success && data.text) {
+      document.getElementById('shirt-ai-text').textContent = data.text;
+      document.getElementById('shirt-ai-result').style.display = 'block';
+      window._shirtAdvisorText = data.text;
+    } else {
+      alert('Could not get recommendation. Try again.');
+    }
+  })
+  .catch(function(){
+    btn.disabled = false; btn.textContent = 'ASK';
+    document.getElementById('shirt-ai-loading').style.display = 'none';
+    alert('Could not reach server. Check your connection.');
+  });
+}
+
+function addAdvisorToNotes() {
+  var text = window._shirtAdvisorText || '';
+  if (!text) return;
+  var notesEl = document.querySelector('#panel-shirts .item-note');
+  if (notesEl) {
+    var existing = notesEl.value ? notesEl.value + '\n\n' : '';
+    notesEl.value = existing + 'AI Shirt Recommendation:\n' + text;
+  }
+  var btn = event.target;
+  btn.textContent = '✅ ADDED TO NOTES';
+  setTimeout(function(){ btn.textContent = '📋 ADD TO NOTES'; }, 2000);
 }
 
 // ─── CUSTOM SHIRT ORDER ──────────────────────────────────────
