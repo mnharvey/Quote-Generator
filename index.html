@@ -746,7 +746,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div id="shirt-ai-loading" style="display:none;font-size:12px;color:var(--gray);padding:8px 0;">Thinking...</div>
     <div id="shirt-ai-result" style="display:none;background:var(--navy);padding:14px 16px;margin-bottom:8px;">
       <div id="shirt-ai-text" style="font-size:13px;color:rgba(255,255,255,.85);line-height:1.7;white-space:pre-wrap;"></div>
-      <button onclick="addAdvisorToNotes()" style="margin-top:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;cursor:pointer;">📋 ADD TO NOTES</button>
+      <button id="shirt-advisor-notes-btn" onclick="addAdvisorToNotes()" style="margin-top:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;cursor:pointer;">📋 ADD TO NOTES</button>
     </div>
 
     <div class="section-divider" style="margin:14px 0 10px;"></div>
@@ -4177,9 +4177,11 @@ function addAdvisorToNotes() {
     var existing = notesEl.value ? notesEl.value + '\n\n' : '';
     notesEl.value = existing + 'AI Shirt Recommendation:\n' + text;
   }
-  var btn = event.target;
-  btn.textContent = '✅ ADDED TO NOTES';
-  setTimeout(function(){ btn.textContent = '📋 ADD TO NOTES'; }, 2000);
+  var btn = document.getElementById('shirt-advisor-notes-btn');
+  if (btn) {
+    btn.textContent = '\u2705 ADDED TO NOTES';
+    setTimeout(function(){ btn.textContent = '\uD83D\uDCCB ADD TO NOTES'; }, 2000);
+  }
 }
 
 // ─── CUSTOM SHIRT ORDER ──────────────────────────────────────
