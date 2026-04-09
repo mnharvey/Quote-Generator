@@ -655,6 +655,88 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <textarea class="item-note" placeholder="Add notes, size info, links, special instructions..."></textarea>
     </div>
         <button class="calc-btn" onclick="calcShirts()">CALCULATE</button>
+
+    <div class="section-divider" style="margin:14px 0 10px;"></div>
+    <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--navy);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">🎨 Build a Custom Shirt Order</div>
+
+    <div class="form-row">
+      <div class="field"><label>Adult Qty</label>
+        <input type="number" id="co-adult" value="0" min="0" oninput="calcCustomOrder()"></div>
+      <div class="field"><label>Youth Qty</label>
+        <input type="number" id="co-youth" value="0" min="0" oninput="calcCustomOrder()"></div>
+    </div>
+
+    <div class="form-row">
+      <div class="field"><label>Front Transfer Size</label>
+        <select id="co-front" onchange="calcCustomOrder()">
+          <option value="0">No front transfer</option>
+          <option value="1.00">4" — $1.00</option>
+          <option value="3.00">5" — $3.00</option>
+          <option value="4.00" selected>6–9" — $4.00</option>
+          <option value="5.00">10–12" — $5.00</option>
+          <option value="6.00">13–15" — $6.00</option>
+          <option value="7.00">16" — $7.00</option>
+        </select></div>
+      <div class="field"><label>Back Transfer Size</label>
+        <select id="co-back" onchange="calcCustomOrder()">
+          <option value="0" selected>No back transfer</option>
+          <option value="1.00">4" — $1.00</option>
+          <option value="3.00">5" — $3.00</option>
+          <option value="4.00">6–9" — $4.00</option>
+          <option value="5.00">10–12" — $5.00</option>
+          <option value="6.00">13–15" — $6.00</option>
+          <option value="7.00">16" — $7.00</option>
+        </select></div>
+    </div>
+
+    <div class="form-row">
+      <div class="field"><label>Sleeve / Pocket Transfer</label>
+        <select id="co-sleeve" onchange="calcCustomOrder()">
+          <option value="0" selected>None</option>
+          <option value="1.00">4" pocket/sleeve — $1.00</option>
+          <option value="3.00">5" — $3.00</option>
+          <option value="4.00">6" — $4.00</option>
+        </select></div>
+      <div class="field"><label>Press Fee</label>
+        <div style="padding:8px 0;font-size:13px;color:var(--gray);">$3.00 per shirt (auto)</div>
+      </div>
+    </div>
+
+    <div style="background:var(--light-gray);border:1.5px solid var(--mid-gray);padding:10px 12px;margin-bottom:10px;">
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--charcoal);cursor:pointer;margin-bottom:8px;">
+        <input type="checkbox" id="co-names-toggle" onchange="toggleNamesNumbers()" style="accent-color:var(--red);width:14px;height:14px;"> Add names / numbers
+      </label>
+      <div id="co-names-section" style="display:none;">
+        <div class="form-row" style="margin-bottom:6px;">
+          <div class="field"><label>Name Transfer Size</label>
+            <select id="co-name-size" onchange="calcCustomOrder()">
+              <option value="1.00" selected>4" (chest/pocket name) — $1.00</option>
+              <option value="3.00">5" — $3.00</option>
+              <option value="4.00">6–9" (back name) — $4.00</option>
+              <option value="5.00">10–12" (large back name) — $5.00</option>
+            </select></div>
+          <div class="field"><label>Number Transfer Size</label>
+            <select id="co-num-size" onchange="calcCustomOrder()">
+              <option value="0">No number</option>
+              <option value="4.00" selected>6–9" (standard number) — $4.00</option>
+              <option value="5.00">10–12" (large number) — $5.00</option>
+              <option value="6.00">13–15" (oversized) — $6.00</option>
+            </select></div>
+        </div>
+        <div class="note-box" style="font-size:11px;">Each name/number is a unique individual transfer + $3 press. Quantity = total shirts with names/numbers.</div>
+      </div>
+    </div>
+
+    <div id="co-result" style="display:none;background:var(--navy);padding:14px 16px;margin-bottom:10px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Order Summary</div>
+      <div id="co-breakdown" style="font-size:12px;color:rgba(255,255,255,.75);line-height:2;"></div>
+      <div style="border-top:1px solid rgba(255,255,255,.15);margin-top:10px;padding-top:10px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;">Est. Total</span>
+        <span id="co-total" style="font-family:'Courier Prime',monospace;font-size:22px;font-weight:700;color:var(--gold);"></span>
+      </div>
+      <div id="co-per-shirt" style="font-family:'Courier Prime',monospace;font-size:11px;color:rgba(255,255,255,.4);text-align:right;margin-top:2px;"></div>
+    </div>
+    <button class="add-to-quote-btn" id="co-add" style="display:none;" onclick="addCustomOrderToQuote()">+ ADD TO ESTIMATE</button>
     <div class="result-card" id="sh-result"></div>
     <button class="add-to-quote-btn" id="sh-add" style="display:none" onclick="addToQuote('sh')">+ ADD TO ESTIMATE</button>
 
@@ -4024,6 +4106,69 @@ function calcBigHeads(){
   showResult('bh-result', lines, total, qty, desc);
   lastCalc.bh = {desc:desc, total:total, qty:qty, details:[['Rate','$'+rate.toFixed(2)+' ea'],['Qty break',label],['Qty',qty]]};
   showAddBtn('bh-add');
+}
+
+// ─── CUSTOM SHIRT ORDER ──────────────────────────────────────
+function toggleNamesNumbers() {
+  var on = document.getElementById('co-names-toggle').checked;
+  document.getElementById('co-names-section').style.display = on ? 'block' : 'none';
+  calcCustomOrder();
+}
+
+function calcCustomOrder() {
+  var adult  = parseInt(document.getElementById('co-adult').value)  || 0;
+  var youth  = parseInt(document.getElementById('co-youth').value)  || 0;
+  var total  = adult + youth;
+  if (total <= 0) { document.getElementById('co-result').style.display='none'; document.getElementById('co-add').style.display='none'; return; }
+
+  var frontCost  = parseFloat(document.getElementById('co-front').value)  || 0;
+  var backCost   = parseFloat(document.getElementById('co-back').value)   || 0;
+  var sleeveCost = parseFloat(document.getElementById('co-sleeve').value) || 0;
+  var press      = 3.00;
+  var hasNames   = document.getElementById('co-names-toggle').checked;
+  var nameCost   = hasNames ? (parseFloat(document.getElementById('co-name-size').value) || 0) : 0;
+  var numCost    = hasNames ? (parseFloat(document.getElementById('co-num-size').value)  || 0) : 0;
+
+  var transferPerShirt = frontCost + backCost + sleeveCost;
+  var namesPerShirt    = nameCost + numCost;
+  var pressPerShirt    = press + (hasNames && (nameCost+numCost) > 0 ? press : 0); // extra press for names
+  var decorPerShirt    = transferPerShirt + namesPerShirt + pressPerShirt;
+  var garmentNote      = 'Garment cost added separately from shirt calculator above.';
+
+  var decorTotal = decorPerShirt * total;
+
+  var lines = [];
+  if (adult > 0)  lines.push(adult  + ' adult shirts');
+  if (youth > 0)  lines.push(youth  + ' youth shirts');
+  if (frontCost)  lines.push('Front transfer: $' + frontCost.toFixed(2) + ' x ' + total);
+  if (backCost)   lines.push('Back transfer: $'  + backCost.toFixed(2)  + ' x ' + total);
+  if (sleeveCost) lines.push('Sleeve/pocket: $'  + sleeveCost.toFixed(2)+ ' x ' + total);
+  lines.push('Press fee: $' + press.toFixed(2) + ' x ' + total);
+  if (hasNames && nameCost > 0) lines.push('Name transfer: $' + nameCost.toFixed(2) + ' x ' + total);
+  if (hasNames && numCost  > 0) lines.push('Number transfer: $' + numCost.toFixed(2)  + ' x ' + total);
+  if (hasNames) lines.push('Names/numbers press: $' + press.toFixed(2) + ' x ' + total);
+  lines.push('<em style="color:rgba(255,255,255,.4);">' + garmentNote + '</em>');
+
+  document.getElementById('co-breakdown').innerHTML = lines.map(function(l){ return '· ' + l; }).join('<br>');
+  document.getElementById('co-total').textContent = '$' + decorTotal.toFixed(2);
+  document.getElementById('co-per-shirt').textContent = '$' + decorPerShirt.toFixed(2) + ' decoration per shirt (excl. garment)';
+  document.getElementById('co-result').style.display = 'block';
+  document.getElementById('co-add').style.display = 'block';
+
+  window._coData = { desc: total + 'x Custom Shirts — decoration', total: decorTotal, qty: total,
+    details: [['Adult', adult], ['Youth', youth], ['Decor/shirt', '$'+decorPerShirt.toFixed(2)]] };
+}
+
+function addCustomOrderToQuote() {
+  if (!window._coData) return;
+  var d = window._coData;
+  itemCounter++;
+  quoteItems.push({ desc: d.desc, total: d.total, qty: d.qty, details: d.details, note: 'Add garment cost separately', id: itemCounter });
+  renderQuote();
+  var btn = document.getElementById('co-add');
+  var orig = btn.textContent;
+  btn.textContent = '+ ADDED'; btn.style.background='var(--green)'; btn.style.color='white'; btn.style.borderColor='var(--green)';
+  setTimeout(function(){ btn.textContent=orig; btn.style.background=btn.style.color=btn.style.borderColor=''; }, 1500);
 }
 
 // ─── MARKUP CALCULATOR ───────────────────────────────────────
