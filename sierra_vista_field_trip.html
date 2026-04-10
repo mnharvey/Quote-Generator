@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>L6I — Sierra Vista Field Trip</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&family=Courier+Prime:wght@400;700&display=swap');
+:root{--red:#B03028;--gold:#C8A84B;--navy:#1A1A2E;--navy-mid:#16213e;--charcoal:#2a2a2a;--gray:#555;--mid-gray:#ddd;--light-gray:#f5f4f1;--white:#fff;--cream:#faf9f6;--green:#1A6B3C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--charcoal);min-height:100vh;font-size:14px;}
+.header{background:var(--navy);border-bottom:3px solid var(--red);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200;}
+.header-left{display:flex;flex-direction:column;}
+.header-title{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;}
+.header-sub{font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;}
+.l6-mark{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;}
+.nav{display:flex;overflow-x:auto;background:var(--navy-mid);border-bottom:1px solid rgba(255,255,255,0.08);scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-btn{flex-shrink:0;padding:10px 14px;background:none;border:none;border-bottom:3px solid transparent;color:rgba(255,255,255,0.45);font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:color .15s;}
+.nav-btn.active{color:var(--gold);border-bottom-color:var(--red);}
+.content{background:var(--cream);padding:18px 15px;min-height:calc(100vh - 99px);}
+.panel{display:none;}
+.panel.active{display:block;}
+.panel-title{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:4px;}
+.panel-desc{font-size:12px;color:var(--gray);margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--red);}
+
+/* STOP CARDS */
+.stop-card{background:var(--white);border:1px solid var(--mid-gray);border-top:4px solid var(--red);padding:16px;margin-bottom:16px;}
+.stop-card.veteran{border-top-color:var(--gold);}
+.stop-card.soft{border-top-color:var(--gray);}
+.stop-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px;}
+.stop-name{font-family:'Oswald',sans-serif;font-size:17px;font-weight:700;color:var(--navy);text-transform:uppercase;line-height:1.1;}
+.stop-meta{font-size:11px;color:var(--gray);margin-top:2px;}
+.priority-badge{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;flex-shrink:0;}
+.badge-hot{background:var(--red);color:var(--white);}
+.badge-warm{background:var(--gold);color:var(--navy);}
+.badge-soft{background:var(--navy);color:var(--white);}
+.badge-personal{background:var(--green);color:var(--white);}
+
+.section-label{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gold);background:var(--navy);letter-spacing:2px;text-transform:uppercase;padding:2px 8px;display:inline-block;margin:10px 0 6px;}
+.section-label.red{background:var(--red);}
+.section-label.green{background:var(--green);}
+
+p,li{font-size:13px;line-height:1.6;color:var(--charcoal);}
+li{margin-bottom:.25rem;}
+ul{padding-left:1.1rem;}
+
+.pitch-box{border-left:3px solid var(--gold);background:var(--light-gray);padding:.75rem 1rem;margin-top:8px;}
+.pitch-label{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--red);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.pitch-box p{font-size:13px;font-style:italic;color:var(--charcoal);}
+
+.products-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.product-tag{font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;padding:3px 8px;border:1px solid var(--red);color:var(--red);}
+
+.vet-note{background:rgba(200,168,75,0.12);border-left:3px solid var(--gold);padding:8px 12px;font-size:12px;color:var(--charcoal);margin-top:8px;line-height:1.5;}
+.vet-note strong{color:var(--navy);}
+
+.address-row{font-family:'Courier Prime',monospace;font-size:11px;color:var(--gray);margin-top:6px;}
+
+/* OVERVIEW TAB */
+.route-row{display:grid;grid-template-columns:36px 1fr;gap:0;margin-bottom:4px;}
+.route-num{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--gold);background:var(--navy);display:flex;align-items:center;justify-content:center;}
+.route-info{padding:.6rem .85rem;border-bottom:1px solid var(--mid-gray);font-size:12.5px;color:var(--charcoal);line-height:1.5;}
+.route-info strong{font-weight:600;color:var(--navy);}
+.route-info span{font-size:11px;color:var(--gray);}
+
+.highlight{background:var(--navy);border-left:4px solid var(--gold);padding:12px 15px;margin-bottom:14px;}
+.highlight p{color:rgba(255,255,255,0.85);font-size:13px;line-height:1.6;}
+.highlight strong{color:var(--gold);}
+
+/* KIT REMINDER */
+.kit-row{display:flex;align-items:flex-start;gap:.6rem;padding:.6rem 0;border-bottom:1px solid var(--mid-gray);}
+.kit-row:last-child{border-bottom:none;}
+.kit-num{font-family:'Courier Prime',monospace;font-size:13px;font-weight:700;color:var(--gold);width:22px;flex-shrink:0;}
+.kit-text{font-size:12.5px;color:var(--charcoal);line-height:1.5;}
+
+@media(max-width:400px){.stop-header{flex-direction:column;}.priority-badge{align-self:flex-start;}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <div class="header-title">Sierra Vista — Field Trip</div>
+    <div class="header-sub">Thursday Outreach Guide</div>
+  </div>
+  <div class="l6-mark">L6I</div>
+</div>
+<div class="nav">
+  <a class="nav-btn" style="color:rgba(255,255,255,0.35);text-decoration:none;border-right:1px solid rgba(255,255,255,0.1);" href="https://mnharvey.github.io/Quote-Generator/index.html">← Quote Tool</a>
+  <button class="nav-btn active" onclick="show('overview',this)">Overview</button>
+  <button class="nav-btn" onclick="show('stops',this)">The Stops</button>
+  <button class="nav-btn" onclick="show('pitches',this)">Pitches</button>
+  <button class="nav-btn" onclick="show('kit',this)">What to Carry</button>
+</div>
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="panel active">
+    <div class="panel-title">Trip Overview</div>
+    <div class="panel-desc">Sierra Vista — 5 targets, 3 real business opportunities, 1 personal stop, 1 soft lead. Fort Huachuca market. Military-heavy customer base. SDVOSB angle plays well here.</div>
+    <div class="highlight">
+      <p><strong>Lead with the veteran card — everywhere.</strong> Sierra Vista is a Fort Huachuca town. <strong>19,000+ military personnel and contractors</strong> live and shop here. Every business owner knows that customer. You being SDVOSB certified and a veteran yourself is not a footnote — it's your opening line.</p>
+    </div>
+    <div style="background:var(--white);border:1px solid var(--mid-gray);border-top:3px solid var(--red);padding:14px 0;margin-bottom:14px;">
+      <div class="route-row">
+        <div class="route-num">1</div>
+        <div class="route-info"><strong>Apocalypse Arms &amp; Military Surplus</strong> — 101 W Fry Blvd <span>· HOT lead · Go here first</span></div>
+      </div>
+      <div class="route-row">
+        <div class="route-num">2</div>
+        <div class="route-info"><strong>Rising Sun Games</strong> — 1299 E Fry Blvd Ste D <span>· WARM lead · Custom merch opportunity</span></div>
+      </div>
+      <div class="route-row">
+        <div class="route-num">3</div>
+        <div class="route-info"><strong>The Mall at Sierra Vista</strong> — 2200 El Mercado Loop <span>· Walk the floor, identify local tenants</span></div>
+      </div>
+      <div class="route-row">
+        <div class="route-num">4</div>
+        <div class="route-info"><strong>R&amp;R Pizza Express</strong> — Sierra Vista <span>· Personal stop · Leave a card if the owner's there</span></div>
+      </div>
+      <div class="route-row">
+        <div class="route-num">5</div>
+        <div class="route-info"><strong>Sarge's Sidearms</strong> — 300 E 4th St, Benson AZ <span>· WARM lead · 30 min detour on the way home</span></div>
+      </div>
+    </div>
+    <div class="highlight">
+      <p><strong>West-End Pawn &amp; Gun</strong> — 176 W Fry Blvd, Sierra Vista. 4.7 stars, 65 reviews. Same street as Apocalypse Arms. If you're already on Fry Blvd, worth a quick stop for the same pitch as Sarge's.</p>
+    </div>
+  </div>
+
+  <!-- THE STOPS -->
+  <div id="stops" class="panel">
+    <div class="panel-title">The Stops</div>
+    <div class="panel-desc">Researched intel on each target. Know before you walk in.</div>
+
+    <!-- STOP 1 -->
+    <div class="stop-card veteran">
+      <div class="stop-header">
+        <div>
+          <div class="stop-name">Apocalypse Arms &amp; Military Surplus</div>
+          <div class="stop-meta">101 W Fry Blvd · Sierra Vista, AZ · (520) 458-9133</div>
+          <div class="address-row">apocalypsearmssv@gmail.com · Thu 9:30AM–6PM</div>
+        </div>
+        <div class="priority-badge badge-hot">Hot</div>
+      </div>
+      <div class="section-label">What we know</div>
+      <ul>
+        <li>Family-owned by Jim &amp; Kara Adams — over 20 years in business</li>
+        <li>Serves military, law enforcement, survivalists, and outdoors community</li>
+        <li>Actively supports veteran, youth, and school efforts in the community</li>
+        <li>390+ Google reviews, 4.4 stars — established, loyal customer base</li>
+        <li>Carries clothing, tactical gear, surplus alongside firearms and ammo</li>
+      </ul>
+      <div class="section-label red">Opportunity</div>
+      <ul>
+        <li>Store-branded merch — shirts, hats, patches, stickers for their loyal following</li>
+        <li>Event materials for any community or veteran events they sponsor</li>
+        <li>Custom engraved trophies or awards for competitions or giveaways</li>
+        <li>DTF transfers they could apply themselves if they do any in-house printing</li>
+      </ul>
+      <div class="products-row">
+        <div class="product-tag">DTF Transfers</div>
+        <div class="product-tag">Stickers</div>
+        <div class="product-tag">Custom Shirts</div>
+        <div class="product-tag">Engraved Items</div>
+        <div class="product-tag">Banners</div>
+      </div>
+      <div class="vet-note"><strong>Veteran angle:</strong> You're SDVOSB. They serve the military community. That's an immediate bond — mention it in the first 30 seconds. "I'm a service-disabled vet too — we're actually certified SDVOSB." They will respond to that.</div>
+    </div>
+
+    <!-- STOP 2 -->
+    <div class="stop-card">
+      <div class="stop-header">
+        <div>
+          <div class="stop-name">Rising Sun Games</div>
+          <div class="stop-meta">1299 E Fry Blvd Ste D · Sierra Vista, AZ · (520) 263-4581</div>
+          <div class="address-row">Thu 12PM–9PM · risingsungamestore.com</div>
+        </div>
+        <div class="priority-badge badge-warm">Warm</div>
+      </div>
+      <div class="section-label">What we know</div>
+      <ul>
+        <li>Sierra Vista's premier tabletop game shop — Magic, Pokémon, Warhammer, RPGs</li>
+        <li>Community hub — hosts game nights, tournaments, events regularly</li>
+        <li>10+ years in business, strong local following</li>
+        <li>Active on Facebook and Instagram — community-engaged owner</li>
+        <li>Justin specifically mentioned this as a potential merch opportunity</li>
+      </ul>
+      <div class="section-label red">Opportunity</div>
+      <ul>
+        <li>Store-branded shirts, hoodies, hats for staff and loyal regulars</li>
+        <li>Tournament prize support — trophies, engraved items, sticker packs</li>
+        <li>Event banners for game nights or conventions</li>
+        <li>Custom stickers — huge in the gaming community, low cost, high value</li>
+        <li>Foam board signs for in-store event promotions</li>
+      </ul>
+      <div class="products-row">
+        <div class="product-tag">Custom Stickers</div>
+        <div class="product-tag">Store Shirts</div>
+        <div class="product-tag">Event Banners</div>
+        <div class="product-tag">Foam Board</div>
+        <div class="product-tag">Engraved Trophies</div>
+      </div>
+      <div class="vet-note"><strong>Hook:</strong> Gaming stores live and die by community identity. Their regulars want to rep the store. "Your customers want to wear your brand — let me show you what a shirt package looks like for a shop your size."</div>
+    </div>
+
+    <!-- STOP 3 -->
+    <div class="stop-card soft">
+      <div class="stop-header">
+        <div>
+          <div class="stop-name">The Mall at Sierra Vista</div>
+          <div class="stop-meta">2200 El Mercado Loop · Sierra Vista, AZ</div>
+          <div class="address-row">Only enclosed mall south of Tucson · 50+ stores</div>
+        </div>
+        <div class="priority-badge badge-soft">Recon</div>
+      </div>
+      <div class="section-label">What we know</div>
+      <ul>
+        <li>Only indoor mall south of Tucson — draws from 75-mile radius including Mexico border towns</li>
+        <li>Fort Huachuca proximity means heavy military customer base</li>
+        <li>Mix of national chains and local independent tenants</li>
+        <li>Mall has a 1st Saturdays small business market — local vendor community exists here</li>
+        <li>Anchors: Dillard's, Best Buy, Cinemark — independents fill the inline spaces</li>
+      </ul>
+      <div class="section-label red">Opportunity</div>
+      <ul>
+        <li>Walk the floor — identify any local independent retailers (not chains)</li>
+        <li>Kiosk and cart operators are often the best targets — lower budget, need signage and shirts fast</li>
+        <li>Food court operators for staff shirts and window graphics</li>
+        <li>Don't pitch to chains — find the owner-operated spots</li>
+      </ul>
+      <div class="vet-note"><strong>Strategy:</strong> This is a recon stop, not a pitch stop. Spend 20 minutes walking the floor. Identify 3–4 independent businesses. Drop a card and a leave-behind. Follow up by email later that week.</div>
+    </div>
+
+    <!-- STOP 4 -->
+    <div class="stop-card soft">
+      <div class="stop-header">
+        <div>
+          <div class="stop-name">R&amp;R Pizza Express</div>
+          <div class="stop-meta">Sierra Vista, AZ · 4.4 stars · 332 reviews</div>
+          <div class="address-row">Known for fresh ingredients, dine-in, military discount</div>
+        </div>
+        <div class="priority-badge badge-personal">Personal</div>
+      </div>
+      <div class="section-label">What we know</div>
+      <ul>
+        <li>Popular local pizza spot with strong reviews and loyal following</li>
+        <li>Offers military discount — owner is military-community friendly</li>
+        <li>Dine-in, takeout, and delivery — full restaurant operation</li>
+        <li>Justin said it's worth the trip — go enjoy it</li>
+      </ul>
+      <div class="section-label red">Light Opportunity</div>
+      <ul>
+        <li>Staff shirts, to-go bag stickers, branded boxes — standard restaurant pitch</li>
+        <li>If the owner is present and you have a good conversation, open the quote tool</li>
+        <li>Don't force it — enjoy the pizza, leave a card, let it be organic</li>
+      </ul>
+      <div class="vet-note"><strong>Note:</strong> You're getting military discount here. Mention you're veteran-owned when you pay. If the owner or manager is nearby, that's your natural intro.</div>
+    </div>
+
+    <!-- STOP 5 -->
+    <div class="stop-card veteran">
+      <div class="stop-header">
+        <div>
+          <div class="stop-name">Sarge's Sidearms</div>
+          <div class="stop-meta">300 E 4th St · Benson, AZ · (520) 586-7250</div>
+          <div class="address-row">sales@sargessidearms.com · Thu 10AM–4PM · ~30 min from Sierra Vista</div>
+        </div>
+        <div class="priority-badge badge-warm">Warm</div>
+      </div>
+      <div class="section-label">What we know</div>
+      <ul>
+        <li>Owner: Jeff Binkley — veteran-owned and operated, established 2014</li>
+        <li>Henry Firearms dealer — American-made, patriot-oriented brand alignment</li>
+        <li>Offers CCW classes, gunsmithing, FFL transfers — community services beyond retail</li>
+        <li>Justin flagged as "good people" with strong community values</li>
+        <li>4.4 stars, small but loyal following</li>
+      </ul>
+      <div class="section-label red">Opportunity</div>
+      <ul>
+        <li>Store-branded shirts, hats, stickers for staff and regulars</li>
+        <li>CCW class materials — folders, notepads, branded pens via Promo with Grace</li>
+        <li>Custom patches or transfers for tactical/gun community apparel</li>
+        <li>Event signage if they run any shooting events or sales</li>
+      </ul>
+      <div class="products-row">
+        <div class="product-tag">Store Merch</div>
+        <div class="product-tag">DTF Transfers</div>
+        <div class="product-tag">Stickers</div>
+        <div class="product-tag">Promo with Grace</div>
+        <div class="product-tag">Event Signs</div>
+      </div>
+      <div class="vet-note"><strong>Veteran angle:</strong> Jeff is a vet. You're a vet. SDVOSB to veteran-owned small business — this is a peer conversation, not a cold sales call. Lead with "I heard about you from a mutual contact, wanted to introduce myself — veteran to veteran."</div>
+    </div>
+
+    <!-- BONUS STOP -->
+    <div class="stop-card">
+      <div class="stop-header">
+        <div>
+          <div class="stop-name">West-End Pawn &amp; Gun</div>
+          <div class="stop-meta">176 W Fry Blvd · Sierra Vista, AZ · (520) 220-7783</div>
+          <div class="address-row">4.7 stars · 65 reviews · Thu opens 9AM</div>
+        </div>
+        <div class="priority-badge badge-warm">Bonus</div>
+      </div>
+      <div class="section-label">What we know</div>
+      <ul>
+        <li>Same street as Apocalypse Arms — 1-minute drive</li>
+        <li>4.7 stars is exceptional for a pawn shop — loyal, happy customers</li>
+        <li>Pawn + gun combo means diverse customer base</li>
+      </ul>
+      <div class="section-label red">Opportunity</div>
+      <ul>
+        <li>Same pitch as the gun shops — store shirts, stickers, signage</li>
+        <li>Pawn shops often run sales events and promotions — banners, foam board</li>
+      </ul>
+      <div class="vet-note"><strong>Tip:</strong> You're already on Fry Blvd for Apocalypse Arms. This is a 5-minute addition. Drop a leave-behind even if the owner's not available.</div>
+    </div>
+
+  </div>
+
+  <!-- PITCHES -->
+  <div id="pitches" class="panel">
+    <div class="panel-title">Personalized Pitches</div>
+    <div class="panel-desc">Tailored openers for each stop. Memorize the first two lines before you walk in.</div>
+
+    <div style="background:var(--white);border:1px solid var(--mid-gray);border-top:3px solid var(--gold);padding:14px;margin-bottom:12px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:8px;">Apocalypse Arms</div>
+      <div class="pitch-box">
+        <div class="pitch-label">Opening line</div>
+        <p>"Hey — I'm Matt Harvey, Little 6 Industries, out of Maricopa. We're a veteran-owned print shop — SDVOSB certified. I heard you guys are the go-to for the military community down here and I wanted to introduce myself. Do you do any branded merch for the store?"</p>
+      </div>
+      <div class="pitch-box" style="margin-top:8px;">
+        <div class="pitch-label">If they show interest</div>
+        <p>"Your customer base already identifies with this brand. We could put your logo on shirts, hats, stickers — stuff your regulars would actually buy and wear. Let me build you a quick quote right now — takes two minutes."</p>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1px solid var(--mid-gray);border-top:3px solid var(--red);padding:14px;margin-bottom:12px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:8px;">Rising Sun Games</div>
+      <div class="pitch-box">
+        <div class="pitch-label">Opening line</div>
+        <p>"Hey, I'm Matt — I run a print shop out of Maricopa called Little 6 Industries. Game stores are actually one of our favorite clients because your community is so brand-loyal. Do you sell any store merch right now, or is that something you've thought about?"</p>
+      </div>
+      <div class="pitch-box" style="margin-top:8px;">
+        <div class="pitch-label">If they say no merch yet</div>
+        <p>"That's actually the perfect time to start — we can do a small run of shirts or stickers, no huge commitment. Your regulars will buy them. Let me show you what a starter package looks like."</p>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1px solid var(--mid-gray);border-top:3px solid var(--gold);padding:14px;margin-bottom:12px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:8px;">Sarge's Sidearms</div>
+      <div class="pitch-box">
+        <div class="pitch-label">Opening line</div>
+        <p>"Jeff — Matt Harvey, Little 6 Industries. I'm actually coming through from Maricopa on a Army thing and a mutual contact said I needed to meet you. Veteran to veteran — we're SDVOSB certified, we do custom printing and branded gear. Sounds like you're the kind of shop that could use a good local vendor."</p>
+      </div>
+      <div class="pitch-box" style="margin-top:8px;">
+        <div class="pitch-label">If he asks what you do</div>
+        <p>"Shirts, hats, stickers, signage — all in-house, fast turnaround. A lot of gun shops we work with use us for store merch and event materials. I can build you a quote on the spot if you want to see numbers."</p>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1px solid var(--mid-gray);border-top:3px solid var(--gray);padding:14px;margin-bottom:12px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:8px;">Mall — Independent Tenants</div>
+      <div class="pitch-box">
+        <div class="pitch-label">Universal drop-in</div>
+        <p>"Hey — I'm Matt with Little 6 Industries, we're a local print shop out of Maricopa. We do shirts, signs, stickers, branded gear — I was in the area and wanted to introduce myself. Do you ever need any of that for your team or your store?"</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT TO CARRY -->
+  <div id="kit" class="panel">
+    <div class="panel-title">What to Carry</div>
+    <div class="panel-desc">Pack the night before. Don't leave without all six.</div>
+    <div style="background:var(--white);border:1px solid var(--mid-gray);border-top:3px solid var(--red);padding:14px;margin-bottom:12px;">
+      <div class="kit-row">
+        <div class="kit-num">01</div>
+        <div class="kit-text"><strong>Phone with quote tool loaded</strong> — practice the flow once in the car before your first stop. Know it cold.</div>
+      </div>
+      <div class="kit-row">
+        <div class="kit-num">02</div>
+        <div class="kit-text"><strong>Capability statement</strong> — printed, 5+ copies. Pull it out at Apocalypse Arms and Sarge's specifically. The SDVOSB cert on there matters to these guys.</div>
+      </div>
+      <div class="kit-row">
+        <div class="kit-num">03</div>
+        <div class="kit-text"><strong>Sample kit — tailored per stop:</strong>
+          <br><br>
+          <strong style="color:var(--navy);">Apocalypse Arms &amp; West-End Pawn:</strong> Engraved tumbler or acrylic (they sell branded gear — show them what engraving looks like on a real product). Die-cut sticker in a tactical/military shape if you have one. DTF transfer on a dark shirt — their customers wear dark tactical colors.
+          <br><br>
+          <strong style="color:var(--navy);">Rising Sun Games:</strong> Sticker is your hero piece here — gaming culture lives and dies on stickers. Bring your sharpest die-cut. A foam board sample works too — they need in-store signage for events. Show them a shirt transfer on something colorful.
+          <br><br>
+          <strong style="color:var(--navy);">Sarge's Sidearms:</strong> Same as Apocalypse Arms — engraved item first, then sticker. Jeff is a Henry dealer — patriot brand, American-made. Bring anything with clean, sharp engraving. That's the product that resonates with this customer.
+          <br><br>
+          <strong style="color:var(--navy);">Mall walk:</strong> Bring a little of everything — you don't know who you'll meet. The tumbler and a sticker are your two most universal conversation pieces.
+          <br><br>
+          Let them hold it. Let them ask "how much?" That question means you open the quote tool.
+        </div>
+      </div>
+      <div class="kit-row">
+        <div class="kit-num">04</div>
+        <div class="kit-text"><strong>Leave-behind cards — with a handwritten note per stop:</strong>
+          <br><br>
+          <strong style="color:var(--navy);">Apocalypse Arms:</strong> Write "veteran-owned, SDVOSB — let's work together" on the back before you walk in. Jim and Kara will keep that card.
+          <br><br>
+          <strong style="color:var(--navy);">Rising Sun Games:</strong> Write "store merch + event stickers — let's talk" on the back. Specific enough to remind them exactly what the conversation was about.
+          <br><br>
+          <strong style="color:var(--navy);">Sarge's Sidearms:</strong> Address it to Jeff by name. "Jeff — vet to vet. Call anytime." That card lives on his counter.
+          <br><br>
+          <strong style="color:var(--navy);">Mall walk:</strong> Straight card, no note — you're moving fast. Quantity over personalization here.
+          <br><br>
+          Bring at least 20. Leave one at every stop even if the owner isn't there.
+        </div>
+      </div>
+      <div class="kit-row">
+        <div class="kit-num">05</div>
+        <div class="kit-text"><strong>Good/Better/Best promo sheet</strong> — especially useful at Rising Sun Games and for the mall walk. It's a conversation starter that doesn't require a pitch.</div>
+      </div>
+      <div class="kit-row">
+        <div class="kit-num">06</div>
+        <div class="kit-text"><strong>L6I branded shirt on your back</strong> — every stop, no exceptions. You are the sample. In a military town, looking sharp and branded matters.</div>
+      </div>
+    </div>
+    <div style="background:var(--navy);border-left:4px solid var(--gold);padding:12px 15px;">
+      <p style="color:rgba(255,255,255,0.85);font-size:13px;line-height:1.6;"><span style="color:var(--gold);font-family:'Oswald',sans-serif;font-weight:700;">After the trip:</span> Same day or next morning — text or email every warm contact. Reference something specific from the conversation. Send a quote link if you built one. Strike while it's fresh.</p>
+    </div>
+  </div>
+
+</div>
+<script>
+function show(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
