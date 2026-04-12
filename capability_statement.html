@@ -87,6 +87,18 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:v
   .no-print{display:none;}
   body{background:var(--white);}
   .page{box-shadow:none;max-width:100%;}
+  .header-left{padding:12px 18px 10px;}
+  .company-name{font-size:22px;}
+  .contact-block{margin-top:6px;line-height:1.6;}
+  .col{padding:12px 16px;}
+  .competency-list li,.diff-list li{padding:3px 0;font-size:11px;}
+  .perf-item{padding:7px 0;}
+  .perf-detail{font-size:11px;}
+  .full-col{padding:7px 16px;}
+  .naics-item{font-size:10px;padding:1px 0;}
+  .cap-footer{padding:8px 18px;}
+  .data-val{font-size:11px;}
+  @page{margin:0.35in;size:letter;}
 }
 @media(max-width:580px){
   .body-grid{grid-template-columns:1fr;}
@@ -195,45 +207,46 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:v
     </div>
   </div>
 
-  <!-- COMPANY DATA — FULL WIDTH -->
-  <div class="full-col">
-    <div class="section-head">Company Data</div>
-    <div class="data-grid">
-      <div class="data-item">
+  <!-- COMPANY DATA — FULL WIDTH COMPRESSED -->
+  <div class="full-col" style="padding:10px 20px;border-top:2px solid var(--navy);">
+    <div style="display:grid;grid-template-columns:auto auto auto auto 1fr;gap:6px 24px;align-items:start;margin-bottom:8px;">
+      <div>
         <div class="data-label">UEI</div>
         <div class="data-val">FVQ2JHZJGCG9</div>
       </div>
-      <div class="data-item">
-        <div class="data-label">CAGE Code</div>
+      <div>
+        <div class="data-label">CAGE</div>
         <div class="data-val">03D54</div>
       </div>
-      <div class="data-item">
+      <div>
         <div class="data-label">DUNS</div>
         <div class="data-val">92-758-2085</div>
       </div>
-      <div class="data-item">
+      <div>
         <div class="data-label">Certifications</div>
-        <div class="data-val">SDVOSB &nbsp;·&nbsp; VOSB &nbsp;·&nbsp; SBA Registered</div>
+        <div class="data-val">SDVOSB &nbsp;·&nbsp; VOSB &nbsp;·&nbsp; SBA</div>
       </div>
     </div>
-    <div class="naics-list" style="margin-top:10px;">
-      <div style="font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gray);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;">NAICS Codes</div>
-      <div class="naics-item"><span class="naics-code">323111</span> &nbsp;— Commercial Printing, except Screen and Books (Primary)</div>
-      <div class="naics-item"><span class="naics-code">314999</span> &nbsp;— All Other Miscellaneous Textile Product Mills</div>
-      <div class="naics-item"><span class="naics-code">339999</span> &nbsp;— All Other Miscellaneous Manufacturing</div>
-      <div class="naics-item"><span class="naics-code">541850</span> &nbsp;— Indoor and Outdoor Display Advertising</div>
-      <div class="naics-item"><span class="naics-code">541890</span> &nbsp;— Other Services Related to Advertising</div>
-    </div>
-    <div class="naics-list" style="margin-top:12px;">
-      <div style="font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gray);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;">PSC Codes</div>
-      <div class="naics-item"><span class="naics-code">8415</span> &nbsp;— Clothing, Special Purpose</div>
-      <div class="naics-item"><span class="naics-code">9905</span> &nbsp;— Signs, Advertising Displays, and Identification Plates</div>
-      <div class="naics-item"><span class="naics-code">7690</span> &nbsp;— Miscellaneous Printed Matter</div>
-      <div class="naics-item"><span class="naics-code">8455</span> &nbsp;— Badges and Insignia</div>
-      <div class="naics-item"><span class="naics-code">T001</span> &nbsp;— Photo/Map/Print/Publication — Arts/Graphics</div>
-      <div class="naics-item"><span class="naics-code">8345</span> &nbsp;— Flags and Pennants</div>
-      <div class="naics-item"><span class="naics-code">9999</span> &nbsp;— Miscellaneous Items</div>
-      <div class="naics-item"><span class="naics-code">7290</span> &nbsp;— Miscellaneous Household and Commercial Furnishings and Appliances</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px;border-top:1px solid var(--mid-gray);padding-top:7px;">
+      <div>
+        <div style="font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gray);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;">NAICS Codes</div>
+        <div class="naics-item"><span class="naics-code">323111</span> &nbsp;— Commercial Printing (Primary)</div>
+        <div class="naics-item"><span class="naics-code">314999</span> &nbsp;— Miscellaneous Textile Product Mills</div>
+        <div class="naics-item"><span class="naics-code">339999</span> &nbsp;— All Other Miscellaneous Manufacturing</div>
+        <div class="naics-item"><span class="naics-code">541850</span> &nbsp;— Indoor and Outdoor Display Advertising</div>
+        <div class="naics-item" style="border-bottom:none;"><span class="naics-code">541890</span> &nbsp;— Other Services Related to Advertising</div>
+      </div>
+      <div>
+        <div style="font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gray);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;">PSC Codes</div>
+        <div class="naics-item"><span class="naics-code">8415</span> &nbsp;— Clothing, Special Purpose</div>
+        <div class="naics-item"><span class="naics-code">9905</span> &nbsp;— Signs, Advertising Displays, ID Plates</div>
+        <div class="naics-item"><span class="naics-code">7690</span> &nbsp;— Miscellaneous Printed Matter</div>
+        <div class="naics-item"><span class="naics-code">8455</span> &nbsp;— Badges and Insignia</div>
+        <div class="naics-item"><span class="naics-code">T001</span> &nbsp;— Photo/Map/Print/Publication — Arts/Graphics</div>
+        <div class="naics-item"><span class="naics-code">8345</span> &nbsp;— Flags and Pennants</div>
+        <div class="naics-item"><span class="naics-code">9999</span> &nbsp;— Miscellaneous Items</div>
+        <div class="naics-item" style="border-bottom:none;"><span class="naics-code">7290</span> &nbsp;— Misc. Household and Commercial Furnishings</div>
+      </div>
     </div>
   </div>
 
