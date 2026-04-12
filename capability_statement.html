@@ -34,32 +34,31 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:v
 
 /* BODY GRID */
 .body-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--mid-gray);}
-.col{padding:18px 20px;}
+.col{padding:14px 18px;}
 .col-left{border-right:1px solid var(--mid-gray);}
 
 /* SECTION HEADERS */
-.section-head{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--white);background:var(--navy);letter-spacing:2px;text-transform:uppercase;padding:4px 10px;margin-bottom:10px;display:inline-block;}
+.section-head{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--white);background:var(--navy);letter-spacing:2px;text-transform:uppercase;padding:3px 8px;margin-bottom:8px;display:inline-block;}
 .section-head.red{background:var(--red);}
 
 /* CORE COMPETENCIES */
 .competency-list{list-style:none;padding:0;}
-.competency-list li{padding:5px 0;border-bottom:1px solid var(--mid-gray);font-size:12px;line-height:1.4;color:var(--charcoal);display:flex;align-items:flex-start;gap:8px;}
+.competency-list li{padding:4px 0;border-bottom:1px solid var(--mid-gray);font-size:11.5px;line-height:1.35;color:var(--charcoal);display:flex;align-items:flex-start;gap:8px;}
 .competency-list li:last-child{border-bottom:none;}
-.comp-dot{width:6px;height:6px;background:var(--red);flex-shrink:0;margin-top:4px;}
+.comp-dot{width:6px;height:6px;background:var(--red);flex-shrink:0;margin-top:3px;}
 
 /* DIFFERENTIATORS */
 .diff-list{list-style:none;padding:0;}
-.diff-list li{padding:5px 0;border-bottom:1px solid var(--mid-gray);font-size:12px;line-height:1.4;color:var(--charcoal);display:flex;align-items:flex-start;gap:8px;}
+.diff-list li{padding:4px 0;border-bottom:1px solid var(--mid-gray);font-size:11.5px;line-height:1.35;color:var(--charcoal);display:flex;align-items:flex-start;gap:8px;}
 .diff-list li:last-child{border-bottom:none;}
-.diff-dot{width:6px;height:6px;background:var(--gold);flex-shrink:0;margin-top:4px;}
+.diff-dot{width:6px;height:6px;background:var(--gold);flex-shrink:0;margin-top:3px;}
 
 /* PAST PERFORMANCE */
-.perf-item{padding:10px 0;border-bottom:1px solid var(--mid-gray);}
+.perf-item{padding:8px 0;border-bottom:1px solid var(--mid-gray);}
 .perf-item:last-child{border-bottom:none;}
-.perf-client{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.3px;}
-.perf-meta{font-size:11px;color:var(--gray);margin-top:1px;}
-.perf-detail{font-size:12px;color:var(--charcoal);margin-top:3px;line-height:1.4;}
-.perf-value{font-family:'Courier Prime',monospace;font-size:13px;font-weight:700;color:var(--red);margin-top:3px;}
+.perf-client{font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.3px;}
+.perf-meta{font-size:10px;color:var(--gray);margin-top:1px;}
+.perf-detail{font-size:11.5px;color:var(--charcoal);margin-top:2px;line-height:1.35;}
 
 /* COMPANY DATA */
 .data-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin-top:2px;}
@@ -154,7 +153,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:v
         <li><div class="comp-dot"></div>Custom apparel decoration — print-and-press, screen-ready transfers, and full garment production</li>
       </ul>
 
-      <div style="margin-top:16px;">
+      <div style="margin-top:10px;">
         <div class="section-head">Differentiators</div>
         <ul class="diff-list">
           <li><div class="diff-dot"></div>100% in-house production — faster turnaround, tighter quality control, no outsourcing</li>
@@ -207,8 +206,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:v
     </div>
   </div>
 
-  <!-- COMPANY DATA + FOOTER — NO BREAK -->
-  <div style="page-break-inside:avoid;break-inside:avoid;">
+  <!-- COMPANY DATA — FULL WIDTH COMPRESSED -->
   <div class="full-col" style="padding:10px 20px;border-top:2px solid var(--navy);">
     <div style="display:grid;grid-template-columns:auto auto auto auto 1fr;gap:6px 24px;align-items:start;margin-bottom:8px;">
       <div>
@@ -266,7 +264,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:v
       <div><a href="mailto:sales@little6llc.com">sales@little6llc.com</a></div>
     </div>
   </div>
-  </div><!-- /no-break wrapper -->
 
 </div><!-- /page -->
 </body>
