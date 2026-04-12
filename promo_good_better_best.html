@@ -103,7 +103,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--cream);color:var(--
 .footer-contact a{color:var(--gold);text-decoration:none;}
 
 /* NOTE ROW */
-.note-row{background:rgba(200,168,75,0.08);border-top:1px solid rgba(200,168,75,0.2);border-bottom:1px solid rgba(200,168,75,0.2);padding:8px 28px;display:flex;align-items:center;gap:10px;}
+.note-row{background:rgba(200,168,75,0.08);border-top:1px solid rgba(200,168,75,0.2);border-bottom:1px solid rgba(200,168,75,0.2);padding:6px 20px;display:flex;align-items:center;gap:10px;}
 .note-icon{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;}
 .note-text{font-size:11px;color:var(--gray);line-height:1.5;}
 
@@ -112,16 +112,29 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--cream);color:var(--
   body{background:var(--white);}
   .page{max-width:100%;box-shadow:none;}
   .no-print{display:none;}
-  .tier{padding:14px 16px 18px;}
-  .product-item{padding:5px 0;}
-  .tier-header{margin-bottom:10px;padding-bottom:9px;}
-  .tier-footer{margin-top:10px;padding-top:9px;}
-  .sheet-header{padding:14px 20px 12px;}
-  .sheet-title{font-size:22px;}
-  .note-row{padding:6px 20px;}
-  .cta-strip{padding:10px 20px;}
-  .sheet-footer{padding:9px 20px;}
-  @page{margin:0.4in;size:letter;}
+  .tier{padding:10px 14px 14px;}
+  .product-item{padding:4px 0;}
+  .product-detail{font-size:10px;}
+  .tier-header{margin-bottom:8px;padding-bottom:8px;}
+  .tier-footer{margin-top:8px;padding-top:8px;}
+  .note-row{padding:4px 16px;}
+  .note-text{font-size:10px;}
+  .cta-strip{padding:8px 16px;}
+  .cta-headline{font-size:13px;}
+  .cta-sub{font-size:10px;}
+  .cta-item-val{font-size:12px;}
+  .sheet-footer{padding:8px 16px;}
+  .footer-brand{font-size:11px;}
+  .footer-contact div{font-size:10px;}
+  .tier-name{font-size:18px;}
+  .tier-tagline{font-size:10px;}
+  .tier-price{font-size:10px;}
+  .footer-label{font-size:8px;}
+  .footer-text{font-size:10px;}
+  .cta-strip{page-break-after:avoid;break-after:avoid;}
+  .sheet-footer{page-break-inside:avoid;break-inside:avoid;page-break-before:avoid;break-before:avoid;}
+  .tiers{page-break-inside:avoid;break-inside:avoid;}
+  @page{margin:0.35in;size:letter;}
 }
 
 /* MOBILE */
@@ -148,17 +161,21 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--cream);color:var(--
 
   <!-- HEADER -->
   <div class="sheet-header">
-    <div class="header-top">
-      <div class="brand-block">
-        <div class="brand-name">Promo with Grace &nbsp;·&nbsp; A Little 6 Industries Brand</div>
-        <div class="sheet-title">Good · Better · Best</div>
-        <div class="sheet-sub">Promotional Products Guide</div>
-      </div>
-      <img src="https://mnharvey.github.io/Quote-Generator/images/sdvosb_cert.png" alt="SBA Service-Disabled Veteran-Owned Certified" style="width:80px;height:auto;display:block;">
-    </div>
-    <div class="header-desc">
-      Not sure where to start? Every tier gets your brand in front of people — the difference is <strong>impression, durability, and perceived value.</strong> Choose by budget, audience, or occasion. We'll help you find the right fit.
-    </div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+      <tr>
+        <td style="padding:14px 20px 10px;vertical-align:middle;">
+          <div class="brand-name" style="margin-bottom:2px;">Promo with Grace &nbsp;·&nbsp; A Little 6 Industries Brand</div>
+          <div class="sheet-title" style="font-size:22px;line-height:1;">Good · Better · Best</div>
+          <div class="sheet-sub" style="margin-top:3px;">Promotional Products Guide</div>
+          <div class="header-desc" style="border-top:1px solid rgba(255,255,255,0.1);margin-top:8px;padding-top:8px;">
+            Not sure where to start? Every tier gets your brand in front of people — the difference is <strong>impression, durability, and perceived value.</strong> Choose by budget, audience, or occasion. We'll help you find the right fit.
+          </div>
+        </td>
+        <td style="padding:14px 20px 10px;vertical-align:middle;text-align:right;width:90px;">
+          <img src="https://mnharvey.github.io/Quote-Generator/images/sdvosb_cert.png" alt="SBA SDVOSB Certified" style="width:80px;height:auto;display:inline-block;">
+        </td>
+      </tr>
+    </table>
   </div>
 
   <!-- NOTE ROW -->
