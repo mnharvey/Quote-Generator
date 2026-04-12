@@ -20,14 +20,14 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:v
 
 /* HEADER */
 .cap-header{background:var(--navy);padding:0;border-bottom:4px solid var(--red);display:grid;grid-template-columns:1fr auto;}
-.header-left{padding:20px 24px 16px;}
-.doc-type{font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:4px;}
-.company-name{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--white);line-height:1;text-transform:uppercase;letter-spacing:.5px;}
+.header-left{padding:12px 20px 10px;}
+.doc-type{font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:2px;}
+.company-name{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:var(--white);line-height:1;text-transform:uppercase;letter-spacing:.5px;}
 .company-name span{color:var(--gold);}
-.tagline{font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-top:5px;}
-.contact-block{font-size:11px;color:rgba(255,255,255,0.55);margin-top:10px;line-height:1.8;}
+.tagline{font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-top:3px;}
+.contact-block{font-size:11px;color:rgba(255,255,255,0.55);margin-top:6px;line-height:1.6;}
 .contact-block a{color:rgba(255,255,255,0.7);text-decoration:none;}
-.header-right{background:var(--red);padding:20px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:160px;text-align:center;}
+.header-right{background:var(--red);padding:12px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:120px;text-align:center;}
 .l6-mark{font-family:'Oswald',sans-serif;font-size:36px;font-weight:700;color:var(--white);letter-spacing:3px;line-height:1;}
 .sdvosb-badge{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--white);letter-spacing:1.5px;text-transform:uppercase;background:rgba(255,255,255,0.15);padding:3px 8px;margin-top:8px;display:block;}
 .veteran-line{font-size:10px;color:rgba(255,255,255,0.7);margin-top:4px;letter-spacing:.5px;}
@@ -72,7 +72,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:v
 .naics-code{font-family:'Courier Prime',monospace;font-weight:700;color:var(--navy);}
 
 /* FOOTER */
-.cap-footer{background:var(--navy);padding:12px 24px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;}
+.cap-footer{background:var(--navy);padding:10px 20px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;page-break-inside:avoid;break-inside:avoid;page-break-before:avoid;break-before:avoid;}
 .footer-brand{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--white);letter-spacing:.5px;}
 .footer-brand span{color:var(--gold);}
 .footer-tagline{font-size:10px;color:rgba(255,255,255,0.35);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
@@ -132,7 +132,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:v
       </div>
     </div>
     <div class="header-right">
-      <img src="https://mnharvey.github.io/Quote-Generator/images/sdvosb_cert.png" alt="SBA Service-Disabled Veteran-Owned Certified" style="width:100px;height:auto;display:block;margin:0 auto;">
+      <img src="https://mnharvey.github.io/Quote-Generator/images/sdvosb_cert.png" alt="SBA Service-Disabled Veteran-Owned Certified" style="width:80px;height:auto;display:block;margin:0 auto;">
     </div>
   </div>
 
@@ -207,7 +207,8 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:v
     </div>
   </div>
 
-  <!-- COMPANY DATA — FULL WIDTH COMPRESSED -->
+  <!-- COMPANY DATA + FOOTER — NO BREAK -->
+  <div style="page-break-inside:avoid;break-inside:avoid;">
   <div class="full-col" style="padding:10px 20px;border-top:2px solid var(--navy);">
     <div style="display:grid;grid-template-columns:auto auto auto auto 1fr;gap:6px 24px;align-items:start;margin-bottom:8px;">
       <div>
@@ -265,6 +266,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:v
       <div><a href="mailto:sales@little6llc.com">sales@little6llc.com</a></div>
     </div>
   </div>
+  </div><!-- /no-break wrapper -->
 
 </div><!-- /page -->
 </body>
