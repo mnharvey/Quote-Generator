@@ -25,7 +25,10 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--cream);color:var(--
 .header-desc strong{color:var(--gold);}
 
 /* TIER COLUMNS */
-.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-bottom:3px solid var(--navy);}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-bottom:3px solid var(--navy);flex:1;}
+.page{max-width:816px;margin:0 auto;background:var(--white);display:flex;flex-direction:column;}
+.tiers{flex:1;}
+.tier{padding:20px 20px 24px;border-right:1px solid var(--mid-gray);display:flex;flex-direction:column;}
 
 .tier{padding:20px 20px 24px;border-right:1px solid var(--mid-gray);}
 .tier:last-child{border-right:none;}
@@ -73,7 +76,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--cream);color:var(--
 .popular-badge{display:inline-block;background:var(--gold);color:var(--navy);font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:1px 6px;margin-left:6px;vertical-align:middle;}
 
 /* WHO IT'S FOR */
-.tier-footer{margin-top:14px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.08);}
+.tier-footer{margin-top:auto;padding-top:12px;border-top:1px solid rgba(0,0,0,0.08);}
 .tier.best .tier-footer{border-top-color:rgba(255,255,255,0.12);}
 .footer-label{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
 .tier.good .footer-label{color:var(--gray);}
@@ -110,13 +113,16 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--cream);color:var(--
 /* PRINT */
 @media print{
   body{background:var(--white);}
-  .page{max-width:100%;box-shadow:none;}
+  html,body{height:100%;}
+  .page{max-width:100%;box-shadow:none;min-height:96vh;display:flex;flex-direction:column;}
+  .tiers{flex:1;display:grid;grid-template-columns:repeat(3,1fr);}
+  .tier{display:flex;flex-direction:column;}
+  .tier-footer{margin-top:auto;}
   .no-print{display:none;}
   .tier{padding:10px 14px 14px;}
   .product-item{padding:4px 0;}
   .product-detail{font-size:10px;}
   .tier-header{margin-bottom:8px;padding-bottom:8px;}
-  .tier-footer{margin-top:8px;padding-top:8px;}
   .note-row{padding:4px 16px;}
   .note-text{font-size:10px;}
   .cta-strip{padding:8px 16px;}
@@ -133,7 +139,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--cream);color:var(--
   .footer-text{font-size:10px;}
   .cta-strip{page-break-after:avoid;break-after:avoid;}
   .sheet-footer{page-break-inside:avoid;break-inside:avoid;page-break-before:avoid;break-before:avoid;}
-  .tiers{page-break-inside:avoid;break-inside:avoid;}
   @page{margin:0.35in;size:letter;}
 }
 
