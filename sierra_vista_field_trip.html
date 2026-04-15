@@ -564,8 +564,9 @@ ul{padding-left:1.1rem;}
 </div>
 
 <script>
+var activeLetter = 'apocalypse';
 function printLetter(){
-  var active = document.querySelector('.letter-panel:not([style*="display:none"])');
+  var active = document.getElementById('letter-'+activeLetter);
   if(!active) active = document.getElementById('letter-apocalypse');
   var content = active.innerHTML;
   var w = window.open('','_blank');
@@ -593,6 +594,7 @@ function printLetter(){
   setTimeout(function(){w.print();},500);
 }
 function showLetter(id,btn){
+  activeLetter = id;
   document.querySelectorAll('.letter-panel').forEach(p=>p.style.display='none');
   document.querySelectorAll('#letters .nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('letter-'+id).style.display='block';
