@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>L6I Field Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#B03028;--gold:#C8A84B;--navy:#1A1A2E;--navy-mid:#16213e;
+  --charcoal:#2a2a2a;--gray:#555;--mid-gray:#ddd;--light-gray:#f5f4f1;
+  --white:#fff;--cream:#faf9f6;--green:#1A6B3C;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--charcoal);min-height:100vh;font-size:14px;}
+
+/* HEADER */
+.header{background:var(--navy);border-bottom:3px solid var(--red);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200;}
+.header-left{display:flex;align-items:center;gap:12px;}
+.header-logo-wrap{background:var(--white);padding:4px 8px;display:flex;align-items:center;}
+.header-logo-wrap img{height:32px;display:block;}
+.header-titles{display:flex;flex-direction:column;}
+.header-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;line-height:1;}
+.header-sub{font-size:9px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
+.header-date{font-family:'Courier Prime',monospace;font-size:11px;color:rgba(255,255,255,.4);}
+
+/* NAV */
+.nav{display:flex;overflow-x:auto;background:var(--navy-mid);border-bottom:1px solid rgba(255,255,255,.08);scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-btn{flex-shrink:0;padding:10px 14px;background:none;border:none;border-bottom:3px solid transparent;color:rgba(255,255,255,.45);font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.nav-btn.active{color:var(--gold);border-bottom-color:var(--red);}
+.nav-link{color:rgba(255,255,255,.3);text-decoration:none;border-right:1px solid rgba(255,255,255,.08);}
+.nav-link:hover{color:var(--gold);}
+
+/* CONTENT */
+.content{background:var(--cream);padding:16px 15px;min-height:calc(100vh - 99px);}
+.panel{display:none;}
+.panel.active{display:block;}
+.panel-title{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:4px;}
+.panel-desc{font-size:12px;color:var(--gray);margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--red);}
+
+/* HOME GRID */
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+
+/* MISSION CARD — ACTIVE */
+.mission-active{background:var(--navy);border-left:4px solid var(--gold);padding:16px;margin-bottom:14px;cursor:pointer;text-decoration:none;display:block;}
+.mission-active:hover{background:#222244;}
+.mission-badge{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--navy);background:var(--gold);letter-spacing:2px;text-transform:uppercase;padding:2px 8px;display:inline-block;margin-bottom:8px;}
+.mission-title{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.5px;line-height:1.1;margin-bottom:4px;}
+.mission-sub{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:10px;line-height:1.5;}
+.mission-stops{display:flex;flex-wrap:wrap;gap:5px;}
+.mission-stop-tag{font-family:'Oswald',sans-serif;font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);}
+.mission-stop-tag.hot{border-color:var(--red);color:var(--red);}
+.mission-stop-tag.warm{border-color:var(--gold);color:var(--gold);}
+.mission-cta{margin-top:12px;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;}
+
+/* QUICK LINK CARDS */
+.quick-card{background:var(--white);border:1px solid var(--mid-gray);border-top:3px solid var(--red);padding:14px;cursor:pointer;text-decoration:none;display:block;}
+.quick-card:hover{border-top-color:var(--gold);}
+.quick-icon{font-size:22px;margin-bottom:6px;display:block;}
+.quick-title{font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.quick-desc{font-size:11px;color:var(--gray);line-height:1.4;}
+
+/* KIT CHECKLIST */
+.kit-card{background:var(--white);border:1px solid var(--mid-gray);border-top:3px solid var(--navy);padding:14px;margin-bottom:14px;}
+.kit-card-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+.kit-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--mid-gray);}
+.kit-item:last-child{border-bottom:none;}
+.kit-cb{width:18px;height:18px;accent-color:var(--red);flex-shrink:0;margin-top:1px;cursor:pointer;}
+.kit-label{font-size:12.5px;color:var(--charcoal);line-height:1.5;cursor:pointer;}
+.kit-label.checked{text-decoration:line-through;color:#aaa;}
+
+/* MISSIONS LIST */
+.mission-row{background:var(--white);border:1px solid var(--mid-gray);border-left:4px solid var(--red);padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;text-decoration:none;}
+.mission-row.past{border-left-color:var(--gray);opacity:.6;}
+.mission-row-left{}
+.mr-title{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.3px;}
+.mr-meta{font-size:11px;color:var(--gray);margin-top:2px;}
+.mr-badge{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;flex-shrink:0;}
+.mr-badge.active{background:var(--red);color:var(--white);}
+.mr-badge.upcoming{background:var(--gold);color:var(--navy);}
+.mr-badge.complete{background:var(--navy);color:rgba(255,255,255,.5);}
+
+/* TOOLKIT */
+.tool-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--mid-gray);}
+.tool-row:last-child{border-bottom:none;}
+.tool-num{font-family:'Courier Prime',monospace;font-size:15px;font-weight:700;color:var(--gold);width:22px;flex-shrink:0;}
+.tool-body{}
+.tool-name{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;color:var(--navy);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px;}
+.tool-desc{font-size:12px;color:var(--gray);line-height:1.5;}
+.tool-link{display:inline-block;margin-top:5px;font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--white);background:var(--navy);border:1px solid var(--gold);padding:2px 8px;text-decoration:none;letter-spacing:1px;text-transform:uppercase;}
+.tool-link.red{background:var(--red);border-color:var(--red);}
+
+/* SOP */
+.sop-step{background:var(--white);border:1px solid var(--mid-gray);border-left:4px solid var(--red);padding:12px 14px;margin-bottom:8px;}
+.sop-step-num{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gold);background:var(--navy);letter-spacing:2px;text-transform:uppercase;padding:2px 6px;display:inline-block;margin-bottom:6px;}
+.sop-step-title{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:5px;}
+p,li{font-size:13px;line-height:1.6;color:var(--charcoal);}
+li{margin-bottom:.2rem;}
+ul{padding-left:1.1rem;}
+
+/* LIGHT BOX */
+.highlight{background:var(--navy);border-left:4px solid var(--gold);padding:12px 14px;margin-bottom:12px;}
+.highlight p{color:rgba(255,255,255,.85);font-size:13px;line-height:1.6;}
+.highlight strong{color:var(--gold);}
+
+/* NOTE BOX */
+.note-box{background:#fffbe6;border-left:3px solid var(--gold);padding:10px 14px;font-size:12px;color:#555;margin-bottom:12px;line-height:1.6;}
+
+/* TRAFFIC LIGHTS */
+.tl-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0;}
+.tl{padding:8px 10px;border-left:4px solid;}
+.tl.green{background:#f0fff4;border-color:var(--green);}
+.tl.yellow{background:#fffbe6;border-color:var(--gold);}
+.tl.red{background:#fff3f3;border-color:var(--red);}
+.tl-label{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.tl.green .tl-label{color:var(--green);}
+.tl.yellow .tl-label{color:#856404;}
+.tl.red .tl-label{color:var(--red);}
+.tl p{font-size:11px;}
+
+/* SDVOSB BADGE */
+.sdvosb-bar{background:var(--navy);display:flex;align-items:center;justify-content:center;gap:10px;padding:10px;margin-bottom:14px;}
+.sdvosb-bar img{height:32px;}
+.sdvosb-text{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;}
+
+@media(max-width:380px){.home-grid{grid-template-columns:1fr;}.tl-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-logo-wrap">
+      <img src="https://mnharvey.github.io/Quote-Generator/images/l6i_logo.png" alt="L6I">
+    </div>
+    <div class="header-titles">
+      <div class="header-title">Field Dashboard</div>
+      <div class="header-sub">Little 6 Industries · SDVOSB</div>
+    </div>
+  </div>
+  <div class="header-date" id="dash-date"></div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <a class="nav-btn nav-link" href="https://mnharvey.github.io/Quote-Generator/index.html">📋 Quote Tool</a>
+  <button class="nav-btn active" onclick="showTab('home',this)">🏠 Home</button>
+  <button class="nav-btn" onclick="showTab('missions',this)">🗺️ Missions</button>
+  <button class="nav-btn" onclick="showTab('toolkit',this)">🎒 Toolkit</button>
+  <button class="nav-btn" onclick="showTab('sop',this)">📘 SOP</button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- HOME -->
+  <div id="tab-home" class="panel active">
+    <div class="panel-title">Good Morning, Matt</div>
+    <div class="panel-desc">Your field command center · Get in, get out, get the order.</div>
+
+    <!-- ACTIVE MISSION -->
+    <a class="mission-active" href="https://mnharvey.github.io/Quote-Generator/sierra_vista_field_trip.html" target="_blank">
+      <div class="mission-badge">🗺️ Active Mission</div>
+      <div class="mission-title">Sierra Vista Field Trip</div>
+      <div class="mission-sub">Thursday outreach · Fort Huachuca market · 5 stops · SDVOSB angle plays strong here</div>
+      <div class="mission-stops">
+        <div class="mission-stop-tag hot">Apocalypse Arms — HOT</div>
+        <div class="mission-stop-tag warm">Rising Sun Games — WARM</div>
+        <div class="mission-stop-tag warm">Sarge's Sidearms — WARM</div>
+        <div class="mission-stop-tag">Mall — Recon</div>
+        <div class="mission-stop-tag">R&R Pizza — Personal</div>
+      </div>
+      <div class="mission-cta">Tap to open full mission brief →</div>
+    </a>
+
+    <!-- QUICK LINKS -->
+    <div class="home-grid">
+      <a class="quick-card" href="https://mnharvey.github.io/Quote-Generator/index.html">
+        <span class="quick-icon">📋</span>
+        <div class="quick-title">Quote Tool</div>
+        <div class="quick-desc">Build & email a branded estimate on the spot</div>
+      </a>
+      <a class="quick-card" href="https://mnharvey.github.io/Quote-Generator/capability_statement.html" target="_blank">
+        <span class="quick-icon">📄</span>
+        <div class="quick-title">Capability Statement</div>
+        <div class="quick-desc">SDVOSB · UEI · CAGE · Past performance</div>
+      </a>
+      <a class="quick-card" href="https://mnharvey.github.io/Quote-Generator/promo_good_better_best.html" target="_blank">
+        <span class="quick-icon">🎁</span>
+        <div class="quick-title">Promo Sheet</div>
+        <div class="quick-desc">Good · Better · Best — for corporate gifting</div>
+      </a>
+      <a class="quick-card" href="https://mnharvey.github.io/Quote-Generator/index_sales.html" target="_blank">
+        <span class="quick-icon">📊</span>
+        <div class="quick-title">Sales Strategy</div>
+        <div class="quick-desc">Prospect tracks · Talking points · KPIs</div>
+      </a>
+    </div>
+
+    <!-- KIT CHECKLIST -->
+    <div class="kit-card">
+      <div class="kit-card-title">☑️ Pre-Mission Checklist</div>
+      <div class="kit-item">
+        <input type="checkbox" class="kit-cb" id="k1" onchange="toggleKit(this)">
+        <label class="kit-label" for="k1">Phone charged · Quote tool loaded · Practice the flow once</label>
+      </div>
+      <div class="kit-item">
+        <input type="checkbox" class="kit-cb" id="k2" onchange="toggleKit(this)">
+        <label class="kit-label" for="k2">Capability statement — printed, 5+ copies</label>
+      </div>
+      <div class="kit-item">
+        <input type="checkbox" class="kit-cb" id="k3" onchange="toggleKit(this)">
+        <label class="kit-label" for="k3">Sample kit — engraved tumbler, die-cut stickers, DTF shirt</label>
+      </div>
+      <div class="kit-item">
+        <input type="checkbox" class="kit-cb" id="k4" onchange="toggleKit(this)">
+        <label class="kit-label" for="k4">Leave-behind cards — 20+ · Write personalized notes per stop</label>
+      </div>
+      <div class="kit-item">
+        <input type="checkbox" class="kit-cb" id="k5" onchange="toggleKit(this)">
+        <label class="kit-label" for="k5">Good/Better/Best promo sheet</label>
+      </div>
+      <div class="kit-item">
+        <input type="checkbox" class="kit-cb" id="k6" onchange="toggleKit(this)">
+        <label class="kit-label" for="k6">L6I branded shirt on your back — no exceptions</label>
+      </div>
+    </div>
+
+    <!-- SDVOSB BAR -->
+    <div class="sdvosb-bar">
+      <img src="https://mnharvey.github.io/Quote-Generator/images/sdvosb_cert.png" alt="SDVOSB">
+      <div class="sdvosb-text">Service-Disabled Veteran-Owned · UEI: FVQ2JHZJGCG9 · CAGE: 03D54</div>
+    </div>
+
+  </div>
+
+  <!-- MISSIONS -->
+  <div id="tab-missions" class="panel">
+    <div class="panel-title">Missions</div>
+    <div class="panel-desc">Field trip briefs · One per market · Tap to open.</div>
+
+    <div class="highlight">
+      <p><strong>How missions work:</strong> Each mission is a researched field trip brief — stops, pitches, what to carry, and leave-behind letters. Open the brief before you drive. Know your targets before you walk in.</p>
+    </div>
+
+    <a class="mission-row" href="https://mnharvey.github.io/Quote-Generator/sierra_vista_field_trip.html" target="_blank">
+      <div class="mission-row-left">
+        <div class="mr-title">Sierra Vista Field Trip</div>
+        <div class="mr-meta">April 17, 2026 · 5 stops · Fort Huachuca market · Cochise County</div>
+      </div>
+      <div class="mr-badge active">Active</div>
+    </a>
+
+    <div class="mission-row" style="cursor:default;opacity:.5;">
+      <div class="mission-row-left">
+        <div class="mr-title">Casa Grande / Coolidge</div>
+        <div class="mr-meta">Coming soon · Industrial corridor · Contractors & manufacturing</div>
+      </div>
+      <div class="mr-badge upcoming">Planned</div>
+    </div>
+
+    <div class="mission-row" style="cursor:default;opacity:.5;">
+      <div class="mission-row-left">
+        <div class="mr-title">Chandler / Gilbert Corporate</div>
+        <div class="mr-meta">Coming soon · Tech corridor · Corporate gifting & branded apparel</div>
+      </div>
+      <div class="mr-badge upcoming">Planned</div>
+    </div>
+
+    <div class="note-box" style="margin-top:14px;">New missions are built in the marketing chat and added here. Each one is a researched, ready-to-execute field brief.</div>
+  </div>
+
+  <!-- TOOLKIT -->
+  <div id="tab-toolkit" class="panel">
+    <div class="panel-title">Rep Toolkit</div>
+    <div class="panel-desc">Everything you carry. Everything you reference. All in one place.</div>
+
+    <div class="kit-card" style="border-top-color:var(--red);">
+      <div class="tool-row">
+        <div class="tool-num">01</div>
+        <div class="tool-body">
+          <div class="tool-name">Mobile Quote Tool</div>
+          <div class="tool-desc">Your #1 asset. Build and email a branded estimate in under 5 minutes. Practice the flow before every stop.</div>
+          <a class="tool-link red" href="https://mnharvey.github.io/Quote-Generator/index.html">Open Quote Tool</a>
+        </div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-num">02</div>
+        <div class="tool-body">
+          <div class="tool-name">Capability Statement</div>
+          <div class="tool-desc">One page. SDVOSB cert, NAICS codes, UEI/CAGE, past performance. Essential for government and corporate calls.</div>
+          <a class="tool-link" href="https://mnharvey.github.io/Quote-Generator/capability_statement.html" target="_blank">Open · Print</a>
+        </div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-num">03</div>
+        <div class="tool-body">
+          <div class="tool-name">Physical Sample Kit</div>
+          <div class="tool-desc">DTF transfer on a shirt, die-cut sticker, foam board sample, engraved tumbler. Let them hold it. "How much?" = open the quote tool.</div>
+        </div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-num">04</div>
+        <div class="tool-body">
+          <div class="tool-name">Leave-Behind Cards</div>
+          <div class="tool-desc">20+ per trip. Write a handwritten note per hot stop before you walk in. Personalized cards get kept.</div>
+        </div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-num">05</div>
+        <div class="tool-body">
+          <div class="tool-name">Good / Better / Best Promo Sheet</div>
+          <div class="tool-desc">Customer-facing promo product tiers from Promo with Grace. Perfect for corporate gifting and event organizers.</div>
+          <a class="tool-link" href="https://mnharvey.github.io/Quote-Generator/promo_good_better_best.html" target="_blank">Open · Print</a>
+        </div>
+      </div>
+      <div class="tool-row">
+        <div class="tool-num">06</div>
+        <div class="tool-body">
+          <div class="tool-name">L6I Branded Apparel — On Your Body</div>
+          <div class="tool-desc">Embroidered polo or DTF shirt, every stop, every day. You are a walking sample. If someone asks where you got the shirt, that's a lead.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <p><strong>The 60-second rule:</strong> Every rep should be able to demo the quote tool cold in under 60 seconds. If you can't, practice before you go out.</p>
+    </div>
+  </div>
+
+  <!-- SOP -->
+  <div id="tab-sop" class="panel">
+    <div class="panel-title">Sales SOP</div>
+    <div class="panel-desc">How we do it at Little 6 · Seven steps · Every time.</div>
+
+    <div class="note-box">This tool exists so you can quote fast, quote right, and never leave a customer waiting. Follow these steps every time and we stay consistent — whether it's Matt, Lindsay, or a new rep on their first day.</div>
+
+    <div class="sop-step">
+      <div class="sop-step-num">Step 1</div>
+      <div class="sop-step-title">Set Up the Estimate</div>
+      <ul>
+        <li>Open the Estimate Sheet before you calculate anything</li>
+        <li>Enter customer <strong>name, company, and email</strong> first — skip this and the PDF goes out blank</li>
+        <li>Enter <strong>your name</strong> in the Sales Rep field</li>
+        <li>Set the date — defaults to today, double-check it</li>
+      </ul>
+    </div>
+
+    <div class="sop-step">
+      <div class="sop-step-num">Step 2</div>
+      <div class="sop-step-title">Build the Quote</div>
+      <ul>
+        <li>Select a product from the sidebar or Home search</li>
+        <li>Enter quantity, size, and options — hit <strong>Calculate</strong></li>
+        <li>Watch the traffic light:</li>
+      </ul>
+      <div class="tl-grid">
+        <div class="tl green"><div class="tl-label">✅ Green</div><p>Good to go. Add to estimate.</p></div>
+        <div class="tl yellow"><div class="tl-label">⚠️ Yellow</div><p>Cutting into margin. Confirm before quoting.</p></div>
+        <div class="tl red"><div class="tl-label">🚫 Red</div><p>Stop. Call Matt or Lindsay first.</p></div>
+      </div>
+      <ul>
+        <li>Hit <strong>+ Add to Estimate</strong> — repeat for every product</li>
+      </ul>
+    </div>
+
+    <div class="sop-step">
+      <div class="sop-step-num">Step 3</div>
+      <div class="sop-step-title">Promo Products</div>
+      <ul>
+        <li>Use the <strong>🎁 Promo with Grace</strong> panel — not DC directly</li>
+        <li>Describe what the customer needs — quantity, budget, timeline</li>
+        <li>Check the <strong>ORDER FROM</strong> block — that's who you call</li>
+        <li>Always confirm pricing with the vendor before sending the PDF</li>
+      </ul>
+    </div>
+
+    <div class="sop-step">
+      <div class="sop-step-num">Step 4</div>
+      <div class="sop-step-title">Send the Estimate</div>
+      <ul>
+        <li>Hit <strong>✉ Email Estimate</strong> — PDF goes to customer automatically</li>
+        <li>Copy goes to sales@little6llc.com so Matt and Lindsay know</li>
+        <li>Use Print if customer is in person · Copy to paste into a text</li>
+      </ul>
+    </div>
+
+    <div class="sop-step">
+      <div class="sop-step-num">Step 5</div>
+      <div class="sop-step-title">Customer Approves</div>
+      <ul>
+        <li><strong>In-house orders</strong> — notify Lindsay to schedule production</li>
+        <li><strong>Promo orders</strong> — call the vendor on the ORDER FROM block</li>
+        <li>Confirm artwork is ready before placing any order</li>
+      </ul>
+    </div>
+
+    <div class="sop-step">
+      <div class="sop-step-num">Step 6</div>
+      <div class="sop-step-title">Discounts & Approvals</div>
+      <ul>
+        <li>Standard discounts are built in — use them freely</li>
+        <li><strong>Veterans and nonprofits</strong> get 15% off — select in the dropdown</li>
+        <li>Anything beyond standard needs Matt or Lindsay approval</li>
+      </ul>
+    </div>
+
+    <div class="sop-step">
+      <div class="sop-step-num">Step 7</div>
+      <div class="sop-step-title">When You're Stuck</div>
+      <ul>
+        <li><strong>Pricing question</strong> — check traffic light first, then ask Lindsay</li>
+        <li><strong>Product not in tool</strong> — Feedback button on Home, Matt adds it</li>
+        <li><strong>Rush order</strong> — always confirm with Lindsay before promising</li>
+        <li><strong>Something unusual</strong> — don't guess, call Matt</li>
+      </ul>
+      <div class="highlight" style="margin-top:10px;">
+        <p>✅ When in doubt, underpromise and ask. A customer who waits is better than a customer who got the wrong price.</p>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /content -->
+
+<script>
+document.getElementById('dash-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function toggleKit(cb) {
+  var label = cb.nextElementSibling;
+  label.classList.toggle('checked', cb.checked);
+  // Save state
+  var state = {};
+  document.querySelectorAll('.kit-cb').forEach(function(c) { state[c.id] = c.checked; });
+  try { localStorage.setItem('l6i_kit', JSON.stringify(state)); } catch(e) {}
+}
+
+// Restore checklist state
+try {
+  var saved = JSON.parse(localStorage.getItem('l6i_kit') || '{}');
+  Object.keys(saved).forEach(function(id) {
+    var cb = document.getElementById(id);
+    if (cb && saved[id]) {
+      cb.checked = true;
+      cb.nextElementSibling.classList.add('checked');
+    }
+  });
+} catch(e) {}
+</script>
+</body>
+</html>
