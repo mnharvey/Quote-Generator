@@ -170,7 +170,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 <img id="hidden-logo" src="https://mnharvey.github.io/Quote-Generator/images/l6i_logo.png" style="display:none" alt="">
 <div class="header">
   <img class="header-logo" src="https://mnharvey.github.io/Quote-Generator/images/l6i_logo.png" alt="Little 6 Industries">
-  <a href="https://mnharvey.github.io/Quote-Generator/dashboard.html" style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--gold);padding:5px 10px;white-space:nowrap;margin-right:6px;">&#9776; Dashboard</a>
+  <a href="inventory.html" style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--gold);padding:5px 10px;white-space:nowrap;margin-right:6px;">&#9776; Portal</a>
   <a href="index_sales.html" style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;color:var(--white);letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--white);padding:5px 10px;white-space:nowrap;">&#128202; Sales</a>
   <div class="header-right">
     <div class="header-title">Sales Estimate Tool</div>
@@ -2675,6 +2675,7 @@ function addToQuote(key){
   var itemNote = noteEl ? noteEl.value.trim() : '';
   quoteItems.push({desc:item.desc,total:item.total,qty:item.qty,details:item.details||[],note:itemNote,id:itemCounter});
   renderQuote();
+  if(noteEl) noteEl.value = '';
   var btn=document.getElementById(key+'-add');
   if(btn){
     var orig=btn.textContent;
@@ -2755,9 +2756,14 @@ function buildQuoteText(){
   if(email)t+='Email: '+email+'\n';
   if(rep)t+='Sales Rep: '+rep+'\n';
   t+='Date: '+date+'\n\n';
-  quoteItems.forEach(function(i){t+='* '+i.desc+': $'+i.total.toFixed(2)+'\n';});
-  var qn=quoteItems.filter(function(i){return i.note;}).map(function(i){return i.desc+": "+i.note;}).join("\n");
-  if(qn){t+='\nNotes:\n'+qn+'\n';}
+  quoteItems.forEach(function(i){
+    t += '* ' + i.desc + ': $' + i.total.toFixed(2) + '\n';
+    if(i.details && i.details.length){
+      i.details.forEach(function(d){ t += '    ' + d[0] + ': ' + d[1] + '\n'; });
+    }
+    if(i.note){ t += '    Note: ' + i.note + '\n'; }
+    t += '\n';
+  });
   t+='\nTOTAL: $'+total.toFixed(2)+'\n\n';
   t+='\n--- ESTIMATE TERMS ---\n';
   t+='This is a price estimate, not a final invoice. Prices are subject to change based on\n';
