@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>L6I Field Intake</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#B03028;--gold:#C8A84B;--navy:#1A1A2E;--navy-mid:#16213e;--charcoal:#2a2a2a;--gray:#555;--mid-gray:#ddd;--light-gray:#f5f4f1;--white:#fff;--cream:#faf9f6;--green:#1A6B3C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--charcoal);min-height:100vh;font-size:14px;}
+.header{background:var(--navy);border-bottom:3px solid var(--red);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200;}
+.header-left{display:flex;align-items:center;gap:12px;}
+.header-logo-wrap{background:var(--white);padding:4px 8px;}
+.header-logo-wrap img{height:30px;display:block;}
+.header-titles{display:flex;flex-direction:column;}
+.header-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;}
+.header-sub{font-size:9px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
+.back-btn{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--gold);padding:5px 10px;white-space:nowrap;}
+.content{background:var(--cream);padding:16px 15px;min-height:calc(100vh - 56px);}
+.section-head{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--white);background:var(--navy);letter-spacing:2px;text-transform:uppercase;padding:4px 10px;margin-bottom:10px;display:inline-block;}
+.section-head.red{background:var(--red);}
+.card{background:var(--white);border:1px solid var(--mid-gray);border-top:3px solid var(--red);padding:14px 15px;margin-bottom:14px;}
+.field{margin-bottom:12px;}
+.field label{display:block;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--gray);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+.field input,.field select,.field textarea{width:100%;padding:9px 10px;border:1.5px solid var(--mid-gray);font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--charcoal);outline:none;background:var(--white);}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--navy);}
+.field textarea{resize:vertical;min-height:80px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.cb-group{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:2px;}
+.cb-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1.5px solid var(--mid-gray);background:var(--white);cursor:pointer;}
+.cb-item input{width:15px;height:15px;accent-color:var(--red);flex-shrink:0;cursor:pointer;}
+.cb-item label{font-size:12px;color:var(--charcoal);cursor:pointer;line-height:1;}
+.photo-area{border:2px dashed var(--mid-gray);padding:20px;text-align:center;background:var(--white);cursor:pointer;margin-top:2px;}
+.photo-area:hover{border-color:var(--navy);}
+.photo-area p{font-size:12px;color:var(--gray);margin-bottom:8px;}
+.photo-preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.photo-thumb{width:80px;height:80px;object-fit:cover;border:1px solid var(--mid-gray);}
+.photo-thumb-wrap{position:relative;}
+.photo-remove{position:absolute;top:-6px;right:-6px;background:var(--red);color:var(--white);border:none;width:18px;height:18px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.submit-btn{width:100%;padding:14px;background:var(--red);color:var(--white);border:none;font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:10px;}
+.submit-btn:disabled{background:#ccc;cursor:not-allowed;}
+.status-box{display:none;padding:12px 14px;font-size:13px;font-weight:600;text-align:center;margin-bottom:14px;}
+.status-box.success{background:#f0fff4;color:var(--green);border-left:4px solid var(--green);}
+.status-box.error{background:#fff3f3;color:var(--red);border-left:4px solid var(--red);}
+.rep-bar{background:var(--navy);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.rep-bar label{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;}
+.rep-bar input{flex:1;padding:7px 10px;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--white);outline:none;}
+@media(max-width:400px){.form-row{grid-template-columns:1fr;}.cb-group{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-logo-wrap">
+      <img src="https://mnharvey.github.io/Quote-Generator/images/l6i_logo.png" alt="L6I">
+    </div>
+    <div class="header-titles">
+      <div class="header-title">Field Intake</div>
+      <div class="header-sub">Stop Report · Little 6 Industries</div>
+    </div>
+  </div>
+  <a class="back-btn" href="https://mnharvey.github.io/Quote-Generator/dashboard.html">← Dashboard</a>
+</div>
+
+<div class="content">
+
+  <!-- REP NAME BAR -->
+  <div class="rep-bar">
+    <label>Rep</label>
+    <input type="text" id="rep-name" placeholder="Your name" autocomplete="name">
+  </div>
+
+  <div id="status-box" class="status-box"></div>
+
+  <!-- BUSINESS INFO -->
+  <div class="card">
+    <div class="section-head">Business Info</div>
+    <div class="form-row">
+      <div class="field"><label>Business Name *</label><input type="text" id="biz-name" placeholder="e.g. Apocalypse Arms"></div>
+      <div class="field"><label>Contact Name</label><input type="text" id="contact-name" placeholder="Owner / Manager name"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Title / Role</label><input type="text" id="contact-title" placeholder="e.g. Owner, Manager"></div>
+      <div class="field"><label>Phone</label><input type="tel" id="contact-phone" placeholder="(520) 000-0000"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Email</label><input type="email" id="contact-email" placeholder="email@business.com"></div>
+      <div class="field"><label>Follow-Up Date</label><input type="date" id="followup-date"></div>
+    </div>
+    <div class="field"><label>Address</label><input type="text" id="biz-address" placeholder="Street, City, State"></div>
+  </div>
+
+  <!-- VISIT INFO -->
+  <div class="card">
+    <div class="section-head red">Visit Details</div>
+    <div class="form-row">
+      <div class="field"><label>Visit Type</label>
+        <select id="visit-type">
+          <option value="Cold Stop">Cold Stop</option>
+          <option value="Warm Follow-Up">Warm Follow-Up</option>
+          <option value="Event / Show">Event / Show</option>
+          <option value="Referral">Referral</option>
+          <option value="Scheduled Meeting">Scheduled Meeting</option>
+        </select>
+      </div>
+      <div class="field"><label>Outcome</label>
+        <select id="visit-outcome">
+          <option value="Interested — Follow up">Interested — Follow up</option>
+          <option value="Quote Built & Sent">Quote Built & Sent</option>
+          <option value="Left Leave-Behind">Left Leave-Behind</option>
+          <option value="Warm — Not Ready Yet">Warm — Not Ready Yet</option>
+          <option value="Not Interested">Not Interested</option>
+          <option value="No Contact — Owner Absent">No Contact — Owner Absent</option>
+          <option value="Closed — Order Placed">Closed — Order Placed</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCTS DISCUSSED -->
+  <div class="card">
+    <div class="section-head">Products Discussed</div>
+    <div class="cb-group">
+      <div class="cb-item"><input type="checkbox" id="p-shirts"><label for="p-shirts">👕 Shirts / Apparel</label></div>
+      <div class="cb-item"><input type="checkbox" id="p-dtf"><label for="p-dtf">🖨️ DTF Transfers</label></div>
+      <div class="cb-item"><input type="checkbox" id="p-stickers"><label for="p-stickers">🔖 Stickers</label></div>
+      <div class="cb-item"><input type="checkbox" id="p-signs"><label for="p-signs">🪧 Signs / Banners</label></div>
+      <div class="cb-item"><input type="checkbox" id="p-embroidery"><label for="p-embroidery">🧵 Embroidery</label></div>
+      <div class="cb-item"><input type="checkbox" id="p-laser"><label for="p-laser">⚡ Laser Engraving</label></div>
+      <div class="cb-item"><input type="checkbox" id="p-tumblers"><label for="p-tumblers">🥤 Tumblers / UV</label></div>
+      <div class="cb-item"><input type="checkbox" id="p-promo"><label for="p-promo">🎁 Promo with Grace</label></div>
+      <div class="cb-item"><input type="checkbox" id="p-foamboard"><label for="p-foamboard">📋 Foam Board</label></div>
+      <div class="cb-item"><input type="checkbox" id="p-canopy"><label for="p-canopy">⛺ Canopy Tent</label></div>
+      <div class="cb-item"><input type="checkbox" id="p-bigheads"><label for="p-bigheads">🙂 Big Heads</label></div>
+      <div class="cb-item"><input type="checkbox" id="p-other"><label for="p-other">📦 Other</label></div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="card">
+    <div class="section-head">Field Notes</div>
+    <div class="field"><label>What happened · What they need · Next step *</label>
+      <textarea id="field-notes" rows="5" placeholder="e.g. Spoke with Jim Adams — owner. Very interested in store-branded shirts and stickers. Said he's been looking for a local vendor. Asked for a quote on 24 shirts + die-cut stickers. Follow up by end of week with a quote."></textarea>
+    </div>
+    <div class="field"><label>Estimated Order Value</label>
+      <input type="text" id="est-value" placeholder="e.g. $500–$800 or Unknown">
+    </div>
+  </div>
+
+  <!-- PHOTO CAPTURE -->
+  <div class="card">
+    <div class="section-head">Photos</div>
+    <p style="font-size:12px;color:var(--gray);margin-bottom:10px;">Storefront, business card, product sample, anything useful. Photos are attached to the email.</p>
+    <div class="photo-area" onclick="document.getElementById('photo-input').click()">
+      <p>📷 Tap to take a photo or choose from library</p>
+      <p style="font-size:11px;color:#aaa;">JPG, PNG — max 5MB each</p>
+    </div>
+    <input type="file" id="photo-input" accept="image/*" multiple capture="environment" style="display:none;" onchange="handlePhotos(this)">
+    <div class="photo-preview" id="photo-preview"></div>
+  </div>
+
+  <!-- SUBMIT -->
+  <button class="submit-btn" id="submit-btn" onclick="submitIntake()">📤 SUBMIT FIELD REPORT</button>
+
+</div><!-- /content -->
+
+<script>
+var SERVER_URL = 'https://api.little6llc.com:3001';
+var photoFiles = [];
+
+function handlePhotos(input) {
+  var files = Array.from(input.files);
+  files.forEach(function(file) {
+    if (file.size > 5 * 1024 * 1024) { alert(file.name + ' is too large. Max 5MB.'); return; }
+    photoFiles.push(file);
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var preview = document.getElementById('photo-preview');
+      var wrap = document.createElement('div');
+      wrap.className = 'photo-thumb-wrap';
+      var idx = photoFiles.length - 1;
+      wrap.innerHTML = '<img class="photo-thumb" src="' + e.target.result + '"><button class="photo-remove" onclick="removePhoto(' + idx + ',this)">×</button>';
+      preview.appendChild(wrap);
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function removePhoto(idx, btn) {
+  photoFiles[idx] = null;
+  btn.parentElement.remove();
+}
+
+function getChecked(ids) {
+  return ids.filter(function(id) {
+    return document.getElementById(id) && document.getElementById(id).checked;
+  }).map(function(id) {
+    return document.getElementById(id).nextElementSibling.textContent.trim();
+  });
+}
+
+function submitIntake() {
+  var bizName = document.getElementById('biz-name').value.trim();
+  var notes = document.getElementById('field-notes').value.trim();
+  if (!bizName) { showStatus('Business name is required.', false); return; }
+  if (!notes) { showStatus('Field notes are required.', false); return; }
+
+  var rep = document.getElementById('rep-name').value.trim() || 'Sales Rep';
+  var products = getChecked(['p-shirts','p-dtf','p-stickers','p-signs','p-embroidery','p-laser','p-tumblers','p-promo','p-foamboard','p-canopy','p-bigheads','p-other']);
+
+  var data = {
+    rep: rep,
+    bizName: bizName,
+    contactName: document.getElementById('contact-name').value.trim(),
+    contactTitle: document.getElementById('contact-title').value.trim(),
+    contactPhone: document.getElementById('contact-phone').value.trim(),
+    contactEmail: document.getElementById('contact-email').value.trim(),
+    bizAddress: document.getElementById('biz-address').value.trim(),
+    visitType: document.getElementById('visit-type').value,
+    visitOutcome: document.getElementById('visit-outcome').value,
+    followupDate: document.getElementById('followup-date').value,
+    products: products,
+    notes: notes,
+    estValue: document.getElementById('est-value').value.trim(),
+    date: new Date().toLocaleDateString('en-US', {weekday:'long',year:'numeric',month:'long',day:'numeric'}),
+    time: new Date().toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'})
+  };
+
+  var btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  // Convert photos to base64
+  var activePhotos = photoFiles.filter(Boolean);
+  var photoPromises = activePhotos.map(function(file) {
+    return new Promise(function(resolve) {
+      var reader = new FileReader();
+      reader.onload = function(e) { resolve({ data: e.target.result.split(',')[1], name: file.name, type: file.type }); };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  Promise.all(photoPromises).then(function(photos) {
+    data.photos = photos;
+    return fetch(SERVER_URL + '/field-intake', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(res) {
+    btn.disabled = false;
+    btn.textContent = '📤 SUBMIT FIELD REPORT';
+    if (res.success) {
+      showStatus('✅ Report submitted! Sent to Matt and sales@little6llc.com.', true);
+      clearForm();
+    } else {
+      showStatus('⚠️ Could not send: ' + (res.error || 'Unknown error'), false);
+    }
+  })
+  .catch(function() {
+    btn.disabled = false;
+    btn.textContent = '📤 SUBMIT FIELD REPORT';
+    showStatus('⚠️ Could not reach server. Check connection and try again.', false);
+  });
+}
+
+function showStatus(msg, success) {
+  var el = document.getElementById('status-box');
+  el.textContent = msg;
+  el.className = 'status-box ' + (success ? 'success' : 'error');
+  el.style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function clearForm() {
+  ['biz-name','contact-name','contact-title','contact-phone','contact-email','biz-address','followup-date','field-notes','est-value'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  ['p-shirts','p-dtf','p-stickers','p-signs','p-embroidery','p-laser','p-tumblers','p-promo','p-foamboard','p-canopy','p-bigheads','p-other'].forEach(function(id) {
+    document.getElementById(id).checked = false;
+  });
+  document.getElementById('visit-type').selectedIndex = 0;
+  document.getElementById('visit-outcome').selectedIndex = 0;
+  photoFiles = [];
+  document.getElementById('photo-preview').innerHTML = '';
+}
+
+// Pre-fill today's date for follow-up
+var d = new Date(); d.setDate(d.getDate() + 7);
+document.getElementById('followup-date').valueAsDate = d;
+</script>
+</body>
+</html>
