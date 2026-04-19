@@ -1281,12 +1281,15 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="panel-desc">White gloss or matte weatherproof vinyl · Min 15 per size</div>
     <div class="form-row">
       <div class="field"><label>Tier</label>
-        <select id="st-tier" onchange="updateStickerSizes()">
+        <select id="st-tier" onchange="updateStickerSizes();checkStickerSize();">
           <option value="premium">Premium — UV rated, outdoor, waterproof</option>
           <option value="economy">Economy — Waterproof, laptops, swag, labels</option>
         </select></div>
       <div class="field"><label>Size</label>
-        <select id="st-size"></select></div>
+        <select id="st-size" onchange="checkStickerSize()"></select></div>
+    </div>
+    <div id="st-size-warning" style="display:none;background:#fff3cd;border-left:4px solid var(--gold);padding:10px 14px;margin-bottom:10px;font-size:12px;color:#856404;">
+      ⚠️ Need a larger size? <strong>Vinyl Decals</strong> handle custom dimensions at $8/sq ft. <a href="#" onclick="showPanel('vinyl',document.querySelector('.cat-btn'));return false;" style="color:var(--navy);font-weight:700;text-decoration:underline;">Switch to Vinyl Decals →</a>
     </div>
     <div class="form-row">
       <div class="field"><label>Quantity</label><input type="number" id="st-qty" value="50" min="1"></div>
@@ -2064,6 +2067,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <ul class="st-list">
           <li><strong>Pricing question</strong> — check the traffic light first, then ask Lindsay</li>
           <li><strong>Product not in the tool</strong> — Feedback button on Home, Matt will add it</li>
+          <li><strong>Sticker too big?</strong> — Max is 4" premium / 5" economy. Larger → use Vinyl Decals ($8/sq ft)</li>
           <li><strong>Something unusual</strong> — don't guess, call Matt</li>
           <li><strong>Artwork issue</strong> — Lindsay handles all file prep and proofing</li>
           <li><strong>Rush order</strong> — always confirm with Lindsay before promising a turnaround</li>
@@ -4037,6 +4041,14 @@ var ST_DATA = {
   }
 };
 var ST_BREAKS = [50, 100, 250, 500];
+
+function checkStickerSize(){
+  var tier = document.getElementById('st-tier').value;
+  var size = parseInt(document.getElementById('st-size').value) || 0;
+  var maxSize = tier === 'premium' ? 4 : 5;
+  var warning = document.getElementById('st-size-warning');
+  if (warning) warning.style.display = size >= maxSize ? 'block' : 'none';
+}
 
 function updateStickerSizes(){
   var tier=document.getElementById('st-tier').value;
