@@ -4393,12 +4393,17 @@ function parseInboundMessage() {
   var prompt = [
     'You are a quote assistant for Little 6 Industries LLC, a custom print shop in Maricopa AZ (SDVOSB).',
     'A customer sent this message requesting a quote: ' + input,
+    'Important business rules to apply:',
+    '- Each unique design or artwork file is a SEPARATE product line item. Two different sticker designs = two separate sticker products. Flag this clearly if the customer has multiple designs.',
+    '- One image/artwork file is allowed per product. If a customer references multiple images or designs in one order, list each as its own line item.',
+    '- For shirts with DTF print: price the garment and the transfer separately.',
     'Do the following:',
-    '1. Identify the product type (cut vinyl letters, stickers, signs, shirts, banners, decals, etc.)',
-    '2. List each element as a numbered line item with: description, dimensions, color, quantity if given',
-    '3. Give a rough estimate. Use $8/sq ft for vinyl/cut vinyl/decal work (width x height in inches divided by 144 x $8 per piece). Show math per line.',
-    '4. Add a subtotal and flag any info still needed for a firm quote.',
-    '5. End with exactly this line: ROUGH ESTIMATE ONLY — Final pricing may vary based on artwork material and specifications. An official quote will follow.',
+    '1. Identify all product types requested (shirts, stickers, signs, vinyl, banners, etc.)',
+    '2. List each as a numbered line item with: description, design/artwork note, size if given, quantity if given',
+    '3. Give a rough estimate. Stickers/vinyl/decals: $8/sq ft (width x height in inches divided by 144 x $8). DTF transfers: use size-based pricing (4"=$1, 5"=$3, 6-9"=$4, 10-12"=$5). Shirts: note garment cost separate.',
+    '4. Flag any missing info needed for a firm quote (size, quantity, exact dimensions, turnaround deadline).',
+    '5. Note any rush/deadline requests prominently.',
+    '6. End with exactly this line: ROUGH ESTIMATE ONLY — Final pricing may vary based on artwork material and specifications. An official quote will follow.',
     'Use plain text only. No markdown, no asterisks, no bullet symbols.'
   ].join(' ');
 
