@@ -4465,10 +4465,23 @@ function addParsedToNotes() {
     var existing = notesEl.value ? notesEl.value + '\n\n' : '';
     notesEl.value = existing + 'INBOUND REQUEST PARSED:\n' + _parsedText;
   }
+  // Open the estimate drawer so rep can see it landed
+  var drawer = document.getElementById('quote-drawer');
+  if (drawer && !drawer.classList.contains('open')) {
+    toggleDrawer();
+  }
+  // Scroll to notes field
+  if (notesEl) {
+    setTimeout(function() {
+      notesEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      notesEl.style.borderColor = 'var(--gold)';
+      setTimeout(function() { notesEl.style.borderColor = ''; }, 2000);
+    }, 300);
+  }
   var btn = document.getElementById('parse-notes-btn');
   var orig = btn.textContent;
-  btn.textContent = '✅ ADDED';
-  setTimeout(function() { btn.textContent = orig; }, 2000);
+  btn.textContent = '✅ ADDED TO ESTIMATE';
+  setTimeout(function() { btn.textContent = orig; }, 2500);
 }
 
 // ─── FEEDBACK ────────────────────────────────────────────────
