@@ -361,10 +361,10 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <!-- MESSAGE PARSER -->
     <div style="background:var(--white);border:1.5px solid var(--mid-gray);padding:14px 16px;margin-bottom:14px;">
       <div style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">📲 Parse Inbound Request</div>
-      <div style="font-size:12px;color:var(--gray);margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--mid-gray);">Paste a text, DM, or Facebook message — AI reads it and builds a structured quote breakdown with rough estimate.</div>
+      <div style="font-size:12px;color:var(--gray);margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--mid-gray);">Paste a text, DM, Facebook, or Hibu message — AI reads it and builds a structured quote breakdown with rough estimate.</div>
       <div class="field">
         <label>Paste message here</label>
-        <textarea id="parse-input" rows="6" placeholder="Paste the customer's message here — text, DM, Facebook, email, whatever they sent..." style="padding:8px 10px;border:1.5px solid var(--mid-gray);background:var(--white);font-family:'Source Sans 3',sans-serif;font-size:12px;color:var(--charcoal);outline:none;width:100%;resize:vertical;"></textarea>
+        <textarea id="parse-input" rows="6" placeholder="Paste the customer message here..." style="padding:8px 10px;border:1.5px solid var(--mid-gray);background:var(--white);font-family:'Source Sans 3',sans-serif;font-size:12px;color:var(--charcoal);outline:none;width:100%;resize:vertical;"></textarea>
       </div>
       <button class="calc-btn" id="parse-btn" onclick="parseInboundMessage()" style="margin-bottom:8px;">🔍 PARSE MESSAGE</button>
       <div id="parse-loading" style="display:none;font-size:12px;color:var(--gray);padding:6px 0;">Reading message...</div>
@@ -2810,12 +2810,9 @@ function copyQuote(){
 }
 
 function showEmailModal(){
-  // Sync drawer notes to email modal notes field
-  var drawerNotes = document.getElementById('drawer-notes');
-  var modalNotes = document.getElementById('m-notes');
-  if (drawerNotes && modalNotes && drawerNotes.value) {
-    modalNotes.value = drawerNotes.value;
-  }
+  var drawerNotes=document.getElementById('drawer-notes');
+  var modalNotes=document.getElementById('m-notes');
+  if(drawerNotes&&modalNotes&&drawerNotes.value){modalNotes.value=drawerNotes.value;}
   var emailField=document.getElementById('m-to');
   if(emailField) emailField.value=document.getElementById('q-email').value||'';
   document.getElementById('email-modal').classList.add('show');
@@ -2828,7 +2825,7 @@ function closeEmailModal(){
 function sendEmail(){
   var customerEmail=document.getElementById('m-to').value||'';
   if(!customerEmail){alert('Please enter a customer email address.');return;}
-  if(quoteItems.length===0){alert('No items in estimate.');return;}
+  var drawerNotes=document.getElementById('drawer-notes'); var hasNotes=drawerNotes&&drawerNotes.value.trim().length>0; if(quoteItems.length===0&&!hasNotes){alert('No items in estimate. Add a product or paste a parsed message into notes first.');return;}
   var customerName=document.getElementById('q-name').value||'Customer';
   var company=document.getElementById('q-company').value||'';
   var rep=document.getElementById('q-rep').value||'';
@@ -4077,11 +4074,11 @@ var ST_DATA = {
 var ST_BREAKS = [50, 100, 250, 500];
 
 function checkStickerSize(){
-  var tier = document.getElementById('st-tier').value;
-  var size = parseInt(document.getElementById('st-size').value) || 0;
-  var maxSize = tier === 'premium' ? 4 : 5;
-  var warning = document.getElementById('st-size-warning');
-  if (warning) warning.style.display = size >= maxSize ? 'block' : 'none';
+  var tier=document.getElementById('st-tier').value;
+  var size=parseInt(document.getElementById('st-size').value)||0;
+  var maxSize=tier==='premium'?4:5;
+  var warning=document.getElementById('st-size-warning');
+  if(warning) warning.style.display=size>=maxSize?'block':'none';
 }
 
 function updateStickerSizes(){
@@ -4399,105 +4396,89 @@ function parseInboundMessage() {
   btn.disabled = true; btn.textContent = 'Parsing...';
   document.getElementById('parse-loading').style.display = 'block';
   document.getElementById('parse-result').style.display = 'none';
-
   var prompt = [
     'You are a quote assistant for Little 6 Industries LLC, a custom print shop in Maricopa AZ (SDVOSB).',
     'A customer sent this message requesting a quote: ' + input,
-    'Important business rules to apply:',
-    '- Each unique design or artwork file is a SEPARATE product line item. Two different sticker designs = two separate sticker products. Flag this clearly if the customer has multiple designs.',
-    '- One image/artwork file is allowed per product. If a customer references multiple images or designs in one order, list each as its own line item.',
-    '- For shirts with DTF print: price the garment and the transfer separately.',
+    'Important business rules:',
+    '- Each unique design or artwork file is a SEPARATE product line item. Two different sticker designs = two separate products.',
+    '- One image per product. If customer references multiple images, list each as its own line item.',
+    '- For shirts with DTF print, price the garment and transfer separately.',
     'Do the following:',
-    '1. Identify all product types requested (shirts, stickers, signs, vinyl, banners, etc.)',
-    '2. List each as a numbered line item with: description, design/artwork note, size if given, quantity if given',
-    '3. Give a rough estimate. Stickers/vinyl/decals: $8/sq ft (width x height in inches divided by 144 x $8). DTF transfers: use size-based pricing (4"=$1, 5"=$3, 6-9"=$4, 10-12"=$5). Shirts: note garment cost separate.',
-    '4. Flag any missing info needed for a firm quote (size, quantity, exact dimensions, turnaround deadline).',
-    '5. Note any rush/deadline requests prominently.',
-    '6. End with exactly this line: ROUGH ESTIMATE ONLY — Final pricing may vary based on artwork material and specifications. An official quote will follow.',
-    'Use plain text only. No markdown, no asterisks, no bullet symbols.'
+    '1. Identify all product types (shirts, stickers, signs, vinyl, banners, etc.)',
+    '2. List each as a numbered line item with: description, design note, size if given, quantity if given',
+    '3. Rough estimate: Stickers/vinyl/decals use $8/sq ft (width x height in inches divided by 144 x $8). DTF transfers: 4in=$1 5in=$3 6-9in=$4 10-12in=$5 13-15in=$6 16in=$7. Shirts: note garment cost separate.',
+    '4. Flag missing info and any rush deadlines prominently.',
+    '5. End with exactly: ROUGH ESTIMATE ONLY - Final pricing may vary based on artwork material and specifications. An official quote will follow.',
+    'Plain text only. No markdown, asterisks, or bullet symbols.'
   ].join(' ');
-
   fetch(SERVER_URL + '/promo-suggest', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt: prompt })
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({prompt: prompt})
   })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    btn.disabled = false; btn.textContent = '🔍 PARSE MESSAGE';
-    document.getElementById('parse-loading').style.display = 'none';
-    if (data.success && data.text) {
-      _parsedText = data.text;
-      document.getElementById('parse-output').textContent = data.text;
-      document.getElementById('parse-result').style.display = 'block';
-    } else {
-      alert('Could not parse. Try again.');
-    }
+  .then(function(r){return r.json();})
+  .then(function(data){
+    btn.disabled=false; btn.textContent='🔍 PARSE MESSAGE';
+    document.getElementById('parse-loading').style.display='none';
+    if(data.success&&data.text){
+      _parsedText=data.text;
+      document.getElementById('parse-output').textContent=data.text;
+      document.getElementById('parse-result').style.display='block';
+    } else { alert('Could not parse. Try again.'); }
   })
-  .catch(function() {
-    btn.disabled = false; btn.textContent = '🔍 PARSE MESSAGE';
-    document.getElementById('parse-loading').style.display = 'none';
+  .catch(function(){
+    btn.disabled=false; btn.textContent='🔍 PARSE MESSAGE';
+    document.getElementById('parse-loading').style.display='none';
     alert('Could not reach server.');
   });
 }
 
 function sendParsedToMatt() {
-  if (!_parsedText) return;
-  var original = (document.getElementById('parse-input').value || '').trim();
-  var rep = (document.getElementById('q-rep') && document.getElementById('q-rep').value) || 'Sales Rep';
-  var btn = document.getElementById('parse-send-btn');
-  btn.disabled = true; btn.textContent = 'Sending...';
-  fetch(SERVER_URL + '/send-feedback', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      from: rep,
-      message: '=== ORIGINAL CUSTOMER MESSAGE ===' + '\n' + original + '\n\n' + '=== PARSED BREAKDOWN ===' + '\n' + _parsedText
-    })
+  if(!_parsedText) return;
+  var original=(document.getElementById('parse-input').value||'').trim();
+  var rep=(document.getElementById('q-rep')&&document.getElementById('q-rep').value)||'Sales Rep';
+  var btn=document.getElementById('parse-send-btn');
+  btn.disabled=true; btn.textContent='Sending...';
+  fetch(SERVER_URL+'/send-feedback',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({from:rep,message:'=== ORIGINAL CUSTOMER MESSAGE ===\n'+original+'\n\n=== PARSED BREAKDOWN ===\n'+_parsedText})
   })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    btn.disabled = false; btn.textContent = '📧 SEND TO MATT';
-    var status = document.getElementById('parse-send-status');
-    status.textContent = data.success ? '✅ Sent to Matt for official quoting.' : '⚠️ Could not send. Email matt@little6llc.com directly.';
-    status.style.color = data.success ? 'var(--green)' : 'var(--red)';
-    status.style.display = 'block';
-    setTimeout(function() { status.style.display = 'none'; }, 5000);
+  .then(function(r){return r.json();})
+  .then(function(data){
+    btn.disabled=false; btn.textContent='📧 SEND TO MATT';
+    var status=document.getElementById('parse-send-status');
+    status.textContent=data.success?'✅ Sent to Matt for official quoting.':'⚠️ Could not send. Email matt@little6llc.com directly.';
+    status.style.color=data.success?'var(--green)':'var(--red)';
+    status.style.display='block';
+    setTimeout(function(){status.style.display='none';},5000);
   })
-  .catch(function() {
-    btn.disabled = false; btn.textContent = '📧 SEND TO MATT';
-    var status = document.getElementById('parse-send-status');
-    status.textContent = '⚠️ Could not reach server.';
-    status.style.color = 'var(--red)';
-    status.style.display = 'block';
+  .catch(function(){
+    var status=document.getElementById('parse-send-status');
+    status.textContent='⚠️ Could not reach server.';
+    status.style.color='var(--red)';
+    status.style.display='block';
   });
 }
 
 function addParsedToNotes() {
-  if (!_parsedText) return;
-  // Write to the visible drawer notes field
-  var drawerNotes = document.getElementById('drawer-notes');
-  if (drawerNotes) {
-    var existing = drawerNotes.value ? drawerNotes.value + '\n\n' : '';
-    drawerNotes.value = existing + 'INBOUND REQUEST PARSED:\n' + _parsedText;
+  if(!_parsedText) return;
+  var drawerNotes=document.getElementById('drawer-notes');
+  if(drawerNotes){
+    var existing=drawerNotes.value?drawerNotes.value+'\n\n':'';
+    drawerNotes.value=existing+'INBOUND REQUEST PARSED:\n'+_parsedText;
   }
-  // Open the estimate drawer so rep can see it landed
-  var drawer = document.getElementById('quote-drawer');
-  if (drawer && !drawer.classList.contains('open')) {
-    toggleDrawer();
+  var drawer=document.getElementById('quote-drawer');
+  if(drawer&&!drawer.classList.contains('open')){toggleDrawer();}
+  if(drawerNotes){
+    setTimeout(function(){
+      drawerNotes.scrollIntoView({behavior:'smooth',block:'center'});
+      drawerNotes.style.borderColor='var(--gold)';
+      setTimeout(function(){drawerNotes.style.borderColor='';},2000);
+    },300);
   }
-  // Flash the notes field gold
-  if (drawerNotes) {
-    setTimeout(function() {
-      drawerNotes.style.borderColor = 'var(--gold)';
-      drawerNotes.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setTimeout(function() { drawerNotes.style.borderColor = ''; }, 2000);
-    }, 300);
-  }
-  var btn = document.getElementById('parse-notes-btn');
-  var orig = btn.textContent;
-  btn.textContent = '\u2705 ADDED TO ESTIMATE';
-  setTimeout(function() { btn.textContent = orig; }, 2500);
+  var btn=document.getElementById('parse-notes-btn');
+  var orig=btn.textContent;
+  btn.textContent='✅ ADDED TO ESTIMATE';
+  setTimeout(function(){btn.textContent=orig;},2500);
 }
 
 // ─── FEEDBACK ────────────────────────────────────────────────
