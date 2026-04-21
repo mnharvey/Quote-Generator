@@ -2507,6 +2507,10 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="quote-subtotal"><span>Items</span><span id="q-count">0</span></div>
     <div class="quote-grand"><span class="quote-grand-label">Total</span><span class="quote-grand-val" id="q-total">$0.00</span></div>
   
+  <div style="padding:8px 12px;border-top:1px solid var(--mid-gray);">
+    <label style="font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gray);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Notes / Special Instructions</label>
+    <textarea id="drawer-notes" rows="3" placeholder="Turnaround, artwork notes, parsed request..." style="width:100%;padding:7px 9px;border:1.5px solid var(--mid-gray);font-family:'Source Sans 3',sans-serif;font-size:12px;color:var(--charcoal);outline:none;resize:vertical;"></textarea>
+  </div>
   <div class="quote-actions">
       <button class="qa-btn primary" onclick="printQuote()">🖨 Print Estimate</button>
       <button class="qa-btn secondary" onclick="copyQuote()">📋 Copy</button>
@@ -2806,6 +2810,12 @@ function copyQuote(){
 }
 
 function showEmailModal(){
+  // Sync drawer notes to email modal notes field
+  var drawerNotes = document.getElementById('drawer-notes');
+  var modalNotes = document.getElementById('m-notes');
+  if (drawerNotes && modalNotes && drawerNotes.value) {
+    modalNotes.value = drawerNotes.value;
+  }
   var emailField=document.getElementById('m-to');
   if(emailField) emailField.value=document.getElementById('q-email').value||'';
   document.getElementById('email-modal').classList.add('show');
@@ -4465,27 +4475,28 @@ function sendParsedToMatt() {
 
 function addParsedToNotes() {
   if (!_parsedText) return;
-  var notesEl = document.getElementById('m-notes');
-  if (notesEl) {
-    var existing = notesEl.value ? notesEl.value + '\n\n' : '';
-    notesEl.value = existing + 'INBOUND REQUEST PARSED:\n' + _parsedText;
+  // Write to the visible drawer notes field
+  var drawerNotes = document.getElementById('drawer-notes');
+  if (drawerNotes) {
+    var existing = drawerNotes.value ? drawerNotes.value + '\n\n' : '';
+    drawerNotes.value = existing + 'INBOUND REQUEST PARSED:\n' + _parsedText;
   }
   // Open the estimate drawer so rep can see it landed
   var drawer = document.getElementById('quote-drawer');
   if (drawer && !drawer.classList.contains('open')) {
     toggleDrawer();
   }
-  // Scroll to notes field
-  if (notesEl) {
+  // Flash the notes field gold
+  if (drawerNotes) {
     setTimeout(function() {
-      notesEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      notesEl.style.borderColor = 'var(--gold)';
-      setTimeout(function() { notesEl.style.borderColor = ''; }, 2000);
+      drawerNotes.style.borderColor = 'var(--gold)';
+      drawerNotes.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(function() { drawerNotes.style.borderColor = ''; }, 2000);
     }, 300);
   }
   var btn = document.getElementById('parse-notes-btn');
   var orig = btn.textContent;
-  btn.textContent = '✅ ADDED TO ESTIMATE';
+  btn.textContent = '\u2705 ADDED TO ESTIMATE';
   setTimeout(function() { btn.textContent = orig; }, 2500);
 }
 
