@@ -2734,30 +2734,20 @@ function clearQuote(){
 }
 
 function showHatsPanel(btn) {
-  // Navigate to shirts panel with HEADWEAR pre-selected
   showPanel('shirts', btn);
   setTimeout(function() {
     var brandSel = document.getElementById('sh-brand');
     if (brandSel) {
-      // Find a brand that has HEADWEAR - New Era is a safe bet
       var options = Array.from(brandSel.options);
       var neOption = options.find(function(o) { return o.value === 'NEW ERA'; });
-      if (neOption) {
-        brandSel.value = 'NEW ERA';
-      } else {
-        // Pick first brand with headwear
-        brandSel.value = options[0].value;
-      }
+      if (neOption) brandSel.value = 'NEW ERA';
       updateShirtCategories();
       setTimeout(function() {
         var catSel = document.getElementById('sh-category');
         if (catSel) {
           var catOptions = Array.from(catSel.options);
           var hwOption = catOptions.find(function(o) { return o.value === 'HEADWEAR'; });
-          if (hwOption) {
-            catSel.value = 'HEADWEAR';
-            updateShirtStyles();
-          }
+          if (hwOption) { catSel.value = 'HEADWEAR'; updateShirtStyles(); }
         }
       }, 100);
     }
@@ -3918,6 +3908,7 @@ var SEARCH_INDEX = [
   {panel:'shirts', icon:'👕', name:'T-Shirts + DTF', cat:'Apparel', desc:'Full SanMar catalog — 37 brands, 3000+ styles with DTF printing'},
   {panel:'dtf', icon:'🖨️', name:'DTF Transfers', cat:'Apparel', desc:'Gang sheet and by-the-foot wholesale — full color transfers'},
   {panel:'embroidery', icon:'🧵', name:'Embroidery', cat:'Apparel', desc:'Hats, polos, jackets, patches — Tajima machine'},
+  {panel:'hats', icon:'🧢', name:'Hats + Headwear', cat:'Apparel', desc:'Full SanMar headwear catalog — caps, beanies, visors — 20+ brands'},
   {panel:'cornhole', icon:'🏆', name:'Cornhole Trophies', cat:'Hard Goods', desc:'8x16 laser cut birch — UV printed, custom awards'},
   {panel:'woodletters', icon:'🪵', name:'Wood Letter Cutouts', cat:'Hard Goods', desc:'Laser cut MDF or birch — natural, stained, or UV printed'},
   {panel:'canopy', icon:'⛺', name:'Canopy Tents', cat:'Hard Goods', desc:'10x10 aluminum frame — 6 packages from roof-only to full event setup'},
@@ -3954,7 +3945,8 @@ function runHomeSearch(){
 
   var html = '';
   matches.forEach(function(item){
-    html += '<div class="search-result-item" onclick="showPanel(\'' + item.panel + '\', document.querySelector(\'.cat-btn\'))">' +
+    var clickFn = item.panel === 'hats' ? 'showHatsPanel(document.querySelector(\'.cat-btn\'))' : 'showPanel(\'' + item.panel + '\', document.querySelector(\'.cat-btn\')';
+    html += '<div class="search-result-item" onclick="' + clickFn + '">' +
       '<div class="sri-icon">'+item.icon+'</div>' +
       '<div><div class="sri-name">'+item.name+'</div>' +
       '<div class="sri-desc">'+item.desc+'</div>' +
