@@ -186,6 +186,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="mobile-nav-btn" onclick="showPanel('aluminum',this)">🔩 Aluminum</button>
   <button class="mobile-nav-btn" onclick="showPanel('vinyl',this)">🎨 Vinyl</button>
   <button class="mobile-nav-btn" onclick="showPanel('shirts',this)">👕 Shirts</button>
+  <button class="mobile-nav-btn" onclick="showHatsPanel(this)">🧢 Hats</button>
   <button class="mobile-nav-btn" onclick="showPanel('dtf',this)">🖨️ DTF Transfers</button>
   <button class="mobile-nav-btn" onclick="showPanel('embroidery',this)">🧵 Embroidery</button>
   <button class="mobile-nav-btn" onclick="showPanel('cornhole',this)">🏆 Cornhole</button>
@@ -224,6 +225,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="cat-btn" onclick="showPanel('vinyl',this)"><span>🎨</span> Vinyl Decals</button>
   <div class="sidebar-section">Apparel</div>
   <button class="cat-btn" onclick="showPanel('shirts',this)"><span>👕</span> T-Shirts + DTF</button>
+        <button class="cat-btn" onclick="showHatsPanel(this)"><span>🧢</span> Hats + Headwear</button>
   <button class="cat-btn" onclick="showPanel('dtf',this)"><span>🖨️</span> DTF Transfers</button>
   <button class="cat-btn" onclick="showPanel('embroidery',this)"><span>🧵</span> Embroidery</button>
   <div class="sidebar-section">Hard Goods</div>
@@ -353,31 +355,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           </div>
         </div>
         <div id="mc-verdict" style="padding:10px 14px;font-size:13px;font-weight:600;border-left:4px solid #ccc;"></div>
-      </div>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <!-- MESSAGE PARSER -->
-    <div style="background:var(--white);border:1.5px solid var(--mid-gray);padding:14px 16px;margin-bottom:14px;">
-      <div style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">📲 Parse Inbound Request</div>
-      <div style="font-size:12px;color:var(--gray);margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--mid-gray);">Paste a text, DM, Facebook, or Hibu message — AI reads it and builds a structured quote breakdown with rough estimate.</div>
-      <div class="field">
-        <label>Paste message here</label>
-        <textarea id="parse-input" rows="6" placeholder="Paste the customer message here..." style="padding:8px 10px;border:1.5px solid var(--mid-gray);background:var(--white);font-family:'Source Sans 3',sans-serif;font-size:12px;color:var(--charcoal);outline:none;width:100%;resize:vertical;"></textarea>
-      </div>
-      <button class="calc-btn" id="parse-btn" onclick="parseInboundMessage()" style="margin-bottom:8px;">🔍 PARSE MESSAGE</button>
-      <div id="parse-loading" style="display:none;font-size:12px;color:var(--gray);padding:6px 0;">Reading message...</div>
-      <div id="parse-result" style="display:none;">
-        <div style="background:var(--navy);padding:14px 16px;margin-bottom:8px;">
-          <div style="font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Parsed Breakdown</div>
-          <div id="parse-output" style="font-size:13px;color:rgba(255,255,255,.85);line-height:1.8;white-space:pre-wrap;"></div>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button id="parse-send-btn" onclick="sendParsedToMatt()" style="flex:1;padding:9px;background:var(--red);color:var(--white);border:none;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">📧 SEND TO MATT</button>
-          <button id="parse-notes-btn" onclick="addParsedToNotes()" style="flex:1;padding:9px;background:var(--navy);color:var(--gold);border:1px solid var(--gold);font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">📋 ADD TO NOTES</button>
-        </div>
-        <div id="parse-send-status" style="display:none;font-size:12px;text-align:center;padding:6px;margin-top:4px;"></div>
       </div>
     </div>
 
@@ -1306,15 +1283,12 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="panel-desc">White gloss or matte weatherproof vinyl · Min 15 per size</div>
     <div class="form-row">
       <div class="field"><label>Tier</label>
-        <select id="st-tier" onchange="updateStickerSizes();checkStickerSize();">
+        <select id="st-tier" onchange="updateStickerSizes()">
           <option value="premium">Premium — UV rated, outdoor, waterproof</option>
           <option value="economy">Economy — Waterproof, laptops, swag, labels</option>
         </select></div>
       <div class="field"><label>Size</label>
-        <select id="st-size" onchange="checkStickerSize()"></select></div>
-    </div>
-    <div id="st-size-warning" style="display:none;background:#fff3cd;border-left:4px solid var(--gold);padding:10px 14px;margin-bottom:10px;font-size:12px;color:#856404;">
-      ⚠️ Need a larger size? <strong>Vinyl Decals</strong> handle custom dimensions at $8/sq ft. <a href="#" onclick="showPanel('vinyl',document.querySelector('.cat-btn'));return false;" style="color:var(--navy);font-weight:700;text-decoration:underline;">Switch to Vinyl Decals →</a>
+        <select id="st-size"></select></div>
     </div>
     <div class="form-row">
       <div class="field"><label>Quantity</label><input type="number" id="st-qty" value="50" min="1"></div>
@@ -2507,10 +2481,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="quote-subtotal"><span>Items</span><span id="q-count">0</span></div>
     <div class="quote-grand"><span class="quote-grand-label">Total</span><span class="quote-grand-val" id="q-total">$0.00</span></div>
   
-  <div style="padding:8px 12px;border-top:1px solid var(--mid-gray);">
-    <label style="font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gray);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Notes / Special Instructions</label>
-    <textarea id="drawer-notes" rows="3" placeholder="Turnaround, artwork notes, parsed request..." style="width:100%;padding:7px 9px;border:1.5px solid var(--mid-gray);font-family:'Source Sans 3',sans-serif;font-size:12px;color:var(--charcoal);outline:none;resize:vertical;"></textarea>
-  </div>
   <div class="quote-actions">
       <button class="qa-btn primary" onclick="printQuote()">🖨 Print Estimate</button>
       <button class="qa-btn secondary" onclick="copyQuote()">📋 Copy</button>
@@ -2763,6 +2733,37 @@ function clearQuote(){
   if(confirm('Clear the entire quote?')){quoteItems=[];renderQuote();}
 }
 
+function showHatsPanel(btn) {
+  // Navigate to shirts panel with HEADWEAR pre-selected
+  showPanel('shirts', btn);
+  setTimeout(function() {
+    var brandSel = document.getElementById('sh-brand');
+    if (brandSel) {
+      // Find a brand that has HEADWEAR - New Era is a safe bet
+      var options = Array.from(brandSel.options);
+      var neOption = options.find(function(o) { return o.value === 'NEW ERA'; });
+      if (neOption) {
+        brandSel.value = 'NEW ERA';
+      } else {
+        // Pick first brand with headwear
+        brandSel.value = options[0].value;
+      }
+      updateShirtCategories();
+      setTimeout(function() {
+        var catSel = document.getElementById('sh-category');
+        if (catSel) {
+          var catOptions = Array.from(catSel.options);
+          var hwOption = catOptions.find(function(o) { return o.value === 'HEADWEAR'; });
+          if (hwOption) {
+            catSel.value = 'HEADWEAR';
+            updateShirtStyles();
+          }
+        }
+      }, 100);
+    }
+  }, 50);
+}
+
 function showPanel(id,btn){
   document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.cat-btn,.mobile-nav-btn').forEach(function(b){b.classList.remove('active');});
@@ -2810,9 +2811,6 @@ function copyQuote(){
 }
 
 function showEmailModal(){
-  var drawerNotes=document.getElementById('drawer-notes');
-  var modalNotes=document.getElementById('m-notes');
-  if(drawerNotes&&modalNotes&&drawerNotes.value){modalNotes.value=drawerNotes.value;}
   var emailField=document.getElementById('m-to');
   if(emailField) emailField.value=document.getElementById('q-email').value||'';
   document.getElementById('email-modal').classList.add('show');
@@ -2825,7 +2823,7 @@ function closeEmailModal(){
 function sendEmail(){
   var customerEmail=document.getElementById('m-to').value||'';
   if(!customerEmail){alert('Please enter a customer email address.');return;}
-  var drawerNotes=document.getElementById('drawer-notes'); var hasNotes=drawerNotes&&drawerNotes.value.trim().length>0; if(quoteItems.length===0&&!hasNotes){alert('No items in estimate. Add a product or paste a parsed message into notes first.');return;}
+  if(quoteItems.length===0){alert('No items in estimate.');return;}
   var customerName=document.getElementById('q-name').value||'Customer';
   var company=document.getElementById('q-company').value||'';
   var rep=document.getElementById('q-rep').value||'';
@@ -4073,14 +4071,6 @@ var ST_DATA = {
 };
 var ST_BREAKS = [50, 100, 250, 500];
 
-function checkStickerSize(){
-  var tier=document.getElementById('st-tier').value;
-  var size=parseInt(document.getElementById('st-size').value)||0;
-  var maxSize=tier==='premium'?4:5;
-  var warning=document.getElementById('st-size-warning');
-  if(warning) warning.style.display=size>=maxSize?'block':'none';
-}
-
 function updateStickerSizes(){
   var tier=document.getElementById('st-tier').value;
   var sizes=Object.keys(ST_DATA[tier]);
@@ -4384,101 +4374,6 @@ function populateShirtBrands(){
     brandSel.appendChild(opt);
   });
   updateShirtCategories();
-}
-
-// ─── MESSAGE PARSER ──────────────────────────────────────────
-var _parsedText = '';
-
-function parseInboundMessage() {
-  var input = (document.getElementById('parse-input').value || '').trim();
-  if (!input) { alert('Paste a customer message first.'); return; }
-  var btn = document.getElementById('parse-btn');
-  btn.disabled = true; btn.textContent = 'Parsing...';
-  document.getElementById('parse-loading').style.display = 'block';
-  document.getElementById('parse-result').style.display = 'none';
-  var prompt = [
-    'You are a quote assistant for Little 6 Industries LLC, a custom print shop in Maricopa AZ (SDVOSB).',
-    'A customer sent this message requesting a quote: ' + input,
-    'Important business rules:',
-    '- Each unique design or artwork file is a SEPARATE product line item. Two different sticker designs = two separate products.',
-    '- One image per product. If customer references multiple images, list each as its own line item.',
-    '- For shirts with DTF print, price the garment and transfer separately.',
-    'Do the following:',
-    '1. Identify all product types (shirts, stickers, signs, vinyl, banners, etc.)',
-    '2. List each as a numbered line item with: description, design note, size if given, quantity if given',
-    '3. Rough estimate: Stickers/vinyl/decals use $8/sq ft (width x height in inches divided by 144 x $8). DTF transfers: 4in=$1 5in=$3 6-9in=$4 10-12in=$5 13-15in=$6 16in=$7. Shirts: note garment cost separate.',
-    '4. Flag missing info and any rush deadlines prominently.',
-    '5. End with exactly: ROUGH ESTIMATE ONLY - Final pricing may vary based on artwork material and specifications. An official quote will follow.',
-    'Plain text only. No markdown, asterisks, or bullet symbols.'
-  ].join(' ');
-  fetch(SERVER_URL + '/promo-suggest', {
-    method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({prompt: prompt})
-  })
-  .then(function(r){return r.json();})
-  .then(function(data){
-    btn.disabled=false; btn.textContent='🔍 PARSE MESSAGE';
-    document.getElementById('parse-loading').style.display='none';
-    if(data.success&&data.text){
-      _parsedText=data.text;
-      document.getElementById('parse-output').textContent=data.text;
-      document.getElementById('parse-result').style.display='block';
-    } else { alert('Could not parse. Try again.'); }
-  })
-  .catch(function(){
-    btn.disabled=false; btn.textContent='🔍 PARSE MESSAGE';
-    document.getElementById('parse-loading').style.display='none';
-    alert('Could not reach server.');
-  });
-}
-
-function sendParsedToMatt() {
-  if(!_parsedText) return;
-  var original=(document.getElementById('parse-input').value||'').trim();
-  var rep=(document.getElementById('q-rep')&&document.getElementById('q-rep').value)||'Sales Rep';
-  var btn=document.getElementById('parse-send-btn');
-  btn.disabled=true; btn.textContent='Sending...';
-  fetch(SERVER_URL+'/send-feedback',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({from:rep,message:'=== ORIGINAL CUSTOMER MESSAGE ===\n'+original+'\n\n=== PARSED BREAKDOWN ===\n'+_parsedText})
-  })
-  .then(function(r){return r.json();})
-  .then(function(data){
-    btn.disabled=false; btn.textContent='📧 SEND TO MATT';
-    var status=document.getElementById('parse-send-status');
-    status.textContent=data.success?'✅ Sent to Matt for official quoting.':'⚠️ Could not send. Email matt@little6llc.com directly.';
-    status.style.color=data.success?'var(--green)':'var(--red)';
-    status.style.display='block';
-    setTimeout(function(){status.style.display='none';},5000);
-  })
-  .catch(function(){
-    var status=document.getElementById('parse-send-status');
-    status.textContent='⚠️ Could not reach server.';
-    status.style.color='var(--red)';
-    status.style.display='block';
-  });
-}
-
-function addParsedToNotes() {
-  if(!_parsedText) return;
-  var drawerNotes=document.getElementById('drawer-notes');
-  if(drawerNotes){
-    var existing=drawerNotes.value?drawerNotes.value+'\n\n':'';
-    drawerNotes.value=existing+'INBOUND REQUEST PARSED:\n'+_parsedText;
-  }
-  var drawer=document.getElementById('quote-drawer');
-  if(drawer&&!drawer.classList.contains('open')){toggleDrawer();}
-  if(drawerNotes){
-    setTimeout(function(){
-      drawerNotes.scrollIntoView({behavior:'smooth',block:'center'});
-      drawerNotes.style.borderColor='var(--gold)';
-      setTimeout(function(){drawerNotes.style.borderColor='';},2000);
-    },300);
-  }
-  var btn=document.getElementById('parse-notes-btn');
-  var orig=btn.textContent;
-  btn.textContent='✅ ADDED TO ESTIMATE';
-  setTimeout(function(){btn.textContent=orig;},2500);
 }
 
 // ─── FEEDBACK ────────────────────────────────────────────────
