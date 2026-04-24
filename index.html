@@ -186,7 +186,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="mobile-nav-btn" onclick="showPanel('aluminum',this)">🔩 Aluminum</button>
   <button class="mobile-nav-btn" onclick="showPanel('vinyl',this)">🎨 Vinyl</button>
   <button class="mobile-nav-btn" onclick="showPanel('shirts',this)">👕 Shirts</button>
-  <button class="mobile-nav-btn" onclick="showHatsPanel(this)">🧢 Hats</button>
   <button class="mobile-nav-btn" onclick="showPanel('dtf',this)">🖨️ DTF Transfers</button>
   <button class="mobile-nav-btn" onclick="showPanel('embroidery',this)">🧵 Embroidery</button>
   <button class="mobile-nav-btn" onclick="showPanel('cornhole',this)">🏆 Cornhole</button>
@@ -225,7 +224,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="cat-btn" onclick="showPanel('vinyl',this)"><span>🎨</span> Vinyl Decals</button>
   <div class="sidebar-section">Apparel</div>
   <button class="cat-btn" onclick="showPanel('shirts',this)"><span>👕</span> T-Shirts + DTF</button>
-        <button class="cat-btn" onclick="showHatsPanel(this)"><span>🧢</span> Hats + Headwear</button>
   <button class="cat-btn" onclick="showPanel('dtf',this)"><span>🖨️</span> DTF Transfers</button>
   <button class="cat-btn" onclick="showPanel('embroidery',this)"><span>🧵</span> Embroidery</button>
   <div class="sidebar-section">Hard Goods</div>
@@ -2733,27 +2731,6 @@ function clearQuote(){
   if(confirm('Clear the entire quote?')){quoteItems=[];renderQuote();}
 }
 
-function showHatsPanel(btn) {
-  showPanel('shirts', btn);
-  setTimeout(function() {
-    var brandSel = document.getElementById('sh-brand');
-    if (brandSel) {
-      var options = Array.from(brandSel.options);
-      var neOption = options.find(function(o) { return o.value === 'NEW ERA'; });
-      if (neOption) brandSel.value = 'NEW ERA';
-      updateShirtCategories();
-      setTimeout(function() {
-        var catSel = document.getElementById('sh-category');
-        if (catSel) {
-          var catOptions = Array.from(catSel.options);
-          var hwOption = catOptions.find(function(o) { return o.value === 'HEADWEAR'; });
-          if (hwOption) { catSel.value = 'HEADWEAR'; updateShirtStyles(); }
-        }
-      }, 100);
-    }
-  }, 50);
-}
-
 function showPanel(id,btn){
   document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.cat-btn,.mobile-nav-btn').forEach(function(b){b.classList.remove('active');});
@@ -3908,7 +3885,6 @@ var SEARCH_INDEX = [
   {panel:'shirts', icon:'👕', name:'T-Shirts + DTF', cat:'Apparel', desc:'Full SanMar catalog — 37 brands, 3000+ styles with DTF printing'},
   {panel:'dtf', icon:'🖨️', name:'DTF Transfers', cat:'Apparel', desc:'Gang sheet and by-the-foot wholesale — full color transfers'},
   {panel:'embroidery', icon:'🧵', name:'Embroidery', cat:'Apparel', desc:'Hats, polos, jackets, patches — Tajima machine'},
-  {panel:'hats', icon:'🧢', name:'Hats + Headwear', cat:'Apparel', desc:'Full SanMar headwear catalog — caps, beanies, visors — 20+ brands'},
   {panel:'cornhole', icon:'🏆', name:'Cornhole Trophies', cat:'Hard Goods', desc:'8x16 laser cut birch — UV printed, custom awards'},
   {panel:'woodletters', icon:'🪵', name:'Wood Letter Cutouts', cat:'Hard Goods', desc:'Laser cut MDF or birch — natural, stained, or UV printed'},
   {panel:'canopy', icon:'⛺', name:'Canopy Tents', cat:'Hard Goods', desc:'10x10 aluminum frame — 6 packages from roof-only to full event setup'},
@@ -3945,8 +3921,7 @@ function runHomeSearch(){
 
   var html = '';
   matches.forEach(function(item){
-    var clickFn = item.panel === 'hats' ? 'showHatsPanel(document.querySelector(\'.cat-btn\'))' : 'showPanel(\'' + item.panel + '\', document.querySelector(\'.cat-btn\')';
-    html += '<div class="search-result-item" onclick="' + clickFn + '">' +
+    html += '<div class="search-result-item" onclick="showPanel(\'' + item.panel + '\', document.querySelector(\'.cat-btn\'))">' +
       '<div class="sri-icon">'+item.icon+'</div>' +
       '<div><div class="sri-name">'+item.name+'</div>' +
       '<div class="sri-desc">'+item.desc+'</div>' +
@@ -4050,18 +4025,18 @@ function calcEmbroidery(){
 // Sticker pricing — Premium and Economy tiers
 var ST_DATA = {
   premium: {
-    '2': [18.00, 29.00, 62.50, 105.00],
-    '3': [39.00, 64.00, 137.50, 230.00],
-    '4': [70.00, 116.00, 247.50, 415.00]
+    '2': [0.55, 0.45, 0.36, 0.29, 0.25, 0.21],
+    '3': [0.99, 0.89, 0.78, 0.64, 0.55, 0.46],
+    '4': [1.75, 1.55, 1.40, 1.16, 0.99, 0.83]
   },
   economy: {
-    '2': [9.00, 15.00, 32.50, 55.00],
-    '3': [18.00, 29.00, 62.50, 105.00],
-    '4': [35.50, 58.00, 125.00, 210.00],
-    '5': [55.00, 90.00, 192.50, 325.00]
+    '2': [0.35, 0.25, 0.18, 0.15, 0.13, 0.11],
+    '3': [0.55, 0.45, 0.36, 0.29, 0.25, 0.21],
+    '4': [0.91, 0.81, 0.71, 0.58, 0.50, 0.42],
+    '5': [1.45, 1.25, 1.10, 0.90, 0.77, 0.65]
   }
 };
-var ST_BREAKS = [50, 100, 250, 500];
+var ST_BREAKS = [1, 25, 50, 100, 250, 500];
 
 function updateStickerSizes(){
   var tier=document.getElementById('st-tier').value;
@@ -4088,8 +4063,8 @@ function calcStickers(){
   var tier=document.getElementById('st-tier').value;
   var size=document.getElementById('st-size').value;
   var qty=parseInt(document.getElementById('st-qty').value)||1;
-  var total=getStickerRate(tier,size,qty);
-  var each=(total/qty);
+  var each=getStickerRate(tier,size,qty);
+  var total=each*qty;
   var tierLabel=tier==='premium'?'Premium UV':'Economy';
   var desc=qty+'x '+size+'" '+tierLabel+' Stickers';
   var lines=[['Tier',tierLabel],['Size',size+'"'],['Qty',qty],['Each','$'+each.toFixed(2)]];
