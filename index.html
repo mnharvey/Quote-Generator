@@ -280,12 +280,10 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="search-results" id="search-results"></div>
 
     <div class="home-cats">
-
-      <!-- SIGNAGE -->
       <div class="home-cat-card" onclick="toggleHomeCat(this)">
         <div class="hcc-icon">🪧</div>
         <div class="hcc-title">Signage <span class="hcc-arrow">▼</span></div>
-        <div class="hcc-items">4mm · 10mm · Aluminum · Vinyl Decals</div>
+        <div class="hcc-items">4mm · 10mm · Aluminum · Vinyl Decals · Banners · Foam Board</div>
         <div class="hcc-sub">
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('corr4',document.querySelector('.cat-btn'))">🪧 4mm Corrugated</button>
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('corr10',document.querySelector('.cat-btn'))">🪧 10mm Corrugated</button>
@@ -295,8 +293,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('foamboard',document.querySelector('.cat-btn'))">🗂️ Foam Board Prints</button>
         </div>
       </div>
-
-      <!-- APPAREL -->
       <div class="home-cat-card" onclick="toggleHomeCat(this)">
         <div class="hcc-icon">👕</div>
         <div class="hcc-title">Apparel <span class="hcc-arrow">▼</span></div>
@@ -308,12 +304,10 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('embroidery',document.querySelector('.cat-btn'))">🧵 Embroidery</button>
         </div>
       </div>
-
-      <!-- HARD GOODS -->
       <div class="home-cat-card" onclick="toggleHomeCat(this)">
         <div class="hcc-icon">🏆</div>
         <div class="hcc-title">Hard Goods <span class="hcc-arrow">▼</span></div>
-        <div class="hcc-items">Cornhole · Wood Letters · Canopy Tents · Ornaments · Foam Board · Big Heads</div>
+        <div class="hcc-items">Cornhole · Wood Letters · Canopy Tents · Ornaments · Big Heads</div>
         <div class="hcc-sub">
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('cornhole',document.querySelector('.cat-btn'))">🏆 Cornhole Trophies</button>
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('woodletters',document.querySelector('.cat-btn'))">🪵 Wood Letters/Cutouts</button>
@@ -322,8 +316,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('bigheads',document.querySelector('.cat-btn'))">🗿 Big Heads</button>
         </div>
       </div>
-
-      <!-- PRINT & TRANSFERS -->
       <div class="home-cat-card" onclick="toggleHomeCat(this)">
         <div class="hcc-icon">🚩</div>
         <div class="hcc-title">Print &amp; Transfers <span class="hcc-arrow">▼</span></div>
@@ -336,8 +328,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('dtf',document.querySelector('.cat-btn'))">🖨️ DTF Transfers</button>
         </div>
       </div>
-
-      <!-- GIFTS & AWARDS -->
       <div class="home-cat-card" onclick="toggleHomeCat(this)">
         <div class="hcc-icon">🥤</div>
         <div class="hcc-title">Gifts &amp; Awards <span class="hcc-arrow">▼</span></div>
@@ -350,8 +340,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('bags',document.querySelector('.cat-btn'))">👜 Bags</button>
         </div>
       </div>
-
-      <!-- SALES TIPS -->
       <div class="home-cat-card" onclick="toggleHomeCat(this)">
         <div class="hcc-icon">💬</div>
         <div class="hcc-title">Sales Tools <span class="hcc-arrow">▼</span></div>
@@ -644,6 +632,23 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <div class="panel" id="panel-shirts">
     <div class="panel-title">Apparel + DTF</div>
     <div class="panel-desc">Full SanMar catalog · Priced at MSRP · DTF + press optional · 100+ unlocks bulk discount</div>
+
+    <!-- AI SHIRT ADVISOR - HERO -->
+    <div style="background:var(--navy);padding:16px;border-left:4px solid var(--gold);margin-bottom:16px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">🤖 AI Shirt Advisor</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:10px;">Describe the job — get 3 shirt options with pricing in seconds.</div>
+      <textarea id="shirt-ai-input" rows="2" placeholder="e.g. A dozen shirts, mixed sizes, Humvee design, Quartsite Outpost..." style="width:100%;padding:10px;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--white);outline:none;resize:none;margin-bottom:8px;" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();askShirtAdvisor();}"></textarea>
+      <button class="calc-btn" id="shirt-ai-btn" onclick="askShirtAdvisor()" style="width:100%;padding:12px;font-size:13px;letter-spacing:2px;">🔍 GET SHIRT OPTIONS</button>
+      <div id="shirt-ai-loading" style="display:none;font-size:12px;color:rgba(255,255,255,.6);padding:8px 0;text-align:center;">Finding best options...</div>
+      <div id="shirt-ai-result" style="display:none;margin-top:10px;">
+        <div id="shirt-ai-text" style="font-size:13px;color:rgba(255,255,255,.85);line-height:1.8;white-space:pre-wrap;"></div>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+          <button onclick="addAdvisorToNotes()" style="flex:1;padding:8px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">📋 ADD TO NOTES</button>
+          <button onclick="addAdvisorToEstimate()" style="flex:1;padding:8px;background:var(--red);color:var(--white);border:none;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">+ ADD TO ESTIMATE</button>
+        </div>
+      </div>
+    </div>
+
     <div class="form-row">
       <div class="field"><label>Brand</label>
         <select id="sh-brand" onchange="updateShirtCategories();updateShirtSalesCard();"></select></div>
@@ -788,18 +793,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     </div>
     <button class="add-to-quote-btn" id="co-add" style="display:none;" onclick="addCustomOrderToQuote()">+ ADD TO ESTIMATE</button>
 
-    <div class="section-divider" style="margin:14px 0 10px;"></div>
-    <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--navy);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">🤖 AI Shirt Advisor</div>
-    <div style="font-size:12px;color:var(--gray);margin-bottom:10px;">Describe the customer's event or need — get recommendations from our top styles.</div>
-    <div style="display:flex;gap:8px;margin-bottom:8px;">
-      <input type="text" id="shirt-ai-input" placeholder="e.g. golf tournament, church volunteer shirts, summer 5K run..." style="flex:1;padding:9px 10px;border:1.5px solid var(--mid-gray);font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--charcoal);outline:none;" onkeydown="if(event.key==='Enter')askShirtAdvisor()">
-      <button class="calc-btn" id="shirt-ai-btn" onclick="askShirtAdvisor()" style="white-space:nowrap;min-width:80px;">ASK</button>
-    </div>
-    <div id="shirt-ai-loading" style="display:none;font-size:12px;color:var(--gray);padding:8px 0;">Thinking...</div>
-    <div id="shirt-ai-result" style="display:none;background:var(--navy);padding:14px 16px;margin-bottom:8px;">
-      <div id="shirt-ai-text" style="font-size:13px;color:rgba(255,255,255,.85);line-height:1.7;white-space:pre-wrap;"></div>
-      <button id="shirt-advisor-notes-btn" onclick="addAdvisorToNotes()" style="margin-top:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;cursor:pointer;">📋 ADD TO NOTES</button>
-    </div>
 
     <div class="section-divider" style="margin:14px 0 10px;"></div>
     <button class="calc-btn" onclick="calcShirts()">CALCULATE</button>
@@ -2827,9 +2820,7 @@ function clearQuote(){
 
 function toggleHomeCat(card) {
   var allCards = document.querySelectorAll('.home-cat-card');
-  allCards.forEach(function(c) {
-    if (c !== card) c.classList.remove('expanded');
-  });
+  allCards.forEach(function(c) { if (c !== card) c.classList.remove('expanded'); });
   card.classList.toggle('expanded');
 }
 
@@ -4287,9 +4278,9 @@ var SHIRT_FAVORITES = [{"style": "64000", "brand": "Gildan", "name": "Softstyle 
 
 function askShirtAdvisor() {
   var input = (document.getElementById('shirt-ai-input').value || '').trim();
-  if (!input) { alert('Describe the customer\'s event or need first.'); return; }
+  if (!input) { alert('Describe the job first.'); return; }
   var btn = document.getElementById('shirt-ai-btn');
-  btn.disabled = true; btn.textContent = '...';
+  btn.disabled = true; btn.textContent = 'Thinking...';
   document.getElementById('shirt-ai-loading').style.display = 'block';
   document.getElementById('shirt-ai-result').style.display = 'none';
 
@@ -4297,37 +4288,63 @@ function askShirtAdvisor() {
     return '- ' + s.brand + ' ' + s.style + ' — ' + s.name + ' (' + s.fabric + ') Tags: ' + s.tags.join(', ');
   }).join('\n');
 
-  var prompt = 'You are a branded apparel expert for Little 6 Industries LLC, a custom print shop in Maricopa AZ. ' +
-    'A customer needs shirts for: "' + input + '"\n\n' +
-    'Our favorite/stocked styles are:\n' + favList + '\n\n' +
-    'Recommend 2-3 styles from this list that best fit the customer\'s need. ' +
-    'For each recommendation explain WHY it fits (fabric, performance, feel, event type). ' +
-    'Keep it practical and conversational — this is for a sales rep to share with the customer. ' +
-    'Format: Style name (style number) — reason. Keep total response under 150 words.';
+  var prompt = 'You are a branded apparel expert for Little 6 Industries LLC, a custom print shop in Maricopa AZ (SDVOSB). ' +
+    'A customer needs: "' + input + '"\n\n' +
+    'From our top shirt styles below, recommend exactly 3 options. For each option give:\n' +
+    '1. Style number and name\n' +
+    '2. Why it fits this job (one sentence)\n' +
+    '3. Fabric and key feature\n' +
+    '4. Rough price range: use SanMar MSRP. A dozen shirts typically runs $8-$18/shirt depending on style. Add $4-$7/shirt for a DTF front transfer, $5-$8 for back.\n' +
+    '5. One sentence on what to watch out for (sizing, color availability, etc.)\n\n' +
+    'Our top styles:\n' + favList + '\n\n' +
+    'Format each option as:\nOPTION 1: [Style] — [Name]\n[Why it fits]\n[Fabric/feature]\nEst. price range: $X-$Y per shirt (garment only) / $X-$Y with front transfer\n[Watch out for]\n\n' +
+    'End with one line: BEST BET: [style number] — [one reason why for this specific job].\n' +
+    'Plain text only. No markdown.';
 
   fetch(SERVER_URL + '/promo-suggest', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({prompt: prompt})
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt: prompt })
   })
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    btn.disabled = false; btn.textContent = 'ASK';
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    btn.disabled = false; btn.textContent = '🔍 GET SHIRT OPTIONS';
     document.getElementById('shirt-ai-loading').style.display = 'none';
     if (data.success && data.text) {
       document.getElementById('shirt-ai-text').textContent = data.text;
       document.getElementById('shirt-ai-result').style.display = 'block';
-      window._shirtAdvisorText = data.text;
-    } else {
-      alert('Could not get recommendation. Try again.');
-    }
+    } else { alert('Could not get recommendations. Try again.'); }
   })
-  .catch(function(){
-    btn.disabled = false; btn.textContent = 'ASK';
+  .catch(function() {
+    btn.disabled = false; btn.textContent = '🔍 GET SHIRT OPTIONS';
     document.getElementById('shirt-ai-loading').style.display = 'none';
-    alert('Could not reach server. Check your connection.');
+    alert('Could not reach server.');
   });
 }
+
+function addAdvisorToEstimate() {
+  var text = document.getElementById('shirt-ai-text').textContent;
+  if (!text) return;
+  var drawerNotes = document.getElementById('drawer-notes');
+  if (drawerNotes) {
+    var existing = drawerNotes.value ? drawerNotes.value + '\n\n' : '';
+    drawerNotes.value = existing + 'SHIRT ADVISOR RECOMMENDATIONS:\n' + text;
+  }
+  var drawer = document.getElementById('quote-drawer');
+  if (drawer && !drawer.classList.contains('open')) toggleDrawer();
+  if (drawerNotes) {
+    setTimeout(function() {
+      drawerNotes.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      drawerNotes.style.borderColor = 'var(--gold)';
+      setTimeout(function() { drawerNotes.style.borderColor = ''; }, 2000);
+    }, 300);
+  }
+  var btn = event.target;
+  var orig = btn.textContent;
+  btn.textContent = '✅ ADDED';
+  setTimeout(function() { btn.textContent = orig; }, 2000);
+}
+
 
 function addAdvisorToNotes() {
   var text = window._shirtAdvisorText || '';
