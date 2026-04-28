@@ -4287,7 +4287,22 @@ function askShirtAdvisor() {
   document.getElementById('shirt-ai-result').style.display = 'none';
 
   var favList = SHIRT_FAVORITES.map(function(s){
-    return '- ' + s.brand + ' ' + s.style + ' — ' + s.name + ' (' + s.fabric + ') Tags: ' + s.tags.join(', ');
+    // Look up MSRP from SanMar catalog
+    var msrp = null;
+    if (window.SANMAR_CATALOG) {
+      for (var b in SANMAR_CATALOG) {
+        for (var cat in SANMAR_CATALOG[b]) {
+          var styles = SANMAR_CATALOG[b][cat];
+          for (var i=0; i<styles.length; i++) {
+            if (styles[i].style === s.style) { msrp = styles[i].msrp; break; }
+          }
+          if (msrp) break;
+        }
+        if (msrp) break;
+      }
+    }
+    var priceNote = msrp ? ' MSRP $' + msrp.toFixed(2) + '/shirt' : '';
+    return '- ' + s.brand + ' ' + s.style + ' — ' + s.name + ' (' + s.fabric + ')' + priceNote + ' Tags: ' + s.tags.join(', ');
   }).join('\n');
 
   var prompt = 'You are a branded apparel expert for Little 6 Industries LLC, a custom print shop in Maricopa AZ (SDVOSB). ' +
@@ -4296,8 +4311,9 @@ function askShirtAdvisor() {
     'From our top shirt styles below, recommend exactly 3 options labeled GOOD, BETTER, BEST. ' +
     'Return ONLY valid JSON in this exact format with no other text: ' +
     '{"options":[{"tier":"GOOD","style":"style# — Name","price_garment":"$X-$Y/shirt","price_with_transfer":"$X-$Y/shirt","suggested_retail":"$X-$Y/shirt","why":"one sentence","fabric":"fabric description","watch":"one caution"},{"tier":"BETTER",...},{"tier":"BEST",...}],"bestbet":"Style# — one reason for this specific job","qty_note":"flag if quantity is ambiguous or larger than expected"} ' +
-    'Use SanMar MSRP for garment pricing. DTF front transfer adds $4-$7/shirt, back adds $5-$8/shirt. ' +
-    'Suggested retail = your price to customer + $5-$8 reseller profit margin (what their customer pays). Show as a range. ' +
+    'IMPORTANT: Use ONLY the exact MSRP prices provided in the style list above — do not estimate or guess garment prices. ' +
+    'DTF front transfer retail: add $7-$12/shirt to garment MSRP for "With Transfer" price (transfer cost + press + markup). ' +
+    'Suggested retail = With Transfer price + $5-$8 customer profit margin. Show as a range. ' +
     'Our top styles: ' + favList;
 
   fetch(SERVER_URL + '/promo-suggest', {
