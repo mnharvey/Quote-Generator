@@ -4295,8 +4295,9 @@ function askShirtAdvisor() {
     'Note: if the request mentions "a dozen of each size" or similar, flag the total quantity impact prominently. ' +
     'From our top shirt styles below, recommend exactly 3 options labeled GOOD, BETTER, BEST. ' +
     'Return ONLY valid JSON in this exact format with no other text: ' +
-    '{"options":[{"tier":"GOOD","style":"style# — Name","price_garment":"$X-$Y/shirt","price_with_transfer":"$X-$Y/shirt","why":"one sentence","fabric":"fabric description","watch":"one caution"},{"tier":"BETTER",...},{"tier":"BEST",...}],"bestbet":"Style# — one reason for this specific job","qty_note":"flag if quantity is ambiguous or larger than expected"} ' +
+    '{"options":[{"tier":"GOOD","style":"style# — Name","price_garment":"$X-$Y/shirt","price_with_transfer":"$X-$Y/shirt","suggested_retail":"$X-$Y/shirt","why":"one sentence","fabric":"fabric description","watch":"one caution"},{"tier":"BETTER",...},{"tier":"BEST",...}],"bestbet":"Style# — one reason for this specific job","qty_note":"flag if quantity is ambiguous or larger than expected"} ' +
     'Use SanMar MSRP for garment pricing. DTF front transfer adds $4-$7/shirt, back adds $5-$8/shirt. ' +
+    'Suggested retail = your price to customer + $5-$8 reseller profit margin (what their customer pays). Show as a range. ' +
     'Our top styles: ' + favList;
 
   fetch(SERVER_URL + '/promo-suggest', {
@@ -4321,9 +4322,14 @@ function askShirtAdvisor() {
             '<div style="font-family:Oswald,sans-serif;font-size:11px;font-weight:700;color:var(--white);line-height:1.3;">'+o.style+'</div>' +
             '<div style="background:rgba(0,0,0,.4);padding:6px 8px;text-align:center;">' +
               '<div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Garment Only</div>' +
-              '<div style="font-size:16px;font-weight:700;color:var(--white);font-family:monospace;">'+o.price_garment+'</div>' +
+              '<div style="font-size:14px;font-weight:700;color:var(--white);font-family:monospace;">'+o.price_garment+'</div>' +
               '<div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px;margin:4px 0 2px;">With Transfer</div>' +
-              '<div style="font-size:16px;font-weight:700;color:var(--gold);font-family:monospace;">'+o.price_with_transfer+'</div>' +
+              '<div style="font-size:14px;font-weight:700;color:var(--gold);font-family:monospace;">'+o.price_with_transfer+'</div>' +
+              '<div style="border-top:1px solid rgba(255,255,255,.15);margin-top:6px;padding-top:6px;">' +
+              '<div style="font-size:9px;color:#4ADE80;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Suggested Retail</div>' +
+              '<div style="font-size:16px;font-weight:700;color:#4ADE80;font-family:monospace;">'+(o.suggested_retail||'—')+'</div>' +
+              '<div style="font-size:9px;color:rgba(255,255,255,.4);margin-top:2px;">~$5-8 reseller margin</div>' +
+              '</div>' +
             '</div>' +
             '<div style="font-size:11px;color:rgba(255,255,255,.8);line-height:1.5;">'+o.why+'</div>' +
             '<div style="font-size:10px;color:rgba(255,255,255,.5);">'+o.fabric+'</div>' +
