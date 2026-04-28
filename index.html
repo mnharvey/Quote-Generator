@@ -647,6 +647,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button onclick="addAdvisorToNotes()" style="flex:1;padding:8px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">📋 ADD TO NOTES</button>
           <button onclick="addAdvisorToEstimate()" style="flex:1;padding:8px;background:var(--red);color:var(--white);border:none;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">+ ADD TO ESTIMATE</button>
+          <button id="advisor-copy-btn" onclick="copyAdvisorForEmail()" style="flex:1;padding:8px;background:none;border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.8);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">📧 COPY FOR EMAIL</button>
         </div>
       </div>
     </div>
@@ -4370,6 +4371,68 @@ function askShirtAdvisor() {
     btn.disabled = false; btn.textContent = '🔍 GET SHIRT OPTIONS';
     document.getElementById('shirt-ai-loading').style.display = 'none';
     alert('Could not reach server.');
+  });
+}
+
+function copyAdvisorForEmail() {
+  var cols = document.getElementById('shirt-ai-cols');
+  var bestbet = document.getElementById('shirt-ai-bestbet');
+  if (!cols || !cols.children.length) return;
+
+  // Build clean plain text from the rendered columns
+  var lines = [];
+  lines.push('SHIRT OPTIONS — Little 6 Industries LLC');
+  lines.push('The Brand Behind the Brand · little6llc.com · 520-705-4026');
+  lines.push('');
+
+  var cards = cols.querySelectorAll('div[style*="flex-direction:column"]');
+  cards.forEach(function(card) {
+    var tier = card.children[0] ? card.children[0].textContent.trim() : '';
+    var style = card.children[1] ? card.children[1].textContent.trim() : '';
+    lines.push('── ' + tier + ' ──');
+    lines.push(style);
+    // Price block
+    var priceBlock = card.querySelector('div[style*="rgba(0,0,0,.4)"]');
+    if (priceBlock) {
+      var labels = priceBlock.querySelectorAll('div[style*="font-size:9px"]');
+      var values = priceBlock.querySelectorAll('div[style*="font-size:14px"], div[style*="font-size:20px"], div[style*="font-size:16px"]');
+      for (var i=0; i<values.length; i++) {
+        var lbl = labels[i] ? labels[i].textContent.trim() : '';
+        var val = values[i] ? values[i].textContent.trim() : '';
+        if (lbl && val) lines.push(lbl + ': ' + val);
+      }
+    }
+    var why = card.children[3] ? card.children[3].textContent.trim() : '';
+    var fabric = card.children[4] ? card.children[4].textContent.trim() : '';
+    var watch = card.children[5] ? card.children[5].textContent.trim() : '';
+    if (why) lines.push(why);
+    if (fabric) lines.push('Fabric: ' + fabric);
+    if (watch) lines.push(watch);
+    lines.push('');
+  });
+
+  if (bestbet && bestbet.textContent) lines.push(bestbet.textContent.trim());
+  lines.push('');
+  lines.push('Ready to move forward? Reply to this email or call/text 520-705-4026.');
+  lines.push('We handle everything from artwork to delivery. SDVOSB Certified.');
+
+  var text = lines.join('\n');
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = document.getElementById('advisor-copy-btn');
+    var orig = btn.textContent;
+    btn.textContent = '✅ COPIED';
+    setTimeout(function() { btn.textContent = orig; }, 2500);
+  }).catch(function() {
+    // Fallback
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('advisor-copy-btn');
+    btn.textContent = '✅ COPIED';
+    setTimeout(function() { btn.textContent = '📧 COPY FOR EMAIL'; }, 2500);
   });
 }
 
