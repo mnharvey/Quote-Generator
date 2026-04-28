@@ -4375,43 +4375,36 @@ function askShirtAdvisor() {
 }
 
 function copyAdvisorForEmail() {
-  var cols = document.getElementById('shirt-ai-cols');
+  var rawText = document.getElementById('shirt-ai-text').textContent;
   var bestbet = document.getElementById('shirt-ai-bestbet');
-  if (!cols || !cols.children.length) return;
+  if (!rawText) return;
 
-  // Build clean plain text from the rendered columns
   var lines = [];
   lines.push('SHIRT OPTIONS — Little 6 Industries LLC');
   lines.push('The Brand Behind the Brand · little6llc.com · 520-705-4026');
   lines.push('');
 
-  var cards = cols.querySelectorAll('div[style*="flex-direction:column"]');
-  cards.forEach(function(card) {
-    var tier = card.children[0] ? card.children[0].textContent.trim() : '';
-    var style = card.children[1] ? card.children[1].textContent.trim() : '';
-    lines.push('── ' + tier + ' ──');
-    lines.push(style);
-    // Price block
-    var priceBlock = card.querySelector('div[style*="rgba(0,0,0,.4)"]');
-    if (priceBlock) {
-      var labels = priceBlock.querySelectorAll('div[style*="font-size:9px"]');
-      var values = priceBlock.querySelectorAll('div[style*="font-size:14px"], div[style*="font-size:20px"], div[style*="font-size:16px"]');
-      for (var i=0; i<values.length; i++) {
-        var lbl = labels[i] ? labels[i].textContent.trim() : '';
-        var val = values[i] ? values[i].textContent.trim() : '';
-        if (lbl && val) lines.push(lbl + ': ' + val);
-      }
-    }
-    var why = card.children[3] ? card.children[3].textContent.trim() : '';
-    var fabric = card.children[4] ? card.children[4].textContent.trim() : '';
-    var watch = card.children[5] ? card.children[5].textContent.trim() : '';
-    if (why) lines.push(why);
-    if (fabric) lines.push('Fabric: ' + fabric);
-    if (watch) lines.push(watch);
-    lines.push('');
-  });
+  try {
+    var parsed = JSON.parse(rawText);
+    parsed.options.forEach(function(o) {
+      lines.push('── ' + o.tier + ' ──');
+      lines.push(o.style);
+      lines.push('Garment Only: ' + o.price_garment);
+      lines.push('With Transfer: ' + o.price_with_transfer);
+      lines.push('They Sell At: ' + (o.suggested_retail || '—'));
+      lines.push('');
+      lines.push(o.why);
+      lines.push('Fabric: ' + o.fabric);
+      lines.push('Note: ' + o.watch);
+      lines.push('');
+    });
+    if (parsed.bestbet) lines.push('⭐ BEST BET: ' + parsed.bestbet);
+    if (parsed.qty_note) lines.push('⚠ ' + parsed.qty_note);
+  } catch(e) {
+    // Fallback to raw text if JSON parse fails
+    lines.push(rawText);
+  }
 
-  if (bestbet && bestbet.textContent) lines.push(bestbet.textContent.trim());
   lines.push('');
   lines.push('Browse our full apparel catalog: https://catalog.companycasuals.com/');
   lines.push('');
@@ -4421,11 +4414,9 @@ function copyAdvisorForEmail() {
   var text = lines.join('\n');
   navigator.clipboard.writeText(text).then(function() {
     var btn = document.getElementById('advisor-copy-btn');
-    var orig = btn.textContent;
-    btn.textContent = '✅ COPIED';
-    setTimeout(function() { btn.textContent = orig; }, 2500);
+    btn.textContent = '\u2705 COPIED';
+    setTimeout(function() { btn.textContent = '\ud83d\udce7 COPY FOR EMAIL'; }, 2500);
   }).catch(function() {
-    // Fallback
     var ta = document.createElement('textarea');
     ta.value = text;
     document.body.appendChild(ta);
@@ -4433,8 +4424,8 @@ function copyAdvisorForEmail() {
     document.execCommand('copy');
     document.body.removeChild(ta);
     var btn = document.getElementById('advisor-copy-btn');
-    btn.textContent = '✅ COPIED';
-    setTimeout(function() { btn.textContent = '📧 COPY FOR EMAIL'; }, 2500);
+    btn.textContent = '\u2705 COPIED';
+    setTimeout(function() { btn.textContent = '\ud83d\udce7 COPY FOR EMAIL'; }, 2500);
   });
 }
 
