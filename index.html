@@ -3379,7 +3379,8 @@ function updateShirtSalesCard() {
 function updateShirtPrice(){
   var styleSel = document.getElementById('sh-shirt');
   var msrp = parseFloat(styleSel.value) || 0;
-  document.getElementById('sh-msrp').value = msrp.toFixed(2);
+  var marked = (msrp * 1.25).toFixed(2); // 25% markup to match advisor pricing
+  document.getElementById('sh-msrp').value = marked;
   updateShirtSalesCard();
   // Populate case price if available
   var casePrice = styleSel.options[styleSel.selectedIndex] ? styleSel.options[styleSel.selectedIndex].getAttribute('data-case') : null;
