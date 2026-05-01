@@ -77,6 +77,13 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <!-- BUSINESS INFO -->
   <div class="card">
     <div class="section-head">Business Info</div>
+    <div style="background:var(--navy);padding:12px 14px;margin-bottom:14px;border-left:3px solid var(--gold);border-radius:4px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">📇 Scan Business Card</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:8px;">Take a photo — AI reads the card and fills the form automatically.</div>
+      <input type="file" id="card-scan-input" accept="image/*" capture="environment" style="display:none;" onchange="scanBusinessCard(this)">
+      <button onclick="document.getElementById('card-scan-input').click()" style="width:100%;padding:9px;background:var(--red);color:var(--white);border:none;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">📷 SCAN CARD</button>
+      <div id="card-scan-status" style="display:none;font-size:11px;padding:6px 0;text-align:center;"></div>
+    </div>
     <div class="form-row">
       <div class="field"><label>Business Name *</label><input type="text" id="biz-name" placeholder="e.g. Apocalypse Arms"></div>
       <div class="field"><label>Contact Name</label><input type="text" id="contact-name" placeholder="Owner / Manager name"></div>
@@ -170,21 +177,37 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 var SERVER_URL = 'https://api.little6llc.com:3001';
 var photoFiles = [];
 
+function compressImage(file, maxWidth, quality, callback) {
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = new Image();
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      var w = img.width, h = img.height;
+      if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      canvas.toBlob(function(blob) { callback(blob, canvas.toDataURL('image/jpeg', quality)); }, 'image/jpeg', quality);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 function handlePhotos(input) {
   var files = Array.from(input.files);
   files.forEach(function(file) {
-    if (file.size > 5 * 1024 * 1024) { alert(file.name + ' is too large. Max 5MB.'); return; }
-    photoFiles.push(file);
-    var reader = new FileReader();
-    reader.onload = function(e) {
+    if (file.size > 15 * 1024 * 1024) { alert(file.name + ' is too large. Max 15MB.'); return; }
+    var idx = photoFiles.length;
+    photoFiles.push(null);
+    compressImage(file, 1200, 0.72, function(blob, dataUrl) {
+      photoFiles[idx] = blob;
       var preview = document.getElementById('photo-preview');
       var wrap = document.createElement('div');
       wrap.className = 'photo-thumb-wrap';
-      var idx = photoFiles.length - 1;
-      wrap.innerHTML = '<img class="photo-thumb" src="' + e.target.result + '"><button class="photo-remove" onclick="removePhoto(' + idx + ',this)">×</button>';
+      wrap.innerHTML = '<img class="photo-thumb" src="' + dataUrl + '"><button class="photo-remove" onclick="removePhoto(' + idx + ',this)">×</button>';
       preview.appendChild(wrap);
-    };
-    reader.readAsDataURL(file);
+    });
   });
   input.value = '';
 }
@@ -235,11 +258,11 @@ function submitIntake() {
 
   // Convert photos to base64
   var activePhotos = photoFiles.filter(Boolean);
-  var photoPromises = activePhotos.map(function(file) {
+  var photoPromises = activePhotos.map(function(blob, i) {
     return new Promise(function(resolve) {
       var reader = new FileReader();
-      reader.onload = function(e) { resolve({ data: e.target.result.split(',')[1], name: file.name, type: file.type }); };
-      reader.readAsDataURL(file);
+      reader.onload = function(e) { resolve({ data: e.target.result.split(',')[1], name: 'photo_' + (i+1) + '.jpg', type: 'image/jpeg' }); };
+      reader.readAsDataURL(blob);
     });
   });
 
@@ -288,6 +311,55 @@ function clearForm() {
   document.getElementById('visit-outcome').selectedIndex = 0;
   photoFiles = [];
   document.getElementById('photo-preview').innerHTML = '';
+}
+
+// ── BUSINESS CARD SCANNER ──────────────────────────────────
+function scanBusinessCard(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var status = document.getElementById('card-scan-status');
+  status.textContent = 'Reading card...';
+  status.style.color = 'rgba(255,255,255,.7)';
+  status.style.display = 'block';
+  compressImage(file, 1200, 0.85, function(blob, dataUrl) {
+    var base64 = dataUrl.split(',')[1];
+    fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 500,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: base64 } },
+          { type: 'text', text: 'Read this business card. Return ONLY valid JSON: {"name":"","title":"","company":"","phone":"","email":"","address":""}. Empty string if not found. No other text.' }
+        ]}]
+      })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var text = data.content && data.content[0] ? data.content[0].text : '';
+      try {
+        var card = JSON.parse(text.replace(/```json|```/g,'').trim());
+        if (card.name) document.getElementById('contact-name').value = card.name;
+        if (card.title) document.getElementById('contact-title').value = card.title;
+        if (card.company) document.getElementById('biz-name').value = card.company;
+        if (card.phone) document.getElementById('contact-phone').value = card.phone;
+        if (card.email) document.getElementById('contact-email').value = card.email;
+        if (card.address) document.getElementById('biz-address').value = card.address;
+        status.textContent = '\u2705 Card scanned \u2014 review and edit fields below.';
+        status.style.color = '#4ADE80';
+      } catch(e) {
+        status.textContent = '\u26a0\ufe0f Could not read card. Fill in manually.';
+        status.style.color = '#f87171';
+      }
+      input.value = '';
+    })
+    .catch(function(){
+      status.textContent = '\u26a0\ufe0f Could not reach server. Fill in manually.';
+      status.style.color = '#f87171';
+      input.value = '';
+    });
+  });
 }
 
 // Pre-fill today's date for follow-up
