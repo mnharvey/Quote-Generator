@@ -339,6 +339,13 @@ function scanBusinessCard(input) {
         if (card.phone) document.getElementById('contact-phone').value = card.phone;
         if (card.email) document.getElementById('contact-email').value = card.email;
         if (card.address) document.getElementById('biz-address').value = card.address;
+        if (card.notes) {
+          var notesEl = document.getElementById('field-notes');
+          if (notesEl) {
+            var existing = notesEl.value ? notesEl.value + '\n\n' : '';
+            notesEl.value = existing + 'FROM CARD: ' + card.notes.replace(/\|/g, ' · ');
+          }
+        }
         status.textContent = '\u2705 Card scanned \u2014 review and edit fields below.';
         status.style.color = '#4ADE80';
       } catch(e) {
