@@ -79,7 +79,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="section-head">Business Info</div>
     <div style="background:var(--navy);padding:12px 14px;margin-bottom:14px;border-left:3px solid var(--gold);border-radius:4px;">
       <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">📇 Scan Business Card</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:8px;">Take a photo — AI reads the card and fills the form automatically.</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:8px;">Take a photo — AI reads and fills the form automatically.</div>
       <input type="file" id="card-scan-input" accept="image/*" capture="environment" style="display:none;" onchange="scanBusinessCard(this)">
       <button onclick="document.getElementById('card-scan-input').click()" style="width:100%;padding:9px;background:var(--red);color:var(--white);border:none;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">📷 SCAN CARD</button>
       <div id="card-scan-status" style="display:none;font-size:11px;padding:6px 0;text-align:center;"></div>
@@ -315,51 +315,57 @@ function clearForm() {
 
 // ── BUSINESS CARD SCANNER ──────────────────────────────────
 function scanBusinessCard(input) {
-  var file = input.files[0];
-  if (!file) return;
+  var file = input.files[0]; if(!file) return;
   var status = document.getElementById('card-scan-status');
-  status.textContent = 'Reading card...';
-  status.style.color = 'rgba(255,255,255,.7)';
-  status.style.display = 'block';
+  status.textContent = 'Reading card...'; status.style.color='rgba(255,255,255,.7)'; status.style.display='block';
   compressImage(file, 1200, 0.85, function(blob, dataUrl) {
-    var base64 = dataUrl.split(',')[1];
     fetch('https://api.little6llc.com:3001/scan-card', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: base64, mediaType: 'image/jpeg' })
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({image: dataUrl.split(',')[1], mediaType:'image/jpeg'})
     })
     .then(function(r){ return r.json(); })
     .then(function(data){
-      if (!data.success) throw new Error(data.error);
+      if(!data.success) throw new Error(data.error);
       var card = data.card;
-      try {
-        if (card.name) document.getElementById('contact-name').value = card.name;
-        if (card.title) document.getElementById('contact-title').value = card.title;
-        if (card.company) document.getElementById('biz-name').value = card.company;
-        if (card.phone) document.getElementById('contact-phone').value = card.phone;
-        if (card.email) document.getElementById('contact-email').value = card.email;
-        if (card.address) document.getElementById('biz-address').value = card.address;
-        if (card.notes) {
-          var notesEl = document.getElementById('field-notes');
-          if (notesEl) {
-            var existing = notesEl.value ? notesEl.value + '\n\n' : '';
-            notesEl.value = existing + 'FROM CARD: ' + card.notes.replace(/\|/g, ' · ');
-          }
-        }
-        status.textContent = '\u2705 Card scanned \u2014 review and edit fields below.';
-        status.style.color = '#4ADE80';
-      } catch(e) {
-        status.textContent = '\u26a0\ufe0f Could not read card. Fill in manually.';
-        status.style.color = '#f87171';
+      if(card.name) document.getElementById('contact-name').value = card.name;
+      if(card.title) document.getElementById('contact-title').value = card.title;
+      if(card.company) document.getElementById('biz-name').value = card.company;
+      if(card.phone) document.getElementById('contact-phone').value = card.phone;
+      if(card.email) document.getElementById('contact-email').value = card.email;
+      if(card.address) document.getElementById('biz-address').value = card.address;
+      if(card.notes) {
+        var notesEl = document.getElementById('field-notes');
+        if(notesEl) notesEl.value = (notesEl.value ? notesEl.value + '\n\n' : '') + 'FROM CARD: ' + card.notes.replace(/\|/g,' · ');
       }
+      status.textContent = '\u2705 Card scanned \u2014 review and edit below.'; status.style.color='#4ADE80';
       input.value = '';
     })
-    .catch(function(){
-      status.textContent = '\u26a0\ufe0f Could not reach server. Fill in manually.';
-      status.style.color = '#f87171';
+    .catch(function(err){
+      status.textContent = '\u26a0\ufe0f Could not read card. Fill in manually.'; status.style.color='#f87171';
       input.value = '';
     });
   });
+}
+
+// ── PIPELINE FEED ON SUBMIT ────────────────────────────────
+function feedPipeline(formData) {
+  try {
+    var cards = JSON.parse(localStorage.getItem('l6i_pipeline_v1') || '[]');
+    var products = [];
+    if(formData.products) formData.products.forEach(function(p){ if(p.checked) products.push(p.label); });
+    cards.push({
+      id: 'card_' + Date.now(),
+      biz: formData.bizName || 'Unknown',
+      contact: [formData.contactName, formData.contactPhone, formData.contactEmail].filter(Boolean).join(' · '),
+      product: products.join(', ').substring(0, 100),
+      value: formData.estValue || '',
+      stage: 'intake',
+      notes: (formData.fieldNotes || '').substring(0, 150),
+      rep: formData.repName || '',
+      created: Date.now(), updated: Date.now()
+    });
+    localStorage.setItem('l6i_pipeline_v1', JSON.stringify(cards));
+  } catch(e) {}
 }
 
 // Pre-fill today's date for follow-up
