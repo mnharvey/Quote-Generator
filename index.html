@@ -158,13 +158,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 .hcc-icon{font-size:24px;margin-bottom:6px;}
 .hcc-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
 .hcc-items{font-size:11px;color:var(--gray);line-height:1.6;}
-.hcc-arrow{float:right;font-size:12px;color:var(--gray);transition:transform .2s;}
-.home-cat-card.expanded .hcc-arrow{transform:rotate(180deg);}
-.hcc-sub{display:none;margin-top:10px;border-top:1px solid var(--mid-gray);padding-top:10px;}
-.home-cat-card.expanded .hcc-sub{display:block;}
-.hcc-sub-btn{display:block;width:100%;text-align:left;padding:7px 10px;margin-bottom:5px;background:var(--light-gray);border:1.5px solid var(--mid-gray);font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;cursor:pointer;}
-.hcc-sub-btn:hover{background:var(--red);color:var(--white);border-color:var(--red);}
-.hcc-sub-btn:last-child{margin-bottom:0;}
 
 .panel-notes-wrap{margin-top:10px;margin-bottom:2px;}
 .panel-notes-wrap label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray);font-family:'Oswald',sans-serif;font-weight:600;display:block;margin-bottom:5px;}
@@ -193,7 +186,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="mobile-nav-btn" onclick="showPanel('aluminum',this)">🔩 Aluminum</button>
   <button class="mobile-nav-btn" onclick="showPanel('vinyl',this)">🎨 Vinyl</button>
   <button class="mobile-nav-btn" onclick="showPanel('shirts',this)">👕 Shirts</button>
-  <button class="mobile-nav-btn" onclick="showHatsPanel(this)">🧢 Hats</button>
   <button class="mobile-nav-btn" onclick="showPanel('dtf',this)">🖨️ DTF Transfers</button>
   <button class="mobile-nav-btn" onclick="showPanel('embroidery',this)">🧵 Embroidery</button>
   <button class="mobile-nav-btn" onclick="showPanel('cornhole',this)">🏆 Cornhole</button>
@@ -232,7 +224,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="cat-btn" onclick="showPanel('vinyl',this)"><span>🎨</span> Vinyl Decals</button>
   <div class="sidebar-section">Apparel</div>
   <button class="cat-btn" onclick="showPanel('shirts',this)"><span>👕</span> T-Shirts + DTF</button>
-        <button class="cat-btn" onclick="showHatsPanel(this)"><span>🧢</span> Hats + Headwear</button>
   <button class="cat-btn" onclick="showPanel('dtf',this)"><span>🖨️</span> DTF Transfers</button>
   <button class="cat-btn" onclick="showPanel('embroidery',this)"><span>🧵</span> Embroidery</button>
   <div class="sidebar-section">Hard Goods</div>
@@ -280,76 +271,45 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="search-results" id="search-results"></div>
 
     <div class="home-cats">
-      <div class="home-cat-card" onclick="toggleHomeCat(this)">
+      <div class="home-cat-card" onclick="showPanel('corr4', document.querySelector('.cat-btn'))">
         <div class="hcc-icon">🪧</div>
-        <div class="hcc-title">Signage <span class="hcc-arrow">▼</span></div>
-        <div class="hcc-items">4mm · 10mm · Aluminum · Vinyl Decals · Banners · Foam Board</div>
-        <div class="hcc-sub">
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('corr4',document.querySelector('.cat-btn'))">🪧 4mm Corrugated</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('corr10',document.querySelector('.cat-btn'))">🪧 10mm Corrugated</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('aluminum',document.querySelector('.cat-btn'))">🔩 Aluminum Signs</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('vinyl',document.querySelector('.cat-btn'))">🎨 Vinyl Decals</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('banners',document.querySelector('.cat-btn'))">🚩 Banners</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('foamboard',document.querySelector('.cat-btn'))">🗂️ Foam Board Prints</button>
-        </div>
+        <div class="hcc-title">Signage</div>
+        <div class="hcc-items">4mm · 10mm · Aluminum · Vinyl Decals</div>
       </div>
-      <div class="home-cat-card" onclick="toggleHomeCat(this)">
+      <div class="home-cat-card" onclick="showPanel('shirts', document.querySelector('.cat-btn'))">
         <div class="hcc-icon">👕</div>
-        <div class="hcc-title">Apparel <span class="hcc-arrow">▼</span></div>
-        <div class="hcc-items">T-Shirts · DTF Transfers · Embroidery · Hats</div>
-        <div class="hcc-sub">
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('shirts',document.querySelector('.cat-btn'))">👕 T-Shirts</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showHatsPanel(document.querySelector('.cat-btn'))">🧢 Hats + Headwear</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('dtf',document.querySelector('.cat-btn'))">🖨️ DTF Transfers</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('embroidery',document.querySelector('.cat-btn'))">🧵 Embroidery</button>
-        </div>
+        <div class="hcc-title">Apparel</div>
+        <div class="hcc-items">T-Shirts · DTF Transfers · Embroidery</div>
       </div>
-      <div class="home-cat-card" onclick="toggleHomeCat(this)">
+      <div class="home-cat-card" onclick="showPanel('cornhole', document.querySelector('.cat-btn'))">
         <div class="hcc-icon">🏆</div>
-        <div class="hcc-title">Hard Goods <span class="hcc-arrow">▼</span></div>
-        <div class="hcc-items">Cornhole · Wood Letters · Canopy Tents · Ornaments · Big Heads</div>
-        <div class="hcc-sub">
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('cornhole',document.querySelector('.cat-btn'))">🏆 Cornhole Trophies</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('woodletters',document.querySelector('.cat-btn'))">🪵 Wood Letters/Cutouts</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('canopy',document.querySelector('.cat-btn'))">⛺ Canopy Tents</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('ornaments',document.querySelector('.cat-btn'))">🎄 Ornaments</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('bigheads',document.querySelector('.cat-btn'))">🗿 Big Heads</button>
-        </div>
+        <div class="hcc-title">Hard Goods</div>
+        <div class="hcc-items">Cornhole · Wood Letters · Canopy Tents · Ornaments · Foam Board · Big Heads</div>
       </div>
-      <div class="home-cat-card" onclick="toggleHomeCat(this)">
+      <div class="home-cat-card" onclick="showPanel('banners', document.querySelector('.cat-btn'))">
         <div class="hcc-icon">🚩</div>
-        <div class="hcc-title">Print &amp; Transfers <span class="hcc-arrow">▼</span></div>
-        <div class="hcc-items">Stickers · Magnets · Plates · PVC Cards · DTF</div>
-        <div class="hcc-sub">
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('stickers',document.querySelector('.cat-btn'))">🏷️ Stickers</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('magnets',document.querySelector('.cat-btn'))">🧲 Magnets</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('licenseplates',document.querySelector('.cat-btn'))">🚗 License Plates</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('pvcards',document.querySelector('.cat-btn'))">💳 PVC Cards</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('dtf',document.querySelector('.cat-btn'))">🖨️ DTF Transfers</button>
-        </div>
+        <div class="hcc-title">Print &amp; Transfers</div>
+        <div class="hcc-items">Banners · Stickers · Magnets · Plates · PVC Cards</div>
       </div>
-      <div class="home-cat-card" onclick="toggleHomeCat(this)">
+      <div class="home-cat-card" onclick="showPanel('tumblers', document.querySelector('.cat-btn'))">
         <div class="hcc-icon">🥤</div>
-        <div class="hcc-title">Gifts &amp; Awards <span class="hcc-arrow">▼</span></div>
+        <div class="hcc-title">Gifts &amp; Awards</div>
         <div class="hcc-items">Tumblers · Medals · Golf Balls · Badge Buddies · Bags</div>
-        <div class="hcc-sub">
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('tumblers',document.querySelector('.cat-btn'))">🥤 Tumblers</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('medals',document.querySelector('.cat-btn'))">🏅 Medals</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('golfballs',document.querySelector('.cat-btn'))">⛳ Golf Balls</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('badgebuddies',document.querySelector('.cat-btn'))">🪪 Badge Buddies</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('bags',document.querySelector('.cat-btn'))">👜 Bags</button>
-        </div>
       </div>
-      <div class="home-cat-card" onclick="toggleHomeCat(this)">
+      <div class="home-cat-card" onclick="showPanel('salestips', document.querySelector('.cat-btn'))">
         <div class="hcc-icon">💬</div>
-        <div class="hcc-title">Sales Tools <span class="hcc-arrow">▼</span></div>
-        <div class="hcc-items">Sales Tips · SOP · Promo with Grace · Sales Rep Tools</div>
-        <div class="hcc-sub">
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('salestips',document.querySelector('.cat-btn'))">💬 Sales Tips</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('salestips',document.querySelector('.cat-btn'));setTimeout(function(){switchSalesTab('sop');},50);">📘 Sales SOP</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('promo',document.querySelector('.cat-btn'))">🎁 Promo with Grace</button>
-          <button class="hcc-sub-btn" onclick="event.stopPropagation();window.open('index_sales.html','_blank')">📊 Sales Rep Tools</button>
-        </div>
+        <div class="hcc-title">Sales Tips</div>
+        <div class="hcc-items">Talking points · Objection handlers · Cross-sell</div>
+      </div>
+      <div class="home-cat-card" onclick="showPanel('salestips', document.querySelector('.cat-btn')); setTimeout(function(){switchSalesTab('sop');},50);">
+        <div class="hcc-icon">📘</div>
+        <div class="hcc-title">Sales SOP</div>
+        <div class="hcc-items">How to quote · Step by step · Quick reference</div>
+      </div>
+      <div class="home-cat-card" onclick="showPanel('promo', document.querySelector('.cat-btn'))">
+        <div class="hcc-icon">🎁</div>
+        <div class="hcc-title">Promo with Grace</div>
+        <div class="hcc-items">Good · Better · Best · AI-powered · DistributorCentral</div>
       </div>
       <div class="home-cat-card" onclick="window.open('index_sales.html','_blank')">
         <div class="hcc-icon">📊</div>
@@ -632,26 +592,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <div class="panel" id="panel-shirts">
     <div class="panel-title">Apparel + DTF</div>
     <div class="panel-desc">Full SanMar catalog · Priced at MSRP · DTF + press optional · 100+ unlocks bulk discount</div>
-
-    <!-- AI SHIRT ADVISOR - HERO -->
-    <div style="background:var(--navy);padding:16px;border-left:4px solid var(--gold);margin-bottom:16px;">
-      <div style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">🤖 AI Shirt Advisor</div>
-      <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:10px;">Describe the job — get 3 shirt options with pricing in seconds.</div>
-      <textarea id="shirt-ai-input" rows="2" placeholder="e.g. A dozen shirts, mixed sizes, Humvee design, Quartsite Outpost..." style="width:100%;padding:10px;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--white);outline:none;resize:none;margin-bottom:8px;" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();askShirtAdvisor();}"></textarea>
-      <button class="calc-btn" id="shirt-ai-btn" onclick="askShirtAdvisor()" style="width:100%;padding:12px;font-size:13px;letter-spacing:2px;">🔍 GET SHIRT OPTIONS</button>
-      <div id="shirt-ai-loading" style="display:none;font-size:12px;color:rgba(255,255,255,.6);padding:8px 0;text-align:center;">Finding best options...</div>
-      <div id="shirt-ai-result" style="display:none;margin-top:10px;">
-        <div id="shirt-ai-cols" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;"></div>
-        <div id="shirt-ai-bestbet" style="font-size:12px;color:var(--gold);padding:8px 10px;background:rgba(0,0,0,.3);margin-bottom:10px;font-style:italic;"></div>
-        <div id="shirt-ai-text" style="display:none;font-size:13px;color:rgba(255,255,255,.85);line-height:1.8;white-space:pre-wrap;"></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button onclick="addAdvisorToNotes()" style="flex:1;padding:8px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">📋 ADD TO NOTES</button>
-          <button onclick="addAdvisorToEstimate()" style="flex:1;padding:8px;background:var(--red);color:var(--white);border:none;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">+ ADD TO ESTIMATE</button>
-          <button id="advisor-copy-btn" onclick="copyAdvisorForEmail()" style="flex:1;padding:8px;background:none;border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.8);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">📧 COPY FOR EMAIL</button>
-        </div>
-      </div>
-    </div>
-
     <div class="form-row">
       <div class="field"><label>Brand</label>
         <select id="sh-brand" onchange="updateShirtCategories();updateShirtSalesCard();"></select></div>
@@ -796,6 +736,18 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     </div>
     <button class="add-to-quote-btn" id="co-add" style="display:none;" onclick="addCustomOrderToQuote()">+ ADD TO ESTIMATE</button>
 
+    <div class="section-divider" style="margin:14px 0 10px;"></div>
+    <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--navy);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">🤖 AI Shirt Advisor</div>
+    <div style="font-size:12px;color:var(--gray);margin-bottom:10px;">Describe the customer's event or need — get recommendations from our top styles.</div>
+    <div style="display:flex;gap:8px;margin-bottom:8px;">
+      <input type="text" id="shirt-ai-input" placeholder="e.g. golf tournament, church volunteer shirts, summer 5K run..." style="flex:1;padding:9px 10px;border:1.5px solid var(--mid-gray);font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--charcoal);outline:none;" onkeydown="if(event.key==='Enter')askShirtAdvisor()">
+      <button class="calc-btn" id="shirt-ai-btn" onclick="askShirtAdvisor()" style="white-space:nowrap;min-width:80px;">ASK</button>
+    </div>
+    <div id="shirt-ai-loading" style="display:none;font-size:12px;color:var(--gray);padding:8px 0;">Thinking...</div>
+    <div id="shirt-ai-result" style="display:none;background:var(--navy);padding:14px 16px;margin-bottom:8px;">
+      <div id="shirt-ai-text" style="font-size:13px;color:rgba(255,255,255,.85);line-height:1.7;white-space:pre-wrap;"></div>
+      <button id="shirt-advisor-notes-btn" onclick="addAdvisorToNotes()" style="margin-top:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;cursor:pointer;">📋 ADD TO NOTES</button>
+    </div>
 
     <div class="section-divider" style="margin:14px 0 10px;"></div>
     <button class="calc-btn" onclick="calcShirts()">CALCULATE</button>
@@ -836,48 +788,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="12|14">Large / Full Back (~12×14")</option>
           <option value="13|18">Oversized / Jersey (~13×18")</option>
         </select></div>
-    </div>
-
-    <div style="background:var(--navy);padding:14px 16px;margin-bottom:14px;border-left:4px solid var(--gold);">
-      <div style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">👕 Shirt Set Pricing (Back + Pocket)</div>
-      <div class="form-row single" style="margin-bottom:10px;">
-        <div class="field">
-          <label style="color:rgba(255,255,255,.7);">Combo</label>
-          <select id="ss-combo" onchange="calcShirtSet()" style="background:var(--navy-mid);color:var(--white);border-color:rgba(255,255,255,.2);">
-            <option value="">— Select a combo —</option>
-            <option value="7|3|39|1.89">7" back + 3" pocket — 39 sets/sheet · $1.89/set</option>
-            <option value="8|3.5|28|2.72">8" back + 3.5" pocket — 28 sets/sheet · $2.72/set</option>
-            <option value="9|3.5|26|3.18">9" back + 3.5" pocket — 26 sets/sheet · $3.18/set</option>
-            <option value="10|3.5|20|3.96">10" back + 3.5" pocket — 20 sets/sheet · $3.96/set</option>
-            <option value="11|3.5|18|4.60">11" back + 3.5" pocket — 18 sets/sheet · $4.60/set</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row single" style="margin-bottom:10px;">
-        <div class="field">
-          <label style="color:rgba(255,255,255,.7);">Quantity (shirts)</label>
-          <input type="number" id="ss-qty" value="24" min="1" oninput="calcShirtSet()" style="background:var(--navy-mid);color:var(--white);border-color:rgba(255,255,255,.2);">
-        </div>
-      </div>
-      <div id="ss-result" style="display:none;">
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px;">
-          <div style="background:rgba(0,0,0,.3);padding:10px;text-align:center;">
-            <div style="font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Sheets Needed</div>
-            <div id="ss-sheets" style="font-size:22px;font-weight:700;color:var(--white);font-family:monospace;"></div>
-          </div>
-          <div style="background:rgba(0,0,0,.3);padding:10px;text-align:center;">
-            <div style="font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Sheet Cost</div>
-            <div id="ss-cost" style="font-size:22px;font-weight:700;color:var(--white);font-family:monospace;"></div>
-          </div>
-          <div style="background:rgba(0,0,0,.3);padding:10px;text-align:center;">
-            <div style="font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Per Shirt Set</div>
-            <div id="ss-per" style="font-size:22px;font-weight:700;color:var(--gold);font-family:monospace;"></div>
-          </div>
-        </div>
-        <div style="margin-top:8px;">
-          <button onclick="addShirtSetToQuote()" style="width:100%;padding:8px;background:var(--red);color:var(--white);border:none;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">+ ADD TO ESTIMATE</button>
-        </div>
-      </div>
     </div>
 
     <div class="form-row">
@@ -1259,6 +1169,12 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <option value="retract_36x84|497.50">36×84" Retractable Stand — $497.50</option>
           <option value="retract_36x92|497.50">36×92" Retractable Stand — $497.50</option>
           </optgroup>
+          <optgroup label="Economy Retractable Banners">
+          <option value="retract_23x66|171.85">23"×66" Economy Retractable — $171.85</option>
+          <option value="retract_24x81|178.75">24"×81" Economy Retractable — $178.75</option>
+          <option value="retract_33x81|137.48">33"×81" Economy Retractable — $137.48</option>
+          <option value="retract_47x81|280.25">47"×81" Economy Retractable — $280.25</option>
+          </optgroup>
         </select></div>
       <div class="field"><label>Quantity</label><input type="number" id="bn-qty" value="1" min="1"></div>
     </div>
@@ -1310,8 +1226,50 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <tr><td>36×92"</td><td>$497.50</td><td>$472.50</td></tr>
     </tbody></table>
     <div class="note-box">Retractable stands via FireSprint — firesprint.com/36-silverstep-retractable-banner-stand/</div>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Economy Retractable Banners</th><th>Price</th></tr></thead><tbody>
+      <tr><td>23"×66"</td><td>$171.85</td></tr>
+      <tr><td>24"×81"</td><td>$178.75</td></tr>
+      <tr><td>33"×81"</td><td>$137.48</td></tr>
+      <tr><td>47"×81"</td><td>$280.25</td></tr>
+    </tbody></table>
+    <div class="note-box">Economy retractable banners — fixed retail pricing, no additional markup.</div>
   </div>
 
+
+  <!-- DOOR HANGERS -->
+  <div class="panel" id="panel-doorhangers">
+    <div class="panel-title">Door Hangers</div>
+    <div class="panel-desc">14PT C2S Cardstock · Full Color Both Sides · UV Coating Front · Arch, Standard, or Starburst Die Cut</div>
+    <div class="form-row">
+      <div class="field"><label>Size</label>
+        <select id="dh-size" onchange="calcDoorHangers()">
+          <option value="4.25x11|1.21|301.24|0.63|317.46|0.35|353.06">4.25" × 11"</option>
+          <option value="4x7|0.92|229.98|0.49|242.94|0.27|268.86">4" × 7"</option>
+          <option value="3.5x8.5|0.92|229.98|0.49|242.94|0.27|268.86">3.5" × 8.5"</option>
+        </select></div>
+      <div class="field"><label>Quantity</label>
+        <select id="dh-qty" onchange="calcDoorHangers()">
+          <option value="250">250</option>
+          <option value="500">500</option>
+          <option value="1000">1,000</option>
+        </select></div>
+    </div>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea class="item-note" placeholder="Die cut style preference, artwork notes, special instructions..."></textarea>
+    </div>
+    <button class="calc-btn" onclick="calcDoorHangers()">CALCULATE</button>
+    <div class="result-card" id="dh-result"></div>
+    <button class="add-to-quote-btn" id="dh-add" style="display:none" onclick="addToQuote('dh')">+ ADD TO ESTIMATE</button>
+    <div class="section-divider"></div>
+    <table class="price-table"><thead><tr><th>Size</th><th>250 qty</th><th>500 qty</th><th>1,000 qty</th></tr></thead><tbody>
+      <tr><td>4.25" × 11"</td><td>$301.24 ($1.21 ea)</td><td>$317.46 ($0.63 ea)</td><td>$353.06 ($0.35 ea)</td></tr>
+      <tr><td>4" × 7"</td><td>$229.98 ($0.92 ea)</td><td>$242.94 ($0.49 ea)</td><td>$268.86 ($0.27 ea)</td></tr>
+      <tr><td>3.5" × 8.5"</td><td>$229.98 ($0.92 ea)</td><td>$242.94 ($0.49 ea)</td><td>$268.86 ($0.27 ea)</td></tr>
+    </tbody></table>
+    <div class="note-box">Fixed retail pricing — no additional markup. Choice of Arch, Standard, or Starburst die cut.</div>
+  </div>
 
   <!-- VEHICLE MAGNETS -->
   <div class="panel" id="panel-magnets">
@@ -2182,17 +2140,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <div class="panel" id="panel-promo">
     <div class="panel-title">Promo with Grace</div>
     <div class="panel-desc">Promotional products · DistributorCentral · Good · Better · Best — for rep use only</div>
-
-    <!-- PRICING REMINDER -->
-    <div style="background:#fff3cd;border-left:4px solid var(--gold);padding:10px 14px;margin-bottom:14px;">
-      <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:#856404;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;">💡 Pricing Reminder — 4over &amp; Reseller Platforms</div>
-      <div style="font-size:12px;color:#856404;line-height:1.7;">
-        When pulling costs from <strong>4over.com</strong> or similar platforms, apply a <strong>250% markup</strong> before quoting the customer.<br>
-        Example: $25.40 cost → <strong>$88.89 customer price</strong> (cost × 3.5).<br>
-        4over shows this as the "Markup Price" column in their pricing tables.
-      </div>
-    </div>
-
     <div class="note-box" style="margin-bottom:14px;">
       <strong>Before you quote — set expectations:</strong><br>
       ✅ <strong>Domestic stock</strong> = 7–14 business days, higher cost per unit.<br>
@@ -2832,33 +2779,6 @@ function clearQuote(){
   if(confirm('Clear the entire quote?')){quoteItems=[];renderQuote();}
 }
 
-function toggleHomeCat(card) {
-  var allCards = document.querySelectorAll('.home-cat-card');
-  allCards.forEach(function(c) { if (c !== card) c.classList.remove('expanded'); });
-  card.classList.toggle('expanded');
-}
-
-function showHatsPanel(btn){
-  showPanel('shirts',btn);
-  setTimeout(function(){
-    var brandSel=document.getElementById('sh-brand');
-    if(brandSel){
-      var opts=Array.from(brandSel.options);
-      var ne=opts.find(function(o){return o.value==='NEW ERA';});
-      if(ne)brandSel.value='NEW ERA';
-      updateShirtCategories();
-      setTimeout(function(){
-        var catSel=document.getElementById('sh-category');
-        if(catSel){
-          var cOpts=Array.from(catSel.options);
-          var hw=cOpts.find(function(o){return o.value==='HEADWEAR';});
-          if(hw){catSel.value='HEADWEAR';updateShirtStyles();}
-        }
-      },100);
-    }
-  },50);
-}
-
 function showPanel(id,btn){
   document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.cat-btn,.mobile-nav-btn').forEach(function(b){b.classList.remove('active');});
@@ -2957,6 +2877,23 @@ function sendEmail(){
     .then(function(r){return r.json();})
     .then(function(data){
       if(data.success){
+        try {
+          var qItems = quoteItems.map(function(i){ return i.desc; }).join(', ');
+          var qTotal = quoteItems.reduce(function(s,i){ return s+i.total; }, 0);
+          var pCards = JSON.parse(localStorage.getItem('l6i_pipeline_v1') || '[]');
+          pCards.push({
+            id: 'card_' + Date.now(),
+            biz: (document.getElementById('q-company').value || document.getElementById('q-name').value || 'Customer').trim(),
+            contact: (document.getElementById('q-name').value || '').trim() + (customerEmail ? ' · ' + customerEmail : ''),
+            product: qItems.substring(0, 100),
+            value: '$' + qTotal.toFixed(2),
+            stage: 'quoted',
+            notes: 'Auto-created from estimate · ' + new Date().toLocaleDateString(),
+            rep: (document.getElementById('q-rep').value || '').trim(),
+            created: Date.now(), updated: Date.now()
+          });
+          localStorage.setItem('l6i_pipeline_v1', JSON.stringify(pCards));
+        } catch(e) {}
         closeEmailModal();
         alert('Estimate sent to '+customerEmail+'. A copy was sent to sales@little6llc.com.');
       } else {
@@ -3390,8 +3327,7 @@ function updateShirtSalesCard() {
 function updateShirtPrice(){
   var styleSel = document.getElementById('sh-shirt');
   var msrp = parseFloat(styleSel.value) || 0;
-  var marked = (msrp * 1.25).toFixed(2); // 25% markup to match advisor pricing
-  document.getElementById('sh-msrp').value = marked;
+  document.getElementById('sh-msrp').value = msrp.toFixed(2);
   updateShirtSalesCard();
   // Populate case price if available
   var casePrice = styleSel.options[styleSel.selectedIndex] ? styleSel.options[styleSel.selectedIndex].getAttribute('data-case') : null;
@@ -3568,37 +3504,6 @@ function getDTFTier(w, h) {
   if(w <= 4 && h <= 4) return 'pocket';
   if(w <= 12 && h <= 12) return 'standard';
   return 'large';
-}
-
-function calcShirtSet(){
-  var combo=document.getElementById('ss-combo').value;
-  var qty=parseInt(document.getElementById('ss-qty').value)||0;
-  var result=document.getElementById('ss-result');
-  if(!combo||!qty){result.style.display='none';return;}
-  var parts=combo.split('|');
-  var setsPerSheet=parseInt(parts[2]);
-  var sheets=Math.ceil(qty/setsPerSheet);
-  var sheetCost=sheets*85;
-  var perSet=sheetCost/qty;
-  document.getElementById('ss-sheets').textContent=sheets;
-  document.getElementById('ss-cost').textContent='$'+sheetCost.toFixed(2);
-  document.getElementById('ss-per').textContent='$'+perSet.toFixed(2);
-  result.style.display='block';
-}
-
-function addShirtSetToQuote(){
-  var combo=document.getElementById('ss-combo').value;
-  var qty=parseInt(document.getElementById('ss-qty').value)||0;
-  if(!combo||!qty)return;
-  var parts=combo.split('|');
-  var sheets=Math.ceil(qty/parseInt(parts[2]));
-  var sheetCost=sheets*85;
-  var perSet=sheetCost/qty;
-  addToQuote('DTF Shirt Set '+parts[0]+'" back + '+parts[1]+'" pocket',qty,perSet,[
-    'Back: '+parts[0]+'" | Pocket: '+parts[1]+'"',
-    'Sets/sheet: '+parts[2]+' | Sheets: '+sheets,
-    'Sheet cost: $'+sheetCost.toFixed(2)+' ($85/sheet)'
-  ]);
 }
 
 function calcDTF(){
@@ -4038,6 +3943,7 @@ function calcWoodLetters(){
 
 
 var SEARCH_INDEX = [
+  {panel:'doorhangers', icon:'🚪', name:'Door Hangers', cat:'Print & Transfers', desc:'14PT C2S · Full color both sides · UV coating front · 250/500/1000 qty'},
   {panel:'corr4', icon:'🪧', name:'4mm Corrugated Signs', cat:'Signage', desc:'Yard signs, political, events, real estate — H-stakes included'},
   {panel:'corr10', icon:'🪧', name:'10mm Corrugated Signs', cat:'Signage', desc:'Heavier duty corrugated — permanent outdoor displays'},
   {panel:'aluminum', icon:'🔩', name:'Aluminum Signs', cat:'Signage', desc:'Permanent outdoor business signs — single and double sided'},
@@ -4101,6 +4007,21 @@ function toggleTip(pid){
   // Update button arrow
   var btn = body.previousElementSibling;
   if(btn) btn.querySelector('span').textContent = body.classList.contains('open') ? '🔽' : '💬';
+}
+
+function calcDoorHangers(){
+  var sv = document.getElementById('dh-size').value.split('|');
+  var size = sv[0];
+  var qty = parseInt(document.getElementById('dh-qty').value);
+  var each, total;
+  if(qty === 250)      { each = parseFloat(sv[1]); total = parseFloat(sv[2]); }
+  else if(qty === 500) { each = parseFloat(sv[3]); total = parseFloat(sv[4]); }
+  else                 { each = parseFloat(sv[5]); total = parseFloat(sv[6]); }
+  var desc = qty + 'x Door Hanger ' + size + '"';
+  var lines = [['Size', size + '"'], ['Qty', qty], ['Each', '$' + each.toFixed(2)]];
+  showResult('dh-result', lines, total, qty, desc);
+  lastCalc.dh = {desc:desc, total:total, qty:qty, details:[['Size',size+'"'],['Qty',qty],['Each','$'+each.toFixed(2)]]};
+  showAddBtn('dh-add');
 }
 
 function calcMagnets(){
@@ -4185,18 +4106,18 @@ function calcEmbroidery(){
 // Sticker pricing — Premium and Economy tiers
 var ST_DATA = {
   premium: {
-    '2': [0.55, 0.45, 0.36, 0.29, 0.25, 0.21],
-    '3': [0.99, 0.89, 0.78, 0.64, 0.55, 0.46],
-    '4': [1.75, 1.55, 1.40, 1.16, 0.99, 0.83]
+    '2': [18.00, 29.00, 62.50, 105.00],
+    '3': [39.00, 64.00, 137.50, 230.00],
+    '4': [70.00, 116.00, 247.50, 415.00]
   },
   economy: {
-    '2': [0.35, 0.25, 0.18, 0.15, 0.13, 0.11],
-    '3': [0.55, 0.45, 0.36, 0.29, 0.25, 0.21],
-    '4': [0.91, 0.81, 0.71, 0.58, 0.50, 0.42],
-    '5': [1.45, 1.25, 1.10, 0.90, 0.77, 0.65]
+    '2': [9.00, 15.00, 32.50, 55.00],
+    '3': [18.00, 29.00, 62.50, 105.00],
+    '4': [35.50, 58.00, 125.00, 210.00],
+    '5': [55.00, 90.00, 192.50, 325.00]
   }
 };
-var ST_BREAKS = [1, 25, 50, 100, 250, 500];
+var ST_BREAKS = [50, 100, 250, 500];
 
 function updateStickerSizes(){
   var tier=document.getElementById('st-tier').value;
@@ -4223,8 +4144,8 @@ function calcStickers(){
   var tier=document.getElementById('st-tier').value;
   var size=document.getElementById('st-size').value;
   var qty=parseInt(document.getElementById('st-qty').value)||1;
-  var each=getStickerRate(tier,size,qty);
-  var total=each*qty;
+  var total=getStickerRate(tier,size,qty);
+  var each=(total/qty);
   var tierLabel=tier==='premium'?'Premium UV':'Economy';
   var desc=qty+'x '+size+'" '+tierLabel+' Stickers';
   var lines=[['Tier',tierLabel],['Size',size+'"'],['Qty',qty],['Each','$'+each.toFixed(2)]];
@@ -4293,177 +4214,47 @@ var SHIRT_FAVORITES = [{"style": "64000", "brand": "Gildan", "name": "Softstyle 
 
 function askShirtAdvisor() {
   var input = (document.getElementById('shirt-ai-input').value || '').trim();
-  if (!input) { alert('Describe the job first.'); return; }
+  if (!input) { alert('Describe the customer\'s event or need first.'); return; }
   var btn = document.getElementById('shirt-ai-btn');
-  btn.disabled = true; btn.textContent = 'Thinking...';
+  btn.disabled = true; btn.textContent = '...';
   document.getElementById('shirt-ai-loading').style.display = 'block';
   document.getElementById('shirt-ai-result').style.display = 'none';
 
   var favList = SHIRT_FAVORITES.map(function(s){
-    // Look up MSRP from SanMar catalog
-    var msrp = null;
-    if (window.SANMAR_CATALOG) {
-      for (var b in SANMAR_CATALOG) {
-        for (var cat in SANMAR_CATALOG[b]) {
-          var styles = SANMAR_CATALOG[b][cat];
-          for (var i=0; i<styles.length; i++) {
-            if (styles[i].style === s.style) { msrp = styles[i].msrp; break; }
-          }
-          if (msrp) break;
-        }
-        if (msrp) break;
-      }
-    }
-    var priceNote = msrp ? ' MSRP $' + msrp.toFixed(2) + '/shirt' : '';
-    return '- ' + s.brand + ' ' + s.style + ' — ' + s.name + ' (' + s.fabric + ')' + priceNote + ' Tags: ' + s.tags.join(', ');
+    return '- ' + s.brand + ' ' + s.style + ' — ' + s.name + ' (' + s.fabric + ') Tags: ' + s.tags.join(', ');
   }).join('\n');
 
-  var prompt = 'You are a branded apparel expert for Little 6 Industries LLC, a custom print shop in Maricopa AZ (SDVOSB). ' +
-    'A customer needs: "' + input + '". ' +
-    'Note: if the request mentions "a dozen of each size" or similar, flag the total quantity impact prominently. ' +
-    'From our top shirt styles below, recommend exactly 3 options labeled GOOD, BETTER, BEST. ' +
-    'Return ONLY valid JSON in this exact format with no other text: ' +
-    '{"options":[{"tier":"GOOD","style":"style# — Name","price_garment":"$X-$Y/shirt","price_with_transfer":"$X-$Y/shirt","suggested_retail":"$X-$Y/shirt","why":"one sentence","fabric":"fabric description","watch":"one caution"},{"tier":"BETTER",...},{"tier":"BEST",...}],"bestbet":"Style# — one reason for this specific job","qty_note":"flag if quantity is ambiguous or larger than expected"} ' +
-    'IMPORTANT: Use ONLY the exact MSRP prices provided in the style list above — do not estimate or guess garment prices. ' +
-    'DTF front transfer retail: add $7-$12/shirt to garment MSRP for "With Transfer" price (transfer cost + press + markup). ' +
-    'Suggested retail = With Transfer price + $5-$8 customer profit margin. Show as a range. ' +
-    'Our top styles: ' + favList;
+  var prompt = 'You are a branded apparel expert for Little 6 Industries LLC, a custom print shop in Maricopa AZ. ' +
+    'A customer needs shirts for: "' + input + '"\n\n' +
+    'Our favorite/stocked styles are:\n' + favList + '\n\n' +
+    'Recommend 2-3 styles from this list that best fit the customer\'s need. ' +
+    'For each recommendation explain WHY it fits (fabric, performance, feel, event type). ' +
+    'Keep it practical and conversational — this is for a sales rep to share with the customer. ' +
+    'Format: Style name (style number) — reason. Keep total response under 150 words.';
 
   fetch(SERVER_URL + '/promo-suggest', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt: prompt })
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({prompt: prompt})
   })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    btn.disabled = false; btn.textContent = '🔍 GET SHIRT OPTIONS';
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    btn.disabled = false; btn.textContent = 'ASK';
     document.getElementById('shirt-ai-loading').style.display = 'none';
     if (data.success && data.text) {
-      try {
-        var clean = data.text.replace(/```json|```/g,'').trim();
-        var parsed = JSON.parse(clean);
-        var cols = document.getElementById('shirt-ai-cols');
-        var tierColors = {GOOD:'#4A90D9', BETTER:'#C8A84B', BEST:'#B03028'};
-        var tierBgs = {GOOD:'rgba(74,144,217,.15)', BETTER:'rgba(200,168,75,.15)', BEST:'rgba(176,48,40,.15)'};
-        cols.innerHTML = parsed.options.map(function(o){
-          return '<div style="background:'+tierBgs[o.tier]+';border:1.5px solid '+tierColors[o.tier]+';padding:10px;display:flex;flex-direction:column;gap:6px;">' +
-            '<div style="font-family:Oswald,sans-serif;font-size:10px;font-weight:700;color:'+tierColors[o.tier]+';letter-spacing:2px;">'+o.tier+'</div>' +
-            '<div style="font-family:Oswald,sans-serif;font-size:11px;font-weight:700;color:var(--white);line-height:1.3;">'+o.style+'</div>' +
-            '<div style="background:rgba(0,0,0,.4);padding:6px 8px;text-align:center;">' +
-              '<div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Garment Only</div>' +
-              '<div style="font-size:14px;font-weight:700;color:var(--white);font-family:monospace;">'+o.price_garment+'</div>' +
-              '<div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px;margin:4px 0 2px;">With Transfer</div>' +
-              '<div style="font-size:14px;font-weight:700;color:var(--gold);font-family:monospace;">'+o.price_with_transfer+'</div>' +
-              '<div style="border-top:1px solid rgba(255,255,255,.15);margin-top:6px;padding-top:6px;">' +
-              '<div style="font-size:9px;color:#4ADE80;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px;">💰 They Sell At</div>' +
-              '<div style="font-size:20px;font-weight:700;color:#4ADE80;font-family:monospace;">'+(o.suggested_retail||'—')+'</div>' +
-              '<div style="font-size:10px;color:#4ADE80;opacity:.8;margin-top:3px;">~$5–$8 profit per shirt</div>' +
-              '</div>' +
-            '</div>' +
-            '<div style="font-size:11px;color:rgba(255,255,255,.8);line-height:1.5;">'+o.why+'</div>' +
-            '<div style="font-size:10px;color:rgba(255,255,255,.5);">'+o.fabric+'</div>' +
-            '<div style="font-size:10px;color:#f0a500;border-top:1px solid rgba(255,255,255,.1);padding-top:6px;">⚠ '+o.watch+'</div>' +
-          '</div>';
-        }).join('');
-        var bestbet = document.getElementById('shirt-ai-bestbet');
-        bestbet.textContent = '⭐ BEST BET: ' + parsed.bestbet;
-        if (parsed.qty_note) bestbet.textContent += ' · ' + parsed.qty_note;
-        document.getElementById('shirt-ai-text').textContent = JSON.stringify(parsed, null, 2);
-        document.getElementById('shirt-ai-result').style.display = 'block';
-      } catch(e) {
-        // Fallback to plain text if JSON parse fails
-        document.getElementById('shirt-ai-text').style.display = 'block';
-        document.getElementById('shirt-ai-text').textContent = data.text;
-        document.getElementById('shirt-ai-cols').innerHTML = '';
-        document.getElementById('shirt-ai-result').style.display = 'block';
-      }
-    } else { alert('Could not get recommendations. Try again.'); }
+      document.getElementById('shirt-ai-text').textContent = data.text;
+      document.getElementById('shirt-ai-result').style.display = 'block';
+      window._shirtAdvisorText = data.text;
+    } else {
+      alert('Could not get recommendation. Try again.');
+    }
   })
-  .catch(function() {
-    btn.disabled = false; btn.textContent = '🔍 GET SHIRT OPTIONS';
+  .catch(function(){
+    btn.disabled = false; btn.textContent = 'ASK';
     document.getElementById('shirt-ai-loading').style.display = 'none';
-    alert('Could not reach server.');
+    alert('Could not reach server. Check your connection.');
   });
 }
-
-function copyAdvisorForEmail() {
-  var rawText = document.getElementById('shirt-ai-text').textContent;
-  var bestbet = document.getElementById('shirt-ai-bestbet');
-  if (!rawText) return;
-
-  var lines = [];
-  lines.push('SHIRT OPTIONS — Little 6 Industries LLC');
-  lines.push('The Brand Behind the Brand · little6llc.com · 520-705-4026');
-  lines.push('');
-
-  try {
-    var parsed = JSON.parse(rawText);
-    parsed.options.forEach(function(o) {
-      lines.push('── ' + o.tier + ' ──');
-      lines.push(o.style);
-      lines.push('Garment Only: ' + o.price_garment);
-      lines.push('With Transfer: ' + o.price_with_transfer);
-      lines.push('They Sell At: ' + (o.suggested_retail || '—'));
-      lines.push('');
-      lines.push(o.why);
-      lines.push('Fabric: ' + o.fabric);
-      lines.push('Note: ' + o.watch);
-      lines.push('');
-    });
-    if (parsed.bestbet) lines.push('⭐ BEST BET: ' + parsed.bestbet);
-    if (parsed.qty_note) lines.push('⚠ ' + parsed.qty_note);
-  } catch(e) {
-    // Fallback to raw text if JSON parse fails
-    lines.push(rawText);
-  }
-
-  lines.push('');
-  lines.push('Browse our full apparel catalog: https://catalog.companycasuals.com/');
-  lines.push('');
-  lines.push('Ready to move forward? Reply to this email or call/text 520-705-4026.');
-  lines.push('We handle everything from artwork to delivery. SDVOSB Certified.');
-
-  var text = lines.join('\n');
-  navigator.clipboard.writeText(text).then(function() {
-    var btn = document.getElementById('advisor-copy-btn');
-    btn.textContent = '\u2705 COPIED';
-    setTimeout(function() { btn.textContent = '\ud83d\udce7 COPY FOR EMAIL'; }, 2500);
-  }).catch(function() {
-    var ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    var btn = document.getElementById('advisor-copy-btn');
-    btn.textContent = '\u2705 COPIED';
-    setTimeout(function() { btn.textContent = '\ud83d\udce7 COPY FOR EMAIL'; }, 2500);
-  });
-}
-
-function addAdvisorToEstimate() {
-  var text = document.getElementById('shirt-ai-text').textContent;
-  if (!text) return;
-  var drawerNotes = document.getElementById('drawer-notes');
-  if (drawerNotes) {
-    var existing = drawerNotes.value ? drawerNotes.value + '\n\n' : '';
-    drawerNotes.value = existing + 'SHIRT ADVISOR RECOMMENDATIONS:\n' + text;
-  }
-  var drawer = document.getElementById('quote-drawer');
-  if (drawer && !drawer.classList.contains('open')) toggleDrawer();
-  if (drawerNotes) {
-    setTimeout(function() {
-      drawerNotes.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      drawerNotes.style.borderColor = 'var(--gold)';
-      setTimeout(function() { drawerNotes.style.borderColor = ''; }, 2000);
-    }, 300);
-  }
-  var btn = event.target;
-  var orig = btn.textContent;
-  btn.textContent = '✅ ADDED';
-  setTimeout(function() { btn.textContent = orig; }, 2000);
-}
-
 
 function addAdvisorToNotes() {
   var text = window._shirtAdvisorText || '';
