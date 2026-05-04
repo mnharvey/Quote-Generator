@@ -477,8 +477,10 @@ ul{padding-left:1.1rem;}
 
   <!-- PIPELINE -->
   <div id="tab-pipeline" class="panel">
+    <div id="pipeline-error" style="display:none;background:#fff3f3;border-left:4px solid #B03028;padding:10px 14px;margin:0 12px 10px;font-size:12px;color:#B03028;">⚠️ Could not reach server. Check your connection.</div>
     <div class="pipeline-header">
       <h3>📊 Sales Pipeline</h3>
+      <button onclick="fetchPipeline()" style="padding:6px 10px;background:transparent;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.2);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-right:6px;">↻ REFRESH</button>
       <button onclick="toggleAddCardForm()" style="padding:6px 12px;background:var(--red);color:var(--white);border:none;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">+ ADD CARD</button>
     </div>
 
@@ -575,16 +577,46 @@ try {
   });
 } catch(e) {}
 
-// ── PIPELINE ──────────────────────────────────────────────
-var PIPELINE_KEY = 'l6i_pipeline_v1';
+// ── PIPELINE — SERVER BACKED ──────────────────────────────
+var SERVER = 'https://api.little6llc.com:3001';
 var STAGE_LABELS = {intake:'Quoted',quoted:'Follow Up',followup:'Close',closed:'Reopen'};
 var STAGE_NEXT   = {intake:'quoted',quoted:'followup',followup:'closed',closed:'intake'};
+var _pipelineCache = [];
 
-function loadPipeline(){ try{ return JSON.parse(localStorage.getItem(PIPELINE_KEY))||[]; }catch(e){ return []; } }
-function savePipeline(cards){ localStorage.setItem(PIPELINE_KEY, JSON.stringify(cards)); }
+function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function pipelineLoading(on){
+  var board = document.getElementById('pipeline-board');
+  if(board) board.style.opacity = on ? '0.5' : '1';
+}
+
+function fetchPipeline(){
+  pipelineLoading(true);
+  return fetch(SERVER+'/pipeline')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      _pipelineCache = data.cards || [];
+      pipelineLoading(false);
+      renderPipeline();
+      var err = document.getElementById('pipeline-error');
+      if(err) err.style.display='none';
+    })
+    .catch(function(){
+      pipelineLoading(false);
+      var err = document.getElementById('pipeline-error');
+      if(err) err.style.display='block';
+    });
+}
+
+function saveCard(card){
+  return fetch(SERVER+'/pipeline/card',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(card)
+  }).then(function(r){ return r.json(); });
+}
 
 function renderPipeline(){
-  var cards = loadPipeline();
+  var cards = _pipelineCache;
   ['intake','quoted','followup','closed'].forEach(function(stage){
     var col = document.getElementById('col-'+stage);
     var count = document.getElementById('count-'+stage);
@@ -593,14 +625,14 @@ function renderPipeline(){
     count.textContent = sc.length;
     col.innerHTML = sc.map(function(c){
       return '<div class="pipeline-card">'+
-        '<div class="pc-biz">'+c.biz+'</div>'+
-        (c.contact?'<div class="pc-detail">'+c.contact+'</div>':'')+
-        (c.product?'<div class="pc-detail">'+c.product+'</div>':'')+
-        (c.value?'<div class="pc-value">'+c.value+'</div>':'')+
-        (c.notes?'<div class="pc-detail" style="color:rgba(255,200,75,.7);margin-top:4px;">'+c.notes+'</div>':'')+
-        '<div class="pc-detail" style="font-size:10px;opacity:.4;margin-top:4px;">'+new Date(c.created).toLocaleDateString()+(c.rep?' · '+c.rep:'')+'</div>'+
+        '<div class="pc-biz">'+escHtml(c.biz)+'</div>'+
+        (c.contact?'<div class="pc-detail">'+escHtml(c.contact)+'</div>':'')+
+        (c.product?'<div class="pc-detail">'+escHtml(c.product)+'</div>':'')+
+        (c.value?'<div class="pc-value">'+escHtml(c.value)+'</div>':'')+
+        (c.notes?'<div class="pc-detail" style="color:rgba(255,200,75,.7);margin-top:4px;">'+escHtml(c.notes)+'</div>':'')+
+        '<div class="pc-detail" style="font-size:10px;opacity:.4;margin-top:4px;">'+new Date(c.created).toLocaleDateString()+(c.rep?' · '+escHtml(c.rep):'')+'</div>'+
         '<div class="pc-actions">'+
-          (stage!=='closed'?'<button class="btn-advance" onclick="advanceCard(\''+c.id+'\')">'+STAGE_LABELS[stage]+' →</button>':'')+
+          (stage!=='closed'?'<button class="btn-advance" onclick="advanceCard(\''+c.id+'\')">'+( STAGE_LABELS[stage]||'Next')+' →</button>':'')+
           '<button class="btn-note" onclick="addNoteToCard(\''+c.id+'\')">📝</button>'+
           '<button class="btn-delete" onclick="deleteCard(\''+c.id+'\')">✕</button>'+
         '</div>'+
@@ -610,45 +642,40 @@ function renderPipeline(){
 }
 
 function advanceCard(id){
-  var cards=loadPipeline();
-  var c=cards.find(function(c){return c.id===id;});
-  if(!c)return;
-  c.stage=STAGE_NEXT[c.stage]; c.updated=Date.now();
-  savePipeline(cards); renderPipeline();
+  var c = _pipelineCache.find(function(c){ return c.id===id; });
+  if(!c) return;
+  c.stage = STAGE_NEXT[c.stage]; c.updated = Date.now();
+  renderPipeline(); saveCard(c);
 }
 
 function deleteCard(id){
-  if(!confirm('Remove this card?'))return;
-  savePipeline(loadPipeline().filter(function(c){return c.id!==id;}));
-  renderPipeline();
+  if(!confirm('Remove this card?')) return;
+  fetch(SERVER+'/pipeline/card/'+id, {method:'DELETE'})
+    .then(function(){ _pipelineCache = _pipelineCache.filter(function(c){ return c.id!==id; }); renderPipeline(); });
 }
 
 function addNoteToCard(id){
-  var note=prompt('Add a note:');
-  if(!note)return;
-  var cards=loadPipeline();
-  var c=cards.find(function(c){return c.id===id;});
-  if(!c)return;
-  c.notes=c.notes?c.notes+' · '+note:note; c.updated=Date.now();
-  savePipeline(cards); renderPipeline();
+  var note = prompt('Add a note:'); if(!note) return;
+  var c = _pipelineCache.find(function(c){ return c.id===id; }); if(!c) return;
+  c.notes = c.notes ? c.notes+' · '+note : note; c.updated = Date.now();
+  renderPipeline(); saveCard(c);
 }
 
 function toggleAddCardForm(){
-  var f=document.getElementById('add-card-form');
-  f.style.display=f.style.display==='none'?'block':'none';
+  var f = document.getElementById('add-card-form');
+  f.style.display = f.style.display==='none' ? 'block' : 'none';
 }
 
 function quickAdd(stage){
-  document.getElementById('pc-stage').value=stage;
-  document.getElementById('add-card-form').style.display='block';
+  document.getElementById('pc-stage').value = stage;
+  document.getElementById('add-card-form').style.display = 'block';
   document.getElementById('pc-biz').focus();
 }
 
 function saveNewCard(){
-  var biz=document.getElementById('pc-biz').value.trim();
-  if(!biz){alert('Business name required.');return;}
-  var cards=loadPipeline();
-  cards.push({
+  var biz = document.getElementById('pc-biz').value.trim();
+  if(!biz){ alert('Business name required.'); return; }
+  var card = {
     id:'card_'+Date.now(),
     biz:biz,
     contact:document.getElementById('pc-contact').value.trim(),
@@ -656,57 +683,47 @@ function saveNewCard(){
     value:document.getElementById('pc-value').value.trim(),
     stage:document.getElementById('pc-stage').value,
     notes:document.getElementById('pc-notes').value.trim(),
-    rep:'',created:Date.now(),updated:Date.now()
-  });
-  savePipeline(cards); renderPipeline();
-  ['pc-biz','pc-contact','pc-product','pc-value','pc-notes'].forEach(function(id){document.getElementById(id).value='';});
+    rep:'', created:Date.now(), updated:Date.now()
+  };
+  _pipelineCache.push(card); renderPipeline(); saveCard(card);
+  ['pc-biz','pc-contact','pc-product','pc-value','pc-notes'].forEach(function(id){ document.getElementById(id).value=''; });
   document.getElementById('add-card-form').style.display='none';
 }
 
-// ── NOTES SCANNER ──────────────────────────────────────────
+// ── NOTES SCANNER — MULTI-CARD ─────────────────────────────
 function scanNotesToPipeline(input){
-  var file=input.files[0]; if(!file)return;
-  var status=document.getElementById('notes-scan-status');
-  status.textContent='Reading notes...'; status.style.color='rgba(255,255,255,.7)'; status.style.display='block';
-
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var base64=e.target.result.split(',')[1];
-    fetch('https://api.little6llc.com:3001/scan-card',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({image:base64, mediaType:'image/jpeg', mode:'notes'})
+  var file = input.files[0]; if(!file) return;
+  var status = document.getElementById('notes-scan-status');
+  status.textContent = 'Reading notes...'; status.style.color='rgba(255,255,255,.7)'; status.style.display='block';
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var base64 = e.target.result.split(',')[1];
+    fetch(SERVER+'/scan-notes',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({image:base64, mediaType:'image/jpeg'})
     })
-    .then(function(r){return r.json();})
+    .then(function(r){ return r.json(); })
     .then(function(data){
-      if(!data.success)throw new Error(data.error);
-      var c=data.card;
-      // Pre-fill the add card form
-      document.getElementById('pc-biz').value=c.company||c.name||'Unknown';
-      document.getElementById('pc-contact').value=[c.name,c.phone,c.email].filter(Boolean).join(' · ');
-      document.getElementById('pc-product').value=c.product||'';
-      document.getElementById('pc-value').value=c.value||'';
-      document.getElementById('pc-stage').value=c.stage||'intake';
-      document.getElementById('pc-notes').value=c.notes||'';
-      document.getElementById('add-card-form').style.display='block';
-      status.textContent='\u2705 Notes read — review and save card below.';
-      status.style.color='#4ADE80';
-      input.value='';
+      if(!data.success) throw new Error(data.error);
+      var n = data.cards.length;
+      data.cards.forEach(function(c){ if(!_pipelineCache.find(function(e){ return e.id===c.id; })) _pipelineCache.push(c); });
+      renderPipeline();
+      status.textContent = '✅ '+n+' card'+(n!==1?'s':'')+' created from notes.';
+      status.style.color='#4ADE80'; input.value='';
     })
     .catch(function(err){
-      status.textContent='\u26a0\ufe0f Could not read notes: '+(err.message||'Try again.');
-      status.style.color='#f87171';
-      input.value='';
+      status.textContent = '⚠️ Could not read notes: '+(err.message||'Try again.');
+      status.style.color='#f87171'; input.value='';
     });
   };
   reader.readAsDataURL(file);
 }
 
 // Render when tab opens
-var _origShowTab=showTab;
-showTab=function(name,btn){
-  _origShowTab(name,btn);
-  if(name==='pipeline')renderPipeline();
+var _origShowTab = showTab;
+showTab = function(name, btn){
+  _origShowTab(name, btn);
+  if(name==='pipeline') fetchPipeline();
 };
 
 </script>
