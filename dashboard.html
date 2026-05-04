@@ -127,7 +127,6 @@ ul{padding-left:1.1rem;}
 
 @media(max-width:380px){.home-grid{grid-template-columns:1fr;}.tl-grid{grid-template-columns:1fr;}}
 
-/* ── PIPELINE ─────────────────────────────────────────── */
 .pipeline-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;}
 @media(min-width:700px){.pipeline-wrap{grid-template-columns:repeat(4,1fr);}}
 .pipeline-col{background:#0D0D1A;border-radius:4px;overflow:hidden;}
@@ -142,7 +141,7 @@ ul{padding-left:1.1rem;}
 .pipeline-card .pc-actions button{flex:1;padding:4px 6px;font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;white-space:nowrap;}
 .btn-advance{background:var(--red);color:var(--white);}
 .btn-note{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);}
-.btn-delete{background:transparent;color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.15) !important;}
+.btn-delete{background:transparent;color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.15)!important;}
 .pipeline-add{width:100%;padding:8px;background:transparent;border:1.5px dashed rgba(255,255,255,.2);color:rgba(255,255,255,.4);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-top:4px;}
 .pipeline-add:hover{border-color:var(--gold);color:var(--gold);}
 .pipeline-header{display:flex;justify-content:space-between;align-items:center;padding:12px 12px 0;}
@@ -150,6 +149,7 @@ ul{padding-left:1.1rem;}
 .add-card-form{background:#0D0D1A;padding:14px;margin:10px 12px;border:1px solid rgba(255,255,255,.1);}
 .add-card-form input,.add-card-form select,.add-card-form textarea{width:100%;padding:7px 9px;background:#1A1A2E;border:1px solid rgba(255,255,255,.15);color:var(--white);font-family:'Source Sans 3',sans-serif;font-size:12px;margin-bottom:8px;outline:none;}
 .add-card-form label{font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:3px;}
+.scan-notes-box{background:#0D0D1A;padding:12px;margin:0 12px 10px;border:1.5px dashed rgba(200,168,75,.4);}
 </style>
 </head>
 <body>
@@ -482,13 +482,22 @@ ul{padding-left:1.1rem;}
       <button onclick="toggleAddCardForm()" style="padding:6px 12px;background:var(--red);color:var(--white);border:none;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">+ ADD CARD</button>
     </div>
 
+    <!-- SCAN NOTES -->
+    <div class="scan-notes-box">
+      <div style="font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">📝 Scan Handwritten Notes → Pipeline Card</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:8px;">Take a photo of your notes — AI reads and creates a pipeline card automatically.</div>
+      <input type="file" id="notes-scan-input" accept="image/*" capture="environment" style="display:none;" onchange="scanNotesToPipeline(this)">
+      <button onclick="document.getElementById('notes-scan-input').click()" style="width:100%;padding:8px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">📷 SCAN NOTES</button>
+      <div id="notes-scan-status" style="display:none;font-size:11px;padding:6px 0;text-align:center;"></div>
+    </div>
+
     <!-- ADD CARD FORM -->
     <div id="add-card-form" style="display:none;" class="add-card-form">
       <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">New Pipeline Card</div>
       <label>Business Name *</label>
       <input type="text" id="pc-biz" placeholder="e.g. Quartsite Outpost">
       <label>Contact</label>
-      <input type="text" id="pc-contact" placeholder="Name · Phone">
+      <input type="text" id="pc-contact" placeholder="Name · Phone · Email">
       <label>Product / Job</label>
       <input type="text" id="pc-product" placeholder="e.g. 48 shirts, Humvee design">
       <label>Est. Value</label>
@@ -568,116 +577,136 @@ try {
 
 // ── PIPELINE ──────────────────────────────────────────────
 var PIPELINE_KEY = 'l6i_pipeline_v1';
-var STAGES = ['intake','quoted','followup','closed'];
 var STAGE_LABELS = {intake:'Quoted',quoted:'Follow Up',followup:'Close',closed:'Reopen'};
-var STAGE_NEXT = {intake:'quoted',quoted:'followup',followup:'closed',closed:'intake'};
+var STAGE_NEXT   = {intake:'quoted',quoted:'followup',followup:'closed',closed:'intake'};
 
-function loadPipeline() {
-  try { return JSON.parse(localStorage.getItem(PIPELINE_KEY)) || []; }
-  catch(e) { return []; }
-}
+function loadPipeline(){ try{ return JSON.parse(localStorage.getItem(PIPELINE_KEY))||[]; }catch(e){ return []; } }
+function savePipeline(cards){ localStorage.setItem(PIPELINE_KEY, JSON.stringify(cards)); }
 
-function savePipeline(cards) {
-  localStorage.setItem(PIPELINE_KEY, JSON.stringify(cards));
-}
-
-function renderPipeline() {
+function renderPipeline(){
   var cards = loadPipeline();
-  STAGES.forEach(function(stage) {
-    var col = document.getElementById('col-' + stage);
-    var count = document.getElementById('count-' + stage);
-    if (!col) return;
-    var stageCards = cards.filter(function(c) { return c.stage === stage; });
-    count.textContent = stageCards.length;
-    col.innerHTML = stageCards.map(function(c) {
-      return '<div class="pipeline-card" id="card-' + c.id + '">' +
-        '<div class="pc-biz">' + c.biz + '</div>' +
-        '<div class="pc-detail">' + (c.contact || '') + '</div>' +
-        '<div class="pc-detail">' + (c.product || '') + '</div>' +
-        (c.value ? '<div class="pc-value">' + c.value + '</div>' : '') +
-        (c.notes ? '<div class="pc-detail" style="color:rgba(255,200,75,.7);margin-top:4px;">' + c.notes + '</div>' : '') +
-        '<div class="pc-detail" style="margin-top:4px;font-size:10px;opacity:.4;">' + new Date(c.created).toLocaleDateString() + ' · ' + (c.rep||'') + '</div>' +
-        '<div class="pc-actions">' +
-          (stage !== 'closed' ? '<button class="btn-advance" onclick="advanceCard(\''+c.id+'\')">'+STAGE_LABELS[stage]+' →</button>' : '') +
-          '<button class="btn-note" onclick="addNoteToCard(\''+c.id+'\')">📝 Note</button>' +
-          '<button class="btn-delete" onclick="deleteCard(\''+c.id+'\')">✕</button>' +
-        '</div>' +
+  ['intake','quoted','followup','closed'].forEach(function(stage){
+    var col = document.getElementById('col-'+stage);
+    var count = document.getElementById('count-'+stage);
+    if(!col) return;
+    var sc = cards.filter(function(c){ return c.stage===stage; });
+    count.textContent = sc.length;
+    col.innerHTML = sc.map(function(c){
+      return '<div class="pipeline-card">'+
+        '<div class="pc-biz">'+c.biz+'</div>'+
+        (c.contact?'<div class="pc-detail">'+c.contact+'</div>':'')+
+        (c.product?'<div class="pc-detail">'+c.product+'</div>':'')+
+        (c.value?'<div class="pc-value">'+c.value+'</div>':'')+
+        (c.notes?'<div class="pc-detail" style="color:rgba(255,200,75,.7);margin-top:4px;">'+c.notes+'</div>':'')+
+        '<div class="pc-detail" style="font-size:10px;opacity:.4;margin-top:4px;">'+new Date(c.created).toLocaleDateString()+(c.rep?' · '+c.rep:'')+'</div>'+
+        '<div class="pc-actions">'+
+          (stage!=='closed'?'<button class="btn-advance" onclick="advanceCard(\''+c.id+'\')">'+STAGE_LABELS[stage]+' →</button>':'')+
+          '<button class="btn-note" onclick="addNoteToCard(\''+c.id+'\')">📝</button>'+
+          '<button class="btn-delete" onclick="deleteCard(\''+c.id+'\')">✕</button>'+
+        '</div>'+
       '</div>';
     }).join('');
   });
 }
 
-function advanceCard(id) {
-  var cards = loadPipeline();
-  var card = cards.find(function(c) { return c.id === id; });
-  if (!card) return;
-  card.stage = STAGE_NEXT[card.stage];
-  card.updated = Date.now();
-  savePipeline(cards);
+function advanceCard(id){
+  var cards=loadPipeline();
+  var c=cards.find(function(c){return c.id===id;});
+  if(!c)return;
+  c.stage=STAGE_NEXT[c.stage]; c.updated=Date.now();
+  savePipeline(cards); renderPipeline();
+}
+
+function deleteCard(id){
+  if(!confirm('Remove this card?'))return;
+  savePipeline(loadPipeline().filter(function(c){return c.id!==id;}));
   renderPipeline();
 }
 
-function deleteCard(id) {
-  if (!confirm('Remove this card from the pipeline?')) return;
-  var cards = loadPipeline().filter(function(c) { return c.id !== id; });
-  savePipeline(cards);
-  renderPipeline();
+function addNoteToCard(id){
+  var note=prompt('Add a note:');
+  if(!note)return;
+  var cards=loadPipeline();
+  var c=cards.find(function(c){return c.id===id;});
+  if(!c)return;
+  c.notes=c.notes?c.notes+' · '+note:note; c.updated=Date.now();
+  savePipeline(cards); renderPipeline();
 }
 
-function addNoteToCard(id) {
-  var note = prompt('Add a note to this card:');
-  if (!note) return;
-  var cards = loadPipeline();
-  var card = cards.find(function(c) { return c.id === id; });
-  if (!card) return;
-  card.notes = card.notes ? card.notes + ' · ' + note : note;
-  card.updated = Date.now();
-  savePipeline(cards);
-  renderPipeline();
+function toggleAddCardForm(){
+  var f=document.getElementById('add-card-form');
+  f.style.display=f.style.display==='none'?'block':'none';
 }
 
-function toggleAddCardForm() {
-  var form = document.getElementById('add-card-form');
-  form.style.display = form.style.display === 'none' ? 'block' : 'none';
-}
-
-function quickAdd(stage) {
-  document.getElementById('pc-stage').value = stage;
-  var form = document.getElementById('add-card-form');
-  form.style.display = 'block';
+function quickAdd(stage){
+  document.getElementById('pc-stage').value=stage;
+  document.getElementById('add-card-form').style.display='block';
   document.getElementById('pc-biz').focus();
 }
 
-function saveNewCard() {
-  var biz = document.getElementById('pc-biz').value.trim();
-  if (!biz) { alert('Business name is required.'); return; }
-  var cards = loadPipeline();
+function saveNewCard(){
+  var biz=document.getElementById('pc-biz').value.trim();
+  if(!biz){alert('Business name required.');return;}
+  var cards=loadPipeline();
   cards.push({
-    id: 'card_' + Date.now(),
-    biz: biz,
-    contact: document.getElementById('pc-contact').value.trim(),
-    product: document.getElementById('pc-product').value.trim(),
-    value: document.getElementById('pc-value').value.trim(),
-    stage: document.getElementById('pc-stage').value,
-    notes: document.getElementById('pc-notes').value.trim(),
-    rep: '',
-    created: Date.now(),
-    updated: Date.now()
+    id:'card_'+Date.now(),
+    biz:biz,
+    contact:document.getElementById('pc-contact').value.trim(),
+    product:document.getElementById('pc-product').value.trim(),
+    value:document.getElementById('pc-value').value.trim(),
+    stage:document.getElementById('pc-stage').value,
+    notes:document.getElementById('pc-notes').value.trim(),
+    rep:'',created:Date.now(),updated:Date.now()
   });
-  savePipeline(cards);
-  renderPipeline();
-  // Reset form
-  ['pc-biz','pc-contact','pc-product','pc-value','pc-notes'].forEach(function(id) {
-    document.getElementById(id).value = '';
-  });
-  document.getElementById('add-card-form').style.display = 'none';
+  savePipeline(cards); renderPipeline();
+  ['pc-biz','pc-contact','pc-product','pc-value','pc-notes'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('add-card-form').style.display='none';
 }
 
-// Render pipeline when tab opens
-var _origShowTab = showTab;
-showTab = function(name, btn) {
-  _origShowTab(name, btn);
-  if (name === 'pipeline') renderPipeline();
+// ── NOTES SCANNER ──────────────────────────────────────────
+function scanNotesToPipeline(input){
+  var file=input.files[0]; if(!file)return;
+  var status=document.getElementById('notes-scan-status');
+  status.textContent='Reading notes...'; status.style.color='rgba(255,255,255,.7)'; status.style.display='block';
+
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var base64=e.target.result.split(',')[1];
+    fetch('https://api.little6llc.com:3001/scan-card',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({image:base64, mediaType:'image/jpeg', mode:'notes'})
+    })
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(!data.success)throw new Error(data.error);
+      var c=data.card;
+      // Pre-fill the add card form
+      document.getElementById('pc-biz').value=c.company||c.name||'Unknown';
+      document.getElementById('pc-contact').value=[c.name,c.phone,c.email].filter(Boolean).join(' · ');
+      document.getElementById('pc-product').value=c.product||'';
+      document.getElementById('pc-value').value=c.value||'';
+      document.getElementById('pc-stage').value=c.stage||'intake';
+      document.getElementById('pc-notes').value=c.notes||'';
+      document.getElementById('add-card-form').style.display='block';
+      status.textContent='\u2705 Notes read — review and save card below.';
+      status.style.color='#4ADE80';
+      input.value='';
+    })
+    .catch(function(err){
+      status.textContent='\u26a0\ufe0f Could not read notes: '+(err.message||'Try again.');
+      status.style.color='#f87171';
+      input.value='';
+    });
+  };
+  reader.readAsDataURL(file);
+}
+
+// Render when tab opens
+var _origShowTab=showTab;
+showTab=function(name,btn){
+  _origShowTab(name,btn);
+  if(name==='pipeline')renderPipeline();
 };
 
 </script>
