@@ -130,7 +130,7 @@ ul{padding-left:1.1rem;}
 .pipeline-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;}
 @media(min-width:700px){.pipeline-wrap{grid-template-columns:repeat(4,1fr);}}
 .pipeline-col{background:#0D0D1A;border-radius:4px;overflow:hidden;}
-.pipeline-col-head{padding:10px 12px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;}
+.pipeline-col-head{padding:10px 12px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;color:#ffffff;}
 .pipeline-col-head .col-count{background:rgba(255,255,255,.15);border-radius:10px;padding:1px 7px;font-size:10px;}
 .pipeline-cards{min-height:80px;padding:8px;}
 .pipeline-card{background:#1A1A2E;border-left:3px solid var(--gold);padding:10px 12px;margin-bottom:8px;border-radius:2px;}
@@ -521,22 +521,22 @@ ul{padding-left:1.1rem;}
 
     <div class="pipeline-wrap" id="pipeline-board">
       <div class="pipeline-col">
-        <div class="pipeline-col-head" style="background:#1a3a5c;">📥 Intake <span class="col-count" id="count-intake">0</span></div>
+        <div class="pipeline-col-head" style="background:#0a2040;">📥 Intake <span class="col-count" id="count-intake">0</span></div>
         <div class="pipeline-cards" id="col-intake"></div>
         <button class="pipeline-add" onclick="quickAdd('intake')">+ Add</button>
       </div>
       <div class="pipeline-col">
-        <div class="pipeline-col-head" style="background:#1a3a2a;">📋 Quoted <span class="col-count" id="count-quoted">0</span></div>
+        <div class="pipeline-col-head" style="background:#0a2a15;">📋 Quoted <span class="col-count" id="count-quoted">0</span></div>
         <div class="pipeline-cards" id="col-quoted"></div>
         <button class="pipeline-add" onclick="quickAdd('quoted')">+ Add</button>
       </div>
       <div class="pipeline-col">
-        <div class="pipeline-col-head" style="background:#3a2a1a;">🔔 Follow Up <span class="col-count" id="count-followup">0</span></div>
+        <div class="pipeline-col-head" style="background:#2a1a08;">🔔 Follow Up <span class="col-count" id="count-followup">0</span></div>
         <div class="pipeline-cards" id="col-followup"></div>
         <button class="pipeline-add" onclick="quickAdd('followup')">+ Add</button>
       </div>
       <div class="pipeline-col">
-        <div class="pipeline-col-head" style="background:#1a2a1a;">✅ Closed <span class="col-count" id="count-closed">0</span></div>
+        <div class="pipeline-col-head" style="background:#0a1a0a;">✅ Closed <span class="col-count" id="count-closed">0</span></div>
         <div class="pipeline-cards" id="col-closed"></div>
         <button class="pipeline-add" onclick="quickAdd('closed')">+ Add</button>
       </div>
