@@ -144,6 +144,10 @@ ul{padding-left:1.1rem;}
 .btn-delete{background:transparent;color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.15)!important;}
 .pipeline-add{width:100%;padding:8px;background:transparent;border:1.5px dashed rgba(255,255,255,.2);color:rgba(255,255,255,.4);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-top:4px;}
 .pipeline-add:hover{border-color:var(--gold);color:var(--gold);}
+.edit-lbl{font-size:9px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:2px;margin-top:6px;}
+.edit-inp{width:100%;padding:5px 7px;background:#0D0D1A;border:1px solid rgba(255,255,255,.2);color:#ffffff;font-family:'Source Sans 3',sans-serif;font-size:12px;outline:none;box-sizing:border-box;}
+.edit-inp:focus{border-color:#C8A84B;}
+textarea.edit-inp{resize:vertical;}
 .pipeline-header{display:flex;justify-content:space-between;align-items:center;padding:12px 12px 0;}
 .pipeline-header h3{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:1px;}
 .add-card-form{background:#0D0D1A;padding:14px;margin:10px 12px;border:1px solid rgba(255,255,255,.1);}
@@ -624,23 +628,75 @@ function renderPipeline(){
     if(!col) return;
     var sc = cards.filter(function(c){ return c.stage===stage; });
     count.textContent = sc.length;
-    col.innerHTML = sc.map(function(c){
-      return '<div class="pipeline-card">'+
-        '<div class="pc-biz">'+escHtml(c.biz)+'</div>'+
-        (c.contact?'<div class="pc-detail">'+escHtml(c.contact)+'</div>':'')+
-        (c.product?'<div class="pc-detail">'+escHtml(c.product)+'</div>':'')+
-        (c.value?'<div class="pc-value">'+escHtml(c.value)+'</div>':'')+
-        (c.notes?'<div class="pc-detail" style="color:rgba(255,200,75,.7);margin-top:4px;">'+escHtml(c.notes)+'</div>':'')+
-        '<div class="pc-detail" style="font-size:10px;opacity:.4;margin-top:4px;">'+new Date(c.created).toLocaleDateString()+(c.rep?' · '+escHtml(c.rep):'')+'</div>'+
-        '<div class="pc-actions">'+
-          (stage!=='closed'?'<button class="btn-advance" onclick="advanceCard(\''+c.id+'\')">'+( STAGE_LABELS[stage]||'Next')+' →</button>':'')+
-          '<button class="btn-note" onclick="addNoteToCard(\''+c.id+'\')">📝</button>'+
-          '<button class="btn-delete" onclick="deleteCard(\''+c.id+'\')">✕</button>'+
-        '</div>'+
-      '</div>';
-    }).join('');
+    col.innerHTML = sc.map(function(c){ return buildCard(c); }).join('');
   });
 }
+
+function buildCard(c){
+  var stageNext = c.stage!=='closed' ? '<button class="btn-advance" onclick="advanceCard(\''+c.id+'\')">'+( STAGE_LABELS[c.stage]||'Next')+' →</button>' : '';
+  return '<div class="pipeline-card" id="card-'+c.id+'">'+
+    '<div class="pc-biz">'+escHtml(c.biz)+'</div>'+
+    (c.contact?'<div class="pc-detail">'+escHtml(c.contact)+'</div>':'')+
+    (c.product?'<div class="pc-detail">'+escHtml(c.product)+'</div>':'')+
+    (c.value?'<div class="pc-value">'+escHtml(c.value)+'</div>':'')+
+    (c.notes?'<div class="pc-detail" style="color:rgba(255,200,75,.7);margin-top:4px;">'+escHtml(c.notes)+'</div>':'')+
+    '<div class="pc-detail" style="font-size:10px;opacity:.4;margin-top:4px;">'+new Date(c.created).toLocaleDateString()+(c.rep?' · '+escHtml(c.rep):'')+'</div>'+
+    '<div class="pc-actions">'+stageNext+
+      '<button class="btn-note" onclick="editCard(\''+c.id+'\')">Edit</button>'+
+      '<button class="btn-delete" onclick="deleteCard(\''+c.id+'\')">X</button>'+
+    '</div>'+
+  '</div>';
+}
+
+function escAttr(s){ return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+function buildEditCard(c){
+  var stageOpts = ['intake','quoted','followup','closed'].map(function(s){
+    var labels = {intake:'Intake',quoted:'Quoted',followup:'Follow Up',closed:'Closed'};
+    return '<option value="'+s+'"'+(c.stage===s?' selected':'')+'>'+labels[s]+'</option>';
+  }).join('');
+  return '<div class="pipeline-card" id="card-'+c.id+'" style="border-left-color:#C8A84B;">'+
+    '<div style="font-size:9px;color:#C8A84B;font-family:Oswald,sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Editing</div>'+
+    '<label class="edit-lbl">Business</label><input class="edit-inp" id="e-biz-'+c.id+'" value="'+escAttr(c.biz)+'">'+
+    '<label class="edit-lbl">Contact</label><input class="edit-inp" id="e-contact-'+c.id+'" value="'+escAttr(c.contact||'')+'">'+
+    '<label class="edit-lbl">Product</label><input class="edit-inp" id="e-product-'+c.id+'" value="'+escAttr(c.product||'')+'">'+
+    '<label class="edit-lbl">Value</label><input class="edit-inp" id="e-value-'+c.id+'" value="'+escAttr(c.value||'')+'">'+
+    '<label class="edit-lbl">Stage</label><select class="edit-inp" id="e-stage-'+c.id+'">'+stageOpts+'</select>'+
+    '<label class="edit-lbl">Notes</label><textarea class="edit-inp" id="e-notes-'+c.id+'" rows="2">'+escHtml(c.notes||'')+'</textarea>'+
+    '<div class="pc-actions" style="margin-top:8px;">'+
+      '<button class="btn-advance" onclick="saveEditCard(\''+c.id+'\')">SAVE</button>'+
+      '<button class="btn-delete" onclick="cancelEdit(\''+c.id+'\')">CANCEL</button>'+
+    '</div>'+
+  '</div>';
+}
+
+function editCard(id){
+  var c = _pipelineCache.find(function(c){ return c.id===id; });
+  if(!c) return;
+  var el = document.getElementById('card-'+id);
+  if(el) el.outerHTML = buildEditCard(c);
+}
+
+function cancelEdit(id){
+  var c = _pipelineCache.find(function(c){ return c.id===id; });
+  if(!c) return;
+  var el = document.getElementById('card-'+id);
+  if(el) el.outerHTML = buildCard(c);
+}
+
+function saveEditCard(id){
+  var c = _pipelineCache.find(function(c){ return c.id===id; });
+  if(!c) return;
+  c.biz     = document.getElementById('e-biz-'+id).value.trim();
+  c.contact = document.getElementById('e-contact-'+id).value.trim();
+  c.product = document.getElementById('e-product-'+id).value.trim();
+  c.value   = document.getElementById('e-value-'+id).value.trim();
+  c.stage   = document.getElementById('e-stage-'+id).value;
+  c.notes   = document.getElementById('e-notes-'+id).value.trim();
+  c.updated = Date.now();
+  saveCard(c).then(function(){ fetchPipeline(); });
+}
+
 
 function advanceCard(id){
   var c = _pipelineCache.find(function(c){ return c.id===id; });
