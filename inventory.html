@@ -176,21 +176,12 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
   </div>
 </div>
 <div class="portal-nav">
-  <button class="portal-tab active" onclick="switchPortal('quotes')">&#128203; Sales Quote Tool</button>
-  <button class="portal-tab" onclick="switchPortal('inventory-gate')">&#128230; Inventory</button>
+  <button class="portal-tab" onclick="window.location.href='https://mnharvey.github.io/Quote-Generator/dashboard.html'">&#127968; Dashboard</button>
+  <button class="portal-tab active" onclick="switchPortal('inventory-gate')">&#128230; Inventory</button>
 </div>
 
-<!-- QUOTES -->
-<div class="view active" id="view-quotes">
-  <div class="launch-card">
-    <div class="launch-inner">
-      <h2>Sales Estimate Tool</h2>
-      <p>Open the full pricing calculator for corrugated signs, aluminum, vinyl, shirts, banners, magnets, cornhole trophies, embroidery, and more.</p>
-      <a class="launch-btn" href="https://mnharvey.github.io/Quote-Generator/index.html" target="_blank">Open Quote Tool &nearr;</a>
-      <p style="margin-top:16px;font-size:11px;color:#aaa;">Transfers42 &middot; Little 6 Industries &middot; Promo with Grace</p>
-    </div>
-  </div>
-</div>
+<!-- QUOTES view removed — replaced by dashboard link -->
+<div class="view" id="view-quotes" style="display:none"></div>
 
 <!-- PIN GATE -->
 <div class="view" id="view-inventory-gate">
@@ -671,13 +662,14 @@ const PIN='6262';
 let portalUnlocked=false;
 
 function switchPortal(v){
-  document.querySelectorAll('.portal-tab').forEach((t,i)=>t.classList.toggle('active',i===(v==='quotes'?0:1)));
+  document.querySelectorAll('.portal-tab').forEach((t,i)=>t.classList.toggle('active',i===(v==='inventory-gate'?1:0)));
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
   if(v==='inventory-gate'){
     if(portalUnlocked){document.getElementById('view-inventory').classList.add('active');}
     else{document.getElementById('view-inventory-gate').classList.add('active');}
   }else{document.getElementById('view-'+v).classList.add('active');}
 }
+switchPortal('inventory-gate');
 
 let pinEntry='';
 function pinPress(d){
