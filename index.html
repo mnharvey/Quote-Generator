@@ -152,12 +152,15 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 .sri-name{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;}
 .sri-desc{font-size:11px;color:var(--gray);margin-top:1px;}
 .sri-cat{font-size:10px;color:var(--gold);font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
-.home-cats{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.home-cat-card{background:var(--white);border:1.5px solid var(--mid-gray);padding:14px;cursor:pointer;transition:all .15s;}
+.home-cats{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;}
+.home-cat-card{background:var(--white);border:1.5px solid var(--mid-gray);padding:14px;cursor:pointer;transition:all .15s;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
 .home-cat-card:hover{border-color:var(--red);background:#fff8f8;}
+.home-cat-card.open{border-color:var(--red);background:#fff8f8;}
 .hcc-icon{font-size:24px;margin-bottom:6px;}
 .hcc-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
 .hcc-items{font-size:11px;color:var(--gray);line-height:1.6;}
+.hcc-sub-btn{display:block;width:100%;text-align:left;padding:7px 10px;margin-top:4px;background:#f7f7f7;border:none;border-left:3px solid #ddd;font-size:12px;cursor:pointer;font-family:'Source Sans 3',sans-serif;color:var(--navy);}
+.hcc-sub-btn:hover{background:#ffeaea;border-left-color:var(--red);color:var(--red);}
 
 .panel-notes-wrap{margin-top:10px;margin-bottom:2px;}
 .panel-notes-wrap label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray);font-family:'Oswald',sans-serif;font-weight:600;display:block;margin-bottom:5px;}
@@ -4755,7 +4758,8 @@ function toggleHomeCat(subId, card) {
   if (!sub) return;
   var isOpen = sub.style.display === 'block';
   document.querySelectorAll('[id$="-sub"]').forEach(function(el) { el.style.display = 'none'; });
-  if (!isOpen) sub.style.display = 'block';
+  document.querySelectorAll('.home-cat-card').forEach(function(el) { el.classList.remove('open'); });
+  if (!isOpen) { sub.style.display = 'block'; card.classList.add('open'); }
 }
 </script>
 </body>
