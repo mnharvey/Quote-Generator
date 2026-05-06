@@ -271,36 +271,69 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
     <div class="search-results" id="search-results"></div>
 
     <div class="home-cats">
-      <div class="home-cat-card" onclick="showPanel('corr4', document.querySelector('.cat-btn'))">
+      <div class="home-cat-card" onclick="toggleHomeCat('signage-sub',this)">
         <div class="hcc-icon">🪧</div>
-        <div class="hcc-title">Signage</div>
-        <div class="hcc-items">4mm · 10mm · Aluminum · Vinyl Decals</div>
+        <div class="hcc-title">Signage ▾</div>
+        <div class="hcc-items" style="margin-bottom:0">4mm · 10mm · Aluminum · Vinyl Decals</div>
+        <div id="signage-sub" style="display:none;margin-top:10px;border-top:1px solid #eee;padding-top:8px;">
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('corr4',document.querySelector('.cat-btn'))">🪧 4mm Coroplast</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('corr10',document.querySelector('.cat-btn'))">🪧 10mm Coroplast</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('aluminum',document.querySelector('.cat-btn'))">⬜ Aluminum Signs</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('vinyl',document.querySelector('.cat-btn'))">🏷️ Vinyl Decals</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('banners',document.querySelector('.cat-btn'))">🚩 Banners</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('doorhangers',document.querySelector('.cat-btn'))">🚪 Door Hangers</button>
+        </div>
       </div>
       <div class="home-cat-card" onclick="toggleHomeCat('apparel-sub',this)" id="hcc-apparel">
         <div class="hcc-icon">👕</div>
         <div class="hcc-title">Apparel ▾</div>
         <div class="hcc-items">T-Shirts · DTF Transfers · Embroidery · Hats</div>
-        <div id="apparel-sub" style="display:none;margin-top:10px;display:none;border-top:1px solid #eee;padding-top:8px;">
+        <div id="apparel-sub" style="display:none;margin-top:10px;border-top:1px solid #eee;padding-top:8px;">
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('shirts',document.querySelector('.cat-btn'))">👕 T-Shirts</button>
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('dtf',document.querySelector('.cat-btn'))">🖨️ DTF Transfers</button>
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('embroidery',document.querySelector('.cat-btn'))">🧵 Embroidery</button>
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('shirts',document.querySelector('.cat-btn'));document.getElementById('shirt-brand').value='NEW ERA';document.getElementById('shirt-cat').value='HEADWEAR';calcShirts()">🧢 Hats</button>
         </div>
       </div>
-      <div class="home-cat-card" onclick="showPanel('cornhole', document.querySelector('.cat-btn'))">
+      <div class="home-cat-card" onclick="toggleHomeCat('hardgoods-sub',this)">
         <div class="hcc-icon">🏆</div>
-        <div class="hcc-title">Hard Goods</div>
+        <div class="hcc-title">Hard Goods ▾</div>
         <div class="hcc-items">Cornhole · Wood Letters · Canopy Tents · Ornaments · Foam Board · Big Heads</div>
+        <div id="hardgoods-sub" style="display:none;margin-top:10px;border-top:1px solid #eee;padding-top:8px;">
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('cornhole',document.querySelector('.cat-btn'))">🎯 Cornhole Boards</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('woodletters',document.querySelector('.cat-btn'))">🪵 Wood Letters</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('canopy',document.querySelector('.cat-btn'))">⛺ Canopy Tents</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('ornaments',document.querySelector('.cat-btn'))">🎄 Ornaments</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('foamboard',document.querySelector('.cat-btn'))">🖼️ Foam Board</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('bigheads',document.querySelector('.cat-btn'))">🙂 Big Heads</button>
+        </div>
       </div>
-      <div class="home-cat-card" onclick="showPanel('banners', document.querySelector('.cat-btn'))">
+      <div class="home-cat-card" onclick="toggleHomeCat('print-sub',this)">
         <div class="hcc-icon">🚩</div>
-        <div class="hcc-title">Print &amp; Transfers</div>
+        <div class="hcc-title">Print &amp; Transfers ▾</div>
         <div class="hcc-items">Banners · Stickers · Magnets · Plates · PVC Cards</div>
+        <div id="print-sub" style="display:none;margin-top:10px;border-top:1px solid #eee;padding-top:8px;">
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('banners',document.querySelector('.cat-btn'))">🚩 Banners</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('stickers',document.querySelector('.cat-btn'))">🏷️ Stickers</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('magnets',document.querySelector('.cat-btn'))">🧲 Magnets</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('licenseplates',document.querySelector('.cat-btn'))">🚗 License Plates</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('pvcards',document.querySelector('.cat-btn'))">💳 PVC Cards</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('doorhangers',document.querySelector('.cat-btn'))">🚪 Door Hangers</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('foamboard',document.querySelector('.cat-btn'))">🖼️ Foam Board</button>
+        </div>
       </div>
-      <div class="home-cat-card" onclick="showPanel('tumblers', document.querySelector('.cat-btn'))">
+      <div class="home-cat-card" onclick="toggleHomeCat('gifts-sub',this)">
         <div class="hcc-icon">🥤</div>
-        <div class="hcc-title">Gifts &amp; Awards</div>
+        <div class="hcc-title">Gifts &amp; Awards ▾</div>
         <div class="hcc-items">Tumblers · Medals · Golf Balls · Badge Buddies · Bags</div>
+        <div id="gifts-sub" style="display:none;margin-top:10px;border-top:1px solid #eee;padding-top:8px;">
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('tumblers',document.querySelector('.cat-btn'))">🥤 Tumblers</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('medals',document.querySelector('.cat-btn'))">🏅 Medals</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('golfballs',document.querySelector('.cat-btn'))">⛳ Golf Balls</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('badgebuddies',document.querySelector('.cat-btn'))">🪪 Badge Buddies</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('bags',document.querySelector('.cat-btn'))">👜 Bags</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('tablecloths',document.querySelector('.cat-btn'))">🪑 Table Covers</button>
+        </div>
       </div>
       <div class="home-cat-card" onclick="showPanel('salestips', document.querySelector('.cat-btn'))">
         <div class="hcc-icon">💬</div>
