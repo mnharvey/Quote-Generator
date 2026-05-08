@@ -634,6 +634,20 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <div class="panel" id="panel-shirts">
     <div class="panel-title">Apparel + DTF</div>
     <div class="panel-desc">Full SanMar catalog · Priced at MSRP · DTF + press optional · 100+ unlocks bulk discount</div>
+
+    <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--navy);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">🤖 AI Shirt Advisor</div>
+    <div style="font-size:12px;color:var(--gray);margin-bottom:10px;">Describe the customer's event or need — get recommendations from our top styles.</div>
+    <div style="display:flex;gap:8px;margin-bottom:8px;">
+      <input type="text" id="shirt-ai-input" placeholder="e.g. golf tournament, church volunteer shirts, summer 5K run..." style="flex:1;padding:9px 10px;border:1.5px solid var(--mid-gray);font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--charcoal);outline:none;" onkeydown="if(event.key==='Enter')askShirtAdvisor()">
+      <button class="calc-btn" id="shirt-ai-btn" onclick="askShirtAdvisor()" style="white-space:nowrap;min-width:80px;">ASK</button>
+    </div>
+    <div id="shirt-ai-loading" style="display:none;font-size:12px;color:var(--gray);padding:8px 0;">Thinking...</div>
+    <div id="shirt-ai-result" style="display:none;background:var(--navy);padding:14px 16px;margin-bottom:8px;">
+      <div id="shirt-ai-text" style="font-size:13px;color:rgba(255,255,255,.85);line-height:1.7;white-space:pre-wrap;"></div>
+      <button id="shirt-advisor-notes-btn" onclick="addAdvisorToNotes()" style="margin-top:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;cursor:pointer;">📋 ADD TO NOTES</button>
+    </div>
+
+    <div class="section-divider" style="margin:14px 0 10px;"></div>
     <div class="form-row">
       <div class="field"><label>Brand</label>
         <select id="sh-brand" onchange="updateShirtCategories();updateShirtSalesCard();"></select></div>
@@ -777,19 +791,6 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <div id="co-per-shirt" style="font-family:'Courier Prime',monospace;font-size:11px;color:rgba(255,255,255,.4);text-align:right;margin-top:2px;"></div>
     </div>
     <button class="add-to-quote-btn" id="co-add" style="display:none;" onclick="addCustomOrderToQuote()">+ ADD TO ESTIMATE</button>
-
-    <div class="section-divider" style="margin:14px 0 10px;"></div>
-    <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--navy);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">🤖 AI Shirt Advisor</div>
-    <div style="font-size:12px;color:var(--gray);margin-bottom:10px;">Describe the customer's event or need — get recommendations from our top styles.</div>
-    <div style="display:flex;gap:8px;margin-bottom:8px;">
-      <input type="text" id="shirt-ai-input" placeholder="e.g. golf tournament, church volunteer shirts, summer 5K run..." style="flex:1;padding:9px 10px;border:1.5px solid var(--mid-gray);font-family:'Source Sans 3',sans-serif;font-size:13px;color:var(--charcoal);outline:none;" onkeydown="if(event.key==='Enter')askShirtAdvisor()">
-      <button class="calc-btn" id="shirt-ai-btn" onclick="askShirtAdvisor()" style="white-space:nowrap;min-width:80px;">ASK</button>
-    </div>
-    <div id="shirt-ai-loading" style="display:none;font-size:12px;color:var(--gray);padding:8px 0;">Thinking...</div>
-    <div id="shirt-ai-result" style="display:none;background:var(--navy);padding:14px 16px;margin-bottom:8px;">
-      <div id="shirt-ai-text" style="font-size:13px;color:rgba(255,255,255,.85);line-height:1.7;white-space:pre-wrap;"></div>
-      <button id="shirt-advisor-notes-btn" onclick="addAdvisorToNotes()" style="margin-top:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;cursor:pointer;">📋 ADD TO NOTES</button>
-    </div>
 
     <div class="section-divider" style="margin:14px 0 10px;"></div>
     <button class="calc-btn" onclick="calcShirts()">CALCULATE</button>
@@ -4264,16 +4265,18 @@ function askShirtAdvisor() {
   document.getElementById('shirt-ai-result').style.display = 'none';
 
   var favList = SHIRT_FAVORITES.map(function(s){
-    return '- ' + s.brand + ' ' + s.style + ' — ' + s.name + ' (' + s.fabric + ') Tags: ' + s.tags.join(', ');
+    return '- ' + s.brand + ' ' + s.style + ' — ' + s.name + ' (MSRP $' + s.msrp.toFixed(2) + ') Fabric: ' + s.fabric + ' Tags: ' + s.tags.join(', ');
   }).join('\n');
 
   var prompt = 'You are a branded apparel expert for Little 6 Industries LLC, a custom print shop in Maricopa AZ. ' +
     'A customer needs shirts for: "' + input + '"\n\n' +
-    'Our favorite/stocked styles are:\n' + favList + '\n\n' +
-    'Recommend 2-3 styles from this list that best fit the customer\'s need. ' +
-    'For each recommendation explain WHY it fits (fabric, performance, feel, event type). ' +
-    'Keep it practical and conversational — this is for a sales rep to share with the customer. ' +
-    'Format: Style name (style number) — reason. Keep total response under 150 words.';
+    'Our catalog styles are:\n' + favList + '\n\n' +
+    'Return ONLY valid JSON — no explanation, no markdown, no preamble. Schema:\n' +
+    '{"good":{"style":"","styleNum":"","msrp":0,"withTransfer":0,"theySellAt":0,"why":"","fabric":"","caution":""},' +
+    '"better":{"style":"","styleNum":"","msrp":0,"withTransfer":0,"theySellAt":0,"why":"","fabric":"","caution":""},' +
+    '"best":{"style":"","styleNum":"","msrp":0,"withTransfer":0,"theySellAt":0,"why":"","fabric":"","caution":""}}\n\n' +
+    'Rules: msrp = MSRP from catalog * 1.25 (our markup). withTransfer = msrp + 4.00. theySellAt = withTransfer + 6.00. ' +
+    'good = value pick, better = popular mid-range, best = premium. caution = any sizing/fit/color note. Keep "why" under 20 words.';
 
   fetch(SERVER_URL + '/promo-suggest', {
     method: 'POST',
@@ -4284,20 +4287,94 @@ function askShirtAdvisor() {
   .then(function(data){
     btn.disabled = false; btn.textContent = 'ASK';
     document.getElementById('shirt-ai-loading').style.display = 'none';
-    if (data.success && data.text) {
-      document.getElementById('shirt-ai-text').textContent = data.text;
+    if (!data.success || !data.text) { alert('Could not get recommendation. Try again.'); return; }
+    try {
+      var clean = data.text.replace(/```json|```/g,'').trim();
+      var match = clean.match(/\{[\s\S]*\}/);
+      var rec = JSON.parse(match ? match[0] : clean);
+      renderShirtAdvisor(rec);
+    } catch(e) {
+      // Fallback: show plain text
+      document.getElementById('shirt-ai-result').innerHTML = '<div style="padding:10px;font-size:13px;line-height:1.6;">' + data.text + '</div>';
       document.getElementById('shirt-ai-result').style.display = 'block';
-      window._shirtAdvisorText = data.text;
-    } else {
-      alert('Could not get recommendation. Try again.');
     }
   })
   .catch(function(){
     btn.disabled = false; btn.textContent = 'ASK';
     document.getElementById('shirt-ai-loading').style.display = 'none';
-    alert('Could not reach server. Check your connection.');
+    alert('Server error. Try again.');
   });
 }
+
+function renderShirtAdvisor(rec) {
+  var tiers = [
+    {key:'good',  label:'GOOD',   color:'#2563EB', bg:'#EFF6FF'},
+    {key:'better',label:'BETTER', color:'#B45309', bg:'#FFFBEB'},
+    {key:'best',  label:'BEST',   color:'#B03028', bg:'#FFF8F8'}
+  ];
+  var html = '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px;">';
+  tiers.forEach(function(t){
+    var r = rec[t.key] || {};
+    r.msrp = parseFloat(r.msrp) || 0;
+    r.withTransfer = parseFloat(r.withTransfer) || 0;
+    r.theySellAt = parseFloat(r.theySellAt) || 0;
+    html += '<div style="background:'+t.bg+';border:1.5px solid '+t.color+';padding:10px;border-radius:3px;">' +
+      '<div style="font-family:Oswald,sans-serif;font-size:11px;font-weight:700;color:'+t.color+';letter-spacing:2px;margin-bottom:6px;">'+t.label+'</div>' +
+      '<div style="font-size:12px;font-weight:700;color:#1a1a2e;margin-bottom:2px;">'+(r.style||'')+'</div>' +
+      '<div style="font-size:10px;color:#666;margin-bottom:6px;">'+(r.styleNum||'')+'</div>' +
+      '<div style="font-size:11px;margin-bottom:2px;">Our price: <strong>$'+(r.msrp||0).toFixed(2)+'</strong></div>' +
+      '<div style="font-size:11px;margin-bottom:2px;">+ Transfer: <strong>$'+(r.withTransfer||0).toFixed(2)+'</strong></div>' +
+      '<div style="font-size:11px;color:'+t.color+';font-weight:700;margin-bottom:6px;">💰 They sell at: $'+(r.theySellAt||0).toFixed(2)+'</div>' +
+      '<div style="font-size:11px;color:#333;margin-bottom:4px;">'+(r.why||'')+'</div>' +
+      '<div style="font-size:10px;color:#777;font-style:italic;">'+(r.fabric||'')+'</div>' +
+      (r.caution?'<div style="font-size:10px;color:#B45309;margin-top:4px;">⚠️ '+(r.caution||'')+'</div>':'') +
+    '</div>';
+  });
+  html += '</div>';
+  html += '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">' +
+    '<button onclick="copyShirtAdvisorEmail()" style="flex:1;padding:8px;background:#1a1a2e;color:#fff;border:none;font-family:Oswald,sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">📧 COPY FOR EMAIL</button>' +
+    '<button onclick="addAdvisorToEstimate()" style="flex:1;padding:8px;background:var(--red,#B03028);color:#fff;border:none;font-family:Oswald,sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">+ ADD TO ESTIMATE</button>' +
+  '</div>';
+
+  window._shirtAdvisorRec = rec;
+  var el = document.getElementById('shirt-ai-result');
+  el.innerHTML = html;
+  el.style.display = 'block';
+}
+
+function copyShirtAdvisorEmail() {
+  var rec = window._shirtAdvisorRec;
+  if (!rec) return;
+  var lines = ['Hi! Here are my top shirt recommendations for your order:\n'];
+  ['good','better','best'].forEach(function(k){
+    var r = rec[k]||{};
+    lines.push('[ ' + k.toUpperCase() + ' ] ' + (r.style||'') + ' (' + (r.styleNum||'') + ')');
+    lines.push('  Our price: $'+(r.msrp||0).toFixed(2)+' | With transfer: $'+(r.withTransfer||0).toFixed(2));
+    lines.push('  Suggested retail: $'+(r.theySellAt||0).toFixed(2));
+    lines.push('  '+( r.why||''));
+    if(r.caution) lines.push('  Note: '+r.caution);
+    lines.push('');
+  });
+  lines.push('Browse full catalog: https://catalog.companycasuals.com/');
+  lines.push("Ready to place an order? Reply or call us and we'll get started!");
+  navigator.clipboard.writeText(lines.join('\n')).then(function(){
+    alert('Email copy copied to clipboard!');
+  });
+}
+
+function addAdvisorToEstimate() {
+  var rec = window._shirtAdvisorRec;
+  if (!rec) return;
+  var lines = [];
+  ['good','better','best'].forEach(function(k){
+    var r = rec[k]||{};
+    if(r.style) lines.push(k.toUpperCase()+': '+r.style+' ('+r.styleNum+') $'+( r.msrp||0).toFixed(2));
+  });
+  var noteEl = document.querySelector('#panel-shirts .item-note');
+  if(noteEl) noteEl.value = lines.join(' | ');
+  showPanel('shirts', document.querySelector('.cat-btn'));
+}
+
 
 function addAdvisorToNotes() {
   var text = window._shirtAdvisorText || '';
