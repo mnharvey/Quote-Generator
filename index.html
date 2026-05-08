@@ -4264,8 +4264,8 @@ function askShirtAdvisor() {
   document.getElementById('shirt-ai-loading').style.display = 'block';
   document.getElementById('shirt-ai-result').style.display = 'none';
 
-  var favList = SHIRT_FAVORITES.map(function(s){
-    return '- ' + s.brand + ' ' + s.style + ' — ' + s.name + ' (MSRP $' + s.msrp.toFixed(2) + ') Fabric: ' + s.fabric + ' Tags: ' + s.tags.join(', ');
+  var favList = SHIRT_FAVORITES.slice(0,15).map(function(s){
+    return '- ' + s.brand + ' ' + s.style + ' — ' + s.name + ' | Fabric: ' + s.fabric + ' | Tags: ' + s.tags.join(', ');
   }).join('\n');
 
   var prompt = 'You are a branded apparel expert for Little 6 Industries LLC, a custom print shop in Maricopa AZ. ' +
@@ -4294,8 +4294,8 @@ function askShirtAdvisor() {
       var rec = JSON.parse(match ? match[0] : clean);
       renderShirtAdvisor(rec);
     } catch(e) {
-      // Fallback: show plain text
-      document.getElementById('shirt-ai-result').innerHTML = '<div style="padding:10px;font-size:13px;line-height:1.6;">' + data.text + '</div>';
+      console.error('Advisor parse error:', e, data.text);
+      document.getElementById('shirt-ai-result').innerHTML = '<div style="padding:10px;font-size:13px;line-height:1.6;color:#333;">' + (data.text||'No response') + '</div>';
       document.getElementById('shirt-ai-result').style.display = 'block';
     }
   })
