@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<div style="background:#fff8e1;border-left:4px solid #F59E0B;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span style="font-size:11px;font-family:Oswald,sans-serif;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:1px;">📅 Period Lock</span><input type="date" id="lock-from" style="padding:4px 7px;font-size:11px;border:1px solid #ddd;"><span style="font-size:11px;">to</span><input type="date" id="lock-to" style="padding:4px 7px;font-size:11px;border:1px solid #ddd;"><button onclick="applyPeriodFilter()" style="padding:5px 10px;background:#92400E;color:#fff;border:none;font-family:Oswald,sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">FILTER</button><button onclick="clearPeriodFilter()" style="padding:5px 10px;background:transparent;border:1px solid #ddd;font-size:10px;cursor:pointer;">CLEAR</button></div><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -223,6 +223,7 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
     <button class="inv-tab" onclick="invTab('scan')">&#128247; Scan</button>
     <button class="inv-tab" onclick="invTab('invoice')">&#129494; Invoice AI</button>
     <button class="inv-tab" onclick="invTab('quickupdate')" style="color:var(--gold);">&#127908; Quick Update</button>
+    <button class="inv-tab" onclick="invTab('qbexport')">📊 QB Export</button>
     <button class="inv-tab" onclick="invTab('expiry')">⏰ Expiring</button>
     <button class="inv-tab" onclick="invTab('burnrate')">&#128293; Burn Rate</button>
     <button class="inv-tab" style="margin-left:auto;color:rgba(255,100,100,.6);" onclick="lockInventory()">&#128274; Lock</button>
@@ -260,7 +261,7 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
           <th onclick="sortBy('qty')" style="text-align:right">Qty</th>
           <th onclick="sortBy('reorder')" style="text-align:right">Reorder Pt</th>
           <th>Status</th><th onclick="sortBy('cost')" style="text-align:right">Cost/Unit</th>
-          <th onclick="sortBy('vendor')">Vendor</th><th>Actions</th>
+          <th onclick="sortBy('vendor')">Vendor</th><th>Location</th><th>Last Recv</th><th>Actions</th>
         </tr></thead>
         <tbody id="inv-tbody"></tbody>
       </table></div>
@@ -275,7 +276,7 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
     <div class="inv-content" id="ipanel-log" style="display:none">
       <div class="sec-head"><div><div class="sec-title">Order Log</div><div class="sec-sub">Running record of all purchase orders</div></div><button class="act-btn primary" onclick="openLogModal()">+ Log Order</button></div>
       <div class="tbl-wrap"><table>
-        <thead><tr><th>Date</th><th>Item</th><th>Vendor</th><th style="text-align:right">Qty</th><th style="text-align:right">Unit Cost</th><th style="text-align:right">Total</th><th>Est. Arrival</th><th>Received</th><th>By</th><th></th></tr></thead>
+        <thead><tr><th>Date</th><th>Item</th><th>Invoice #</th><th>Vendor</th><th style="text-align:right">Qty</th><th style="text-align:right">Unit Cost</th><th style="text-align:right">Total</th><th>Est. Arrival</th><th>Received</th><th>By</th><th></th></tr></thead>
         <tbody id="log-tbody"></tbody>
       </table></div>
     </div>
@@ -604,6 +605,7 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
         <div class="mfield"><label>Reorder Point</label><input type="number" id="im-reorder" min="0" value="0"></div>
         <div class="mfield"><label>Cost per Unit ($)</label><input type="number" id="im-cost" step="0.01" min="0"></div>
         <div class="mfield"><label>Preferred Vendor</label><input type="text" id="im-vendor"></div>
+        <div class="mfield full"><label>Storage Location</label><input type="text" id="im-location" placeholder="e.g. Shelf A3"></div>
         <div class="mfield full"><label>Notes</label><input type="text" id="im-notes"></div>
         <div class="mfield"><label>Expiry Date</label><input type="date" id="im-expiry"></div>
         <div class="mfield"><label>Default Shelf Life (days)</label><input type="number" id="im-shelflife" min="0" placeholder="e.g. 365"></div>
@@ -621,6 +623,7 @@ td.vnd{font-size:11px;color:#667;max-width:130px;overflow:hidden;text-overflow:e
       <div class="mform-grid">
         <div class="mfield full"><label>Item</label><select id="lm-item"></select></div>
         <div class="mfield"><label>Date Ordered</label><input type="date" id="lm-date"></div>
+        <div class="mfield full"><label>Invoice #</label><input type="text" id="lm-invoice" placeholder="INV-2026-0001"></div>
         <div class="mfield"><label>Vendor</label><input type="text" id="lm-vendor"></div>
         <div class="mfield"><label>Qty Ordered</label><input type="number" id="lm-qty" min="1"></div>
         <div class="mfield"><label>Unit Cost ($)</label><input type="number" id="lm-cost" step="0.01" min="0"></div>
@@ -695,8 +698,23 @@ function lockInventory(){portalUnlocked=false;pinEntry='';document.getElementByI
 document.addEventListener('keydown',e=>{if(!document.getElementById('view-inventory-gate').classList.contains('active'))return;if(/^[0-9]$/.test(e.key))pinPress(e.key);if(e.key==='Backspace')pinDel();if(e.key==='Escape')pinClear();});
 
 const K={items:'l6i_items',log:'l6i_log',vendors:'l6i_vendors'};
+const INV_SERVER='https://api.little6llc.com:3001';
 function load(k){try{return JSON.parse(localStorage.getItem(k))||[];}catch{return[];}}
-function save(k,d){localStorage.setItem(k,JSON.stringify(d));}
+function save(k,d){
+  localStorage.setItem(k,JSON.stringify(d));
+  if(k===K.items||k===K.vendors){clearTimeout(window._sI);window._sI=setTimeout(()=>fetch(INV_SERVER+'/inventory/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items,vendors})}).catch(()=>{}),1500);}
+  if(k===K.log){clearTimeout(window._sL);window._sL=setTimeout(()=>fetch(INV_SERVER+'/inventory/log/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({log:logData})}).catch(()=>{}),1500);}
+}
+async function pullFromServer(){
+  try{
+    const[iR,lR]=await Promise.all([fetch(INV_SERVER+'/inventory/get'),fetch(INV_SERVER+'/inventory/log/get')]);
+    const iD=await iR.json(),lD=await lR.json();
+    if(iD.success&&iD.items?.length){items=iD.items;vendors=iD.vendors||vendors;localStorage.setItem(K.items,JSON.stringify(items));localStorage.setItem(K.vendors,JSON.stringify(vendors));}
+    if(lD.success&&lD.log?.length){logData=lD.log;localStorage.setItem(K.log,JSON.stringify(logData));}
+    showSyncStatus('✅ Synced','#4ADE80');renderItems();renderLog();
+  }catch(e){showSyncStatus('⚠️ Offline','#F59E0B');}
+}
+function showSyncStatus(msg,color){var el=document.getElementById('sync-status');if(!el)return;el.textContent=msg;el.style.color=color;setTimeout(()=>el.textContent='',4000);}
 let items=load(K.items),logData=load(K.log),vendors=load(K.vendors);
 let sortCol='name',sortDir=1,filterCat='all';
 
@@ -863,6 +881,7 @@ if(!items.length) seedItems();
 if(!vendors.length) seedVendors();
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5);}
+function lastReceived(id){var e=logData.filter(x=>x.itemId===id);if(!e.length)return '—';e.sort((a,b)=>(b.receivedDate||b.date)>(a.receivedDate||a.date)?1:-1);return e[0].receivedDate||e[0].date||'—';}
 function status(it){if(it.qty<=it.reorder)return 'reorder';if(it.qty<=it.reorder*1.2)return 'low';return 'ok';}
 function badge(it){const s=status(it);if(s==='reorder')return '<span class="badge b-red">REORDER</span>';if(s==='low')return '<span class="badge b-orange">LOW</span>';return '<span class="badge b-green">OK</span>';}
 
@@ -947,8 +966,10 @@ function renderReorder(){const list=items.filter(it=>status(it)!=='ok').sort((a,
 
 function openLogModal(pre){document.getElementById('lm-id').value='';document.getElementById('lm-date').value=new Date().toISOString().split('T')[0];document.getElementById('lm-arrival').value='';document.getElementById('lm-qty').value='';document.getElementById('lm-cost').value='';document.getElementById('lm-rcv').value='No';document.getElementById('lm-by').value='Matt Harvey';const sel=document.getElementById('lm-item');sel.innerHTML=items.map(i=>`<option value="${i.id}">${e(i.name)}</option>`).join('');if(pre){sel.value=pre;const it=items.find(i=>i.id===pre);if(it){document.getElementById('lm-vendor').value=it.vendor;document.getElementById('lm-cost').value=it.cost||'';}}sel.onchange=()=>{const it=items.find(i=>i.id===sel.value);if(it)document.getElementById('lm-vendor').value=it.vendor;};if(!pre&&items.length){const it=items.find(i=>i.id===sel.value);if(it)document.getElementById('lm-vendor').value=it.vendor;}openModal('log-modal');}
 function openLogFromItem(id){openLogModal(id);invTab('log');}
-function saveLog(){const itemId=document.getElementById('lm-item').value;const qty=+document.getElementById('lm-qty').value||0;if(!itemId||!qty){alert('Item and quantity required.');return;}const entry={id:uid(),itemId,itemName:items.find(i=>i.id===itemId)?.name||'',date:document.getElementById('lm-date').value,vendor:document.getElementById('lm-vendor').value.trim(),qty,cost:+document.getElementById('lm-cost').value||0,arrival:document.getElementById('lm-arrival').value,received:document.getElementById('lm-rcv').value,by:document.getElementById('lm-by').value.trim()};logData.unshift(entry);save(K.log,logData);closeModal('log-modal');renderLog();toast('Order logged.');}
-function renderLog(){const tbody=document.getElementById('log-tbody');if(!logData.length){tbody.innerHTML='<tr><td colspan="10"><div class="empty">No orders logged yet.</div></td></tr>';return;}tbody.innerHTML=logData.map(l=>{const tot=(l.qty||0)*(l.cost||0);const rcvCls=l.received==='Yes'?'rcv-yes':l.received==='Partial'?'rcv-par':'rcv-no';return`<tr><td>${l.date||'-'}</td><td class="iname">${e(l.itemName)}</td><td class="vnd">${e(l.vendor)}</td><td class="num">${l.qty}</td><td class="num cost-td">$${(l.cost||0).toFixed(2)}</td><td class="num cost-td">$${tot.toFixed(2)}</td><td>${l.arrival||'-'}</td><td class="${rcvCls}">${l.received}</td><td>${e(l.by)}</td><td><button class="act-btn danger" onclick="deleteLog('${l.id}')">X</button></td></tr>`;}).join('');}
+function saveLog(){const itemId=document.getElementById('lm-item').value;const qty=+document.getElementById('lm-qty').value||0;if(!itemId||!qty){alert('Item and quantity required.');return;}const entry={id:uid(),itemId,itemName:items.find(i=>i.id===itemId)?.name||'',invoiceNum:(document.getElementById('lm-invoice')||{value:''}).value.trim(),date:document.getElementById('lm-date').value,vendor:document.getElementById('lm-vendor').value.trim(),qty,cost:+document.getElementById('lm-cost').value||0,arrival:document.getElementById('lm-arrival').value,received:document.getElementById('lm-rcv').value,by:document.getElementById('lm-by').value.trim()};logData.unshift(entry);save(K.log,logData);closeModal('log-modal');renderLog();toast('Order logged.');}
+function renderLog(){
+  const displayLog = (_pF||_pT) ? logData.filter(e=>{ if(_pF&&e.date<_pF)return false; if(_pT&&e.date>_pT)return false; return true; }) : logData;
+const tbody=document.getElementById('log-tbody');if(!displayLog.length){tbody.innerHTML='<tr><td colspan="10"><div class="empty">No orders logged yet.</div></td></tr>';return;}tbody.innerHTML=displayLog.map(l=>{const tot=(l.qty||0)*(l.cost||0);const rcvCls=l.received==='Yes'?'rcv-yes':l.received==='Partial'?'rcv-par':'rcv-no';return`<tr><td>${l.date||'-'}</td><td class="iname">${e(l.itemName)}</td><td class="vnd">${e(l.vendor)}</td><td class="num">${l.qty}</td><td class="num cost-td">$${(l.cost||0).toFixed(2)}</td><td class="num cost-td">$${tot.toFixed(2)}</td><td>${l.arrival||'-'}</td><td class="${rcvCls}">${l.received}</td><td>${e(l.by)}</td><td><button class="act-btn danger" onclick="deleteLog('${l.id}')">X</button></td></tr>`;}).join('');}
 function deleteLog(id){if(!confirm('Delete?'))return;logData=logData.filter(l=>l.id!==id);save(K.log,logData);renderLog();}
 
 function openVendorModal(id){document.getElementById('vm-title').textContent=id?'Edit Vendor':'Add Vendor';document.getElementById('vm-id').value=id||'';const v=id?vendors.find(x=>x.id===id):{};['name','web','acct','qb','rep','contact','lead','terms','notes'].forEach(k=>{const el=document.getElementById('vm-'+k);if(el)el.value=v?.[k]||'';});if(v&&v.category)document.getElementById('vm-cat').value=v.category;openModal('vendor-modal');}
@@ -956,8 +977,8 @@ function saveVendor(){const name=document.getElementById('vm-name').value.trim()
 function deleteVendor(id){if(!confirm('Delete vendor?'))return;vendors=vendors.filter(v=>v.id!==id);save(K.vendors,vendors);renderVendors();}
 function renderVendors(){const grid=document.getElementById('vendor-grid');if(!vendors.length){grid.innerHTML='<p>No vendors yet.</p>';return;}grid.innerHTML=vendors.map(v=>`<div class="vcard"><div class="vn">${e(v.name)}</div><span class="vcat">${e(v.category)}</span>${v.website?`<div class="vrow"><span class="vlbl">Website</span><a href="https://${v.website}" target="_blank" style="color:var(--red)">${v.website}</a></div>`:''} ${v.acct?`<div class="vrow"><span class="vlbl">Account</span>${e(v.acct)}</div>`:''} ${v.qb?`<div class="vrow"><span class="vlbl">QB COGS</span>${e(v.qb)}</div>`:''} ${v.rep?`<div class="vrow"><span class="vlbl">Rep</span>${e(v.rep)}</div>`:''} ${v.contact?`<div class="vrow"><span class="vlbl">Contact</span>${e(v.contact)}</div>`:''} ${v.lead?`<div class="vrow"><span class="vlbl">Lead Time</span>${e(v.lead)}</div>`:''} ${v.terms?`<div class="vrow"><span class="vlbl">Terms</span>${e(v.terms)}</div>`:''} ${v.notes?`<div class="vrow" style="font-style:italic;color:#888;">${e(v.notes)}</div>`:''}<div class="vactions"><button class="act-btn outline" onclick="openVendorModal('${v.id}')" style="font-size:10px;padding:5px 10px;">Edit</button><button class="act-btn danger" onclick="deleteVendor('${v.id}')">Delete</button></div></div>`).join('');}
 
-function openItemModal(id){document.getElementById('item-modal-title').textContent=id?'Edit Item':'Add Item';document.getElementById('im-id').value=id||'';const it=id?items.find(i=>i.id===id):{};document.getElementById('im-name').value=it.name||'';document.getElementById('im-sku').value=it.sku||'';document.getElementById('im-cat').value=it.category||'DTF Materials';document.getElementById('im-unit').value=it.unit||'';document.getElementById('im-qty').value=it.qty||0;document.getElementById('im-reorder').value=it.reorder||0;document.getElementById('im-cost').value=it.cost||'';document.getElementById('im-vendor').value=it.vendor||'';document.getElementById('im-notes').value=it.notes||'';document.getElementById('im-expiry').value=it.expiry||'';document.getElementById('im-shelflife').value=it.shelflife||'';openModal('item-modal');}
-function saveItem(){const name=document.getElementById('im-name').value.trim();if(!name){alert('Item name required.');return;}const id=document.getElementById('im-id').value;const data={name,sku:document.getElementById('im-sku').value.trim(),category:document.getElementById('im-cat').value,unit:document.getElementById('im-unit').value.trim(),qty:+document.getElementById('im-qty').value||0,reorder:+document.getElementById('im-reorder').value||0,cost:+document.getElementById('im-cost').value||0,vendor:document.getElementById('im-vendor').value.trim(),notes:document.getElementById('im-notes').value.trim(),expiry:document.getElementById('im-expiry').value||'',shelflife:+document.getElementById('im-shelflife').value||0};if(id){const idx=items.findIndex(i=>i.id===id);items[idx]={...items[idx],...data};toast('Item updated.');}else{items.push({id:uid(),...data});toast('Item added.');}save(K.items,items);closeModal('item-modal');renderInv();}
+function openItemModal(id){document.getElementById('item-modal-title').textContent=id?'Edit Item':'Add Item';document.getElementById('im-id').value=id||'';const it=id?items.find(i=>i.id===id):{};document.getElementById('im-name').value=it.name||'';document.getElementById('im-sku').value=it.sku||'';document.getElementById('im-cat').value=it.category||'DTF Materials';document.getElementById('im-unit').value=it.unit||'';document.getElementById('im-qty').value=it.qty||0;document.getElementById('im-reorder').value=it.reorder||0;document.getElementById('im-cost').value=it.cost||'';document.getElementById('im-vendor').value=it.vendor||'';(document.getElementById('im-location')||{}).value=it.location||'';document.getElementById('im-notes').value=it.notes||'';document.getElementById('im-expiry').value=it.expiry||'';document.getElementById('im-shelflife').value=it.shelflife||'';openModal('item-modal');}
+function saveItem(){const name=document.getElementById('im-name').value.trim();if(!name){alert('Item name required.');return;}const id=document.getElementById('im-id').value;const data={name,sku:document.getElementById('im-sku').value.trim(),category:document.getElementById('im-cat').value,unit:document.getElementById('im-unit').value.trim(),qty:+document.getElementById('im-qty').value||0,reorder:+document.getElementById('im-reorder').value||0,cost:+document.getElementById('im-cost').value||0,vendor:document.getElementById('im-vendor').value.trim(),location:(document.getElementById('im-location')||{value:''}).value.trim(),notes:document.getElementById('im-notes').value.trim(),expiry:document.getElementById('im-expiry').value||'',shelflife:+document.getElementById('im-shelflife').value||0};if(id){const idx=items.findIndex(i=>i.id===id);items[idx]={...items[idx],...data};toast('Item updated.');}else{items.push({id:uid(),...data});toast('Item added.');}save(K.items,items);closeModal('item-modal');renderInv();}
 
 const dz=document.getElementById('drop-zone');
 dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
@@ -1178,8 +1199,8 @@ function refreshAll(){
 function exportCSV(){const h=['name','sku','category','unit','qty','reorder','cost','vendor','notes'];const rows=items.map(it=>h.map(k=>`"${(it[k]||'').toString().replace(/"/g,'""')}"`));const csv=[h.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`l6i_inventory_${new Date().toISOString().split('T')[0]}.csv`;a.click();}
 
 function invTab(t){
-  document.querySelectorAll('.inv-tab').forEach((b,i)=>b.classList.toggle('active',['inv','reorder','log','vendors','import','scan','invoice','quickupdate','expiry','burnrate'][i]===t));
-  ['inv','reorder','log','vendors','import','scan','invoice','quickupdate','expiry','burnrate'].forEach(p=>{
+  document.querySelectorAll('.inv-tab').forEach((b,i)=>b.classList.toggle('active',['inv','reorder','log','vendors','import','scan','invoice','quickupdate','expiry','burnrate','qbexport'][i]===t));
+  ['inv','reorder','log','vendors','import','scan','invoice','quickupdate','expiry','burnrate','qbexport'].forEach(p=>{
     const el=document.getElementById('ipanel-'+p);
     if(el) el.style.display=p===t?'block':'none';
   });
@@ -1815,6 +1836,25 @@ function cancelQuickChanges() {
 }
 
 renderInv();
+
+var _pF=null,_pT=null;
+function applyPeriodFilter(){_pF=document.getElementById('lock-from').value||null;_pT=document.getElementById('lock-to').value||null;renderLog();}
+function clearPeriodFilter(){_pF=_pT=null;document.getElementById('lock-from').value='';document.getElementById('lock-to').value='';renderLog();}
+function csvRow(arr){return arr.map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(',');}
+function dlCSV(name,rows){var b=new Blob([rows.join('\n')],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
+function exportInventoryCSV(){var rows=[csvRow(['SKU','Name','Category','Unit','Qty','Reorder','Cost','Vendor','Location','Notes','Expiry'])];items.forEach(i=>rows.push(csvRow([i.sku,i.name,i.category,i.unit,i.qty,i.reorder,i.cost,i.vendor,i.location||'',i.notes||'',i.expiry||''])));dlCSV('L6I_Inventory_'+new Date().toISOString().slice(0,10)+'.csv',rows);}
+function exportLogCSV(){var rows=[csvRow(['Date','Invoice #','Item','Vendor','Qty','Cost','Total','Arrival','Received By'])];logData.forEach(e=>rows.push(csvRow([e.date,e.invoiceNum||'',e.itemName,e.vendor,e.qty,e.cost,((e.qty||0)*(e.cost||0)).toFixed(2),e.arrival||'',e.by||''])));dlCSV('L6I_OrderLog_'+new Date().toISOString().slice(0,10)+'.csv',rows);}
 </script>
 </body>
 </html>
+<div class="inv-content" id="ipanel-qbexport" style="display:none;">
+  <div style="padding:16px;">
+    <div style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--navy);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">📊 QuickBooks Export</div>
+    <div style="font-size:12px;color:#666;margin-bottom:14px;">Download CSV files ready for QuickBooks Online or Desktop import.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+      <button onclick="exportInventoryCSV()" style="padding:10px 18px;background:var(--navy);color:#fff;border:none;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">⬇ INVENTORY CSV</button>
+      <button onclick="exportLogCSV()" style="padding:10px 18px;background:var(--red);color:#fff;border:none;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">⬇ ORDER LOG CSV</button>
+    </div>
+    <div style="font-size:11px;color:#999;">Inventory CSV: SKU, Name, Category, Qty, Cost, Vendor, Location, Expiry.<br>Order Log CSV: Date, Invoice #, Item, Vendor, Qty, Cost, Total, Received By.</div>
+  </div>
+</div>
