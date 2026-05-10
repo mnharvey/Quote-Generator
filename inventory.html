@@ -722,11 +722,16 @@ function seedItems(){
   items=[
 
     // DTF Materials
-    {id:uid(),name:'DTF Film Roll 24"',sku:'DTF-FILM-24',category:'DTF Materials',unit:'Roll',qty:8,reorder:3,cost:42,vendor:'DTFSuperstore',notes:''},
-    {id:uid(),name:'DTF Film Roll 13"',sku:'DTF-FILM-13',category:'DTF Materials',unit:'Roll',qty:5,reorder:2,cost:22,vendor:'DTFSuperstore',notes:''},
-    {id:uid(),name:'DTF White Ink',sku:'DTF-INK-WHT',category:'DTF Materials',unit:'Liter',qty:3,reorder:1,cost:38,vendor:'DTFSuperstore',notes:''},
-    {id:uid(),name:'DTF Hot Melt Powder White',sku:'DTF-PWD-WHT',category:'DTF Materials',unit:'Kg',qty:6,reorder:2,cost:18,vendor:'DTFSuperstore',notes:''},
-    {id:uid(),name:'DTF Hot Melt Powder Black',sku:'DTF-PWD-BLK',category:'DTF Materials',unit:'Kg',qty:2,reorder:1,cost:18,vendor:'DTFSuperstore',notes:''},
+    {id:uid(),name:'DTF Film Roll 24" x 328ft Hot Peel',sku:'LSF-FILM-24-328',category:'DTF Materials',unit:'Roll',qty:8,reorder:2,cost:0,vendor:'Lone Star DTF',notes:'24" x 328ft Double Side Instant Hot Peel. Reorder when down to 2 rolls. Typical order: 6 rolls.'},
+    {id:uid(),name:'DTF Film Roll 13"',sku:'DTF-FILM-13',category:'DTF Materials',unit:'Roll',qty:5,reorder:2,cost:0,vendor:'Lone Star DTF',notes:''},
+    {id:uid(),name:'DTF White Ink — Inkbank 5602',sku:'DGPP-INK-WHT-5602',category:'DTF Materials',unit:'Bottle',qty:3,reorder:4,cost:0,vendor:'DTG Printer Parts',notes:'Primary white ink — Inkbank 5602 (more opaque than 5600). Order 14+ bottles for free 2-day shipping.'},
+    {id:uid(),name:'DTF Cyan Ink — Inkbank 56000',sku:'DTFS-INK-CYN',category:'DTF Materials',unit:'Bottle',qty:2,reorder:1,cost:30,vendor:'DTFSuperstore',notes:'Inkbank 56000 series. $30/bottle. Local pickup Gilbert AZ.'},
+    {id:uid(),name:'DTF Magenta Ink — Inkbank 56000',sku:'DTFS-INK-MAG',category:'DTF Materials',unit:'Bottle',qty:2,reorder:1,cost:30,vendor:'DTFSuperstore',notes:'Inkbank 56000 series. $30/bottle. Local pickup Gilbert AZ.'},
+    {id:uid(),name:'DTF Black Ink — Inkbank 56000',sku:'DTFS-INK-BLK',category:'DTF Materials',unit:'Bottle',qty:2,reorder:1,cost:30,vendor:'DTFSuperstore',notes:'Inkbank 56000 series. $30/bottle. Local pickup Gilbert AZ.'},
+    {id:uid(),name:'DTF Yellow Ink — Inkbank 56000',sku:'DTFS-INK-YLW',category:'DTF Materials',unit:'Bottle',qty:2,reorder:1,cost:30,vendor:'DTFSuperstore',notes:'Inkbank 56000 series. $30/bottle. Local pickup Gilbert AZ.'},
+    {id:uid(),name:'DTF Hot Melt Powder White 1kg',sku:'BOI-PWD-WHT-1KG',category:'DTF Materials',unit:'Kg',qty:6,reorder:3,cost:0,vendor:'Buckets of Ink',notes:'Typical order: 10 x 1kg bags. Ships or local pickup.'},
+    {id:uid(),name:'DTF Hot Melt Powder Black 1kg',sku:'BOI-PWD-BLK-1KG',category:'DTF Materials',unit:'Kg',qty:2,reorder:1,cost:0,vendor:'Buckets of Ink',notes:'Typical order with white powder bags.'},
+    {id:uid(),name:'4720 Head / Oric DX5 Dampers',sku:'DGPP-DAMPER-DX5',category:'DTF Materials',unit:'Each',qty:0,reorder:1,cost:0,vendor:'DTG Printer Parts',notes:'Spare parts — order before needed.'},
     // Substrate Blanks
     {id:uid(),name:'Gildan 64000 S',sku:'BLK-G64-S',category:'Substrate Blanks',unit:'Each',qty:48,reorder:12,cost:2.85,vendor:'SanMar',notes:''},
     {id:uid(),name:'Gildan 64000 M',sku:'BLK-G64-M',category:'Substrate Blanks',unit:'Each',qty:72,reorder:24,cost:2.85,vendor:'SanMar',notes:''},
@@ -859,7 +864,10 @@ function seedVendors(){
   vendors=[
     {id:uid(),name:'JPPlus',category:'Laser/UV Materials',website:'jpplus.com',acct:'',rep:'',contact:'',lead:'3-5 days',terms:'Net 30',qb:'COGS - Printing Supplies',notes:'Acrylic, sublimation blanks, drinkware, awards, Saddle Collection, Rowmark, CerMark'},
     {id:uid(),name:"Twiddy's Blanks",category:'Blank Apparel',website:'',acct:'',rep:'',contact:'',lead:'',terms:'',qb:'COGS - Supplies & Materials',notes:'Blank items for customization'},
-    {id:uid(),name:'DTFSuperstore',category:'DTF / Vinyl',website:'dtfsuperstore.com',acct:'',rep:'',contact:'',lead:'3-5 days',terms:'Credit Card',qb:'COGS - Printing Supplies',notes:'Films, powders, inks'},
+    {id:uid(),name:'DTFSuperstore',category:'DTF / Vinyl',website:'dtfsuperstore.com',acct:'lindsay@little6llc.com',rep:'',contact:'',lead:'Local pickup Gilbert AZ',terms:'Credit Card',qb:'COGS - Printing Supplies',notes:'Colored DTF ink — Inkbank 56000 series: Cyan, Magenta, Black, Yellow. $30/bottle. Local pickup Gilbert AZ or ships from IL warehouse.'},
+    {id:uid(),name:'DTG Printer Parts',category:'DTF / Vinyl',website:'dtgprinterparts.com',acct:'',rep:'',contact:'',lead:'2 days (free over 14 bottles)',terms:'Credit Card',qb:'COGS - Printing Supplies',notes:'White DTF ink — Inkbank 5602 (primary, more opaque than 5600). CMYK as backup if DTFSuperstore OOS. 4720 Head / Oric DX5 Dampers. Free 2-day shipping at 14+ bottles.'},
+    {id:uid(),name:'Lone Star DTF',category:'DTF / Vinyl',website:'lonestardtf.com',acct:'',rep:'',contact:'',lead:'Free standard shipping',terms:'Credit Card',qb:'COGS - Printing Supplies',notes:'24" x 328ft Double Side Instant Hot Peel DTF Transfer Film. Typical order: 6 rolls. Reorder at 2 rolls. Faster shipping options available.'},
+    {id:uid(),name:'Buckets of Ink',category:'DTF / Vinyl',website:'bucketsofink.com',acct:'',rep:'',contact:'',lead:'Ships or local pickup',terms:'Credit Card',qb:'COGS - Printing Supplies',notes:'DTF Powder. Typical order: 10 x 1kg bags. Local pickup available.'},
     {id:uid(),name:'Ninja Transfers',category:'DTF / Vinyl',website:'ninjatransfers.com',acct:'',rep:'',contact:'',lead:'3-5 days',terms:'Credit Card',qb:'COGS - Printing Supplies',notes:'DTF inks & transfer paper'},
     {id:uid(),name:'Polymershapes',category:'Laser/UV Materials',website:'polymershapes.com',acct:'',rep:'',contact:'',lead:'3-5 days',terms:'Net 30',qb:'COGS - Printing Supplies',notes:'Vinyl, acrylic, eco-solvent media'},
     {id:uid(),name:'JDS Industries',category:'Laser/UV Materials',website:'jdsindustries.com',acct:'',rep:'',contact:'',lead:'3-5 days',terms:'Net 30',qb:'COGS - Printing Supplies',notes:'UV printing media, acrylic, aluminum'},
