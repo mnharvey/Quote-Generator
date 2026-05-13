@@ -669,6 +669,19 @@ tr.design-row:nth-child(even) td{background:rgba(0,0,0,0.02);}
 </style>
 
 <script>
+function printSonnyBanner(){
+  var content = document.getElementById('sonny').querySelector('.banner-wrap').outerHTML;
+  var w = window.open('','_blank');
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Sonny Event Banner</title><style>'+
+    '@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&family=Courier+Prime:wght@400;700&display=swap");'+
+    '*{box-sizing:border-box;margin:0;padding:0;}body{font-family:"Source Sans 3",sans-serif;}'+
+    '@page{size:13in 14.5in;margin:0;}'+
+    'html,body{width:13in;height:14.5in;}'+
+    '</style></head><body>'+document.getElementById('sonny').querySelector('[style*="background:var(--navy)"][style*="border:4px"]').outerHTML+'</body></html>');
+  w.document.close();
+  w.focus();
+  setTimeout(function(){w.print();},500);
+}
 function show(id,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
@@ -724,9 +737,11 @@ function delItem(btn){ btn.closest('.cl-item').remove(); }
 <div style="padding:16px;">
 <div style="max-width:900px;margin:0 auto;">
 
-  <div style="background:var(--navy);border-left:4px solid var(--gold);padding:12px 16px;margin-bottom:16px;">
-    <p style="color:rgba(255,255,255,0.85);font-size:13px;line-height:1.6;"><span style="color:var(--gold);font-family:'Oswald',sans-serif;font-weight:700;">Reusable Event Banner</span> — Built for Sonny's BBQ & Catering to run independently. No event name, no dates, no location lock. Works anywhere in Arizona. Print with background graphics enabled, landscape orientation.</p>
+  <div style="background:var(--navy);border-left:4px solid var(--gold);padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+    <p style="color:rgba(255,255,255,0.85);font-size:13px;line-height:1.6;"><span style="color:var(--gold);font-family:'Oswald',sans-serif;font-weight:700;">Reusable Event Banner</span> — Built for Sonny's BBQ & Catering to run independently. No event name, no dates, no location lock. Works anywhere in Arizona.</p>
+    <button onclick="printSonnyBanner()" style="background:var(--red);color:var(--white);border:none;padding:8px 16px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;flex-shrink:0;">Print / Save PDF</button>
   </div>
+  <p style="font-size:11px;color:var(--gray);margin-bottom:12px;">Print size: 13" wide × 14.5" tall · Set custom paper size · Margins: None · Enable background graphics</p>
 
   <!-- BANNER -->
   <div style="background:var(--navy);border:4px solid var(--gold);overflow:hidden;">
