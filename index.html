@@ -1427,6 +1427,36 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <tr><td>24×12"</td><td>$30.00</td><td>2</td></tr>
       <tr><td>24×18"</td><td>$45.00</td><td>2</td></tr>
     </tbody></table>
+
+    <div class="section-divider"></div>
+
+    <div style="background:#f0f4ff;border-left:4px solid #2563EB;padding:12px 14px;margin-bottom:12px;border-radius:2px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;color:#2563EB;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;">📅 2026 Calendar Sports Magnets — Group Order</div>
+      <div style="font-size:12px;color:#444;margin-bottom:10px;">4" × 7" · 20mil magnet · Drop ship available · <strong>Order cutoff: June 30, 2026</strong></div>
+      <div class="form-row">
+        <div class="field"><label>Quantity</label>
+          <select id="sm-qty" onchange="calcSportsMagnet()">
+            <option value="100|1.50">100 pieces — $1.50 ea</option>
+            <option value="250|0.89">250–400 pieces — $0.89 ea</option>
+            <option value="500|0.65">500–900 pieces — $0.65 ea</option>
+            <option value="1000|0.50">1,000 pieces — $0.50 ea ⭐ Best Value</option>
+          </select></div>
+      </div>
+      <button class="calc-btn" onclick="calcSportsMagnet()" style="margin-top:8px;">CALCULATE</button>
+      <div class="result-card" id="sm-result"></div>
+      <button class="add-to-quote-btn" id="sm-add" style="display:none" onclick="addToQuote('sm')">+ ADD TO ESTIMATE</button>
+      <div style="font-size:11px;color:#666;margin-top:8px;">Freight and tax not included · Orders placed as a group to unlock best pricing · Contact info@promowithgrace.com</div>
+    </div>
+
+    <table class="price-table">
+      <thead><tr><th>Qty Tier</th><th>Price Each</th><th>Total</th></tr></thead>
+      <tbody>
+        <tr><td>100 pieces</td><td>$1.50</td><td>$150.00</td></tr>
+        <tr><td>250–400 pieces</td><td>$0.89</td><td>$222.50+</td></tr>
+        <tr><td>500–900 pieces</td><td>$0.65</td><td>$325.00+</td></tr>
+        <tr><td>1,000 pieces ⭐</td><td>$0.50</td><td>$500.00</td></tr>
+      </tbody>
+    </table>
   </div>
 
   <!-- STICKERS -->
@@ -4162,6 +4192,19 @@ function calcFlags(){
   showResult('fl-result', lines, total, qty, desc);
   lastCalc.fl = {desc:desc, total:total, qty:qty, details:lines};
   showAddBtn('fl-add');
+}
+
+function calcSportsMagnet(){
+  var sv = document.getElementById('sm-qty').value.split('|');
+  var qtyLabel = sv[0]; var rate = parseFloat(sv[1]);
+  var qtyMap = {'100':100,'250':250,'500':500,'1000':1000};
+  var qty = qtyMap[qtyLabel] || parseInt(qtyLabel);
+  var total = rate * qty;
+  var desc = qty + 'x 2026 Calendar Sports Magnet 4"×7"';
+  var lines = [['Size','4"×7" 20mil'],['Qty',qtyLabel+' pcs'],['Each','$'+rate.toFixed(2)]];
+  showResult('sm-result', lines, total, qty, desc);
+  lastCalc.sm = {desc:desc, total:total, qty:qty, details:lines};
+  showAddBtn('sm-add');
 }
 
 function calcMagnets(){
