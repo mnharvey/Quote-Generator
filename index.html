@@ -285,6 +285,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('vinyl',document.querySelector('.cat-btn'))">🏷️ Vinyl Decals</button>
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('banners',document.querySelector('.cat-btn'))">🚩 Banners</button>
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('doorhangers',document.querySelector('.cat-btn'))">🚪 Door Hangers</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('flags',document.querySelector('.cat-btn'))">🚩 Advertising Flags</button>
         </div>
       </div>
       <div class="home-cat-card" onclick="toggleHomeCat('apparel-sub',this)" id="hcc-apparel">
@@ -419,14 +420,21 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <select id="c4-size">
           <option value="18x12">18×12"</option><option value="24x12">24×12"</option>
           <option value="24x18">24×18"</option><option value="24x24">24×24"</option>
-          <option value="36x24" selected>36×24"</option><option value="48x48">48×48"</option>
+          <option value="24x36">24×36"</option>
+          <option value="36x24" selected>36×24"</option><option value="36x36">36×36" ★</option>
+          <option value="48x48">48×48"</option>
           <option value="48x90">48×90"</option>
         </select></div>
       <div class="field"><label>Sides</label>
         <select id="c4-sides"><option value="single">Single Sided</option><option value="double">Double Sided</option></select></div>
       <div class="field"><label>Quantity</label><input type="number" id="c4-qty" value="10" min="1"></div>
     </div>
-    <div class="form-row single">
+    <div class="form-row">
+      <div class="field"><label>H-Stake</label>
+        <select id="c4-stake">
+          <option value="0">No stake</option>
+          <option value="1">With H-Stake (+$1.56 ea)</option>
+        </select></div>
       <div class="field"><label>Discount</label>
         <select id="c4-disc">
           <option value="0">No discount</option>
@@ -456,26 +464,20 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   </div>
     <div class="note-box">Custom shapes and edge-to-edge printing available — call for quote. Wire stakes sold separately.</div>
     <div class="section-divider"></div>
-    <table class="price-table"><thead><tr><th>Size</th><th>Type</th><th>1</th><th>10</th><th>100</th><th>500</th><th>1,000</th></tr></thead><tbody>
-      <tr class="subhead"><td colspan="7">18×12" &amp; 24×12"</td></tr>
-      <tr><td></td><td>Single</td><td>$12.13</td><td>$9.18</td><td>$7.33</td><td>$5.50</td><td>$5.33</td></tr>
-      <tr><td></td><td>Double</td><td>$12.13</td><td>$10.00</td><td>$8.33</td><td>$7.33</td><td>$6.50</td></tr>
-      <tr class="subhead"><td colspan="7">24×18"</td></tr>
-      <tr><td></td><td>Single</td><td>$13.75</td><td>$11.00</td><td>$8.25</td><td>$8.00</td><td>$8.00</td></tr>
-      <tr><td></td><td>Double</td><td>$15.00</td><td>$12.50</td><td>$11.00</td><td>$9.75</td><td>$9.75</td></tr>
-      <tr class="subhead"><td colspan="7">24×24"</td></tr>
-      <tr><td></td><td>Single</td><td>$18.33</td><td>$14.68</td><td>$11.00</td><td>$10.68</td><td>$10.68</td></tr>
-      <tr><td></td><td>Double</td><td>$20.00</td><td>$16.68</td><td>$14.68</td><td>$13.00</td><td>$13.00</td></tr>
-      <tr class="subhead"><td colspan="7">36×24"</td></tr>
-      <tr><td></td><td>Single</td><td>$27.50</td><td>$22.00</td><td>$16.50</td><td>$16.00</td><td>$16.00</td></tr>
-      <tr><td></td><td>Double</td><td>$30.00</td><td>$25.00</td><td>$22.00</td><td>$19.50</td><td>$19.50</td></tr>
-      <tr class="subhead"><td colspan="7">48×48"</td></tr>
-      <tr><td></td><td>Single</td><td>$73.33</td><td>$58.68</td><td>$42.68</td><td>$42.68</td><td>$42.68</td></tr>
-      <tr><td></td><td>Double</td><td>$80.00</td><td>$66.68</td><td>$52.00</td><td>$52.00</td><td>$52.00</td></tr>
-      <tr class="subhead"><td colspan="7">48×90"</td></tr>
-      <tr><td></td><td>Single</td><td>$110.00</td><td>$82.50</td><td>$80.00</td><td>$80.00</td><td>$80.00</td></tr>
-      <tr><td></td><td>Double</td><td>$125.00</td><td>$110.00</td><td>$97.50</td><td>$97.50</td><td>$97.50</td></tr>
-    </tbody></table>
+    <table class="price-table">
+      <thead><tr><th>Size</th><th>Sign Only (10+)</th><th>+ H-Stake</th></tr></thead>
+      <tbody>
+        <tr><td>18×12"</td><td>$5.50</td><td>$7.06</td></tr>
+        <tr><td>24×12"</td><td>$5.50</td><td>$7.06</td></tr>
+        <tr><td>24×18"</td><td>$5.09</td><td>$6.65</td></tr>
+        <tr><td>24×24"</td><td>$6.36</td><td>$7.94 ★</td></tr>
+        <tr><td>24×36"</td><td>$12.74</td><td>$14.31</td></tr>
+        <tr><td>36×24"</td><td>$16.00</td><td>—</td></tr>
+        <tr><td>36×36"</td><td>$25.49</td><td>No stake*</td></tr>
+        <tr><td>48×48"</td><td>$25.49</td><td>No stake*</td></tr>
+        <tr><td>48×90"</td><td>$80.00</td><td>No stake*</td></tr>
+      </tbody>
+    </table>
   </div>
 
   <!-- 10MM -->
@@ -1312,6 +1314,67 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <tr><td>3.5" × 8.5"</td><td>$229.98 ($0.92 ea)</td><td>$242.94 ($0.49 ea)</td><td>$268.86 ($0.27 ea)</td></tr>
     </tbody></table>
     <div class="note-box">Fixed retail pricing — no additional markup. Choice of Arch, Standard, or Starburst die cut.</div>
+  </div>
+
+  <!-- ADVERTISING FLAGS -->
+  <div class="panel" id="panel-flags">
+    <div class="panel-title">Advertising Flags</div>
+    <div class="panel-desc">Full color dye sublimation · Single sided · Ground stake included · 4 business day turnaround</div>
+    <div class="form-row">
+      <div class="field"><label>Style</label>
+        <select id="fl-style" onchange="calcFlags()">
+          <option value="feather_angled">Feather Angled ⭐ Best Seller</option>
+          <option value="feather_convex">Feather Convex</option>
+          <option value="teardrop">Teardrop</option>
+        </select></div>
+      <div class="field"><label>Size</label>
+        <select id="fl-size" onchange="calcFlags()">
+          <option value="small|131.22">Small — $131.22</option>
+          <option value="medium|131.22">Medium — $131.22</option>
+          <option value="large|139.90">Large — $139.90 ⭐</option>
+          <option value="xlarge|175.76">X-Large — $175.76</option>
+        </select></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Hardware Add-on</label>
+        <select id="fl-hardware" onchange="calcFlags()">
+          <option value="0">Ground stake only (included)</option>
+          <option value="13.98">+ Cross base — indoor (+$13.98)</option>
+          <option value="28.75">+ Cross base + ground stake (+$28.75)</option>
+          <option value="28.75b">+ Cross base + water bag (+$28.75)</option>
+          <option value="17.25">+ Square base (+$17.25)</option>
+        </select></div>
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="fl-qty" value="1" min="1" onchange="calcFlags()"></div>
+    </div>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea class="item-note" placeholder="Flag color, artwork notes, event details..."></textarea>
+    </div>
+    <button class="calc-btn" onclick="calcFlags()">CALCULATE</button>
+    <div class="result-card" id="fl-result"></div>
+    <button class="add-to-quote-btn" id="fl-add" style="display:none" onclick="addToQuote('fl')">+ ADD TO ESTIMATE</button>
+    <div class="section-divider"></div>
+    <table class="price-table">
+      <thead><tr><th>Size</th><th>Price (incl. stake)</th><th>Height</th></tr></thead>
+      <tbody>
+        <tr><td>Small</td><td>$131.22</td><td>9 ft (feather) / 7 ft (teardrop)</td></tr>
+        <tr><td>Medium</td><td>$131.22</td><td>10.5 ft (feather) / 9 ft (teardrop)</td></tr>
+        <tr><td>Large ⭐</td><td>$139.90</td><td>14 ft (feather) / 11.2 ft (teardrop)</td></tr>
+        <tr><td>X-Large</td><td>$175.76</td><td>18 ft (feather) / 13.5 ft (teardrop)</td></tr>
+      </tbody>
+    </table>
+    <table class="price-table" style="margin-top:10px;">
+      <thead><tr><th>Hardware Add-on</th><th>Price</th></tr></thead>
+      <tbody>
+        <tr><td>Ground stake only</td><td>Included</td></tr>
+        <tr><td>Cross base (indoor)</td><td>+$13.98</td></tr>
+        <tr><td>Cross base + ground stake</td><td>+$28.75</td></tr>
+        <tr><td>Cross base + water bag</td><td>+$28.75</td></tr>
+        <tr><td>Square base</td><td>+$17.25</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box">Single sided dye sublimation on 3oz polyester. Double sided available — contact for pricing.</div>
   </div>
 
   <!-- VEHICLE MAGNETS -->
@@ -2626,12 +2689,15 @@ const SERVER_URL='https://api.little6llc.com:3001';
 const C4={
   '18x12':{single:[12.13,9.18,7.33,5.50,5.33],double:[12.13,10.00,8.33,7.33,6.50]},
   '24x12':{single:[12.13,9.18,7.33,5.50,5.33],double:[12.13,10.00,8.33,7.33,6.50]},
-  '24x18':{single:[13.75,11.00,8.25,8.00,8.00],double:[15.00,12.50,11.00,9.75,9.75]},
-  '24x24':{single:[18.33,14.68,11.00,10.68,10.68],double:[20.00,16.68,14.68,13.00,13.00]},
+  '24x18':{single:[13.75,11.00,8.25,5.09,5.09],double:[15.00,12.50,11.00,9.75,9.75]},
+  '24x24':{single:[18.33,14.68,11.00,6.36,6.36],double:[20.00,16.68,14.68,13.00,13.00]},
+  '24x36':{single:[22.00,18.00,15.00,12.74,12.74],double:[26.00,22.00,18.00,16.00,16.00]},
   '36x24':{single:[27.50,22.00,16.50,16.00,16.00],double:[30.00,25.00,22.00,19.50,19.50]},
-  '48x48':{single:[73.33,58.68,42.68,42.68,42.68],double:[80.00,66.68,52.00,52.00,52.00]},
+  '36x36':{single:[38.00,30.00,27.00,25.49,25.49],double:[44.00,36.00,32.00,30.00,30.00]},
+  '48x48':{single:[73.33,58.68,42.68,25.49,25.49],double:[80.00,66.68,52.00,52.00,52.00]},
   '48x90':{single:[110.00,82.50,80.00,80.00,80.00],double:[125.00,110.00,97.50,97.50,97.50]},
 };
+const C4_STAKE_ADDER = 1.56; // H-stake add-on per sign
 const C4B=[1,10,100,500,1000];
 
 const C10={
@@ -2682,12 +2748,22 @@ function calcCorr4(){
   var size=document.getElementById('c4-size').value;
   var sides=document.getElementById('c4-sides').value;
   var qty=parseInt(document.getElementById('c4-qty').value)||1;
+  var stake=parseInt(document.getElementById('c4-stake').value)||0;
   var rate=getRate(C4[size][sides],C4B,qty);
-  var total=rate*qty;
+  var stakeAdder = stake ? C4_STAKE_ADDER : 0;
+  var unitTotal = rate + stakeAdder;
+  var total=unitTotal*qty;
   var sidesLabel=sides==='single'?'Single Sided':'Double Sided';
-  var desc=qty+'x '+size+'" 4mm Corrugated ('+sidesLabel+')';
-  showResult('c4-result',[['Size',size+'"'],['Sides',sidesLabel],['Qty',qty],['Rate Each','$'+rate.toFixed(2)]],total,qty,desc);
-  lastCalc.c4={desc:desc,total:total,qty:qty,rate:rate};
+  var stakeLabel=stake?'+H-Stake':'No Stake';
+  // Warn if stake not available for large sizes
+  var noStakeSizes=['36x36','48x48','48x90'];
+  if(stake && noStakeSizes.includes(size)){
+    document.getElementById('c4-result').innerHTML='<div style="color:#B03028;padding:10px;font-size:13px;">⚠️ H-stake not available for '+size+'" signs (size too large for standard wire stakes).</div>';
+    return;
+  }
+  var desc=qty+'x '+size+'" 4mm Corrugated ('+sidesLabel+(stake?' + H-Stake':'')+')';
+  showResult('c4-result',[['Size',size+'"'],['Sides',sidesLabel],['Stake',stakeLabel],['Qty',qty],['Rate Each','$'+unitTotal.toFixed(2)]],total,qty,desc);
+  lastCalc.c4={desc:desc,total:total,qty:qty,rate:unitTotal};
   showAddBtn('c4-add');
 }
 
@@ -3987,6 +4063,7 @@ function calcWoodLetters(){
 
 
 var SEARCH_INDEX = [
+  {panel:'flags', icon:'🚩', name:'Advertising Flags', cat:'Signage', desc:'Feather angled · Feather convex · Teardrop · Full color dye sub · Ground stake included'},
   {panel:'doorhangers', icon:'🚪', name:'Door Hangers', cat:'Print & Transfers', desc:'14PT C2S · Full color both sides · UV coating front · 250/500/1000 qty'},
   {panel:'corr4', icon:'🪧', name:'4mm Corrugated Signs', cat:'Signage', desc:'Yard signs, political, events, real estate — H-stakes included'},
   {panel:'corr10', icon:'🪧', name:'10mm Corrugated Signs', cat:'Signage', desc:'Heavier duty corrugated — permanent outdoor displays'},
@@ -4066,6 +4143,25 @@ function calcDoorHangers(){
   showResult('dh-result', lines, total, qty, desc);
   lastCalc.dh = {desc:desc, total:total, qty:qty, details:[['Size',size+'"'],['Qty',qty],['Each','$'+each.toFixed(2)]]};
   showAddBtn('dh-add');
+}
+
+function calcFlags(){
+  var style = document.getElementById('fl-style').value;
+  var sv = document.getElementById('fl-size').value.split('|');
+  var size = sv[0]; var basePrice = parseFloat(sv[1]);
+  var hwVal = document.getElementById('fl-hardware').value.replace('b','');
+  var hw = parseFloat(hwVal) || 0;
+  var qty = parseInt(document.getElementById('fl-qty').value)||1;
+  var unitPrice = basePrice + hw;
+  var total = unitPrice * qty;
+  var styleNames = {feather_angled:'Feather Angled',feather_convex:'Feather Convex',teardrop:'Teardrop'};
+  var sizeNames = {small:'Small',medium:'Medium',large:'Large',xlarge:'X-Large'};
+  var hwNames = {'0':'Ground stake included','13.98':'+Cross base','28.75':'+Cross base+stake','17.25':'+Square base'};
+  var desc = qty+'x '+styleNames[style]+' Flag ('+sizeNames[size]+')';
+  var lines = [['Style',styleNames[style]],['Size',sizeNames[size]],['Hardware',hwNames[hwVal]||'+Hardware'],['Qty',qty],['Unit Price','$'+unitPrice.toFixed(2)]];
+  showResult('fl-result', lines, total, qty, desc);
+  lastCalc.fl = {desc:desc, total:total, qty:qty, details:lines};
+  showAddBtn('fl-add');
 }
 
 function calcMagnets(){
