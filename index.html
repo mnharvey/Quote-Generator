@@ -321,6 +321,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('stickers',document.querySelector('.cat-btn'))">🏷️ Stickers</button>
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('magnets',document.querySelector('.cat-btn'))">🧲 Magnets</button>
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('licenseplates',document.querySelector('.cat-btn'))">🚗 License Plates</button>
+          <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('bizcards',document.querySelector('.cat-btn'))">💼 Business Cards</button>
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('pvcards',document.querySelector('.cat-btn'))">💳 PVC Cards</button>
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('doorhangers',document.querySelector('.cat-btn'))">🚪 Door Hangers</button>
           <button class="hcc-sub-btn" onclick="event.stopPropagation();showPanel('foamboard',document.querySelector('.cat-btn'))">🖼️ Foam Board</button>
@@ -1789,6 +1790,48 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <tr><td>4"</td><td>Acrylic</td><td>$6.00</td><td>$4.25</td><td>$3.25</td><td>$2.75</td></tr>
     </tbody></table>
     <div class="note-box">Includes ornament and basic ribbon. Does not include individual packaging.</div>
+  </div>
+
+  <!-- PVC CARDS -->
+  <!-- BUSINESS CARDS -->
+  <div class="panel" id="panel-bizcards">
+    <div class="panel-title">Business Cards</div>
+    <div class="panel-desc">14pt C2S · Full color both sides · UV coating front · Shipping included · Promo with Grace</div>
+    <div class="form-row">
+      <div class="field"><label>Quantity</label>
+        <select id="bc-qty" onchange="calcBizCards()">
+          <option value="25|25.00">25 cards — $25.00</option>
+          <option value="50|37.50">50 cards — $37.50</option>
+          <option value="100|55.00">100 cards — $55.00</option>
+          <option value="250|68.00">250 cards — $68.00</option>
+          <option value="500|80.00" selected>500 cards — $80.00</option>
+          <option value="1000|130.00">1,000 cards — $130.00</option>
+          <option value="2500|159.00">2,500 cards — $159.00</option>
+          <option value="5000|180.00">5,000 cards — $180.00</option>
+        </select></div>
+    </div>
+    <div class="panel-notes-wrap">
+      <label>✏️ Notes for this estimate</label>
+      <textarea class="item-note" placeholder="Design notes, contact info, special instructions..."></textarea>
+    </div>
+    <button class="calc-btn" onclick="calcBizCards()">CALCULATE</button>
+    <div class="result-card" id="bc-result"></div>
+    <button class="add-to-quote-btn" id="bc-add" style="display:none" onclick="addToQuote('bc')">+ ADD TO ESTIMATE</button>
+    <div class="section-divider"></div>
+    <table class="price-table">
+      <thead><tr><th>Quantity</th><th>Price</th><th>Each</th></tr></thead>
+      <tbody>
+        <tr><td>25 cards</td><td>$25.00</td><td>$1.00 ea</td></tr>
+        <tr><td>50 cards</td><td>$37.50</td><td>$0.75 ea</td></tr>
+        <tr><td>100 cards</td><td>$55.00</td><td>$0.55 ea</td></tr>
+        <tr><td>250 cards</td><td>$68.00</td><td>$0.27 ea</td></tr>
+        <tr><td>500 cards</td><td>$80.00</td><td>$0.16 ea</td></tr>
+        <tr><td>1,000 cards</td><td>$130.00</td><td>$0.13 ea</td></tr>
+        <tr><td>2,500 cards</td><td>$159.00</td><td>$0.06 ea</td></tr>
+        <tr><td>5,000 cards</td><td>$180.00</td><td>$0.04 ea</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box">Standard 3.5"×2" · Prices include shipping · Sales tax not included · Orders via info@promowithgrace.com</div>
   </div>
 
   <!-- PVC CARDS -->
@@ -3902,6 +3945,17 @@ function calcOrnaments(){
 }
 
 // PVC CARDS
+function calcBizCards(){
+  var sv = document.getElementById('bc-qty').value.split('|');
+  var qty = parseInt(sv[0]); var total = parseFloat(sv[1]);
+  var each = total / qty;
+  var desc = qty + 'x Business Cards 3.5"×2" (14pt C2S)';
+  var lines = [['Size','3.5"×2"'],['Stock','14pt C2S · UV front'],['Qty',qty],['Each','$'+each.toFixed(2)]];
+  showResult('bc-result', lines, total, qty, desc);
+  lastCalc.bc = {desc:desc, total:total, qty:qty, details:lines};
+  showAddBtn('bc-add');
+}
+
 function calcPVCards(){
   var type = document.getElementById('pv-type').value;
   var sides = document.getElementById('pv-sides').value;
@@ -4110,6 +4164,7 @@ var SEARCH_INDEX = [
   {panel:'stickers', icon:'🏷', name:'Stickers', cat:'Print & Transfers', desc:'Die-cut vinyl — premium UV outdoor or economy waterproof'},
   {panel:'magnets', icon:'🧲', name:'Vehicle Magnets', cat:'Print & Transfers', desc:'Full color removable car magnets — min 2'},
   {panel:'licenseplates', icon:'🪪', name:'License Plates', cat:'Print & Transfers', desc:'Custom UV printed — $13.50 each, qty breaks coming'},
+  {panel:'bizcards', icon:'💼', name:'Business Cards', cat:'Print & Transfers', desc:'14pt C2S · Full color · UV coating · Shipping included · Promo with Grace'},
   {panel:'pvcards', icon:'💳', name:'PVC Cards', cat:'Print & Transfers', desc:'Regular or holographic — loyalty, membership, ID cards'},
   {panel:'tablecloths', icon:'🪄', name:'Tablecloths', cat:'Print & Transfers', desc:'Custom logo 6ft and 8ft — contact for pricing'},
   {panel:'tumblers', icon:'🥤', name:'Tumblers', cat:'Gifts & Awards', desc:'Polar Camel laser engraved — 20oz and 40oz, retail and wholesale'},
