@@ -1280,6 +1280,64 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <tr><td>47"×81"</td><td>$280.25</td></tr>
     </tbody></table>
     <div class="note-box">Economy retractable banners — fixed retail pricing, no additional markup.</div>
+
+    <div class="section-divider"></div>
+
+    <!-- STEP & REPEAT BACKDROP -->
+    <div style="font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Step &amp; Repeat Backdrop — 10'W × 8'H</div>
+    <div style="font-size:12px;color:var(--gray);margin-bottom:10px;">9oz wrinkle-free fabric · Dye sublimation · Large tube hardware · Adjustable height &amp; width · Carrying bag included</div>
+    <div class="form-row">
+      <div class="field"><label>Option</label>
+        <select id="sr-option" onchange="calcStepRepeat()">
+          <option value="342.89">Graphic + Frame — $342.89 ⭐ Best Value</option>
+          <option value="235.80">Graphic Only — $235.80</option>
+        </select></div>
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="sr-qty" value="1" min="1" onchange="calcStepRepeat()"></div>
+    </div>
+    <button class="calc-btn" onclick="calcStepRepeat()" style="margin-top:4px;">CALCULATE</button>
+    <div class="result-card" id="sr-result"></div>
+    <button class="add-to-quote-btn" id="sr-add" style="display:none" onclick="addToQuote('sr')">+ ADD TO ESTIMATE</button>
+    <table class="price-table" style="margin-top:10px;">
+      <thead><tr><th>Option</th><th>Price</th></tr></thead>
+      <tbody>
+        <tr><td>Graphic + Frame ⭐</td><td>$342.89</td></tr>
+        <tr><td>Graphic Only</td><td>$235.80</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-divider"></div>
+
+    <!-- FABRIC BANNER -->
+    <div style="font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Fabric Banner — 10'W × 8'H</div>
+    <div style="font-size:12px;color:var(--gray);margin-bottom:10px;">9oz wrinkle-free fabric · Dye sublimation · Hem all sides standard · Ground shipping included</div>
+    <div class="form-row">
+      <div class="field"><label>Finishing</label>
+        <select id="fb-finish" onchange="calcFabricBanner()">
+          <option value="279.36">Standard Hem (all sides) — $279.36</option>
+          <option value="279.36b">Grommets (all sides, every 2') — $279.36</option>
+          <option value="308.10">Pole Pocket — $308.10</option>
+          <option value="328.37">1" Velcro (all sides) — $328.37</option>
+          <option value="377.37">2" Velcro (all sides) — $377.37</option>
+        </select></div>
+      <div class="field"><label>Quantity</label>
+        <input type="number" id="fb-qty" value="1" min="1" onchange="calcFabricBanner()"></div>
+    </div>
+    <button class="calc-btn" onclick="calcFabricBanner()" style="margin-top:4px;">CALCULATE</button>
+    <div class="result-card" id="fb-result"></div>
+    <button class="add-to-quote-btn" id="fb-add" style="display:none" onclick="addToQuote('fb')">+ ADD TO ESTIMATE</button>
+    <table class="price-table" style="margin-top:10px;">
+      <thead><tr><th>Finishing Option</th><th>Price</th></tr></thead>
+      <tbody>
+        <tr><td>Standard Hem (all sides)</td><td>$279.36</td></tr>
+        <tr><td>Grommets (all sides, every 2')</td><td>$279.36</td></tr>
+        <tr><td>Pole Pocket</td><td>$308.10</td></tr>
+        <tr><td>1" Velcro (all sides)</td><td>$328.37</td></tr>
+        <tr><td>2" Velcro (all sides)</td><td>$377.37</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box">Pole pocket options: 2" or 3" top only, or top &amp; bottom — same price. Prices include ground shipping. Design fee may apply. Contact info@promowithgrace.com or sales@little6llc.com</div>
+
   </div>
 
 
@@ -4213,6 +4271,35 @@ function toggleTip(pid){
   // Update button arrow
   var btn = body.previousElementSibling;
   if(btn) btn.querySelector('span').textContent = body.classList.contains('open') ? '🔽' : '💬';
+}
+
+function calcStepRepeat(){
+  var price = parseFloat(document.getElementById('sr-option').value);
+  var qty = parseInt(document.getElementById('sr-qty').value)||1;
+  var total = price * qty;
+  var optLabel = price === 342.89 ? 'Graphic + Frame' : 'Graphic Only';
+  var desc = qty + 'x Step & Repeat Backdrop 10x8 (' + optLabel + ')';
+  var lines = [['Size','10W x 8H'],['Option',optLabel],['Qty',qty],['Each','$'+price.toFixed(2)]];
+  showResult('sr-result', lines, total, qty, desc);
+  lastCalc.sr = {desc:desc, total:total, qty:qty, details:lines};
+  showAddBtn('sr-add');
+}
+
+function calcFabricBanner(){
+  var raw = document.getElementById('fb-finish').value;
+  var price = parseFloat(raw);
+  var qty = parseInt(document.getElementById('fb-qty').value)||1;
+  var total = price * qty;
+  var finishNames = {
+    '279.36':'Standard Hem','279.36b':'Grommets',
+    '308.10':'Pole Pocket','328.37':'1" Velcro','377.37':'2" Velcro'
+  };
+  var finish = finishNames[raw] || 'Custom';
+  var desc = qty + 'x Fabric Banner 10x8 (' + finish + ')';
+  var lines = [['Size','10W x 8H'],['Finishing',finish],['Qty',qty],['Each','$'+price.toFixed(2)]];
+  showResult('fb-result', lines, total, qty, desc);
+  lastCalc.fb = {desc:desc, total:total, qty:qty, details:lines};
+  showAddBtn('fb-add');
 }
 
 function calcDoorHangers(){
