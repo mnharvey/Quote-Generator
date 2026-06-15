@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>L6I — Training Lesson Plans</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&family=Courier+Prime:wght@400;700&display=swap');
+:root{--red:#B03028;--red-dark:#8a2020;--gold:#C8A84B;--navy:#1A1A2E;--navy-mid:#16213e;--charcoal:#2a2a2a;--gray:#444;--light-gray:#f5f4f1;--mid-gray:#ddd;--white:#fff;--cream:#faf9f6;--green:#1A6B3C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--charcoal);min-height:100vh;font-size:14px;}
+
+/* HEADER */
+.header{background:var(--navy);border-bottom:3px solid var(--red);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200;}
+.header-logo{height:40px;width:auto;}
+.header-right{display:flex;flex-direction:column;align-items:flex-end;}
+.header-title{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;}
+.header-sub{font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;}
+
+/* TOP NAV — Module selector */
+.top-nav{display:flex;overflow-x:auto;background:var(--navy-mid);border-bottom:2px solid rgba(255,255,255,0.08);scrollbar-width:none;}
+.top-nav::-webkit-scrollbar{display:none;}
+.top-nav-btn{flex-shrink:0;padding:11px 18px;background:none;border:none;border-bottom:3px solid transparent;color:rgba(255,255,255,0.45);font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.top-nav-btn.active{color:var(--gold);border-bottom-color:var(--red);background:rgba(255,255,255,0.03);}
+
+/* SUB NAV — Lesson selector within module */
+.sub-nav{display:flex;overflow-x:auto;background:var(--navy);border-bottom:1px solid rgba(255,255,255,0.06);scrollbar-width:none;}
+.sub-nav::-webkit-scrollbar{display:none;}
+.sub-nav-btn{flex-shrink:0;padding:8px 13px;background:none;border:none;border-bottom:2px solid transparent;color:rgba(255,255,255,0.35);font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.sub-nav-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* MODULE WRAPPERS */
+.module{display:none;}
+.module.active{display:block;}
+
+/* CONTENT */
+.content{background:var(--cream);padding:18px 15px;min-height:calc(100vh - 110px);}
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* TYPOGRAPHY */
+.panel-title{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:4px;}
+.panel-desc{font-size:12px;color:var(--gray);margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--red);}
+.lesson-number{display:inline-block;background:var(--red);color:var(--white);font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;padding:2px 8px;letter-spacing:1px;margin-bottom:8px;}
+.lesson-title{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:6px;}
+.lesson-desc{font-size:13px;color:var(--gray);margin-bottom:14px;line-height:1.6;}
+.notes-label{font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.notes-box{background:var(--navy);color:rgba(255,255,255,0.45);padding:14px 16px;border-left:4px solid var(--gold);min-height:80px;font-size:13px;line-height:1.7;font-style:italic;}
+.notes-box.has-notes{font-style:normal;color:var(--white);}
+.tips-section{margin-top:14px;}
+.tips-label{font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.tip-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--gray);padding:5px 0;border-bottom:1px solid var(--mid-gray);line-height:1.5;}
+.tip-bullet{color:var(--red);font-weight:700;flex-shrink:0;margin-top:1px;}
+
+/* OVERVIEW CARD */
+.overview-card{background:var(--navy);color:var(--white);padding:14px 16px;border-left:4px solid var(--gold);margin-bottom:16px;}
+.overview-title{font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.overview-item{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:12px;}
+.overview-item:last-child{border-bottom:none;}
+.overview-num{background:var(--red);color:var(--white);font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.overview-text{color:rgba(255,255,255,0.85);}
+.note-box{background:rgba(200,168,75,0.1);border-left:3px solid var(--gold);padding:9px 12px;font-size:12px;color:var(--gray);margin-top:10px;line-height:1.5;}
+
+/* HOME MODULE */
+.home-card{background:var(--navy);color:var(--white);padding:16px;border-left:4px solid var(--gold);margin-bottom:12px;cursor:pointer;}
+.home-card:hover{border-left-color:var(--red);}
+.home-card-label{font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.home-card-title{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px;}
+.home-card-desc{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5;}
+.home-card-lessons{font-size:11px;color:var(--gold);margin-top:6px;}
+.coming-soon{opacity:0.45;cursor:default;}
+.coming-soon .home-card-label{color:var(--mid-gray);}
+.dashboard-btn{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--navy);font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 16px;border:none;cursor:pointer;text-decoration:none;margin-bottom:1rem;}
+.dashboard-btn:hover{background:#d4a93a;}
+.external-tip{background:rgba(200,168,75,0.08);border-left:3px solid var(--gold);padding-left:6px;}
+.external-label{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-left:4px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="https://mnharvey.github.io/Quote-Generator/images/l6i_logo.png" alt="L6I Logo" class="header-logo">
+  <div class="header-right" style="flex-direction:row;align-items:center;gap:12px;">
+    <div style="display:flex;flex-direction:column;align-items:flex-end;">
+      <span class="header-title">Training Lesson Plans</span>
+      <span class="header-sub">Little 6 Industries · Internal</span>
+    </div>
+    <a href="https://mnharvey.github.io/Quote-Generator/dashboard.html" class="dashboard-btn">⬡ Dashboard</a>
+  </div>
+</div>
+
+<!-- TOP NAV: MODULES -->
+<div class="top-nav">
+  <button class="top-nav-btn active" onclick="showModule('home')">🏠 Home</button>
+  <button class="top-nav-btn" onclick="showModule('inkscape')">Inkscape</button>
+  <button class="top-nav-btn" onclick="showModule('canva')">Canva</button>
+  <button class="top-nav-btn coming-soon" disabled>Flatbed UV</button>
+  <button class="top-nav-btn coming-soon" disabled>Roll-to-Roll</button>
+  <button class="top-nav-btn coming-soon" disabled>Lasers</button>
+  <button class="top-nav-btn coming-soon" disabled>DTF Printer</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- HOME MODULE -->
+<!-- ============================================================ -->
+<div class="module active" id="module-home">
+  <div class="content">
+    <div class="panel-title">Training Hub</div>
+    <div class="panel-desc">Little 6 Industries cross-training program — select a module above to begin</div>
+
+    <div class="home-card" onclick="showModule('inkscape')">
+      <div class="home-card-label">Software · Active</div>
+      <div class="home-card-title">Inkscape</div>
+      <div class="home-card-desc">Vector design, file prep, tracing, and exporting for print and laser production.</div>
+      <div class="home-card-lessons">9 lessons · Notes in progress</div>
+    </div>
+
+    <div class="home-card" onclick="showModule('canva')">
+      <div class="home-card-label">Software · Active</div>
+      <div class="home-card-title">Canva</div>
+      <div class="home-card-desc">Design tool for quick graphics, mockups, social content, and client-ready artwork.</div>
+      <div class="home-card-lessons">8 lessons · Notes in progress</div>
+    </div>
+
+    <div class="home-card coming-soon">
+      <div class="home-card-label">Equipment · Coming Soon</div>
+      <div class="home-card-title">Flatbed UV Printer</div>
+      <div class="home-card-desc">UJF-6042 MkII — substrates, setup, job running, and maintenance.</div>
+    </div>
+
+    <div class="home-card coming-soon">
+      <div class="home-card-label">Equipment · Coming Soon</div>
+      <div class="home-card-title">Roll-to-Roll UV Printer</div>
+      <div class="home-card-desc">UCJV300-160 — media loading, print jobs, and cut file creation in CorelDRAW.</div>
+    </div>
+
+    <div class="home-card coming-soon">
+      <div class="home-card-label">Equipment · Coming Soon</div>
+      <div class="home-card-title">Laser Engravers</div>
+      <div class="home-card-desc">Thunder CO2 Nova 35 and UV Aurora 8 — settings, materials, and techniques.</div>
+    </div>
+
+    <div class="home-card coming-soon">
+      <div class="home-card-label">Equipment · Coming Soon</div>
+      <div class="home-card-title">DTF Printer</div>
+      <div class="home-card-desc">Audley 24" — operation, film loading, gang sheets, and powder application.</div>
+    </div>
+
+    <div class="note-box" style="margin-top:16px;">Lesson plans are built out as training sessions are completed. Notes are added after each session to build real lesson content over time.</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- INKSCAPE MODULE -->
+<!-- ============================================================ -->
+<div class="module" id="module-inkscape">
+  <div class="sub-nav" id="subnav-inkscape">
+    <button class="sub-nav-btn active" onclick="showLesson('inkscape','overview',this)">Overview</button>
+    <button class="sub-nav-btn" onclick="showLesson('inkscape','l1',this)">1. Tools</button>
+    <button class="sub-nav-btn" onclick="showLesson('inkscape','l2',this)">2. Fill/Stroke</button>
+    <button class="sub-nav-btn" onclick="showLesson('inkscape','l3',this)">3. B&W</button>
+    <button class="sub-nav-btn" onclick="showLesson('inkscape','l4',this)">4. Color</button>
+    <button class="sub-nav-btn" onclick="showLesson('inkscape','l5',this)">5. Cropping</button>
+    <button class="sub-nav-btn" onclick="showLesson('inkscape','l6',this)">6. Transparency</button>
+    <button class="sub-nav-btn" onclick="showLesson('inkscape','l7',this)">7. Tracing</button>
+    <button class="sub-nav-btn" onclick="showLesson('inkscape','l8',this)">8. Offset</button>
+    <button class="sub-nav-btn" onclick="showLesson('inkscape','l9',this)">9. Exporting</button>
+  </div>
+  <div class="content">
+
+    <div class="panel active" id="inkscape-overview">
+      <div class="panel-title">Inkscape</div>
+      <div class="panel-desc">Vector design — file prep, tracing, color editing, and exporting for all L6I production workflows</div>
+      <div class="overview-card">
+        <div class="overview-title">Lesson Outline</div>
+        <div class="overview-item"><span class="overview-num">1</span><span class="overview-text">Knowing the Tool — Interface & navigation</span></div>
+        <div class="overview-item"><span class="overview-num">2</span><span class="overview-text">Fill vs Stroke — Understanding the difference</span></div>
+        <div class="overview-item"><span class="overview-num">3</span><span class="overview-text">Changing Colors — Black & white conversion</span></div>
+        <div class="overview-item"><span class="overview-num">4</span><span class="overview-text">Changing Colors — Single color changes</span></div>
+        <div class="overview-item"><span class="overview-num">5</span><span class="overview-text">Cropping — Clipping and masking</span></div>
+        <div class="overview-item"><span class="overview-num">6</span><span class="overview-text">Transparency — Opacity and blending</span></div>
+        <div class="overview-item"><span class="overview-num">7</span><span class="overview-text">Tracing & Vectorizing — Bitmap trace</span></div>
+        <div class="overview-item"><span class="overview-num">8</span><span class="overview-text">Creating an Offset — Outlines and borders</span></div>
+        <div class="overview-item"><span class="overview-num">9</span><span class="overview-text">Exporting Files — Formats and best practices</span></div>
+      </div>
+      <div class="note-box">Tap a lesson above to view content and add notes after each training session.</div>
+    </div>
+
+    <div class="panel" id="inkscape-l1">
+      <span class="lesson-number">Inkscape · Lesson 1</span>
+      <div class="lesson-title">Knowing the Tool</div>
+      <div class="lesson-desc">Introduction to the Inkscape interface — toolbars, panels, canvas navigation, and how to get around efficiently.</div>
+
+      <div class="tips-section">
+        <div class="tips-label">Top Toolbar Setup</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Build your right toolbar with the tools you use most: Arrow (select), Align & Distribute, Trace Bitmap, Delete, Find & Replace, Fill & Stroke, and Export.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Export tool tip: click Export and change DPI to 300 for print-ready files.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Document & Canvas Setup</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Show Document Page, Selection, and Custom tabs. Hit Selection to work on the canvas. Note: Selection may not activate until an object is on the canvas.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Coordinates X and Y start at the top left corner of the canvas.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Units are typically mm but can be changed to inches in the top bar. Lock the box to keep proportions — unlocked can skew or distort objects. This applies to all objects.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Zooming & Navigation</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Laptop:</strong> Two fingers to zoom — pinch/spread centers on cursor. Slide two fingers left/right to pan.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Desktop:</strong> Ctrl + scroll wheel to zoom. Shift + scroll to move left/right.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Left Panel — Main Tools</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Arrow tool</strong> — main selection tool for moving and resizing objects.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Node tool</strong> — shows the nodes that make up a shape. Nodes can be moved to reshape an image.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Shape tools</strong> — squares, circles, star/polygon. Make shapes from the left toolbar. Double-clicking on the line of a star/polygon while on that tool lets you change the number of points or corners.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Text tool (A)</strong> — click and drag to create a text box. Use the arrow tool to resize the box — width and height show in the top bar. After typing, click the arrow button to exit the text box.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>We don't use shape builder, but we do use circle, square, and text tools regularly.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Text & Fonts</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Font bar is at the top — change font after you have your text selected. Fonts available are based on what is installed on your device.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Extensions > Text > Change Case</strong> — convert text to ALL UPPERCASE or lowercase. Very useful for uniform name printing.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Split Text</strong> — paste a long list of names and it will split each name out individually while keeping the original. Great for name lists.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Layers, Ordering & Alignment</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Overlap 3 shapes to practice. Top toolbar buttons: Raise to Top, Raise One Step, Lower One Step, Lower to Bottom.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Align & Distribute</strong> (right toolbar): set "Relative to" > Selection to center objects to each other. Use "Relative to Page" to center to the full canvas.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Select multiple objects by dragging a box around them, or hold Shift and click each one.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Distribute:</strong> "Make horizontal/vertical gaps equal" is the most used — great for evenly spacing labels or repeated elements.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Hotkeys & Shortcuts</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Ctrl+D</strong> — Duplicate (creates a copy directly on top of the original)</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Ctrl+C / Ctrl+V</strong> — Copy and Paste (may need Shift instead of Ctrl depending on Inkscape version)</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Ctrl+G</strong> — Group (may be Shift+G depending on version)</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Ctrl+U</strong> — Ungroup (same version variation applies)</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Backspace</strong> — Delete selected object</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Rotate 90° and Flip tools are available in the top bar.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Inkscape's built-in tutorials are a great reference: <strong>Help menu > Tutorials > Basic / Shapes / Advanced</strong>. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* To clean up a document, you can clear unused gradients, patterns, and markers via <strong>File > Clean Up Document</strong>. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Hold <strong>Shift</strong> while resizing to resize from center. Hold <strong>Ctrl</strong> while resizing to keep aspect ratio locked. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="inkscape-l2">
+      <span class="lesson-number">Inkscape · Lesson 2</span>
+      <div class="lesson-title">Fill vs Stroke</div>
+      <div class="lesson-desc">Understanding the difference between fill (inside color) and stroke (outline/border) and how to control each independently.</div>
+
+      <div class="tips-section">
+        <div class="tips-label">The Basics</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Fill</strong> = the inner color of a shape. <strong>Stroke</strong> = the line/border around it.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>All colors are shown along the bottom of the screen. Right-click a color to choose "Set Fill" or "Set Stroke."</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Right Panel — Fill & Stroke Controls</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Stroke Style</strong> — controls the line itself: width, dashed lines (useful for cut lines on stickers), line caps and joins.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Stroke Paint</strong> — changes the color of the stroke. Can switch between RGB and CMYK at the top.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>To <strong>remove</strong> a fill or stroke color: the far left box (X) removes it. The solid box next to it gives a flat solid color. The remaining options are gradients.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Gradients</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>The gradient bar lets you set multiple colors and control how they blend using the slider/Stop color tool.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>The Stop color controls where one color ends and the next begins. You can adjust hues for each stop independently.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Same gradient options are available in both the Fill and Stroke sections.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Stroke for Sticker Cut Lines</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Stroke is especially important when creating sticker cut lines. More detail on this will be covered in the Offset lesson.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* You can switch between RGB and CMYK color modes at the top of the Fill & Stroke panel. Always use CMYK for print production files. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* To quickly remove fill or stroke: select the object and press <strong>Shift+Ctrl+F</strong> to open Fill & Stroke, then click the X icon. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="inkscape-l3">
+      <span class="lesson-number">Inkscape · Lesson 3</span>
+      <div class="lesson-title">Changing Colors — Black & White Conversion</div>
+      <div class="lesson-desc">How to convert a design to black and white or apply color changes using Inkscape's Filters menu. Uses the PNG exported from the Canva lesson as practice.</div>
+
+      <div class="tips-section">
+        <div class="tips-label">Importing Your Design</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Import the file using <strong>File > Import</strong>.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Check the sizing at the top bar — it should match but always worth verifying on any design.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>You can move the design around. Sometimes working off the canvas is easier depending on what you're doing.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Fade to Black or White</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Select the design, then go to <strong>Filters > Colors > Fade to Black or White</strong>.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Since the design is black, it will ask to fade to white. Use a low value like <strong>0.03</strong>, then click Apply.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Colorize — Adding Color to a Design</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Go to <strong>Filters > Colors > Colorize</strong> for color-tinting options.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Enable <strong>Live Preview</strong> to see changes in real time as you adjust.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Under the <strong>Options</strong> tab: set <strong>Blend 1 to Normal</strong> and <strong>Blend 2 to Normal</strong>. Then adjust the color sliders to get your desired hue.</div>
+      </div>
+    </div>
+
+    <div class="panel" id="inkscape-l4">
+      <span class="lesson-number">Inkscape · Lesson 4</span>
+      <div class="lesson-title">Changing Colors — Single Color Changes</div>
+      <div class="lesson-desc">How to change individual colors in a design — selecting by color, swapping brand colors, and editing grouped elements.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Key Points to Cover</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Click to select, then click color swatch to change fill</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Edit > Find/Replace to select all elements of a specific color</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Entering exact HEX values for brand color accuracy</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Ungrouping to access individual elements inside a group</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Double-clicking to enter a group without ungrouping</div>
+      </div>
+    </div>
+
+    <div class="panel" id="inkscape-l5">
+      <span class="lesson-number">Inkscape · Lesson 5</span>
+      <div class="lesson-title">Cropping — Clipping & Masking</div>
+      <div class="lesson-desc">How to crop images in Inkscape using the Clip tool. Most important for DTF file prep — ensures your design is the right size and cleanly cropped.</div>
+
+      <div class="tips-section">
+        <div class="tips-label">Step-by-Step: Setting a Clip</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Select the object — you will see a gap between the dotted line and the edge of the image.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Draw a filled rectangle box over the design. <strong>Remove the stroke</strong> from the box.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Move the box to the background and size it as close to the design as possible without cutting out any details.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Select the main design and <strong>send it to the back</strong>.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Select both the design and the box.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Go to <strong>Object > Clip > Set</strong>. Make sure units are set to inches at the top.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">After Clipping</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Resize to confirm the design is the correct size. Make sure the <strong>lock is on</strong> to keep proportions.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Made a mistake? <strong>Ctrl+Z</strong> to undo.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>This is the most important lesson for DTF file prep.</div>
+      </div>
+    </div>
+
+    <div class="panel" id="inkscape-l6">
+      <span class="lesson-number">Inkscape · Lesson 6</span>
+      <div class="lesson-title">Transparency — Opacity & Blending</div>
+      <div class="lesson-desc">Understanding transparency in Inkscape — mostly about making sure your fill settings are correct and knowing when transparency helps vs hurts.</div>
+
+      <div class="tips-section">
+        <div class="tips-label">The Main Rule</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>For production files, mostly focus on making sure your fill is correct. Transparency should usually stay at 100%.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>In the CMYK fill color panel, the <strong>A value</strong> controls transparency. Do not adjust this — keep it at 100% for production files.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Transparency as a Cropping Aid</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>You can temporarily use transparency to help with cropping — instead of sending the box to the background (as in Lesson 5), you can fade it to see the design underneath.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Important:</strong> if you use transparency this way, you must reset it back to 100% before clipping and exporting. Leaving transparency on will affect the final file.</div>
+      </div>
+    </div>
+
+    <div class="panel" id="inkscape-l7">
+      <span class="lesson-number">Inkscape · Lesson 7</span>
+      <div class="lesson-title">Tracing & Vectorizing — Bitmap Trace</div>
+      <div class="lesson-desc">Converting a raster image (JPEG) into a scalable vector using Inkscape's Trace Bitmap tool. Once vectorized, the design can be colored, exported as SVG/PDF/PNG, and edited with nodes.</div>
+
+      <div class="tips-section">
+        <div class="tips-label">Preparing the File</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Go back to Canva and re-download the same design — this time as <strong>JPEG</strong>.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>JPEG never has a transparent background — it will always have a white background. That's expected here.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Size doesn't matter for this step.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Delete the old file from the previous lesson in Inkscape, then import the JPEG.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Running the Trace</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Click the image, then access <strong>Trace Bitmap</strong> from the toolbar or by right-clicking the object.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Detection mode: <strong>Brightness Cutoff</strong> — senses colors and converts to one solid color.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Adjust the <strong>threshold</strong>: black is sensed first, light yellow last. Lighter colors need a higher threshold. Adjust and hit <strong>Apply</strong>.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>After applying, you will have a transparent vectorized design — the white background is removed.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Working with the Vector</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>The design is now a vector — you can change its color, export as SVG, PDF, PNG, and more.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Select the Node tool to see nodes. Nodes tell the laser where to cut and the printer where to print.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>You can delete nodes and adjust them to clean up the image. Deleting inside nodes can convert a detailed area into a solid fill.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Sizing & Rotating</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Drag corners to resize proportionally. Drag the sides to squish or squeeze (use lock to avoid this).</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Double-click</strong> the object to switch to rotate mode — drag corners to rotate.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* For best trace results, start with a high-contrast, clean image. Low-res or blurry images will produce messy node paths that are hard to clean up. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* After tracing, always delete the original raster image underneath — the trace sits on top of it and you don't want both in your file. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Use <strong>Path > Simplify</strong> (Ctrl+L) after tracing to reduce the number of nodes and create cleaner, smoother paths. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="inkscape-l8">
+      <span class="lesson-number">Inkscape · Lesson 8</span>
+      <div class="lesson-title">Creating an Offset — Outlines & Borders</div>
+      <div class="lesson-desc">How to create an offset or border around a vectorized design — used for sticker cut lines, contour lines, and outline effects. Two methods covered.</div>
+
+      <div class="tips-section">
+        <div class="tips-label">Before You Start</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Offsets are for sticker outlines, contour cut lines, and border effects.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>You can <strong>only create an offset on a vectorized image</strong>. If the design has nodes, it's vectorized and ready.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Method 1 — Linked Offset (Path Menu)</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Go to <strong>Path > Linked Offset</strong>. This creates a second layer around the design.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Click and hold the <strong>diamond handle</strong> that appears, then drag it away from the design to grow the offset.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Go back to <strong>Path > Union</strong> to convert the outline into its own vector shape.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Now you can delete inside nodes to create a solid filled object. You may need to click the arrow tool to exit node mode first.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Change the color and you now have a clean outline/border around your design.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Method 2 — Stroke Style</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Go to <strong>Fill & Stroke</strong> on the right panel. Hit <strong>Stroke Paint</strong> and change it to a flat color fill.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Go to <strong>Stroke Style</strong> and make the width very large to create a visible border.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Duplicate the design and delete the stroke from the duplicate to keep the original clean. This adds depth to the design.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Note: this method has limitations — you cannot edit gaps the same way you can with node editing in Method 1.</div>
+      </div>
+    </div>
+
+    <div class="panel" id="inkscape-l9">
+      <span class="lesson-number">Inkscape · Lesson 9</span>
+      <div class="lesson-title">Exporting Files</div>
+      <div class="lesson-desc">How to export finished artwork in the right format for each output type — DTF, laser, vinyl, print, and digital use.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Key Points to Cover</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>File > Export PNG Image — for DTF, stickers, digital use</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Setting DPI — 300 minimum for print, 150 for large format</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>File > Save As > SVG for vector files</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Exporting as PDF for print-ready files</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>DXF export for laser cut files</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Always convert fonts to paths before exporting</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- CANVA MODULE -->
+<!-- ============================================================ -->
+<div class="module" id="module-canva">
+  <div class="sub-nav" id="subnav-canva">
+    <button class="sub-nav-btn active" onclick="showLesson('canva','overview',this)">Overview</button>
+    <button class="sub-nav-btn" onclick="showLesson('canva','l1',this)">1. Tools</button>
+    <button class="sub-nav-btn" onclick="showLesson('canva','l2',this)">2. Design</button>
+    <button class="sub-nav-btn" onclick="showLesson('canva','l3',this)">3. Text & Brand</button>
+    <button class="sub-nav-btn" onclick="showLesson('canva','l4',this)">4. Backgrounds</button>
+    <button class="sub-nav-btn" onclick="showLesson('canva','l5',this)">5. Edits</button>
+    <button class="sub-nav-btn" onclick="showLesson('canva','l6',this)">6. Mockups</button>
+    <button class="sub-nav-btn" onclick="showLesson('canva','l7',this)">7. Exporting</button>
+    <button class="sub-nav-btn" onclick="showLesson('canva','l8',this)">8. Workshop</button>
+  </div>
+  <div class="content">
+
+    <div class="panel active" id="canva-overview">
+      <div class="panel-title">Canva</div>
+      <div class="panel-desc">Design tool for quick graphics, mockups, social content, and client-ready artwork</div>
+      <div class="overview-card">
+        <div class="overview-title">Lesson Outline</div>
+        <div class="overview-item"><span class="overview-num">1</span><span class="overview-text">Knowing the Tools — Interface & navigation</span></div>
+        <div class="overview-item"><span class="overview-num">2</span><span class="overview-text">Creating a Design — Templates, canvas, layout</span></div>
+        <div class="overview-item"><span class="overview-num">3</span><span class="overview-text">Text, Graphics & Branding — Fonts, elements, brand kit</span></div>
+        <div class="overview-item"><span class="overview-num">4</span><span class="overview-text">Remove Backgrounds — Magic eraser and BG removal</span></div>
+        <div class="overview-item"><span class="overview-num">5</span><span class="overview-text">Edits — Outlines, color changes, filters & adjustments</span></div>
+        <div class="overview-item"><span class="overview-num">6</span><span class="overview-text">Making Mockups — Product mockup tools</span></div>
+        <div class="overview-item"><span class="overview-num">7</span><span class="overview-text">Exporting — PNG vs PDF vs JPEG and when to use each</span></div>
+        <div class="overview-item"><span class="overview-num">8</span><span class="overview-text">Workshop — Make your own logo and mockups</span></div>
+      </div>
+      <div class="note-box">Tap a lesson above to view content and add notes after each training session.</div>
+    </div>
+
+    <div class="panel" id="canva-l1">
+      <span class="lesson-number">Canva · Lesson 1</span>
+      <div class="lesson-title">Knowing the Tools</div>
+      <div class="lesson-desc">Getting comfortable with the Canva interface — the toolbar, side panel, canvas area, and how to navigate efficiently.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Key Points to Cover</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Left panel — Templates, Elements, Text, Brand, Uploads, Apps</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Top toolbar — changes based on what is selected</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Layers panel and page organization</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Zooming, panning, and canvas view options</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Keyboard shortcuts — Ctrl+Z, Ctrl+C, Ctrl+D, T for text</div>
+      </div>
+    </div>
+
+    <div class="panel" id="canva-l2">
+      <span class="lesson-number">Canva · Lesson 2</span>
+      <div class="lesson-title">Creating a Design</div>
+      <div class="lesson-desc">Starting a design from scratch — setting canvas size, adding elements, and exporting for use in other tools like Inkscape.</div>
+
+      <div class="tips-section">
+        <div class="tips-label">Getting Started</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Hit <strong>Create</strong> to start a new design.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Size matters</strong> — always go bigger than you need, it's easier to size down. Example: business card at 5×7 inches. Banners may need more precise dimensions. We use inches.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Title your design</strong> so it doesn't get lost in your project list.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Left Toolbar Overview</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Templates</strong> — pre-made Canva layouts to start from.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Elements</strong> — clip art, shapes, graphics, and more.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Text</strong> — add text boxes to your design.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Branding</strong> — covered in the next lesson.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Canva AI</strong> — AI-assisted design help.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>Uploads</strong> — where you bring in outside images like client logos.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Practice Exercise (links to Inkscape Lesson 3)</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Select Text from the toolbar and type a message (e.g. "Matt is Great"). Size it on the canvas.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Select a font. <strong>Keep it black</strong> — important for the Inkscape color lesson that follows.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Add a simple element from the Elements toolbar. <strong>Keep it black</strong> as well.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>When done, click <strong>Share > Download</strong>. Select <strong>PNG</strong>, set the size as large as possible, enable <strong>Transparent Background</strong>, then hit Download.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>This exported PNG will be used in Inkscape to practice the color-changing lesson.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* To select an element that's hidden behind another, hold <strong>Ctrl (or Cmd)</strong> and click the top layer, then keep clicking to cycle through layers underneath. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Drag a text box to the full width of the canvas to auto-center text horizontally without needing the alignment tool. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Duplicate text boxes (Ctrl+D) to keep the same font and size on a new line — then just change the words. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="canva-l3">
+      <span class="lesson-number">Canva · Lesson 3</span>
+      <div class="lesson-title">Text, Graphics & Branding</div>
+      <div class="lesson-desc">Working with text elements, Canva graphics, and setting up brand kits so every design stays on-brand.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Key Points to Cover</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Adding and formatting text — font, size, spacing, alignment</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Pairing fonts — heading vs body best practices</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Using Canva's element library — icons, shapes, illustrations</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Uploading and using client logos and brand assets</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Setting up a Brand Kit — colors, fonts, logos</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Applying brand kit to keep designs consistent</div>
+      </div>
+    </div>
+
+    <div class="panel" id="canva-l4">
+      <span class="lesson-number">Canva · Lesson 4</span>
+      <div class="lesson-title">Remove Backgrounds</div>
+      <div class="lesson-desc">Using Canva's BG Remover tool to remove white or unwanted backgrounds from images — especially useful for AI-generated designs that may not have a true transparent background.</div>
+
+      <div class="tips-section">
+        <div class="tips-label">Getting Started</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Add your image to the Canva page.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Many AI-generated designs are not crisp and may not have a truly transparent background even if they appear to.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>To check: click the canvas background and change its color. If the image background changes color with it, the image is NOT transparent.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Using BG Remover</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>With the image selected, hit <strong>BG Remover</strong> in the top bar.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>If it removes too much or needs areas restored, hit <strong>BG</strong> again to enter the editing studio.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>In the studio, use the <strong>Restore</strong> brush to bring back areas that were incorrectly removed, or use the <strong>Erase</strong> brush to remove areas that should have been deleted.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Adjust the <strong>brush size</strong> depending on the level of detail needed.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>If you make mistakes, you can go back — but you may need to reset and start the removal again.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Use the <strong>Preview</strong> option to see what has changed before applying.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Things to Know</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Some designs work great with Canva BG Remover. Others need more work or may be better handled in a different tool.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Always export as PNG after removal to preserve the transparent background.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* For complex or detailed images where Canva BG Remover struggles, try <strong>remove.bg</strong> (free online tool) then import the result back into Canva. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Change the canvas background to a bright color like hot pink before removing backgrounds — this makes it much easier to spot leftover white areas. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="canva-l5">
+      <span class="lesson-number">Canva · Lesson 5</span>
+      <div class="lesson-title">Edits — Outlines, Color Changes & Adjustments</div>
+      <div class="lesson-desc">Adding outlines and effects to designs in Canva — useful for creating sticker-ready artwork with visible borders. Two methods covered.</div>
+
+      <div class="tips-section">
+        <div class="tips-label">Before You Start</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>To create a sticker from your design, you can group all elements together first, or select individual elements to apply effects to.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Method 1 — Shadow as Outline</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Select an element or grouped design.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Go to <strong>Edit</strong> and scroll all the way down to <strong>Shadows</strong>. Click <strong>See All</strong>.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Select the <strong>Outline</strong> option from the shadow styles.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Change the shadow/outline color — magenta works well as a sticker cut line color.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Adjust the size of the outline to your preference.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Note: some designs will work better than others with this method.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Method 2 — New Page with Original PNG</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>In Canva, click <strong>Add Page</strong> to create a new canvas.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Re-import your original PNG design onto the new page.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Repeat the Shadow/Outline steps from Method 1.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>This is useful when you want to keep the original design clean on one page and the outlined version on another.</div>
+      </div>
+    </div>
+
+    <div class="panel" id="canva-l6">
+      <span class="lesson-number">Canva · Lesson 6</span>
+      <div class="lesson-title">Making Mockups</div>
+      <div class="lesson-desc">Creating product mockups in Canva to show clients how their design will look — using Canva photos or pulling real product images from supplier sites.</div>
+
+      <div class="tips-section">
+        <div class="tips-label">Method 1 — Canva Photos</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>In the left toolbar, go to <strong>Elements</strong> — instead of Graphics, switch to <strong>Photos</strong>.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Search for and pick a product photo that matches your design (e.g. a blank t-shirt).</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Place your design on top of the product photo and adjust size and position.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Method 2 — Pull from a Supplier Site</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Go to <strong>companycasuals.com</strong> (or similar supplier site).</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Search for the exact shirt style and color your customer is ordering. <strong>Right-click the image and copy it</strong>.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Go back to Canva and <strong>paste the image</strong> directly onto your canvas.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Now place your design on top of the shirt image.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Adjusting the Design for the Mockup</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Click your design, go to <strong>Edit > Filters</strong> to change colors as needed.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>To flip a black design to white: go to <strong>Edit > Adjust</strong> and scroll about halfway down to find the <strong>Invert</strong> option.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Adding a QR Code to a Mockup or Flyer</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>If your mockup or flyer needs a QR code, go to <strong>Apps</strong> in the left side menu.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Search for and click the <strong>QR Code</strong> app.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Click <strong>Gen QR</strong> and enter the URL you want the QR code to link to.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Click <strong>Add to Design</strong> and position it on your canvas.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Use Canva's <strong>Smart Mockup</strong> feature (Pro) to drag and drop your design directly onto product photos and it auto-adjusts perspective. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* For color accuracy on shirt mockups, always check the actual product color name against the supplier spec sheet before sending to the client. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* <strong>Placeit.net</strong> is a great alternative for apparel mockups if Canva's options are limited — offers many branded shirt styles and colors. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="canva-l7">
+      <span class="lesson-number">Canva · Lesson 7</span>
+      <div class="lesson-title">Exporting — PNG vs PDF vs JPEG</div>
+      <div class="lesson-desc">Choosing the right export format matters — the wrong choice can make a file unusable on our equipment. Here's what to use and when.</div>
+
+      <div class="tips-section">
+        <div class="tips-label">PNG</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Best for <strong>DTF/t-shirts</strong> — export as the largest size with a transparent background.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Also used for stickers, logos, and any design that needs a transparent background.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>PNG files will NOT go into the flatbed printer</strong> — use PDF for flatbed.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">JPEG</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Use JPEG only when the design does not need any transparency or extra design layers — foam boards, banners, corrugated signs.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>JPEG never has a transparent background.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">PDF</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>PDF works with most of our machines.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Always use <strong>PDF Print</strong> — not PDF Standard — and select <strong>CMYK</strong>.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>RGB is for digital screens. CMYK is for printing.</strong> Always use CMYK for production files.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>In CorelDRAW, you can extract the image from the background of a PDF.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>PDF Standard can be used for paper-based items.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">SVG</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>SVG works in the laser — but the design must be a <strong>solid color</strong> for the laser to read it correctly.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* When exporting multiple pages in Canva as PDF, you can choose "All Pages" or select specific pages — useful when only certain pages are ready for print. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* PNG files are larger in file size than JPEG. If emailing a mockup to a client for preview only, JPEG is fine and will send faster. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* SVG export is a Canva Pro feature. On the free plan, download as PDF and open in Inkscape to convert if needed. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="canva-l8">
+      <span class="lesson-number">Canva · Lesson 8</span>
+      <div class="lesson-title">Workshop — Make Your Own Logo & Mockup</div>
+      <div class="lesson-desc">Hands-on practice session — each team member designs their own logo and places it into a product mockup from start to finish.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Workshop Steps</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Step 1: Choose a custom canvas size and set up your workspace</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Step 2: Add text, shapes, and elements to build a simple logo</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Step 3: Apply brand colors and fonts</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Step 4: Export as PNG with transparent background</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Step 5: Find a t-shirt mockup template and place your logo</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Step 6: Export finished mockup and share with the group</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showModule(mod) {
+  // Hide all modules
+  document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.top-nav-btn').forEach(b => b.classList.remove('active'));
+  // Show selected
+  const modEl = document.getElementById('module-' + mod);
+  if (modEl) modEl.classList.add('active');
+  // Highlight nav button
+  document.querySelectorAll('.top-nav-btn').forEach(b => {
+    if (b.textContent.trim().toLowerCase().includes(mod) || (mod === 'home' && b.textContent.includes('🏠'))) {
+      b.classList.add('active');
+    }
+  });
+  window.scrollTo(0, 0);
+}
+
+function showLesson(module, lesson, btn) {
+  // Hide all panels in this module
+  const modEl = document.getElementById('module-' + module);
+  modEl.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  modEl.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
+  // Show selected panel
+  document.getElementById(module + '-' + lesson).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
