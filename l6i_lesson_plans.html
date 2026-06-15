@@ -94,10 +94,10 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="top-nav-btn active" onclick="showModule('home')">🏠 Home</button>
   <button class="top-nav-btn" onclick="showModule('inkscape')">Inkscape</button>
   <button class="top-nav-btn" onclick="showModule('canva')">Canva</button>
-  <button class="top-nav-btn coming-soon" disabled>Flatbed UV</button>
-  <button class="top-nav-btn coming-soon" disabled>Roll-to-Roll</button>
-  <button class="top-nav-btn coming-soon" disabled>Lasers</button>
-  <button class="top-nav-btn coming-soon" disabled>DTF Printer</button>
+  <button class="top-nav-btn" onclick="showModule('flatbed')">Flatbed UV</button>
+  <button class="top-nav-btn" onclick="showModule('r2r')">Roll-to-Roll</button>
+  <button class="top-nav-btn" onclick="showModule('lasers')">Lasers</button>
+  <button class="top-nav-btn" onclick="showModule('dtf')">DTF Printer</button>
 </div>
 
 <!-- ============================================================ -->
@@ -122,28 +122,32 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <div class="home-card-lessons">8 lessons · Notes in progress</div>
     </div>
 
-    <div class="home-card coming-soon">
-      <div class="home-card-label">Equipment · Coming Soon</div>
+    <div class="home-card" onclick="showModule('flatbed')">
+      <div class="home-card-label">Equipment · Active</div>
       <div class="home-card-title">Flatbed UV Printer</div>
       <div class="home-card-desc">UJF-6042 MkII — substrates, setup, job running, and maintenance.</div>
+      <div class="home-card-lessons">5 lessons · Awaiting session notes</div>
     </div>
 
-    <div class="home-card coming-soon">
-      <div class="home-card-label">Equipment · Coming Soon</div>
+    <div class="home-card" onclick="showModule('r2r')">
+      <div class="home-card-label">Equipment · Active</div>
       <div class="home-card-title">Roll-to-Roll UV Printer</div>
       <div class="home-card-desc">UCJV300-160 — media loading, print jobs, and cut file creation in CorelDRAW.</div>
+      <div class="home-card-lessons">5 lessons · Awaiting session notes</div>
     </div>
 
-    <div class="home-card coming-soon">
-      <div class="home-card-label">Equipment · Coming Soon</div>
+    <div class="home-card" onclick="showModule('lasers')">
+      <div class="home-card-label">Equipment · Active</div>
       <div class="home-card-title">Laser Engravers</div>
       <div class="home-card-desc">Thunder CO2 Nova 35 and UV Aurora 8 — settings, materials, and techniques.</div>
+      <div class="home-card-lessons">5 lessons · Awaiting session notes</div>
     </div>
 
-    <div class="home-card coming-soon">
-      <div class="home-card-label">Equipment · Coming Soon</div>
+    <div class="home-card" onclick="showModule('dtf')">
+      <div class="home-card-label">Equipment · Active</div>
       <div class="home-card-title">DTF Printer</div>
       <div class="home-card-desc">Audley 24" — operation, film loading, gang sheets, and powder application.</div>
+      <div class="home-card-lessons">5 lessons · Awaiting session notes</div>
     </div>
 
     <div class="note-box" style="margin-top:16px;">Lesson plans are built out as training sessions are completed. Notes are added after each session to build real lesson content over time.</div>
@@ -313,6 +317,12 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="tip-item"><span class="tip-bullet">→</span>Enable <strong>Live Preview</strong> to see changes in real time as you adjust.</div>
         <div class="tip-item"><span class="tip-bullet">→</span>Under the <strong>Options</strong> tab: set <strong>Blend 1 to Normal</strong> and <strong>Blend 2 to Normal</strong>. Then adjust the color sliders to get your desired hue.</div>
       </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* For laser files, pure black (#000000) engraves deepest. Any grey or near-black may engrave lighter than expected — always check your fills before sending to the laser. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* <strong>Edit > Find/Replace</strong> (Ctrl+F) lets you find all objects of a specific fill color and select them all at once — great for batch color changes. <span class="external-label">External</span></div>
+      </div>
     </div>
 
     <div class="panel" id="inkscape-l4">
@@ -328,6 +338,13 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="tip-item"><span class="tip-bullet">→</span>Entering exact HEX values for brand color accuracy</div>
         <div class="tip-item"><span class="tip-bullet">→</span>Ungrouping to access individual elements inside a group</div>
         <div class="tip-item"><span class="tip-bullet">→</span>Double-clicking to enter a group without ungrouping</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* To change a color across an entire design at once, use <strong>Edit > Find/Replace</strong>, switch to the Style tab, and search by fill color value. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* When working with client brand colors, keep a text file with exact HEX values handy — this saves time and prevents color drift across files. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Use <strong>Object > Object Properties</strong> to label grouped objects — helpful when working with complex multi-layer designs. <span class="external-label">External</span></div>
       </div>
     </div>
 
@@ -352,6 +369,13 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="tip-item"><span class="tip-bullet">→</span>Made a mistake? <strong>Ctrl+Z</strong> to undo.</div>
         <div class="tip-item"><span class="tip-bullet">→</span>This is the most important lesson for DTF file prep.</div>
       </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* To release a clip and get your original objects back, go to <strong>Object > Clip > Release</strong>. The clip shape will return to the top of the stack. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* The clipping shape must be on top of the object being clipped — if it's underneath, the clip won't work correctly. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Any shape can be used as a clip — not just rectangles. Circles, stars, or custom paths all work the same way. <span class="external-label">External</span></div>
+      </div>
     </div>
 
     <div class="panel" id="inkscape-l6">
@@ -369,6 +393,12 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="tips-label">Transparency as a Cropping Aid</div>
         <div class="tip-item"><span class="tip-bullet">→</span>You can temporarily use transparency to help with cropping — instead of sending the box to the background (as in Lesson 5), you can fade it to see the design underneath.</div>
         <div class="tip-item"><span class="tip-bullet">→</span><strong>Important:</strong> if you use transparency this way, you must reset it back to 100% before clipping and exporting. Leaving transparency on will affect the final file.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* The master opacity slider (bottom of screen, labeled "Opacity") affects the entire object including its stroke. The A value in fill color only affects the fill. These are two different controls. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Transparency/opacity does not export well to some file formats. Always check your exported file looks correct before sending to production. <span class="external-label">External</span></div>
       </div>
     </div>
 
@@ -441,6 +471,13 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="tip-item"><span class="tip-bullet">→</span>Duplicate the design and delete the stroke from the duplicate to keep the original clean. This adds depth to the design.</div>
         <div class="tip-item"><span class="tip-bullet">→</span>Note: this method has limitations — you cannot edit gaps the same way you can with node editing in Method 1.</div>
       </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* For sticker cut lines, the offset color is typically magenta or a bright color that won't appear in the final print — this helps the cutter software identify the cut path. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Use <strong>Path > Inset</strong> to shrink a shape inward — the opposite of Outset. Useful for creating inner borders or knock-outs. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* After creating an offset with Path > Union, always check for overlapping nodes using the Node tool and clean them up for a smoother cut line. <span class="external-label">External</span></div>
+      </div>
     </div>
 
     <div class="panel" id="inkscape-l9">
@@ -457,6 +494,14 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="tip-item"><span class="tip-bullet">→</span>Exporting as PDF for print-ready files</div>
         <div class="tip-item"><span class="tip-bullet">→</span>DXF export for laser cut files</div>
         <div class="tip-item"><span class="tip-bullet">→</span>Always convert fonts to paths before exporting</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* To convert fonts to paths (so they don't need to be installed on another computer), select all text and go to <strong>Path > Object to Path</strong> before exporting. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* When exporting PNG, use <strong>Export Selection</strong> to export just the selected object rather than the whole canvas — useful for individual sticker designs. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* SVG files exported from Inkscape can be opened directly in CorelDRAW, which is useful for transferring artwork between the two programs. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* DXF is the standard format for laser cutters. When exporting DXF for the laser, make sure all objects are paths (not groups) and strokes represent cut lines. <span class="external-label">External</span></div>
       </div>
     </div>
 
@@ -510,6 +555,13 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="tip-item"><span class="tip-bullet">→</span>Layers panel and page organization</div>
         <div class="tip-item"><span class="tip-bullet">→</span>Zooming, panning, and canvas view options</div>
         <div class="tip-item"><span class="tip-bullet">→</span>Keyboard shortcuts — Ctrl+Z, Ctrl+C, Ctrl+D, T for text</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Press <strong>R</strong> to quickly insert a rectangle, <strong>C</strong> for circle, <strong>L</strong> for line — handy keyboard shortcuts to speed up design work. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Use <strong>Ctrl+A</strong> to select all elements on the canvas at once — useful for moving or grouping everything together. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* The <strong>Position</strong> panel (top right when an element is selected) lets you set exact X/Y coordinates and dimensions — great for precision placement. <span class="external-label">External</span></div>
       </div>
     </div>
 
@@ -566,6 +618,14 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="tip-item"><span class="tip-bullet">→</span>Uploading and using client logos and brand assets</div>
         <div class="tip-item"><span class="tip-bullet">→</span>Setting up a Brand Kit — colors, fonts, logos</div>
         <div class="tip-item"><span class="tip-bullet">→</span>Applying brand kit to keep designs consistent</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Stick to 2 fonts max per design — one for headings, one for body. More than 2 fonts usually looks unprofessional. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Use the <strong>color picker eyedropper</strong> in Canva to sample a color directly from an uploaded photo or logo — great for creating cohesive designs that match client branding. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* When uploading client logos, always ask for a PNG with transparent background — never rely on a JPEG logo as the white box around it will show up in the design. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Brand Kit (Canva Pro) lets you save colors, fonts, and logos so they're always one click away — no more hunting for HEX codes. <span class="external-label">External</span></div>
       </div>
     </div>
 
@@ -630,6 +690,13 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="tip-item"><span class="tip-bullet">→</span>Re-import your original PNG design onto the new page.</div>
         <div class="tip-item"><span class="tip-bullet">→</span>Repeat the Shadow/Outline steps from Method 1.</div>
         <div class="tip-item"><span class="tip-bullet">→</span>This is useful when you want to keep the original design clean on one page and the outlined version on another.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Use <strong>Canva's Blur</strong> effect (Edit > Adjust) to soften background images behind text — makes text more readable without removing the image. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* The <strong>Duotone</strong> effect under Edit is great for turning photos into two-color brand-colored images — useful for cohesive social media graphics. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Hold <strong>Shift</strong> while resizing any element to maintain its original proportions — works on images, shapes, and text boxes. <span class="external-label">External</span></div>
       </div>
     </div>
 
@@ -730,6 +797,424 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="tip-item"><span class="tip-bullet">→</span>Step 5: Find a t-shirt mockup template and place your logo</div>
         <div class="tip-item"><span class="tip-bullet">→</span>Step 6: Export finished mockup and share with the group</div>
       </div>
+
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Keep your workshop logo simple — 1-2 fonts, 2-3 colors max. Simple designs are easier to apply to mockups and look more professional. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Save your design as a Canva template after the workshop — this way you can reuse the layout and update it quickly for future client projects. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* After placing your logo on a mockup, lower the opacity slightly (around 90%) to make it blend more naturally with the shirt texture rather than sitting flat on top. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FLATBED UV MODULE -->
+<!-- ============================================================ -->
+<div class="module" id="module-flatbed">
+  <div class="sub-nav">
+    <button class="sub-nav-btn active" onclick="showLesson('flatbed','overview',this)">Overview</button>
+    <button class="sub-nav-btn" onclick="showLesson('flatbed','l1',this)">1. Introduction</button>
+    <button class="sub-nav-btn" onclick="showLesson('flatbed','l2',this)">2. Substrates</button>
+    <button class="sub-nav-btn" onclick="showLesson('flatbed','l3',this)">3. Setup & Loading</button>
+    <button class="sub-nav-btn" onclick="showLesson('flatbed','l4',this)">4. Running a Job</button>
+    <button class="sub-nav-btn" onclick="showLesson('flatbed','l5',this)">5. Maintenance</button>
+  </div>
+  <div class="content">
+
+    <div class="panel active" id="flatbed-overview">
+      <div class="panel-title">Flatbed UV Printer</div>
+      <div class="panel-desc">Mimaki UJF-6042 MkII — UV printing on rigid and specialty substrates</div>
+      <div class="overview-card">
+        <div class="overview-title">Lesson Outline</div>
+        <div class="overview-item"><span class="overview-num">1</span><span class="overview-text">Introduction — What the flatbed does and when to use it</span></div>
+        <div class="overview-item"><span class="overview-num">2</span><span class="overview-text">Substrates — What materials it can print on</span></div>
+        <div class="overview-item"><span class="overview-num">3</span><span class="overview-text">Setup & Loading — Placing and securing substrates</span></div>
+        <div class="overview-item"><span class="overview-num">4</span><span class="overview-text">Running a Job — Software, settings, and printing</span></div>
+        <div class="overview-item"><span class="overview-num">5</span><span class="overview-text">Maintenance — Daily care and head cleaning</span></div>
+      </div>
+      <div class="note-box">Session notes will be added after training. Tap a lesson above to view external tips.</div>
+    </div>
+
+    <div class="panel" id="flatbed-l1">
+      <span class="lesson-number">Flatbed UV · Lesson 1</span>
+      <div class="lesson-title">Introduction</div>
+      <div class="lesson-desc">Overview of what the Mimaki UJF-6042 MkII does, what makes UV printing unique, and when to use the flatbed vs other equipment.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* UV printing cures instantly with UV light — no drying time needed. This makes it ideal for rigid substrates that can't go through a dryer. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* The flatbed can print on items up to 6" thick and up to 16.5" × 24" in size (UJF-6042 MkII bed size). <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* UV inks are more durable than solvent or latex inks for hard surfaces — they resist scratching, chemicals, and UV fading. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="flatbed-l2">
+      <span class="lesson-number">Flatbed UV · Lesson 2</span>
+      <div class="lesson-title">Substrates</div>
+      <div class="lesson-desc">What the flatbed can and cannot print on — understanding material compatibility and surface preparation.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Compatible substrates include acrylic, wood, metal, glass, leather, tile, foam board, phone cases, and most rigid plastics. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Porous surfaces like uncoated wood may need a primer coat for best ink adhesion. Always test on a sample first. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Never print on materials that off-gas (like some foams) — this can damage the print heads. When in doubt, test with a small piece first. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Dark substrates may need a white ink underbase layer for colors to show correctly. The UJF-6042 MkII supports white ink printing. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="flatbed-l3">
+      <span class="lesson-number">Flatbed UV · Lesson 3</span>
+      <div class="lesson-title">Setup & Loading</div>
+      <div class="lesson-desc">How to correctly place, level, and secure substrates on the flatbed before printing.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Set the head height correctly for every substrate — too close risks head strikes, too far reduces print quality. Always measure and set before printing. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Use registration marks or jigs for repeat print jobs — this saves setup time and ensures consistent placement across batches. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Clean the substrate surface with IPA (isopropyl alcohol) before printing — oils, dust, and fingerprints cause adhesion problems. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="flatbed-l4">
+      <span class="lesson-number">Flatbed UV · Lesson 4</span>
+      <div class="lesson-title">Running a Job</div>
+      <div class="lesson-desc">File setup, RIP software settings, and sending a job to the flatbed printer.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* The UJF-6042 MkII uses RasterLink RIP software. Always set color mode to CMYK and resolution to at least 600dpi for quality output. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Run a test print on a piece of scrap material before committing to the final substrate — especially on expensive or one-of-a-kind items. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* PDF is the preferred file format for the flatbed. PNG files are not compatible — always convert to PDF before sending to RasterLink. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="flatbed-l5">
+      <span class="lesson-number">Flatbed UV · Lesson 5</span>
+      <div class="lesson-title">Maintenance</div>
+      <div class="lesson-desc">Daily and weekly maintenance tasks to keep the flatbed running cleanly and reliably.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Run a nozzle check print daily before starting production — catching clogged nozzles early prevents ruined jobs. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Never let the printer sit idle for more than a few days without running a cleaning cycle — UV ink can dry in the heads. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Keep the print bed clean — UV ink spills cure solid and are difficult to remove. Wipe spills immediately with IPA before they cure. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ROLL-TO-ROLL MODULE -->
+<!-- ============================================================ -->
+<div class="module" id="module-r2r">
+  <div class="sub-nav">
+    <button class="sub-nav-btn active" onclick="showLesson('r2r','overview',this)">Overview</button>
+    <button class="sub-nav-btn" onclick="showLesson('r2r','l1',this)">1. Introduction</button>
+    <button class="sub-nav-btn" onclick="showLesson('r2r','l2',this)">2. Media Loading</button>
+    <button class="sub-nav-btn" onclick="showLesson('r2r','l3',this)">3. Print Settings</button>
+    <button class="sub-nav-btn" onclick="showLesson('r2r','l4',this)">4. Cut Files</button>
+    <button class="sub-nav-btn" onclick="showLesson('r2r','l5',this)">5. Maintenance</button>
+  </div>
+  <div class="content">
+
+    <div class="panel active" id="r2r-overview">
+      <div class="panel-title">Roll-to-Roll UV Printer</div>
+      <div class="panel-desc">Mimaki UCJV300-160 — UV printing and cutting on roll media</div>
+      <div class="overview-card">
+        <div class="overview-title">Lesson Outline</div>
+        <div class="overview-item"><span class="overview-num">1</span><span class="overview-text">Introduction — What the roll-to-roll does and when to use it</span></div>
+        <div class="overview-item"><span class="overview-num">2</span><span class="overview-text">Media Loading — Loading roll media correctly</span></div>
+        <div class="overview-item"><span class="overview-num">3</span><span class="overview-text">Print Settings — RasterLink setup and color management</span></div>
+        <div class="overview-item"><span class="overview-num">4</span><span class="overview-text">Cut Files — Creating contour cut files in CorelDRAW</span></div>
+        <div class="overview-item"><span class="overview-num">5</span><span class="overview-text">Maintenance — Daily care and media handling</span></div>
+      </div>
+      <div class="note-box">Session notes will be added after training. Tap a lesson above to view external tips.</div>
+    </div>
+
+    <div class="panel" id="r2r-l1">
+      <span class="lesson-number">Roll-to-Roll · Lesson 1</span>
+      <div class="lesson-title">Introduction</div>
+      <div class="lesson-desc">Overview of the UCJV300-160 — what it prints, what makes it unique, and when to use it vs the flatbed.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* The UCJV300-160 is a print-and-cut machine — it can print AND contour cut in one pass, which saves significant production time on stickers and decals. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* It prints 64" wide — ideal for banners, vehicle wraps, wall graphics, and large format sticker sheets. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* UV inks on this machine are flexible when cured, making them well-suited for vinyl that needs to contour around curves (like vehicle wraps). <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="r2r-l2">
+      <span class="lesson-number">Roll-to-Roll · Lesson 2</span>
+      <div class="lesson-title">Media Loading</div>
+      <div class="lesson-desc">How to correctly load roll media — tension, alignment, and feed settings.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Always load media with the print side facing out (away from the roll core). Loading it backwards is a common mistake that results in printing on the liner. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* After loading, always run a media feed test and check that edges are aligned before starting a production run. <span class="external-tip external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Skewed media is the most common cause of misaligned cuts — take extra time to get media perfectly straight on load. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="r2r-l3">
+      <span class="lesson-number">Roll-to-Roll · Lesson 3</span>
+      <div class="lesson-title">Print Settings</div>
+      <div class="lesson-desc">RasterLink software setup, color profiles, and resolution settings for different media types.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Always select the correct media profile in RasterLink — using the wrong profile affects ink density, cure, and color accuracy. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Run a color calibration (test print) when switching between media types or after the printer has been idle. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* For banners and large format prints, 360dpi is typically sufficient. For stickers and detailed work, use 600dpi or higher. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="r2r-l4">
+      <span class="lesson-number">Roll-to-Roll · Lesson 4</span>
+      <div class="lesson-title">Cut Files in CorelDRAW</div>
+      <div class="lesson-desc">Creating contour cut lines in CorelDRAW for print-and-cut jobs on the UCJV300-160.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Cut lines must be set to a specific spot color recognized by RasterLink — typically named "CutContour" or similar. Check your RasterLink documentation for the exact name. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Registration marks (crop marks) must be included in your file so the cutter can align to the print accurately. RasterLink can add these automatically. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Add a 2–3mm bleed around your design before creating the cut line — this prevents white edges if the cut is slightly off registration. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="r2r-l5">
+      <span class="lesson-number">Roll-to-Roll · Lesson 5</span>
+      <div class="lesson-title">Maintenance</div>
+      <div class="lesson-desc">Daily and weekly maintenance to keep the UCJV300-160 running reliably.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Run a nozzle check at the start of every day. Never skip this — a clogged nozzle on a long banner run can ruin an expensive job. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Check the cutter blade regularly — a dull blade causes dragging, torn media, and incomplete cuts. Replace blades on schedule. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Keep the cutting strip clean — debris buildup under the blade affects cut depth and accuracy. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- LASERS MODULE -->
+<!-- ============================================================ -->
+<div class="module" id="module-lasers">
+  <div class="sub-nav">
+    <button class="sub-nav-btn active" onclick="showLesson('lasers','overview',this)">Overview</button>
+    <button class="sub-nav-btn" onclick="showLesson('lasers','l1',this)">1. Introduction</button>
+    <button class="sub-nav-btn" onclick="showLesson('lasers','l2',this)">2. Materials</button>
+    <button class="sub-nav-btn" onclick="showLesson('lasers','l3',this)">3. Settings</button>
+    <button class="sub-nav-btn" onclick="showLesson('lasers','l4',this)">4. Techniques</button>
+    <button class="sub-nav-btn" onclick="showLesson('lasers','l5',this)">5. Safety</button>
+  </div>
+  <div class="content">
+
+    <div class="panel active" id="lasers-overview">
+      <div class="panel-title">Laser Engravers</div>
+      <div class="panel-desc">Thunder CO2 Nova 35 (80W) · UV Aurora 8 (5W) · Aurora Lite Fiber Laser</div>
+      <div class="overview-card">
+        <div class="overview-title">Lesson Outline</div>
+        <div class="overview-item"><span class="overview-num">1</span><span class="overview-text">Introduction — Which laser does what and when</span></div>
+        <div class="overview-item"><span class="overview-num">2</span><span class="overview-text">Materials — What each laser can engrave or cut</span></div>
+        <div class="overview-item"><span class="overview-num">3</span><span class="overview-text">Settings — Power, speed, and frequency</span></div>
+        <div class="overview-item"><span class="overview-num">4</span><span class="overview-text">Techniques — Powder coat infill, kinetic sand, pen engraving</span></div>
+        <div class="overview-item"><span class="overview-num">5</span><span class="overview-text">Safety — Ventilation, fire, and eye protection</span></div>
+      </div>
+      <div class="note-box">Session notes will be added after training. Tap a lesson above to view external tips.</div>
+    </div>
+
+    <div class="panel" id="lasers-l1">
+      <span class="lesson-number">Lasers · Lesson 1</span>
+      <div class="lesson-title">Introduction</div>
+      <div class="lesson-desc">Overview of our three laser systems and when to use each one.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* <strong>CO2 lasers</strong> (Thunder Nova 35) are best for wood, acrylic, leather, fabric, and non-metals. They cannot engrave bare metal. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* <strong>Fiber lasers</strong> (Aurora Lite) are designed for metals and hard plastics — great for engraving stainless steel, aluminum, and anodized items. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* <strong>UV lasers</strong> (Aurora 8) use a cold laser process — minimal heat means less burning, ideal for delicate materials like glass, circuit boards, and fine detail work. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="lasers-l2">
+      <span class="lesson-number">Lasers · Lesson 2</span>
+      <div class="lesson-title">Materials</div>
+      <div class="lesson-desc">What each laser can engrave or cut — and what to never put in a laser.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* <strong>Never laser PVC or vinyl</strong> — it releases chlorine gas which is toxic and will corrode the machine. This is non-negotiable. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Polycarbonate (PC) does not laser well — it melts and turns yellow. Use acrylic instead for clear engraved pieces. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Always test on scrap material first — especially for new substrates. Power and speed settings vary widely between material types and thicknesses. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Anodized aluminum engraves beautifully on the fiber laser — the anodized coating vaporizes to reveal the bare metal underneath. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="lasers-l3">
+      <span class="lesson-number">Lasers · Lesson 3</span>
+      <div class="lesson-title">Settings</div>
+      <div class="lesson-desc">Understanding power, speed, frequency, and passes — and how they affect the final output.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* <strong>Power</strong> controls depth/darkness. <strong>Speed</strong> controls how fast the head moves. Lower speed = more time on material = deeper/darker result. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Start with manufacturer-recommended settings and adjust from there — going too high on power can burn through or damage the material. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* For powder coat infill: engrave the substrate first, then apply dry powder coat and use a heavily defocused beam at low power/high speed to melt without vaporizing. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="lasers-l4">
+      <span class="lesson-number">Lasers · Lesson 4</span>
+      <div class="lesson-title">Techniques</div>
+      <div class="lesson-desc">Special production techniques used at L6I — powder coat infill, kinetic sand time molds, and pen engraving.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* For pen engraving, use a jig or fixture to hold pens consistently — alignment is critical for quality and repeatability across a batch. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* When doing powder coat infill, apply the powder immediately after engraving while the substrate is still slightly warm — it helps adhesion. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Always keep a settings log for successful jobs — substrate, power, speed, passes, and result. This saves time on repeat orders. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="lasers-l5">
+      <span class="lesson-number">Lasers · Lesson 5</span>
+      <div class="lesson-title">Safety</div>
+      <div class="lesson-desc">Essential safety rules for operating laser engravers — ventilation, fire risk, and eye protection.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* <strong>Never leave a laser running unattended</strong> — fire risk is real, especially with wood and paper. Always stay nearby during a job. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Always use the exhaust/ventilation system when lasering — fumes from burning materials can be toxic even if they don't smell dangerous. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Wear laser-appropriate eye protection — standard safety glasses are NOT sufficient. Use OD4+ rated eyewear for the specific laser wavelength. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Keep a fire extinguisher within reach at all times when operating the CO2 laser. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DTF PRINTER MODULE -->
+<!-- ============================================================ -->
+<div class="module" id="module-dtf">
+  <div class="sub-nav">
+    <button class="sub-nav-btn active" onclick="showLesson('dtf','overview',this)">Overview</button>
+    <button class="sub-nav-btn" onclick="showLesson('dtf','l1',this)">1. Introduction</button>
+    <button class="sub-nav-btn" onclick="showLesson('dtf','l2',this)">2. Film & Powder</button>
+    <button class="sub-nav-btn" onclick="showLesson('dtf','l3',this)">3. Printing</button>
+    <button class="sub-nav-btn" onclick="showLesson('dtf','l4',this)">4. Pressing</button>
+    <button class="sub-nav-btn" onclick="showLesson('dtf','l5',this)">5. Maintenance</button>
+  </div>
+  <div class="content">
+
+    <div class="panel active" id="dtf-overview">
+      <div class="panel-title">DTF Printer</div>
+      <div class="panel-desc">Audley 24" DTF Printer — direct-to-film transfers for garment decoration</div>
+      <div class="overview-card">
+        <div class="overview-title">Lesson Outline</div>
+        <div class="overview-item"><span class="overview-num">1</span><span class="overview-text">Introduction — What DTF is and how it works</span></div>
+        <div class="overview-item"><span class="overview-num">2</span><span class="overview-text">Film & Powder — Loading film and applying powder</span></div>
+        <div class="overview-item"><span class="overview-num">3</span><span class="overview-text">Printing — Gang sheets, file setup, and print run</span></div>
+        <div class="overview-item"><span class="overview-num">4</span><span class="overview-text">Pressing — Heat press settings and application</span></div>
+        <div class="overview-item"><span class="overview-num">5</span><span class="overview-text">Maintenance — Daily checklist and ink management</span></div>
+      </div>
+      <div class="note-box">Session notes will be added after training. Tap a lesson above to view external tips.</div>
+    </div>
+
+    <div class="panel" id="dtf-l1">
+      <span class="lesson-number">DTF · Lesson 1</span>
+      <div class="lesson-title">Introduction</div>
+      <div class="lesson-desc">What DTF printing is, how it compares to other decoration methods, and what it's best used for.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* DTF works on almost any fabric — cotton, polyester, blends, nylon, leather. No pretreatment needed unlike DTG printing. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* DTF transfers are printed in reverse on the film — white ink goes down first, then colors on top. This is the opposite of most printing. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* DTF is ideal for small runs, multi-color designs, and designs with fine detail or gradients — areas where screen printing becomes expensive. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="dtf-l2">
+      <span class="lesson-number">DTF · Lesson 2</span>
+      <div class="lesson-title">Film & Powder</div>
+      <div class="lesson-desc">Loading DTF film correctly and applying hot melt powder for proper adhesion.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* We use Lone Star DTF 24" × 328ft Double Side Instant Hot Peel film. Reorder when down to 2 rolls. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Apply powder immediately after printing while the ink is still wet — waiting too long causes poor adhesion. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Do not overapply powder — excess powder causes a thick, stiff feel on the garment. A light, even coat is all you need. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* We order powder from Buckets of Ink — typical order is 10 × 1kg bags. Reorder when supplies get low. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="dtf-l3">
+      <span class="lesson-number">DTF · Lesson 3</span>
+      <div class="lesson-title">Printing</div>
+      <div class="lesson-desc">Setting up gang sheets, file requirements, and running a print job on the Audley 24" DTF printer.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Gang sheets maximize film use — nest designs as close as possible with a 0.25" gap between each one to avoid bleed-over when cutting. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Always use PNG files with transparent backgrounds for DTF — any white in the background will print as white ink on the transfer. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Gently shake white ink bottles before printing — white ink settles quickly and inconsistent mixing causes color issues. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* We use Inkbank 5602 white ink (from DTG Printer Parts) — more opaque than the 5600 series, which is why we prefer it for white. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="dtf-l4">
+      <span class="lesson-number">DTF · Lesson 4</span>
+      <div class="lesson-title">Pressing</div>
+      <div class="lesson-desc">Heat press settings, peel technique, and application tips for DTF transfers.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Standard DTF press settings: 325°F (163°C), medium pressure, 15 seconds. Always verify with a test press on scrap fabric first. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* We use instant hot peel film — peel immediately while still hot. Waiting for it to cool causes the transfer to stick back to the film. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* After peeling, do a second press with a Teflon sheet for 5–10 seconds — this improves washability and gives a smoother finish. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Pre-press the garment for 3–5 seconds before applying the transfer — removes moisture and wrinkles for better adhesion. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="dtf-l5">
+      <span class="lesson-number">DTF · Lesson 5</span>
+      <div class="lesson-title">Maintenance</div>
+      <div class="lesson-desc">Daily maintenance tasks to keep the Audley DTF printer running cleanly — see also the Printer Maintenance Checklist.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Refer to the daily printer maintenance checklist for full before/during printing procedures. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* White ink requires more frequent maintenance than color inks — it settles and clogs heads faster. Never skip white ink agitation. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Check waste ink tank levels daily — overflow causes ink to back up into the machine and damage components. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* We order colored inks from DTF Superstore (Gilbert local pickup) and white ink from DTG Printer Parts (ships 2-day). Reorder before running out. <span class="external-label">External</span></div>
+      </div>
     </div>
 
   </div>
@@ -737,15 +1222,12 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 
 <script>
 function showModule(mod) {
-  // Hide all modules
   document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
   document.querySelectorAll('.top-nav-btn').forEach(b => b.classList.remove('active'));
-  // Show selected
   const modEl = document.getElementById('module-' + mod);
   if (modEl) modEl.classList.add('active');
-  // Highlight nav button
   document.querySelectorAll('.top-nav-btn').forEach(b => {
-    if (b.textContent.trim().toLowerCase().includes(mod) || (mod === 'home' && b.textContent.includes('🏠'))) {
+    if (b.getAttribute('onclick') === "showModule('" + mod + "')") {
       b.classList.add('active');
     }
   });
