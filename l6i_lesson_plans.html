@@ -983,15 +983,30 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 
     <div class="panel" id="r2r-l4">
       <span class="lesson-number">Roll-to-Roll · Lesson 4</span>
-      <div class="lesson-title">Cut Files in CorelDRAW</div>
-      <div class="lesson-desc">Creating contour cut lines in CorelDRAW for print-and-cut jobs on the UCJV300-160.</div>
+      <div class="lesson-title">Cut Files in CorelDRAW & RasterLink</div>
+      <div class="lesson-desc">Creating contour cut lines in CorelDRAW and setting up cut tools in RasterLink for kiss cuts, die cuts, and tabbed stickers.</div>
       <div class="notes-label">Session Notes</div>
-      <div class="notes-box">Notes will be added here after training...</div>
+      <div class="notes-box has-notes">
+        <strong>Our Cut Tool Setup in RasterLink:</strong><br>
+        Tool 2 — Die Cut (Economy & Premium vinyl)<br>
+        Tool 3 — Kiss Cut (Economy, Premium, Glossy vinyl)<br>
+        Tool 4 — Holographic vinyl<br><br>
+        <strong>Tabbed Stickers (Two-Cut Method):</strong><br>
+        Tabbed stickers require two separate cuts — a kiss cut (cuts through the sticker layer only) and a die cut (cuts all the way through including the backing).<br><br>
+        The kiss cut must always run before the die cut.<br><br>
+        <strong>✅ Confirmed correct layer order in CorelDRAW:</strong><br>
+        • Kiss cut line (top)<br>
+        • Image (middle)<br>
+        • Die cut line (bottom)<br><br>
+        <strong>⚠️ Known issue — cuts running flipped:</strong><br>
+        Both cuts are firing in the correct order but the depths are swapped — kiss cut is going too deep and die cut is too shallow (or vice versa). This is a blade depth setting issue in RasterLink Tool 2 and Tool 3, not a layer order problem. Check and adjust blade depth for each tool to resolve.
+      </div>
       <div class="tips-section">
         <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
-        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Cut lines must be set to a specific spot color recognized by RasterLink — typically named "CutContour" or similar. Check your RasterLink documentation for the exact name. <span class="external-label">External</span></div>
-        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Registration marks (crop marks) must be included in your file so the cutter can align to the print accurately. RasterLink can add these automatically. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Cut lines must be set to a specific spot color recognized by RasterLink — check your RasterLink documentation for the exact spot color name required for each tool. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Registration marks must be included in your file so the cutter can align to the print accurately. RasterLink can add these automatically. <span class="external-label">External</span></div>
         <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Add a 2–3mm bleed around your design before creating the cut line — this prevents white edges if the cut is slightly off registration. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* For kiss cuts, blade depth is critical — too deep cuts through the backing, too shallow doesn't cut through the sticker layer. Test on scrap first. <span class="external-label">External</span></div>
       </div>
     </div>
 
@@ -1145,15 +1160,26 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
 
     <div class="panel" id="dtf-l1">
       <span class="lesson-number">DTF · Lesson 1</span>
-      <div class="lesson-title">Introduction</div>
-      <div class="lesson-desc">What DTF printing is, how it compares to other decoration methods, and what it's best used for.</div>
+      <div class="lesson-title">Introduction — What is DTF?</div>
+      <div class="lesson-desc">DTF (Direct to Film) is a garment decoration method where a design is printed onto a special film, coated with adhesive powder, then heat pressed onto fabric. It has become one of the most popular decoration methods because of its versatility and durability.</div>
       <div class="notes-label">Session Notes</div>
       <div class="notes-box">Notes will be added here after training...</div>
+      <div class="tips-section">
+        <div class="tips-label">How DTF Works — The Basic Process</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>1. Print:</strong> The design is printed in reverse onto DTF film — white ink is laid down first as a base, then the colors print on top of the white.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>2. Powder:</strong> While the ink is still wet, hot melt adhesive powder is applied over the entire printed area and the excess is shaken off.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>3. Cure:</strong> The film goes through a dryer/oven (or heat press) to melt the powder into the ink, creating a bonded transfer ready to apply.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span><strong>4. Press:</strong> The transfer is heat pressed onto the garment, the film is peeled away (hot peel), and the design is left behind.</div>
+      </div>
       <div class="tips-section">
         <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
         <div class="tip-item external-tip"><span class="tip-bullet">→</span>* DTF works on almost any fabric — cotton, polyester, blends, nylon, leather. No pretreatment needed unlike DTG printing. <span class="external-label">External</span></div>
         <div class="tip-item external-tip"><span class="tip-bullet">→</span>* DTF transfers are printed in reverse on the film — white ink goes down first, then colors on top. This is the opposite of most printing. <span class="external-label">External</span></div>
         <div class="tip-item external-tip"><span class="tip-bullet">→</span>* DTF is ideal for small runs, multi-color designs, and designs with fine detail or gradients — areas where screen printing becomes expensive. <span class="external-label">External</span></div>
+        <div class="tip-item"><span class="tip-bullet">→</span>"Small run" for DTF can still mean several hundred pieces — it's not just for one-offs. DTF stays cost-effective at volume in a way screen printing setup costs don't.</div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Unlike screen printing, DTF has no setup fees or screen costs — making it cost-effective even for single-piece orders. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* DTF transfers can be stored and applied later — unlike DTG (direct to garment) which prints straight onto the shirt and must be done per item. <span class="external-label">External</span></div>
+        <div class="tip-item"><span class="tip-bullet">→</span>DTF isn't limited to fabric — it can even go on cardboard or other rigid materials, as long as it fits in the heat press and can handle the heat/pressure.</div>
       </div>
     </div>
 
