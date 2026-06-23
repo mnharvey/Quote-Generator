@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phoenix Strategy — Market Expansion</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&family=Courier+Prime:wght@400;700&display=swap');
+:root{--red:#B03028;--gold:#C8A84B;--navy:#1A1A2E;--navy-mid:#16213e;--charcoal:#2a2a2a;--gray:#555;--mid-gray:#ddd;--light-gray:#f5f4f1;--white:#fff;--green:#1A6B3C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--light-gray);color:var(--charcoal);font-size:13px;}
+.topnav{background:var(--navy-mid);padding:0 16px;display:flex;align-items:center;border-bottom:3px solid var(--red);}
+.nav-btn{padding:12px 18px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-3px;color:rgba(255,255,255,0.45);font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.nav-btn.active{color:var(--gold);border-bottom-color:var(--red);}
+.print-btn{background:var(--red);color:var(--white);border:none;padding:7px 16px;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-left:auto;}
+.panel{display:none;}.panel.active{display:block;}
+.page{max-width:900px;margin:0 auto;background:var(--white);box-shadow:0 2px 16px rgba(0,0,0,0.1);}
+.hdr{background:var(--navy);}
+.hdr-stripe{height:4px;background:linear-gradient(90deg,var(--red),var(--gold));}
+.hdr-body{padding:18px 28px 14px;}
+.hdr-label{font-family:'Oswald',sans-serif;font-size:9px;color:rgba(255,255,255,0.35);letter-spacing:3px;text-transform:uppercase;margin-bottom:3px;}
+.hdr-title{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:var(--white);text-transform:uppercase;}
+.hdr-title span{color:var(--gold);}
+.hdr-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;font-style:italic;}
+.hdr-meta{background:rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.07);padding:9px 28px;display:flex;gap:20px;flex-wrap:wrap;}
+.hm{font-size:10px;color:rgba(255,255,255,0.4);}
+.hm strong{display:block;font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.body{padding:20px 28px;}
+.section{margin-bottom:20px;}
+.sh{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--white);background:var(--navy);letter-spacing:2px;text-transform:uppercase;padding:3px 9px;display:inline-block;margin-bottom:9px;}
+.sh-red{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--white);background:var(--red);letter-spacing:2px;text-transform:uppercase;padding:3px 9px;display:inline-block;margin-bottom:9px;}
+.sh-gold{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--navy);background:var(--gold);letter-spacing:2px;text-transform:uppercase;padding:3px 9px;display:inline-block;margin-bottom:9px;}
+p{font-size:12.5px;line-height:1.7;margin-bottom:9px;}
+.callout{background:rgba(200,168,75,0.09);border-left:3px solid var(--gold);padding:10px 14px;margin-bottom:14px;font-size:12.5px;line-height:1.6;}
+.callout strong{color:var(--navy);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.mcard{border:1px solid var(--mid-gray);border-top:3px solid var(--red);padding:13px 15px;}
+.mcard.gold{border-top-color:var(--gold);}
+.mc-title{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;margin-bottom:3px;}
+.mc-stat{font-family:'Courier Prime',monospace;font-size:11px;color:var(--gray);margin-bottom:7px;padding-bottom:6px;border-bottom:1px solid var(--mid-gray);}
+.mc-li{display:flex;gap:6px;padding:3px 0;font-size:11.5px;color:var(--charcoal);line-height:1.4;}
+.mc-dot{color:var(--red);font-size:9px;margin-top:2px;flex-shrink:0;}
+.seg-tbl{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:12px;}
+.seg-tbl th{font-family:'Oswald',sans-serif;font-size:8px;font-weight:700;color:var(--white);background:var(--navy);letter-spacing:1.5px;text-transform:uppercase;padding:6px 10px;text-align:left;}
+.seg-tbl td{padding:7px 10px;border-bottom:1px solid var(--mid-gray);vertical-align:top;line-height:1.5;}
+.seg-tbl tr:last-child td{border-bottom:none;}
+.seg-tbl tr:nth-child(even) td{background:rgba(0,0,0,0.02);}
+.db{background:var(--navy);padding:14px 18px;margin-bottom:16px;}
+.db-label{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.db-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.db-item{background:rgba(255,255,255,0.05);padding:9px 11px;}
+.db-t{font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;color:var(--white);text-transform:uppercase;margin-bottom:2px;}
+.db-d{font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5;}
+.al{list-style:none;}
+.al-item{display:grid;grid-template-columns:22px 1fr auto;gap:9px;padding:7px 0;border-bottom:1px solid var(--mid-gray);align-items:start;}
+.al-item:last-child{border-bottom:none;}
+.al-num{font-family:'Courier Prime',monospace;font-size:12px;font-weight:700;color:var(--gold);}
+.al-t{font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;color:var(--navy);text-transform:uppercase;margin-bottom:1px;}
+.al-d{font-size:11px;color:var(--gray);line-height:1.4;}
+.al-own{font-family:'Oswald',sans-serif;font-size:8px;font-weight:700;color:var(--red);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
+.badge{font-family:'Oswald',sans-serif;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;display:inline-block;}
+.b-red{background:var(--red);color:var(--white);}
+.b-gold{background:var(--gold);color:var(--navy);}
+.b-navy{background:var(--navy);color:var(--gold);}
+.met-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.met-tbl th{font-family:'Oswald',sans-serif;font-size:8px;font-weight:700;color:var(--white);background:var(--red);letter-spacing:1.5px;text-transform:uppercase;padding:6px 10px;text-align:left;}
+.met-tbl td{padding:6px 10px;border-bottom:1px solid var(--mid-gray);}
+.met-tbl tr:last-child td{border-bottom:none;}
+.met-tbl tr:nth-child(even) td{background:rgba(0,0,0,0.02);}
+.summary{background:var(--light-gray);padding:10px 20px;display:flex;gap:16px;border-bottom:1px solid var(--mid-gray);flex-wrap:wrap;}
+.sum-item{text-align:center;}
+.sum-val{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--navy);}
+.sum-label{font-size:9px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;}
+.seg-hdr{padding:7px 18px;display:flex;justify-content:space-between;align-items:center;}
+.seg-hdr.red{background:var(--red);}
+.seg-hdr.navy{background:var(--navy);}
+.seg-hdr.gold{background:rgba(200,168,75,0.15);border-left:4px solid var(--gold);}
+.seg-hdr.green{background:var(--green);}
+.seg-hdr.dk{background:#2a2a2a;}
+.seg-title{font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.seg-hdr.red .seg-title,.seg-hdr.navy .seg-title,.seg-hdr.green .seg-title,.seg-hdr.dk .seg-title{color:var(--white);}
+.seg-hdr.gold .seg-title{color:var(--navy);}
+.seg-note{font-size:10px;}
+.seg-hdr.red .seg-note,.seg-hdr.navy .seg-note,.seg-hdr.green .seg-note,.seg-hdr.dk .seg-note{color:rgba(255,255,255,0.65);}
+.seg-hdr.gold .seg-note{color:var(--gray);}
+.tgt-tbl{width:100%;border-collapse:collapse;font-size:11.5px;}
+.tgt-tbl th{font-family:'Oswald',sans-serif;font-size:8px;font-weight:700;color:var(--white);background:rgba(26,26,46,0.9);letter-spacing:1.5px;text-transform:uppercase;padding:5px 9px;text-align:left;}
+.tgt-tbl td{padding:7px 9px;border-bottom:1px solid var(--mid-gray);vertical-align:top;line-height:1.45;}
+.tgt-tbl tr:last-child td{border-bottom:none;}
+.tgt-tbl tr:hover td{background:rgba(200,168,75,0.04);}
+.t-name{font-weight:600;color:var(--navy);font-size:12px;}
+.t-addr{font-size:10px;color:var(--gray);margin-top:1px;}
+.t-contact{font-size:10px;color:var(--red);margin-top:1px;font-weight:600;}
+.t-pitch{font-size:11px;color:var(--charcoal);line-height:1.5;}
+.t-phone{font-size:10.5px;color:var(--gray);}
+.sel{width:100%;border:1px solid var(--mid-gray);padding:3px 4px;font-size:10px;font-family:'Source Sans 3',sans-serif;color:var(--charcoal);background:var(--white);}
+.inp{width:100%;border:1px solid var(--mid-gray);padding:3px 4px;font-size:10px;font-family:'Source Sans 3',sans-serif;color:var(--charcoal);}
+.brief-footer{background:var(--navy);padding:9px 28px;display:flex;justify-content:space-between;align-items:center;}
+.bf-l{font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--white);}
+.bf-l span{color:var(--gold);}
+.bf-r{font-size:10px;color:rgba(255,255,255,0.4);}
+@media print{.topnav{display:none;}body{background:white;}.page{box-shadow:none;}.panel{display:block!important;}.sel,.inp{border:1px solid #ccc;}@page{margin:0.4in;size:letter;}}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <button class="nav-btn active" onclick="show('brief',this)">Strategy</button>
+  <button class="nav-btn" onclick="show('targets',this)">Target List</button>
+  <button class="nav-btn" onclick="show('ideas',this)">Ideas & Pushback</button>
+  <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<!-- TAB 1: STRATEGY BRIEF -->
+<div id="brief" class="panel active">
+<div class="page">
+  <div class="hdr">
+    <div class="hdr-stripe"></div>
+    <div class="hdr-body">
+      <div class="hdr-label">Team Strategy Doc · Living Document · Confidential</div>
+      <div class="hdr-title">Phoenix <span>Strategy</span></div>
+      <div class="hdr-sub">DTF Transfers & Custom Stickers — B2B & Wholesale Growth</div>
+    </div>
+    <div class="hdr-meta">
+      <div class="hm"><strong>Status</strong>Open for Input · Updated Continuously</div>
+      <div class="hm"><strong>Focus Products</strong>DTF Transfers · Custom Stickers</div>
+      <div class="hm"><strong>Markets</strong>Ahwatukee · Chandler, AZ</div>
+      <div class="hm"><strong>Owner</strong>Whole Team — Add Your Ideas</div>
+    </div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="sh-gold">Objective</div>
+      <div class="callout"><strong>Drive B2B and wholesale sales of DTF transfers and custom stickers into Ahwatukee and Chandler</strong> — two adjacent high-income Phoenix metro markets with strong small business, sports leagues, schools, and community event activity. This is a living strategy doc — everyone on the team is encouraged to challenge it, add to it, and push it further.</div>
+    </div>
+
+    <div class="section">
+      <div class="sh">Why These Two Markets</div>
+      <div class="two-col">
+        <div class="mcard">
+          <div class="mc-title">Ahwatukee</div>
+          <div class="mc-stat">~88,500 residents · Avg HHI $96,700 · Phoenix Village</div>
+          <div class="mc-li"><div class="mc-dot">▸</div>Highest avg household income in the target area</div>
+          <div class="mc-li"><div class="mc-dot">▸</div>Year-round sports leagues for all ages</div>
+          <div class="mc-li"><div class="mc-dot">▸</div>State-of-the-art YMCA + multiple fitness centers</div>
+          <div class="mc-li"><div class="mc-dot">▸</div>Kyrene School District — 25 schools, all rated excelling</div>
+          <div class="mc-li"><div class="mc-dot">▸</div>Ahwatukee Foothills Chamber — 32 years, 16,500+ employees</div>
+        </div>
+        <div class="mcard gold">
+          <div class="mc-title">Chandler</div>
+          <div class="mc-stat">"Community of Innovation" · Major Phoenix suburb</div>
+          <div class="mc-li"><div class="mc-dot">▸</div>City-run adult leagues — softball, basketball, volleyball, pickleball</div>
+          <div class="mc-li"><div class="mc-dot">▸</div>All-City Softball Tournament at Snedigar Sportsplex</div>
+          <div class="mc-li"><div class="mc-dot">▸</div>Ostrich Festival — massive annual community event</div>
+          <div class="mc-li"><div class="mc-dot">▸</div>Dense small business corridor + Intel, PayPal, Northrop campuses</div>
+          <div class="mc-li"><div class="mc-dot">▸</div>Chandler School Boosters — direct access to all school spirit wear</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sh-red">Target Segments — DTF & Stickers</div>
+      <table class="seg-tbl">
+        <thead><tr><th>Segment</th><th>Product Fit</th><th>Entry Point</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Screen Printers & Decorators</strong><br><span style="font-size:11px;color:var(--gray);">Local shops, embroidery, wholesalers</span></td><td>Gang sheets · wholesale DTF by the foot · Transfers42 auto-builder</td><td>Cold call · Google Maps · Instagram</td><td><span class="badge b-red">High</span></td></tr>
+          <tr><td><strong>Sports Leagues & Teams</strong><br><span style="font-size:11px;color:var(--gray);">Adult leagues, youth leagues, tournaments</span></td><td>DTF transfers for jerseys · stickers for helmets, water bottles, swag</td><td>Chandler Parks & Rec · Ahwatukee Rec Center</td><td><span class="badge b-red">High</span></td></tr>
+          <tr><td><strong>Restaurants & Retail</strong><br><span style="font-size:11px;color:var(--gray);">Local owner-operated businesses</span></td><td>DTF for staff apparel · die-cut stickers for branding</td><td>Walk-in · Chamber events</td><td><span class="badge b-gold">Medium</span></td></tr>
+          <tr><td><strong>Schools & Booster Clubs</strong><br><span style="font-size:11px;color:var(--gray);">Kyrene District · Tempe Union HS · Chandler USD</span></td><td>Spirit wear transfers · event stickers · tournament banners</td><td>Chandler School Boosters · Athletic directors</td><td><span class="badge b-gold">Medium</span></td></tr>
+          <tr><td><strong>Corporate & Real Estate</strong><br><span style="font-size:11px;color:var(--gray);">Intel, PayPal, Northrop · Chandler realtors</span></td><td>Branded apparel · promo stickers · onboarding kits via Promo with Grace</td><td>Chamber networking · LinkedIn</td><td><span class="badge b-navy">Long Term</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="sh-gold">Execution Workstreams</div>
+      <div class="db">
+        <div class="db-label">Market Expansion Tasks — Open to Whoever Picks Them Up</div>
+        <div class="db-grid">
+          <div class="db-item"><div class="db-t">Market Research</div><div class="db-d">Work from the Target List tab. Add businesses, verify contact info, assign priorities. Goal: 30+ qualified contacts.</div></div>
+          <div class="db-item"><div class="db-t">Outreach Campaign</div><div class="db-d">Draft and send cold outreach emails and DMs. Log every contact. Follow up week 2.</div></div>
+          <div class="db-item"><div class="db-t">Wholesale Pitch</div><div class="db-d">Identify screen printers and decorators as Transfers42 wholesale customers. Point them to the gang sheet auto-builder.</div></div>
+          <div class="db-item"><div class="db-t">KPI Tracking</div><div class="db-d">Track outreach, responses, quotes, and orders weekly. Feeds into the business plan Execution section.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sh">Immediate Action Items</div>
+      <ul class="al">
+        <li class="al-item"><div class="al-num">01</div><div><div class="al-t">Join Ahwatukee Foothills Chamber</div><div class="al-d">Attend next networking event before cold calling. ahwatukeechamber.com</div></div><div class="al-own">Open</div></li>
+        <li class="al-item"><div class="al-num">02</div><div><div class="al-t">Contact Chandler Parks & Rec — Adult Sports</div><div class="al-d">Ask about becoming preferred vendor for league shirts and tournament materials.</div></div><div class="al-own">Open</div></li>
+        <li class="al-item"><div class="al-num">03</div><div><div class="al-t">Contact Chandler School Boosters</div><div class="al-d">Direct line to spirit wear across all Chandler USD schools. (480) 812-7687</div></div><div class="al-own">Open</div></li>
+        <li class="al-item"><div class="al-num">04</div><div><div class="al-t">Work through Target List — 23 identified, goal 30+</div><div class="al-d">Use the Target List tab. Update status and notes as you go.</div></div><div class="al-own">Open</div></li>
+        <li class="al-item"><div class="al-num">05</div><div><div class="al-t">Draft outreach email templates</div><div class="al-d">Two versions: wholesale/decorator pitch (Transfers42 gang sheets) and sports/schools pitch (custom shirts + stickers).</div></div><div class="al-own">Open</div></li>
+        <li class="al-item"><div class="al-num">06</div><div><div class="al-t">Set weekly reporting cadence</div><div class="al-d">Contacts · responses · quotes · orders. Report to Matt weekly.</div></div><div class="al-own">Team</div></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="sh-red">30-Day Success Metrics</div>
+      <table class="met-tbl">
+        <thead><tr><th>Metric</th><th>Target</th></tr></thead>
+        <tbody>
+          <tr><td>Businesses contacted</td><td>30 minimum</td></tr>
+          <tr><td>Response rate</td><td>15–20%</td></tr>
+          <tr><td>Quotes built</td><td>5+</td></tr>
+          <tr><td>New orders closed</td><td>2+</td></tr>
+          <tr><td>Wholesale accounts identified</td><td>3+ screen printers/decorators</td></tr>
+          <tr><td>Transfers42 wholesale signups</td><td>1+</td></tr>
+          <tr><td>School/booster club contacts made</td><td>5+</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <div class="brief-footer">
+    <div class="bf-l">LitTLE 6 <span>Industries LLC</span> · Internal · Confidential</div>
+    <div class="bf-r">Phoenix Strategy · Living Document</div>
+  </div>
+</div>
+</div>
+
+<!-- TAB 2: TARGET LIST -->
+<div id="targets" class="panel">
+<div class="page">
+  <div class="hdr">
+    <div class="hdr-stripe"></div>
+    <div class="hdr-body">
+      <div class="hdr-label">Phoenix Strategy · Target List · Confidential</div>
+      <div class="hdr-title">Phoenix <span>Target List</span></div>
+      <div class="hdr-sub">DTF Transfers & Custom Stickers — Open to Whoever's Working It</div>
+    </div>
+    <div class="hdr-meta">
+      <div class="hm"><strong>Total Targets</strong>23 identified · goal 30+</div>
+      <div class="hm"><strong>Segments</strong>Screen Printers · Sports · Restaurants · Schools · Corporate</div>
+      <div class="hm"><strong>30-Day Goal</strong>30 contacts · 5 quotes · 2 orders</div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <div class="sum-item"><div class="sum-val">7</div><div class="sum-label">Screen Printers</div></div>
+    <div class="sum-item"><div class="sum-val">4</div><div class="sum-label">Sports / Community</div></div>
+    <div class="sum-item"><div class="sum-val">5</div><div class="sum-label">Restaurants</div></div>
+    <div class="sum-item"><div class="sum-val">4</div><div class="sum-label">Schools / Boosters</div></div>
+    <div class="sum-item"><div class="sum-val">3</div><div class="sum-label">Corporate</div></div>
+    <div class="sum-item"><div class="sum-val" id="contacted-count">0</div><div class="sum-label">Contacted</div></div>
+    <div class="sum-item"><div class="sum-val" id="responded-count">0</div><div class="sum-label">Responded</div></div>
+    <div class="sum-item"><div class="sum-val" id="closed-count">0</div><div class="sum-label">Closed</div></div>
+  </div>
+
+  <!-- SEG 1 -->
+  <div class="seg-hdr red"><div class="seg-title">Segment 1 — Screen Printers & Decorators</div><div class="seg-note">Lead with Transfers42 gang sheet auto-builder · wholesale DTF pricing</div></div>
+  <table class="tgt-tbl">
+    <thead><tr><th>#</th><th>Business</th><th>Pitch</th><th>Pri</th><th>Phone</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><div class="t-name">LogoWear Express</div><div class="t-addr">3245 N Arizona Ave Ste 8, Chandler · ⭐4.9</div><div class="t-contact">Ask for Melissa</div></td><td><div class="t-pitch">High-volume embroidery + screen printing. Pitch gang sheets for small runs not worth burning screens.</div></td><td><span class="badge b-red">High</span></td><td><div class="t-phone">480-545-5900</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>2</td><td><div class="t-name">SamorI Printing & Outfitters</div><div class="t-addr">275 W Warner Rd Ste 3, Chandler · ⭐4.9</div></td><td><div class="t-pitch">Newer shop doing custom jerseys. Good candidate for adding DTF wholesale. Pitch auto-builder.</div></td><td><span class="badge b-red">High</span></td><td><div class="t-phone">480-200-8167</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>3</td><td><div class="t-name">Print Collective</div><div class="t-addr">1171 N Fiesta Blvd #4, Gilbert · ⭐5.0</div><div class="t-contact">Ask for Brent</div></td><td><div class="t-pitch">Perfect 5-star, does stickers and shirts. Adjacent to Chandler. Brent is the owner — call directly. Pitch DTF + sticker wholesale.</div></td><td><span class="badge b-red">High</span></td><td><div class="t-phone">602-789-3697</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>4</td><td><div class="t-name">Snider Custom Apparel</div><div class="t-addr">219 S William Dillard Dr, Gilbert · ⭐4.9</div><div class="t-contact">Ask for Lisa</div></td><td><div class="t-pitch">High-volume screen print + embroidery. Lisa runs it. Does bulk and small lots. Gang sheets for small runs.</div></td><td><span class="badge b-red">High</span></td><td><div class="t-phone">480-962-4599</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>5</td><td><div class="t-name">Inked Xpressions</div><div class="t-addr">7008 S 45th Way, Phoenix · ⭐5.0</div><div class="t-contact">Ask for Jose (owner)</div></td><td><div class="t-pitch">Small custom apparel shop, fast turnaround. Jose is the owner. Perfect DTF wholesale candidate — no minimums resonates with his model.</div></td><td><span class="badge b-red">High</span></td><td><div class="t-phone">602-639-3466</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>6</td><td><div class="t-name">Big Stitch Embroidery</div><div class="t-addr">1700 E Elliot Rd #14, Tempe · ⭐4.8</div></td><td><div class="t-pitch">17-year established embroidery shop. Embroidery shops regularly outsource DTF for complex color designs. Perfect wholesale fit.</div></td><td><span class="badge b-red">High</span></td><td><div class="t-phone">480-345-6337</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>7</td><td><div class="t-name">SHIRT52</div><div class="t-addr">1791 W University Dr #163, Tempe · ⭐4.9</div><div class="t-contact">Ask for Zach</div></td><td><div class="t-pitch">High-volume shirt decorator, open 7 days. Does sports teams and clubs. Pitch as their DTF transfer supplier.</div></td><td><span class="badge b-red">High</span></td><td><div class="t-phone">866-527-4478</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+    </tbody>
+  </table>
+
+  <!-- SEG 2 -->
+  <div class="seg-hdr navy"><div class="seg-title">Segment 2 — Sports Leagues & Community Centers</div><div class="seg-note">Recurring seasonal orders — shirts + stickers every season</div></div>
+  <table class="tgt-tbl">
+    <thead><tr><th>#</th><th>Business</th><th>Pitch</th><th>Pri</th><th>Phone</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>8</td><td><div class="t-name">Chandler Adult Sports / Parks & Rec</div><div class="t-addr">Tumbleweed Recreation Center, Chandler</div></td><td><div class="t-pitch">City-run softball, basketball, volleyball, pickleball — 4 seasons. Ask about becoming preferred vendor for league shirts and tournament materials. Multiple teams = recurring revenue.</div></td><td><span class="badge b-red">High</span></td><td><div class="t-phone">chandleraz.gov</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>9</td><td><div class="t-name">Ahwatukee Recreation Center</div><div class="t-addr">5001 E Cheyenne Dr Ste 101, Phoenix · ⭐4.5</div></td><td><div class="t-pitch">Major rec center — pool, gym, courts, year-round leagues. Ask for activities/events coordinator. Staff shirts, event banners, league shirts.</div></td><td><span class="badge b-red">High</span></td><td><div class="t-phone">480-893-2549</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>10</td><td><div class="t-name">Pecos Community Center</div><div class="t-addr">17010 S 48th St, Phoenix · ⭐4.6 (722)</div></td><td><div class="t-pitch">Huge facility — pickleball, soccer, baseball, pool, youth + senior programs. Staff shirts, event stickers, program banners.</div></td><td><span class="badge b-gold">Medium</span></td><td><div class="t-phone">602-495-5500</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>11</td><td><div class="t-name">Ahwatukee Community Swim, Tennis & Event Center</div><div class="t-addr">4700 E Warner Rd, Phoenix · ⭐3.9</div><div class="t-contact">Ask for Susan or Carolina</div></td><td><div class="t-pitch">Event venue + sports club. Hosts weddings and community events. Staff shirts + event signage. Lower rating = stand out with great service.</div></td><td><span class="badge b-gold">Medium</span></td><td><div class="t-phone">480-893-3431</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+    </tbody>
+  </table>
+
+  <!-- SEG 3 -->
+  <div class="seg-hdr gold"><div class="seg-title">Segment 3 — Restaurants & Local Business</div><div class="seg-note">Staff shirts · stickers · event banners · Chamber entry point</div></div>
+  <table class="tgt-tbl">
+    <thead><tr><th>#</th><th>Business</th><th>Pitch</th><th>Pri</th><th>Phone</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>12</td><td><div class="t-name">Ahwatukee Foothills Chamber of Commerce</div><div class="t-addr">Ahwatukee · 32 years · 16,500+ employees</div></td><td><div class="t-pitch">Entry point to all Ahwatukee businesses. Attend networking event first. Membership opens every other door on this list.</div></td><td><span class="badge b-red">High</span></td><td><div class="t-phone">ahwatukeechamber.com</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>13</td><td><div class="t-name">Caffe Boa</div><div class="t-addr">5063 E Elliot Rd, Phoenix · ⭐4.5 (1,133)</div><div class="t-contact">Owner present regularly</div></td><td><div class="t-pitch">Italian restaurant + event venue. 1,100+ reviews. Staff shirts, event banners, to-go stickers. Go in as a customer — owner is present.</div></td><td><span class="badge b-gold">Medium</span></td><td><div class="t-phone">480-893-3331</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>14</td><td><div class="t-name">Sweet Magnolia Smokehouse</div><div class="t-addr">4929 E Chandler Blvd Ste 405 · ⭐4.5 (679)</div><div class="t-contact">Owner-operated · very approachable</div></td><td><div class="t-pitch">Owner-operated BBQ. Veteran angle could resonate. Staff shirts, branded stickers, catering event materials. Ask for the owner directly.</div></td><td><span class="badge b-gold">Medium</span></td><td><div class="t-phone">623-232-3661</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>15</td><td><div class="t-name">Hillside Spot</div><div class="t-addr">4740 E Warner Rd, Phoenix · ⭐4.5 (1,897)</div></td><td><div class="t-pitch">Nearly 2,000 reviews — very high traffic. Staff shirts, stickers for cups/bags. Go in as a customer, introduce yourself to the manager.</div></td><td><span class="badge b-gold">Medium</span></td><td><div class="t-phone">480-705-7768</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>16</td><td><div class="t-name">The Soul Farmacy</div><div class="t-addr">1334 E Chandler Blvd #5 · ⭐5.0 (59)</div><div class="t-contact">Husband and wife team</div></td><td><div class="t-pitch">Community-minded food truck. VINP/veteran angle could land well. Branded shirts, stickers for packaging, event banners.</div></td><td><span class="badge b-gold">Medium</span></td><td><div class="t-phone">480-331-2011</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+    </tbody>
+  </table>
+
+  <!-- SEG 4 -->
+  <div class="seg-hdr green"><div class="seg-title">Segment 4 — Schools & Booster Clubs</div><div class="seg-note">Spirit wear · tournament shirts · event stickers · recurring seasonal orders</div></div>
+  <table class="tgt-tbl">
+    <thead><tr><th>#</th><th>Business</th><th>Pitch</th><th>Pri</th><th>Phone</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>17</td><td><div class="t-name">Chandler School Boosters</div><div class="t-addr">1525 W Frye Rd, Chandler</div><div class="t-contact">Direct booster club contact</div></td><td><div class="t-pitch">Direct line to spirit wear across all Chandler USD schools. One call, multiple schools. Spirit wear DTF, event stickers, tournament banners. High leverage — priority #1 in this segment.</div></td><td><span class="badge b-red">High</span></td><td><div class="t-phone">480-812-7687</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>18</td><td><div class="t-name">Hamilton High School</div><div class="t-addr">3700 S Arizona Ave, Chandler</div><div class="t-contact">Athletic director or booster club</div></td><td><div class="t-pitch">Major Chandler HS — strong multi-sport program. Booster clubs need spirit wear, stickers, banners every season. Find booster club via school website.</div></td><td><span class="badge b-gold">Medium</span></td><td><div class="t-phone">480-420-8155</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>19</td><td><div class="t-name">Kyrene de la Colina Elementary</div><div class="t-addr">13612 S 36th St, Phoenix (Ahwatukee)</div></td><td><div class="t-pitch">One of 25 Kyrene District schools — all rated excelling. Contact front office, ask who handles spirit wear. One yes leads to referrals across the district.</div></td><td><span class="badge b-gold">Medium</span></td><td><div class="t-phone">480-541-2600</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>20</td><td><div class="t-name">Kyrene School District — Central Office</div><div class="t-addr">Ahwatukee / Chandler area · 25 schools</div></td><td><div class="t-pitch">Go to the top — district events coordinator. One district relationship = 25 schools. SDVOSB status may qualify for preferred vendor programs.</div></td><td><span class="badge b-gold">Medium</span></td><td><div class="t-phone">kyrene.org</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+    </tbody>
+  </table>
+
+  <!-- SEG 5 -->
+  <div class="seg-hdr dk"><div class="seg-title">Segment 5 — Corporate & Long Term</div><div class="seg-note">Plant seeds now · longer sales cycle · higher order value</div></div>
+  <table class="tgt-tbl">
+    <thead><tr><th>#</th><th>Business</th><th>Pitch</th><th>Pri</th><th>Phone</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>21</td><td><div class="t-name">Chandler Chamber of Commerce</div><div class="t-addr">Chandler · Ostrich Festival · 36th Annual</div></td><td><div class="t-pitch">Entry point to all Chandler businesses. Attend networking events. Ostrich Festival vendor opportunity — research 2027 application timeline.</div></td><td><span class="badge b-navy">Long Term</span></td><td><div class="t-phone">chandlerchamber.com</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>22</td><td><div class="t-name">Intel Chandler Campus</div><div class="t-addr">Chandler, AZ · Major employer</div></td><td><div class="t-pitch">Corporate branded apparel + promo via Promo with Grace. Find HR/events contact on LinkedIn. SDVOSB angle may open procurement doors.</div></td><td><span class="badge b-navy">Long Term</span></td><td><div class="t-phone">LinkedIn outreach</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+      <tr><td>23</td><td><div class="t-name">PayPal Chandler Campus</div><div class="t-addr">Chandler, AZ · Major employer</div></td><td><div class="t-pitch">Tech company culture = strong appetite for branded swag. Find HR/events on LinkedIn. Promo with Grace for larger catalog orders. SDVOSB preferred vendor opportunity.</div></td><td><span class="badge b-navy">Long Term</span></td><td><div class="t-phone">LinkedIn outreach</div></td><td><select class="sel" onchange="updateCounts()"><option>Not contacted</option><option>Called</option><option>Emailed</option><option>Responded</option><option>Quote sent</option><option>Order closed</option><option>Not interested</option></select></td><td><input class="inp" type="text" placeholder="Notes..."></td></tr>
+    </tbody>
+  </table>
+
+  <div class="brief-footer">
+    <div class="bf-l">LitTLE 6 <span>Industries LLC</span> · Internal · Confidential</div>
+    <div class="bf-r">Phoenix Strategy · Target List · Living Document</div>
+  </div>
+</div>
+</div>
+
+<!-- TAB 3: IDEAS & PUSHBACK -->
+<div id="ideas" class="panel">
+<div class="page">
+  <div class="hdr">
+    <div class="hdr-stripe"></div>
+    <div class="hdr-body">
+      <div class="hdr-label">Phoenix Strategy · Open Discussion · Confidential</div>
+      <div class="hdr-title">Ideas & <span>Pushback</span></div>
+      <div class="hdr-sub">This plan isn't finished. Poke holes in it. Add what's missing. Argue with it.</div>
+    </div>
+    <div class="hdr-meta">
+      <div class="hm"><strong>Purpose</strong>Stress-test the strategy before we commit resources</div>
+      <div class="hm"><strong>Anyone Can Edit</strong>No names required — just add your thinking</div>
+    </div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="callout"><strong>How to use this tab:</strong> Add a new card for any idea, concern, alternative market, or reason this plan might be wrong. Nothing here is sacred — Ahwatukee and Chandler are a starting hypothesis, not a final answer. If you think Gilbert, Tempe, or a different segment entirely deserves the focus, say so here.</div>
+    </div>
+
+    <div class="section">
+      <div class="sh-red">Open Questions</div>
+      <table class="seg-tbl">
+        <thead><tr><th>Question</th><th>Why It Matters</th></tr></thead>
+        <tbody id="questions-body">
+          <tr><td>Is Ahwatukee/Chandler actually the right first move, or just the easiest data to pull?</td><td>We picked these two because of available demographic data — worth confirming they beat alternatives like Gilbert or Tempe on actual fit, not just convenience.</td></tr>
+          <tr><td>Do we have the production capacity to fulfill a wholesale surge if 3+ screen printers say yes at once?</td><td>Landing the wholesale accounts is the goal — but a capacity gap could turn a win into a reputation problem.</td></tr>
+          <tr><td>Is cold outreach the best entry point, or should Chamber membership come first everywhere?</td><td>Chamber-first worked for Ahwatukee logic — does the same apply to Chandler, or does it slow us down there?</td></tr>
+        </tbody>
+      </table>
+      <button class="add-row-btn" onclick="addRow('questions-body', ['New question...', 'Why it matters...'])">+ Add Question</button>
+    </div>
+
+    <div class="section">
+      <div class="sh-gold">Alternative Ideas</div>
+      <table class="seg-tbl">
+        <thead><tr><th>Idea</th><th>Rationale</th></tr></thead>
+        <tbody id="ideas-body">
+          <tr><td>Add Gilbert as a third market</td><td>Several of our strongest wholesale leads (Print Collective, Snider, Show & Tell) are already in Gilbert, not Ahwatukee/Chandler proper.</td></tr>
+        </tbody>
+      </table>
+      <button class="add-row-btn" onclick="addRow('ideas-body', ['New idea...', 'Rationale...'])">+ Add Idea</button>
+    </div>
+
+    <div class="section">
+      <div class="sh">Risks & Concerns</div>
+      <table class="seg-tbl">
+        <thead><tr><th>Risk</th><th>Mitigation Idea</th></tr></thead>
+        <tbody id="risks-body">
+          <tr><td>Outreach volume may outpace our ability to follow up personally</td><td>Consider templated but personalized follow-up sequence with built-in reminders.</td></tr>
+        </tbody>
+      </table>
+      <button class="add-row-btn" onclick="addRow('risks-body', ['New risk...', 'Mitigation idea...'])">+ Add Risk</button>
+    </div>
+
+    <div class="section">
+      <div class="sh-red">General Notes</div>
+      <textarea id="general-notes" placeholder="Add freeform thoughts, links, or context here. This saves automatically to your browser." style="width:100%;min-height:140px;padding:12px;font-family:'Source Sans 3',sans-serif;font-size:12.5px;border:1px solid var(--mid-gray);resize:vertical;"></textarea>
+    </div>
+
+  </div>
+  <div class="brief-footer">
+    <div class="bf-l">LitTLE 6 <span>Industries LLC</span> · Internal · Confidential</div>
+    <div class="bf-r">Phoenix Strategy · Open for Edits</div>
+  </div>
+</div>
+</div>
+
+<style>
+.add-row-btn{background:var(--navy);color:var(--white);border:none;padding:6px 14px;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-top:8px;}
+.add-row-btn:hover{background:var(--red);}
+[contenteditable="true"]{outline:none;}
+[contenteditable="true"]:focus{background:rgba(200,168,75,0.08);}
+</style>
+
+
+<script>
+function addRow(tbodyId, placeholders){
+  var tbody = document.getElementById(tbodyId);
+  var tr = document.createElement('tr');
+  placeholders.forEach(function(ph){
+    var td = document.createElement('td');
+    td.contentEditable = "true";
+    td.textContent = ph;
+    tr.appendChild(td);
+  });
+  tbody.appendChild(tr);
+  saveIdeas();
+}
+function makeEditable(){
+  document.querySelectorAll('#ideas .seg-tbl td').forEach(function(td){
+    td.contentEditable = "true";
+  });
+}
+function saveIdeas(){
+  try{
+    var data = {
+      questions: document.getElementById('questions-body').innerHTML,
+      ideas: document.getElementById('ideas-body').innerHTML,
+      risks: document.getElementById('risks-body').innerHTML,
+      notes: document.getElementById('general-notes').value
+    };
+    localStorage.setItem('phoenixStrategyIdeas', JSON.stringify(data));
+  }catch(e){}
+}
+function loadIdeas(){
+  try{
+    var saved = localStorage.getItem('phoenixStrategyIdeas');
+    if(saved){
+      var data = JSON.parse(saved);
+      if(data.questions) document.getElementById('questions-body').innerHTML = data.questions;
+      if(data.ideas) document.getElementById('ideas-body').innerHTML = data.ideas;
+      if(data.risks) document.getElementById('risks-body').innerHTML = data.risks;
+      if(data.notes) document.getElementById('general-notes').value = data.notes;
+    }
+  }catch(e){}
+  makeEditable();
+}
+document.addEventListener('DOMContentLoaded', loadIdeas);
+document.addEventListener('input', function(e){
+  if(e.target.closest('#ideas')) saveIdeas();
+});
+
+function show(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+function updateCounts(){
+  var selects=document.querySelectorAll('.sel');
+  var contacted=0,responded=0,closed=0;
+  selects.forEach(function(s){
+    var v=s.value;
+    if(v!=='Not contacted'&&v!=='')contacted++;
+    if(v==='Responded'||v==='Quote sent'||v==='Order closed')responded++;
+    if(v==='Order closed')closed++;
+  });
+  document.getElementById('contacted-count').textContent=contacted;
+  document.getElementById('responded-count').textContent=responded;
+  document.getElementById('closed-count').textContent=closed;
+}
+</script>
+</body>
+</html>
