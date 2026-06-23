@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phoenix Strategy — Market Expansion</title>
+<title>Phoenix Expansion</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&family=Courier+Prime:wght@400;700&display=swap');
 :root{--red:#B03028;--gold:#C8A84B;--navy:#1A1A2E;--navy-mid:#16213e;--charcoal:#2a2a2a;--gray:#555;--mid-gray:#ddd;--light-gray:#f5f4f1;--white:#fff;--green:#1A6B3C;}
@@ -118,7 +118,7 @@ p{font-size:12.5px;line-height:1.7;margin-bottom:9px;}
     <div class="hdr-stripe"></div>
     <div class="hdr-body">
       <div class="hdr-label">Team Strategy Doc · Living Document · Confidential</div>
-      <div class="hdr-title">Phoenix <span>Strategy</span></div>
+      <div class="hdr-title">Phoenix <span>Expansion</span></div>
       <div class="hdr-sub">DTF Transfers & Custom Stickers — B2B & Wholesale Growth</div>
     </div>
     <div class="hdr-meta">
@@ -217,7 +217,7 @@ p{font-size:12.5px;line-height:1.7;margin-bottom:9px;}
   </div>
   <div class="brief-footer">
     <div class="bf-l">LitTLE 6 <span>Industries LLC</span> · Internal · Confidential</div>
-    <div class="bf-r">Phoenix Strategy · Living Document</div>
+    <div class="bf-r">Phoenix Expansion · Living Document</div>
   </div>
 </div>
 </div>
@@ -228,8 +228,8 @@ p{font-size:12.5px;line-height:1.7;margin-bottom:9px;}
   <div class="hdr">
     <div class="hdr-stripe"></div>
     <div class="hdr-body">
-      <div class="hdr-label">Phoenix Strategy · Target List · Confidential</div>
-      <div class="hdr-title">Phoenix <span>Target List</span></div>
+      <div class="hdr-label">Phoenix Expansion · Target List · Confidential</div>
+      <div class="hdr-title">Phoenix Expansion — <span>Target List</span></div>
       <div class="hdr-sub">DTF Transfers & Custom Stickers — Open to Whoever's Working It</div>
     </div>
     <div class="hdr-meta">
@@ -315,7 +315,7 @@ p{font-size:12.5px;line-height:1.7;margin-bottom:9px;}
 
   <div class="brief-footer">
     <div class="bf-l">LitTLE 6 <span>Industries LLC</span> · Internal · Confidential</div>
-    <div class="bf-r">Phoenix Strategy · Target List · Living Document</div>
+    <div class="bf-r">Phoenix Expansion · Target List · Living Document</div>
   </div>
 </div>
 </div>
@@ -326,8 +326,8 @@ p{font-size:12.5px;line-height:1.7;margin-bottom:9px;}
   <div class="hdr">
     <div class="hdr-stripe"></div>
     <div class="hdr-body">
-      <div class="hdr-label">Phoenix Strategy · Open Discussion · Confidential</div>
-      <div class="hdr-title">Ideas & <span>Pushback</span></div>
+      <div class="hdr-label">Phoenix Expansion · Open Discussion · Confidential</div>
+      <div class="hdr-title">Phoenix Expansion — Ideas & <span>Pushback</span></div>
       <div class="hdr-sub">This plan isn't finished. Poke holes in it. Add what's missing. Argue with it.</div>
     </div>
     <div class="hdr-meta">
@@ -384,7 +384,7 @@ p{font-size:12.5px;line-height:1.7;margin-bottom:9px;}
   </div>
   <div class="brief-footer">
     <div class="bf-l">LitTLE 6 <span>Industries LLC</span> · Internal · Confidential</div>
-    <div class="bf-r">Phoenix Strategy · Open for Edits</div>
+    <div class="bf-r">Phoenix Expansion · Open for Edits</div>
   </div>
 </div>
 </div>
@@ -423,12 +423,12 @@ function saveIdeas(){
       risks: document.getElementById('risks-body').innerHTML,
       notes: document.getElementById('general-notes').value
     };
-    localStorage.setItem('phoenixStrategyIdeas', JSON.stringify(data));
+    localStorage.setItem('phoenixExpansionIdeas', JSON.stringify(data));
   }catch(e){}
 }
 function loadIdeas(){
   try{
-    var saved = localStorage.getItem('phoenixStrategyIdeas');
+    var saved = localStorage.getItem('phoenixExpansionIdeas');
     if(saved){
       var data = JSON.parse(saved);
       if(data.questions) document.getElementById('questions-body').innerHTML = data.questions;
