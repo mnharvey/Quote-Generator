@@ -98,6 +98,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
   <button class="top-nav-btn" onclick="showModule('r2r')">Roll-to-Roll</button>
   <button class="top-nav-btn" onclick="showModule('lasers')">Lasers</button>
   <button class="top-nav-btn" onclick="showModule('dtf')">DTF Printer</button>
+  <button class="top-nav-btn" onclick="showModule('stickers')">Stickers</button>
 </div>
 
 <!-- ============================================================ -->
@@ -148,6 +149,13 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
       <div class="home-card-title">DTF Printer</div>
       <div class="home-card-desc">Audley 24" — operation, film loading, gang sheets, and powder application.</div>
       <div class="home-card-lessons">5 lessons · Awaiting session notes</div>
+    </div>
+
+    <div class="home-card" onclick="showModule('stickers')">
+      <div class="home-card-label">Product Knowledge · Active</div>
+      <div class="home-card-title">Stickers</div>
+      <div class="home-card-desc">Economy, premium, holographic, clear, and window cling — materials, cut options, ordering, and pricing.</div>
+      <div class="home-card-lessons">1 lesson · Notes in progress</div>
     </div>
 
     <div class="note-box" style="margin-top:16px;">Lesson plans are built out as training sessions are completed. Notes are added after each session to build real lesson content over time.</div>
@@ -1181,6 +1189,21 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="tip-item external-tip"><span class="tip-bullet">→</span>* DTF transfers can be stored and applied later — unlike DTG (direct to garment) which prints straight onto the shirt and must be done per item. <span class="external-label">External</span></div>
         <div class="tip-item"><span class="tip-bullet">→</span>DTF isn't limited to fabric — it can even go on cardboard or other rigid materials, as long as it fits in the heat press and can handle the heat/pressure.</div>
       </div>
+
+      <div class="tips-section">
+        <div class="tips-label">What You Can Customize</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>No color limitations — full color, gradients, photographic artwork all print the same price.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Compatible garments: cotton, polyester, blends, hats, leather, and virtually any fabric type.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Check our social media for real examples of finished products.</div>
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-label">How to Order — Transfers42.com</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Orders are placed at <strong>transfers42.com</strong> — it uses an auto gang sheet builder.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>Customers upload their own custom designs OR use our internal designs that are cleared for commercial use.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>New team members should try the builder themselves to get a feel for how it works before helping customers. Layout recently changed — a new tutorial video is needed.</div>
+        <div class="tip-item"><span class="tip-bullet">→</span>When training in person, Lindsay will walk through the full process: sheet builder → printing → pressing a shirt.</div>
+      </div>
     </div>
 
     <div class="panel" id="dtf-l2">
@@ -1240,6 +1263,131 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--navy);color:var(--c
         <div class="tip-item external-tip"><span class="tip-bullet">→</span>* White ink requires more frequent maintenance than color inks — it settles and clogs heads faster. Never skip white ink agitation. <span class="external-label">External</span></div>
         <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Check waste ink tank levels daily — overflow causes ink to back up into the machine and damage components. <span class="external-label">External</span></div>
         <div class="tip-item external-tip"><span class="tip-bullet">→</span>* We order colored inks from DTF Superstore (Gilbert local pickup) and white ink from DTG Printer Parts (ships 2-day). Reorder before running out. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- STICKERS MODULE -->
+<!-- ============================================================ -->
+<div class="module" id="module-stickers">
+  <div class="sub-nav">
+    <button class="sub-nav-btn active" onclick="showLesson('stickers','overview',this)">Overview</button>
+    <button class="sub-nav-btn" onclick="showLesson('stickers','l1',this)">1. Materials</button>
+    <button class="sub-nav-btn" onclick="showLesson('stickers','l2',this)">2. Cut Options</button>
+    <button class="sub-nav-btn" onclick="showLesson('stickers','l3',this)">3. Add-ons</button>
+    <button class="sub-nav-btn" onclick="showLesson('stickers','l4',this)">4. Ordering</button>
+    <button class="sub-nav-btn" onclick="showLesson('stickers','l5',this)">5. Pricing</button>
+  </div>
+  <div class="content">
+
+    <div class="panel active" id="stickers-overview">
+      <div class="panel-title">Stickers</div>
+      <div class="panel-desc">Product knowledge for L6I sticker offerings — materials, cut options, ordering, and pricing</div>
+      <div class="overview-card">
+        <div class="overview-title">Lesson Outline</div>
+        <div class="overview-item"><span class="overview-num">1</span><span class="overview-text">Materials — Vinyl types available</span></div>
+        <div class="overview-item"><span class="overview-num">2</span><span class="overview-text">Cut Options — Die-cut vs kiss-cut</span></div>
+        <div class="overview-item"><span class="overview-num">3</span><span class="overview-text">Add-ons — Spot gloss and other upgrades</span></div>
+        <div class="overview-item"><span class="overview-num">4</span><span class="overview-text">Ordering — How customers order stickers</span></div>
+        <div class="overview-item"><span class="overview-num">5</span><span class="overview-text">Pricing — Economy, premium, and specialty tiers</span></div>
+      </div>
+      <div class="note-box">Tap a lesson above to view product knowledge and notes.</div>
+    </div>
+
+    <div class="panel" id="stickers-l1">
+      <span class="lesson-number">Stickers · Lesson 1</span>
+      <div class="lesson-title">Materials</div>
+      <div class="lesson-desc">Understanding the different vinyl materials we offer and when to recommend each one.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box has-notes">
+        <strong>Default material:</strong> White vinyl — available in both Economy and Premium.<br><br>
+        <strong>Economy stickers:</strong> Waterproof, great for laptops, swag, and labels. Good everyday sticker option.<br><br>
+        <strong>Premium stickers:</strong> UV rated, longer outdoor use, more durable. Best for outdoor use or longer-lasting applications.<br><br>
+        <strong>Clear vinyl:</strong> Priced at economy rate. Transparent background — great for window or surface applications where you want the background to show through.<br><br>
+        <strong>Clear window cling:</strong> Static cling — no adhesive. Removable and repositionable. Good for windows and smooth surfaces.<br><br>
+        <strong>Holographic vinyl:</strong> Premium specialty option with a rainbow/metallic shimmer effect. Higher price point. Pricing guide and listing still in progress — check with Lindsay before quoting.
+      </div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Always ask the customer what surface they're applying to and how long they need the sticker to last — this helps recommend economy vs premium vs specialty. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Clear vinyl works best with designs that have solid colors — fine details can be hard to see on clear without a white underbase. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="stickers-l2">
+      <span class="lesson-number">Stickers · Lesson 2</span>
+      <div class="lesson-title">Cut Options</div>
+      <div class="lesson-desc">The two main cut styles we offer and when each is appropriate.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box has-notes">
+        <strong>Die-cut:</strong> The sticker is cut to the exact shape of the design — no backing border. Standard for most stickers 2–3" or larger. The finished sticker is the shape of the artwork itself.<br><br>
+        <strong>Kiss-cut:</strong> The sticker is cut to shape but leaves the backing intact in a square or rectangle around it. Standard for labels and stickers smaller than 2". Easier to peel, especially for small or detailed shapes.<br><br>
+        When in doubt: Die-cut for standard stickers, kiss-cut for small stickers and labels.
+      </div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Kiss-cut stickers are also great for sticker sheets where multiple designs are on one backing — each design is kiss-cut but the sheet stays together. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* For intricate designs with thin points or small details, die-cut can sometimes cause fragile areas — kiss-cut may be a better recommendation. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="stickers-l3">
+      <span class="lesson-number">Stickers · Lesson 3</span>
+      <div class="lesson-title">Add-ons</div>
+      <div class="lesson-desc">Optional upgrades available on sticker orders.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box has-notes">
+        <strong>Spot gloss:</strong> Adds a thick, glossy layer on selected elements of the design — makes that area tactile and visually pop against the matte surface. It's an add-on, not a full gloss coating. Great for logos, key design elements, or text you want to stand out.<br><br>
+        More add-on options may be added as the product line grows — check with Lindsay for current availability.
+      </div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Spot gloss works best on premium stickers — the contrast between the matte vinyl and gloss areas is most dramatic on premium material. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* When recommending spot gloss, tell the customer it adds texture you can feel — this helps them understand the value of the upgrade. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="stickers-l4">
+      <span class="lesson-number">Stickers · Lesson 4</span>
+      <div class="lesson-title">Ordering</div>
+      <div class="lesson-desc">How customers currently order stickers and how we want to grow our online sticker sales.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box has-notes">
+        <strong>Minimum order:</strong> 15 pieces per design.<br><br>
+        <strong>Current ordering methods:</strong><br>
+        1. Most customers currently email Lindsay their sticker orders — this is what we want to move away from.<br>
+        2. Online via Transfers42.com — has a sticker builder (premium pricing only for now). Economy not yet listed online.<br>
+        3. Online via little6llc.com/products/Stickers/Custom-Stickers/ — both economy and premium available.<br><br>
+        <strong>Goal:</strong> Push more customers toward online ordering rather than email. If you want to try the Transfers42 sticker builder, ask Lindsay for a 100% off code so you can submit a real order and learn the process.<br><br>
+        <strong>Holographic:</strong> Listing and pricing still in progress — not available to order online yet. Refer to Lindsay.
+      </div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* When promoting stickers on social media, always link directly to the Transfers42 sticker builder or the L6I sticker product page — make it as easy as possible for customers to order. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* If a customer emails a sticker order, gently guide them to the online builder for future orders — explain it's faster and they can see exactly how their design will look. <span class="external-label">External</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="stickers-l5">
+      <span class="lesson-number">Stickers · Lesson 5</span>
+      <div class="lesson-title">Pricing</div>
+      <div class="lesson-desc">Pricing tiers for economy, premium, and specialty stickers. See the full pricing guide for exact numbers.</div>
+      <div class="notes-label">Session Notes</div>
+      <div class="notes-box has-notes">
+        <strong>Economy stickers</strong> — lower price point, standard waterproof vinyl, good for everyday use.<br><br>
+        <strong>Premium stickers</strong> — higher price point, UV rated, longer outdoor durability.<br><br>
+        <strong>Clear vinyl</strong> — priced at economy rate.<br><br>
+        <strong>Holographic vinyl</strong> — higher price point than premium. Pricing guide still in progress — check with Lindsay.<br><br>
+        <strong>Spot gloss add-on</strong> — additional charge on top of base sticker price.<br><br>
+        Refer to the L6I Sticker Pricing Guide for exact per-piece pricing by size and quantity. Pricing is tiered by quantity — the more ordered, the lower the per-piece price.
+      </div>
+      <div class="tips-section">
+        <div class="tips-label">Additional Tips <span class="external-label">* External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* Always quote from the current pricing guide — sticker prices can change based on material costs. Don't quote from memory. <span class="external-label">External</span></div>
+        <div class="tip-item external-tip"><span class="tip-bullet">→</span>* When a customer asks about bulk pricing, the quantity break points in the pricing guide will show them where the best value tiers are. <span class="external-label">External</span></div>
       </div>
     </div>
 
